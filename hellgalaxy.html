@@ -1,0 +1,3169 @@
+<title>Hell Galaxy Database</title>
+<link rel="icon" type="image/svg+xml" href="images/logo.svg">
+<style>
+  :root{
+    color-scheme: dark;
+    --bg: #0d1013;
+    --surface: #161b20;
+    --surface-2: #1d2329;
+    --surface-3: #252c33;
+    --border: #2b333b;
+    --border-soft: #1f262c;
+    --text: #e7ecf0;
+    --text-dim: #8d99a3;
+    --text-faint: #5c6870;
+    --accent: #43d6d1;
+    --accent-dim: #2a8f8c;
+    --accent-ink: #05201f;
+    --danger: #e2604f;
+    --good: #57c98a;
+
+    --r-salvage: #7c8892;
+    --r-common: #cfd7dd;
+    --r-uncommon: #57c98a;
+    --r-rare: #4fa3ec;
+    --r-epic: #b083f0;
+    --r-legendary: #eab13a;
+    --r-mythic: #ef5f96;
+
+    --c-gatling: #f0a24a;
+    --c-laser: #4fc3f7;
+    --c-rocket: #ef6a4f;
+    --c-sonicshooter: #b083f0;
+    --c-shotgun: #c2914d;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', -apple-system, Segoe UI, sans-serif;
+    padding-inline: 16px;
+    min-height:100%;
+  }
+  ::selection{ background: var(--accent-dim); color: var(--text); }
+  ::-webkit-scrollbar{ width:10px; height:10px; }
+  ::-webkit-scrollbar-track{ background: var(--surface); }
+  ::-webkit-scrollbar-thumb{ background: var(--surface-3); border-radius:8px; border:2px solid var(--surface); }
+
+  .mono{ font-family:'IBM Plex Mono', ui-monospace, monospace; }
+
+  .wrap{
+    max-width: min(1880px, 97vw);
+    margin: 0 auto;
+    padding-block: 22px 60px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  /* ---------- header ---------- */
+  header.top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    border-bottom:1px solid var(--border-soft);
+    padding-bottom:16px;
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand-mark{
+    width:38px; height:38px; border-radius:8px;
+    background: linear-gradient(155deg, var(--surface-3), var(--surface));
+    border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    color: var(--accent);
+    flex-shrink:0;
+  }
+  .brand h1{
+    font-size:19px; margin:0; letter-spacing:.01em; font-weight:600;
+  }
+  .brand p{
+    margin:2px 0 0; font-size:12.5px; color: var(--text-dim);
+    font-family:'IBM Plex Mono', monospace; letter-spacing:.03em;
+  }
+  .top-actions{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+
+  .dirty-pill{
+    display:flex; align-items:center; gap:7px;
+    font-size:12.5px; color: var(--text-dim);
+    font-family:'IBM Plex Mono', monospace;
+    padding:7px 12px; border-radius:999px;
+    border:1px solid var(--border); background: var(--surface);
+  }
+  .dirty-pill .dot{ width:7px; height:7px; border-radius:50%; background: var(--text-faint); }
+  .dirty-pill.on{ color: var(--text); border-color: color-mix(in srgb, var(--danger) 45%, var(--border)); }
+  .dirty-pill.on .dot{ background: var(--danger); box-shadow:0 0 0 3px color-mix(in srgb, var(--danger) 20%, transparent); }
+
+  button{ font-family:inherit; cursor:pointer; }
+  .btn{
+    appearance:none; border:1px solid var(--border);
+    background: var(--surface-2); color: var(--text);
+    padding:8px 14px; border-radius:8px; font-size:13px; font-weight:500;
+    display:inline-flex; align-items:center; gap:7px;
+    transition: background .12s, border-color .12s, transform .05s;
+    white-space:nowrap;
+  }
+  .btn:hover{ background: var(--surface-3); border-color: color-mix(in srgb, var(--text-faint) 60%, var(--border)); }
+  .btn:active{ transform: translateY(1px); }
+  .btn:disabled{ opacity:.45; cursor:not-allowed; }
+  .btn:disabled:hover{ background: var(--surface-2); }
+  .btn.ghost{ background:transparent; }
+  .btn.primary{
+    background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight:600;
+  }
+  .btn.primary:hover{ background: color-mix(in srgb, var(--accent) 88%, white); }
+  .btn.small{ padding:6px 10px; font-size:12px; border-radius:7px; }
+  .btn.danger{ color: var(--danger); border-color: color-mix(in srgb, var(--danger) 40%, var(--border)); }
+  .btn.danger:hover{ background: color-mix(in srgb, var(--danger) 12%, var(--surface-2)); }
+
+  /* ---------- sections (top-level pages) ---------- */
+  .sectionbar{ display:flex; gap:8px; flex-wrap:wrap; }
+  .section-tab{
+    appearance:none; border:1px solid var(--border); background: var(--surface);
+    color: var(--text-dim); padding:9px 18px; border-radius:10px; font-size:13.5px; font-weight:600;
+    letter-spacing:.02em;
+  }
+  .section-tab:hover{ color: var(--text); background: var(--surface-2); border-color: color-mix(in srgb, var(--text-faint) 60%, var(--border)); }
+  .section-tab.active{ color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+  .section-settings{ margin-left:auto; padding-left:16px; border-left:1px solid var(--border-soft); }
+
+  .empty-state{
+    display:flex; align-items:center; justify-content:center;
+    min-height:240px; border:1px dashed var(--border); border-radius:12px;
+    color: var(--text-faint); font-size:13.5px; font-family:'IBM Plex Mono', monospace; letter-spacing:.02em;
+  }
+
+  /* ---------- tabs ---------- */
+  .tabbar{ display:flex; gap:6px; flex-wrap:wrap; border-bottom:1px solid var(--border-soft); padding-bottom:2px; }
+  .tab{
+    appearance:none; border:1px solid transparent; background:transparent; color: var(--text-dim);
+    padding:9px 14px; border-radius:9px 9px 0 0; font-size:13.5px; font-weight:500;
+    display:flex; align-items:center; gap:8px; position:relative; top:1px;
+  }
+  .tab:hover{ color: var(--text); background: var(--surface); }
+  .tab.active{
+    color: var(--text); background: var(--surface); border-color: var(--border-soft); border-bottom-color: var(--surface);
+  }
+  .tab .tabdot{
+    min-width:16px; height:16px; padding:0 4px; border-radius:999px; background: var(--danger); color:#2a0a06;
+    font-size:10px; font-weight:700; display:none; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .tab.hasdirty .tabdot{ display:flex; }
+
+  .panel{ display:flex; flex-direction:column; gap:16px; }
+  .panel[hidden]{ display:none; }
+
+  /* ---------- stat strip ---------- */
+  .stats{ display:flex; gap:10px; flex-wrap:wrap; }
+  .stat{
+    flex:1; min-width:110px;
+    background: var(--surface); border:1px solid var(--border-soft);
+    border-radius:10px; padding:10px 14px;
+  }
+  .stat .n{ font-family:'IBM Plex Mono', monospace; font-size:21px; font-weight:600; font-variant-numeric: tabular-nums; }
+  .stat .l{ font-size:11.5px; color: var(--text-dim); text-transform:uppercase; letter-spacing:.06em; margin-top:2px;}
+  .stat.accent .n{ color: var(--accent); }
+
+  /* ---------- toolbar ---------- */
+  .toolbar{
+    display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    background: var(--surface); border:1px solid var(--border-soft);
+    border-radius:10px; padding:10px;
+  }
+  .search{
+    display:flex; align-items:center; gap:8px;
+    background: var(--surface-2); border:1px solid var(--border);
+    border-radius:7px; padding:7px 10px; min-width:190px; flex:1 1 190px;
+  }
+  .search svg{ color: var(--text-faint); flex-shrink:0; }
+  .search input{
+    background:transparent; border:none; outline:none; color:var(--text);
+    font-size:13.5px; width:100%; font-family:inherit;
+  }
+  .search input::placeholder{ color: var(--text-faint); }
+
+  .chips{ display:flex; gap:6px; flex-wrap:wrap; }
+  .chip{
+    border:1px solid var(--border); background: var(--surface-2); color: var(--text-dim);
+    padding:6px 12px; border-radius:999px; font-size:12.5px; font-weight:500;
+    display:flex; align-items:center; gap:6px;
+  }
+  .chip .cnt{ font-family:'IBM Plex Mono', monospace; color: var(--text-faint); font-size:11px; }
+  .chip.active{ background: color-mix(in srgb, var(--accent) 16%, var(--surface-2)); border-color: var(--accent-dim); color: var(--text); }
+  .chip.active .cnt{ color: var(--accent); }
+
+  select.selbox{
+    background: var(--surface-2); border:1px solid var(--border); color:var(--text);
+    border-radius:7px; padding:7px 10px; font-size:12.5px; font-family:inherit; outline:none;
+  }
+
+  .colpop-wrap{ position:relative; }
+  .colpop{
+    position:absolute; top:calc(100% + 6px); right:0; z-index:15;
+    background: var(--surface-2); border:1px solid var(--border); border-radius:9px;
+    padding:10px; width:230px; box-shadow:0 14px 30px rgba(0,0,0,.4);
+    display:none; max-height:320px; overflow-y:auto;
+  }
+  .colpop.show{ display:block; }
+  .colpop label{
+    display:flex; align-items:center; gap:8px; font-size:12.5px; padding:5px 4px; border-radius:6px; color: var(--text-dim);
+  }
+  .colpop label:hover{ background: var(--surface-3); color: var(--text); }
+  .colpop input[type=checkbox]{ accent-color: var(--accent); }
+  .colpop-foot{ display:flex; justify-content:space-between; margin-top:6px; padding-top:6px; border-top:1px solid var(--border-soft); }
+  .colpop-foot button{ font-size:11.5px; color: var(--accent); background:none; border:none; padding:2px; }
+
+  /* ---------- chart ---------- */
+  .chart-card{
+    background: var(--surface); border:1px solid var(--border-soft); border-radius:10px; padding:14px 16px 10px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .chart-head{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:space-between; }
+  .chart-title{ font-size:13px; font-weight:600; color: var(--text); }
+  .chart-title .sub{ font-weight:400; color: var(--text-faint); font-size:11.5px; margin-left:6px; }
+  .chart-controls{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .chart-controls label{ font-size:11px; color: var(--text-faint); text-transform:uppercase; letter-spacing:.05em; }
+  .chart-controls select.selbox{ padding:5px 8px; font-size:12px; }
+  .chart-maxinput{
+    width:100px; background: var(--surface-2); border:1px solid var(--border); color:var(--text);
+    border-radius:7px; padding:5px 8px; font-size:12px; font-family:'IBM Plex Mono', monospace; outline:none;
+  }
+  .chart-maxinput:focus{ border-color: var(--accent-dim); }
+  .chart-legend{ display:flex; gap:12px; flex-wrap:wrap; }
+  .chart-legend .lg-item{ display:flex; align-items:center; gap:6px; font-size:11px; color: var(--text-dim); }
+  .chart-legend .lg-sw{ width:9px; height:9px; border-radius:2px; flex-shrink:0; }
+  .chart-scroll{ overflow-x:auto; overflow-y:hidden; }
+  .chart-bar{ transition: filter .1s; cursor:pointer; }
+  .chart-bar:hover{ filter: brightness(1.2); }
+  .chart-tooltip{
+    position:fixed; pointer-events:none; z-index:50; background: var(--surface-3); border:1px solid var(--border);
+    border-radius:8px; padding:8px 10px; font-size:12px; opacity:0; transition:opacity .08s; transform:translate(-50%,-100%);
+    box-shadow:0 8px 20px rgba(0,0,0,.4); white-space:nowrap;
+  }
+  .chart-tooltip.show{ opacity:1; }
+  .chart-tooltip .tt-val{ font-family:'IBM Plex Mono', monospace; font-weight:700; font-size:13.5px; color: var(--text); }
+  .chart-tooltip .tt-name{ color: var(--text-dim); margin-top:2px; }
+  .chart-tooltip .tt-rarity{ color: var(--text-faint); font-size:10.5px; margin-top:1px; }
+  .chart-empty{ padding:30px; text-align:center; color: var(--text-faint); font-size:12.5px; }
+
+  /* ---------- table ---------- */
+  .table-shell{
+    border:1px solid var(--border-soft); border-radius:10px; overflow:hidden; background: var(--surface);
+  }
+  .table-scroll{ overflow-x:auto; }
+  table{ width:100%; border-collapse:collapse; min-width:640px; }
+  thead th{
+    text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+    color: var(--text-faint); font-weight:600; padding:10px 12px;
+    border-bottom:1px solid var(--border-soft); background: var(--surface-2);
+    white-space:nowrap; cursor:pointer; user-select:none;
+  }
+  thead th:hover{ color: var(--text-dim); }
+  thead th .arrow{ opacity:.5; margin-left:3px; font-size:10px; }
+  thead th.sorted{ color: var(--accent); }
+  thead th.sorted .arrow{ opacity:1; }
+  tbody td{
+    padding:9px 12px; border-bottom:1px solid var(--border-soft); font-size:13px; vertical-align:middle;
+  }
+  tbody tr{ cursor:pointer; transition: background .1s; }
+  tbody tr:hover{ background: var(--surface-2); }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody tr.selected{ background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+
+  .id-cell{ color: var(--text-faint); font-size:11px; }
+  .name-cell{ display:flex; align-items:center; gap:9px; font-weight:500; }
+  .dot-edit{ width:6px; height:6px; border-radius:50%; background: var(--danger); flex-shrink:0; }
+  .dot-edit.hidden-dot{ visibility:hidden; }
+
+  .badge-type{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:6px;
+    background: var(--surface-3); color: var(--text-dim); border:1px solid var(--border);
+  }
+  .badge-type .sw{ width:7px; height:7px; border-radius:2px; flex-shrink:0; }
+  .badge-rarity{
+    display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600;
+  }
+  .badge-rarity .sw{ width:8px; height:8px; border-radius:2px; }
+
+  .num-cell{ font-family:'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; color: var(--text-dim); }
+  .empty-row td{ text-align:center; color: var(--text-faint); padding:34px; font-size:13px; }
+
+  td.editable-cell{ cursor:text; }
+  td.editable-cell:hover{ box-shadow: inset 0 0 0 1px var(--accent-dim); border-radius:4px; }
+  td.editable-cell.editing{ padding:5px 8px; }
+  .cell-input{
+    width:100%; max-width:100%; box-sizing:border-box; background: var(--surface); border:1px solid var(--accent-dim);
+    color: var(--text); border-radius:5px; padding:4px 6px; font-size:13px; font-family:inherit; outline:none;
+  }
+
+  /* ---------- drawer ---------- */
+  .scrim{
+    position:fixed; inset:0; background: rgba(6,8,10,.55);
+    opacity:0; pointer-events:none; transition:opacity .15s;
+    z-index:20;
+  }
+  .scrim.show{ opacity:1; pointer-events:auto; }
+
+  .drawer{
+    position:fixed; top:0; right:0; height:100%; width:min(440px, 100vw);
+    background: var(--surface); border-left:1px solid var(--border);
+    transform: translateX(100%); transition: transform .18s ease;
+    z-index:21; display:flex; flex-direction:column;
+    box-shadow: -18px 0 40px rgba(0,0,0,.35);
+  }
+  .drawer.show{ transform: translateX(0); }
+  .drawer-head{
+    padding:16px 18px; border-bottom:1px solid var(--border-soft);
+    display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+  }
+  .drawer-head .idline{ font-family:'IBM Plex Mono', monospace; font-size:11px; color: var(--text-faint); margin-bottom:3px; }
+  .drawer-head h2{ font-size:16px; margin:0; }
+  .drawer-close{
+    border:none; background:transparent; color: var(--text-dim); font-size:18px; line-height:1;
+    padding:4px; border-radius:6px;
+  }
+  .drawer-close:hover{ background: var(--surface-2); color: var(--text); }
+  .drawer-body{ padding:16px 18px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:14px; }
+  .field label{
+    display:block; font-size:11px; text-transform:uppercase; letter-spacing:.05em;
+    color: var(--text-faint); margin-bottom:6px; font-weight:600;
+  }
+  .field input, .field textarea, .field select{
+    width:100%; background: var(--surface-2); border:1px solid var(--border);
+    color: var(--text); border-radius:7px; padding:9px 10px; font-size:13.5px; font-family:inherit; outline:none;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{ border-color: var(--accent-dim); }
+  .field textarea{ resize:vertical; min-height:78px; line-height:1.45; }
+  .field-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .field .hint{ font-size:11px; color: var(--text-faint); margin-top:5px; }
+  .drawer-section-title{
+    font-size:11px; text-transform:uppercase; letter-spacing:.06em; color: var(--text-faint); font-weight:700;
+    margin: 4px 0 -4px;
+  }
+  .readonly-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px 14px; }
+  .ro-item{ font-size:12px; }
+  .ro-item .k{ color: var(--text-faint); text-transform:uppercase; letter-spacing:.04em; font-size:10.5px; }
+  .ro-item .v{ color: var(--text-dim); font-family:'IBM Plex Mono', monospace; margin-top:2px; }
+  .drawer-foot{
+    padding:14px 18px; border-top:1px solid var(--border-soft);
+    display:flex; gap:8px; justify-content:space-between;
+  }
+
+  /* ---------- sync modal ---------- */
+  .modal-scrim{
+    position:fixed; inset:0; background: rgba(6,8,10,.6);
+    display:none; align-items:center; justify-content:center; z-index:30; padding:20px;
+  }
+  .modal-scrim.show{ display:flex; }
+  .modal{
+    background: var(--surface); border:1px solid var(--border);
+    border-radius:12px; width:min(580px, 100%); max-height:85vh; overflow:hidden;
+    display:flex; flex-direction:column; box-shadow:0 24px 60px rgba(0,0,0,.45);
+  }
+  .modal-head{ padding:16px 20px; border-bottom:1px solid var(--border-soft); display:flex; justify-content:space-between; align-items:center; }
+  .modal-head h3{ margin:0; font-size:15px; display:flex; align-items:center; gap:8px; }
+  .modal-body{ padding:18px 20px; overflow-y:auto; font-size:13.5px; line-height:1.55; color: var(--text-dim); }
+  .modal-body strong{ color: var(--text); }
+  .diff-list{ display:flex; flex-direction:column; gap:8px; margin:14px 0; }
+  .diff-item{ background: var(--surface-2); border:1px solid var(--border-soft); border-radius:8px; padding:9px 12px; }
+  .diff-item .di-name{ font-size:12.5px; font-weight:600; color: var(--text); margin-bottom:4px; }
+  .diff-item .di-field{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color: var(--text-faint); }
+  .diff-item .di-vals{ font-size:12.5px; margin-top:2px; }
+  .diff-item .old{ color: var(--danger); text-decoration: line-through; opacity:.75; }
+  .diff-item .new{ color: var(--good); }
+  .callout{
+    background: color-mix(in srgb, var(--accent) 9%, var(--surface-2)); border:1px solid var(--accent-dim);
+    border-radius:9px; padding:12px 13px; font-size:12.5px; color: var(--text-dim); margin-top:14px;
+  }
+  .callout code{ font-family:'IBM Plex Mono', monospace; background: var(--surface-3); padding:1px 5px; border-radius:4px; color: var(--text); }
+  .callout.warn{ border-color: color-mix(in srgb, var(--danger) 45%, var(--border)); }
+  .modal-foot{ padding:14px 20px; border-top:1px solid var(--border-soft); display:flex; justify-content:flex-end; gap:8px; }
+
+  .toast{
+    position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(20px);
+    background: var(--surface-3); border:1px solid var(--border); color:var(--text);
+    padding:10px 16px; border-radius:8px; font-size:13px; opacity:0; pointer-events:none;
+    transition: opacity .18s, transform .18s; z-index:40; display:flex; align-items:center; gap:8px;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* ---------- settings ---------- */
+  .settings-grid{ display:flex; flex-direction:column; gap:16px; max-width:760px; }
+  .card{ background: var(--surface); border:1px solid var(--border-soft); border-radius:12px; padding:18px 20px; }
+  .card h3{ margin:0 0 4px; font-size:14.5px; }
+  .csv-link-group{ margin-top:16px; }
+  .csv-link-group + .csv-link-group{ margin-top:20px; padding-top:16px; border-top:1px solid var(--border-soft); }
+  .csv-link-group-title{ font-size:11px; text-transform:uppercase; letter-spacing:.06em; color: var(--accent); font-weight:700; margin-bottom:10px; }
+  .csv-link-row{ display:flex; gap:8px; align-items:flex-end; margin-bottom:10px; }
+  .csv-link-row .field{ flex:1; margin-bottom:0; }
+  .csv-link-open{
+    flex-shrink:0; border:1px solid var(--border); background: var(--surface-2); color: var(--text-dim);
+    border-radius:7px; padding:9px 12px; font-size:12.5px; white-space:nowrap;
+  }
+  .csv-link-open:hover{ background: var(--surface-3); color: var(--text); }
+  .csv-link-open[disabled]{ opacity:.4; cursor:not-allowed; pointer-events:none; }
+  .card .sub{ font-size:12.5px; color: var(--text-dim); margin:0 0 14px; line-height:1.5; }
+  .conn-row{
+    display:grid; grid-template-columns: 1.1fr 1fr 1.6fr auto; gap:10px; align-items:center;
+    padding:10px 0; border-bottom:1px solid var(--border-soft); font-size:12.5px;
+  }
+  .conn-row:last-child{ border-bottom:none; }
+  .conn-row .cname{ font-weight:600; color: var(--text); }
+  .conn-row .curl{ color: var(--text-dim); font-family:'IBM Plex Mono', monospace; font-size:11.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .conn-empty{ color: var(--text-faint); font-size:12.5px; padding:14px 0; text-align:center; }
+  .add-form{
+    background: var(--surface-2); border:1px dashed var(--border); border-radius:9px; padding:14px; margin-top:12px;
+    display:none; flex-direction:column; gap:10px;
+  }
+  .add-form.show{ display:flex; }
+  .add-form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .add-form-actions{ display:flex; justify-content:flex-end; gap:8px; }
+
+  /* ---------- thumbnails ---------- */
+  .thumb-cell{ width:34px; }
+  .thumb{
+    width:28px; height:28px; border-radius:7px; object-fit:cover; display:block;
+    background: var(--surface-3); border:1px solid var(--border);
+  }
+  .thumb-placeholder{
+    width:28px; height:28px; border-radius:7px; background: var(--surface-3); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; color: var(--text-faint); font-size:10px; font-weight:700;
+  }
+
+  /* ---------- tab separation ---------- */
+  .tabgroup{ display:flex; gap:6px; flex-wrap:wrap; }
+  .tab-settings{ margin-left:auto; padding-left:16px; border-left:1px solid var(--border-soft); }
+
+  /* ---------- image field (drawer) ---------- */
+  .img-field{ display:flex; align-items:center; gap:12px; }
+  .img-preview{
+    width:64px; height:64px; border-radius:10px; object-fit:cover; background: var(--surface-3); border:1px solid var(--border); flex-shrink:0;
+  }
+  .img-preview-placeholder{
+    width:64px; height:64px; border-radius:10px; background: var(--surface-3); border:1px dashed var(--border);
+    display:flex; align-items:center; justify-content:center; color: var(--text-faint); font-size:9.5px; text-align:center; flex-shrink:0; padding:4px; line-height:1.3;
+  }
+  .img-actions{ display:flex; flex-direction:column; gap:6px; }
+  .img-actions input[type=file]{ display:none; }
+  .img-drop-zone{ border-radius:10px; transition:box-shadow .12s ease; }
+  .img-drop-zone.dragover{ box-shadow:0 0 0 2px var(--accent, #4f8cff); }
+  .img-drop-zone.dragover .img-preview,
+  .img-drop-zone.dragover .img-preview-placeholder{ opacity:.6; }
+
+  /* ---------- producers tab ---------- */
+  .producer-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(190px,1fr)); gap:12px; }
+  .producer-card{
+    background: var(--surface); border:1px solid var(--border-soft); border-radius:11px; padding:16px 14px;
+    display:flex; flex-direction:column; gap:10px; align-items:center; text-align:center;
+  }
+  .producer-card .pname{ font-weight:600; font-size:13.5px; }
+  .producer-card .pcount{ font-size:11px; color: var(--text-faint); font-family:'IBM Plex Mono', monospace; }
+  .producer-card .img-actions{ flex-direction:row; }
+
+  @media (max-width: 640px){
+    .field-grid, .add-form-grid{ grid-template-columns:1fr; }
+    .conn-row{ grid-template-columns:1fr; gap:4px; }
+    .conn-row .actions{ justify-self:start; }
+  }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg width="23" height="23" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <path d="M32,12 L49.4,22 L49.4,42 L32,52 L14.6,42 L14.6,22 Z"
+                fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+          <circle cx="32" cy="32" r="4.5" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          <line x1="32" y1="23.5" x2="32" y2="26.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="32" y1="37.5" x2="32" y2="40.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="23.5" y1="32" x2="26.5" y2="32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="37.5" y1="32" x2="40.5" y2="32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="32" cy="12" r="4" fill="var(--c-gatling)"/>
+          <circle cx="49.4" cy="32" r="4" fill="var(--c-laser)"/>
+          <circle cx="32" cy="52" r="4" fill="var(--c-rocket)"/>
+          <circle cx="14.6" cy="32" r="4" fill="var(--c-sonicshooter)"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Hell Galaxy Database</h1>
+        <p>HS &middot; MODULES DATABASE</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <span class="dirty-pill" id="dirtyPill"><span class="dot"></span><span id="dirtyLabel">Nessuna modifica</span></span>
+      <button class="btn ghost small" id="resetAllBtn">Ripristina tutto</button>
+    </div>
+  </header>
+
+  <nav class="sectionbar" id="sectionbar"></nav>
+
+  <div id="entitiesSection">
+    <nav class="tabbar" id="tabbar"></nav>
+    <div id="panels"></div>
+  </div>
+
+  <section class="panel" id="panel-settings" hidden></section>
+
+  <section class="panel" id="panel-quest" hidden>
+    <div class="stats" id="questStats"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="questSearch" placeholder="Cerca per titolo o ID&hellip;">
+      </div>
+      <div class="chips" id="questChapterChips"></div>
+      <div class="chips" id="questLabelChips"></div>
+      <select class="selbox" id="questAreaFilter"></select>
+      <button class="chip" id="questPlaceholderToggle">Mostra placeholder</button>
+      <button class="btn primary small" id="questSyncBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3M4 6v4h4M20 18v-4h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Sincronizza
+      </button>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-head">
+        <div class="chart-title">Missioni per capitolo<span class="sub">&nbsp;&middot; numero di missioni per capitolo della trama, colorate per tipo</span></div>
+      </div>
+      <div class="chart-legend" id="questLabelLegend"></div>
+      <div class="chart-scroll"><svg id="questChapterChart"></svg></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-head">
+        <div class="chart-title">Ricompensa in crediti<span class="sub">&nbsp;&middot; missioni con ricompensa in crediti, ordinate per valore &mdash; colore per capitolo</span></div>
+      </div>
+      <div class="chart-legend" id="questChapterLegend"></div>
+      <div class="chart-scroll"><svg id="questCreditsChart"></svg></div>
+    </div>
+
+    <div class="table-shell">
+      <div class="table-scroll">
+        <table>
+          <thead><tr id="questThead"></tr></thead>
+          <tbody id="questTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <section class="panel" id="panel-stations" hidden>
+    <div class="stats" id="stationStats"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="stationSearch" placeholder="Cerca stazione&hellip;">
+      </div>
+      <div class="chips" id="stationProfileChips"></div>
+      <button class="btn primary small" id="stationSyncBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3M4 6v4h4M20 18v-4h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Sincronizza
+      </button>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-head">
+        <div class="chart-title">Profilo bottino per stazione<span class="sub">&nbsp;&middot; quantit&agrave; massima di oggetti per rarit&agrave; nel roll dello shop</span></div>
+      </div>
+      <div class="chart-legend" id="stationRarityLegend"></div>
+      <div class="chart-scroll"><svg id="stationRarityChart"></svg></div>
+    </div>
+
+    <div class="table-shell">
+      <div class="table-scroll">
+        <table>
+          <thead><tr id="stationThead"></tr></thead>
+          <tbody id="stationTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="stats" id="catalogStats" style="margin-top:22px;"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="catalogSearch" placeholder="Cerca oggetto o ID&hellip;">
+      </div>
+      <div class="chips" id="catalogOriginChips"></div>
+      <div class="chips" id="catalogRarityChips"></div>
+      <select class="selbox" id="catalogTypeFilter"></select>
+      <button class="chip" id="catalogPlaceholderToggle">Mostra placeholder</button>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-head">
+        <div class="chart-title">Oggetti sbloccati per stazione<span class="sub">&nbsp;&middot; conteggio voci di catalogo con sblocco mostrato in quella stazione &mdash; barra scura = profilo Base</span></div>
+      </div>
+      <div class="chart-scroll"><svg id="catalogByStationChart"></svg></div>
+    </div>
+
+    <div class="table-shell">
+      <div class="table-scroll">
+        <table>
+          <thead><tr id="catalogThead"></tr></thead>
+          <tbody id="catalogTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <section class="panel" id="panel-enemies" hidden>
+    <div class="stats" id="enemyStats"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="enemySearch" placeholder="Cerca per nome o archetipo&hellip;">
+      </div>
+      <div class="chips" id="enemyWeaponChips"></div>
+      <select class="selbox" id="enemyTierFilter"></select>
+      <button class="chip" id="enemyBossToggle">Solo Boss</button>
+      <button class="chip" id="enemyInGameToggle">Solo in gioco</button>
+      <button class="btn primary small" id="enemySyncBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3M4 6v4h4M20 18v-4h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Sincronizza
+      </button>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-head">
+        <div class="chart-title">Indice di minaccia<span class="sub">&nbsp;&middot; &radic;(EHP &times; DPS) &mdash; stima combinata di sopravvivenza e potenza di fuoco</span></div>
+      </div>
+      <div class="chart-legend" id="enemyClassLegend"></div>
+      <div class="chart-scroll"><svg id="enemyThreatChart"></svg></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-head">
+        <div class="chart-title">Sopravvivenza vs potenza di fuoco<span class="sub">&nbsp;&middot; EHP (integrit&agrave;+scudo) contro DPS, scala logaritmica &mdash; cerchio con bordo rosso = Boss</span></div>
+      </div>
+      <div class="chart-scroll"><svg id="enemyScatterChart"></svg></div>
+    </div>
+
+    <div class="table-shell">
+      <div class="table-scroll">
+        <table>
+          <thead><tr id="enemyThead"></tr></thead>
+          <tbody id="enemyTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div>
+      <div class="idline mono" id="dwId">MOD00-Example</div>
+      <h2 id="dwTitle">Nome</h2>
+    </div>
+    <button class="drawer-close" id="dwClose">&times;</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot">
+    <button class="btn ghost small" id="dwRevert">Annulla modifiche</button>
+    <button class="btn primary small" id="dwSave">Salva riga</button>
+  </div>
+</div>
+
+<div class="modal-scrim" id="modalScrim">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3M4 6v4h4M20 18v-4h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Sincronizza su Google Sheet
+      </h3>
+      <button class="drawer-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot">
+      <button class="btn ghost small" id="copyDiffBtn">Copia riepilogo</button>
+      <button class="btn primary small" id="modalOkBtn">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="chart-tooltip" id="chartTooltip"></div>
+
+<script>
+/* ============================== DATA ============================== */
+const BODY_ITEMS = [];
+const ENGINE_ITEMS = [];
+const PRIMARY_ITEMS = [];
+const SECONDARY_ITEMS = [];
+/* I dati dei moduli vengono caricati da /api/data (SQLite, vedi server.js) al bootstrap: */
+
+const RARITY_ORDER = ["Salvage","Common","Uncommon","Rare","Epic","Legendary","Mythic"];
+const RARITY_COLOR = {
+  Salvage:"var(--r-salvage)", Common:"var(--r-common)", Uncommon:"var(--r-uncommon)",
+  Rare:"var(--r-rare)", Epic:"var(--r-epic)", Legendary:"var(--r-legendary)", Mythic:"var(--r-mythic)"
+};
+const CLASS_COLOR = {
+  Gatling:"var(--c-gatling)", Laser:"var(--c-laser)",
+  Rocket:"var(--c-rocket)", SonicShooter:"var(--c-sonicshooter)",
+  Shotgun:"var(--c-shotgun)", "N/D":"var(--text-faint)"
+};
+
+const CHAPTER_ORDER = ['0','1','2','3','4','Mining','Altro'];
+const CHAPTER_COLOR = {};
+CHAPTER_ORDER.forEach((c,i) => { CHAPTER_COLOR[c] = RARITY_COLOR[RARITY_ORDER[i]] || 'var(--text-faint)'; });
+const CHAPTER_LABEL = { '0':'Capitolo 0', '1':'Capitolo 1', '2':'Capitolo 2', '3':'Capitolo 3', '4':'Capitolo 4', Mining:'Mining', Altro:'Altro' };
+
+/* ============================== COLUMN CONFIG ============================== */
+function weaponColumns(opts){
+  const cols = [
+    {key:'Name', label:'Nome', type:'text', editable:true, default:true, pin:true},
+    {key:'WeaponClass', label:'Classe', type:'class', editable:false, default:true},
+    {key:'Rarity', label:'Rarità', type:'rarity', editable:true, default:true},
+    {key:'Price', label:'Prezzo', type:'num', editable:true, default:true},
+    {key:'Quality', label:'Qualità', type:'num', editable:true, default:true},
+    {key:'BaseDamageMin', label:'Danno Min', type:'num', editable:true, default:true},
+    {key:'BaseDamageMax', label:'Danno Max', type:'num', editable:true, default:true},
+    {key:'DPS', label:'DPS', type:'num', editable:true, default:true},
+    {key:'Rate', label:'Cadenza (s)', type:'num', editable:true, default:false},
+    {key:'HeatGeneration', label:'Calore/colpo', type:'num', editable:true, default:false},
+    {key:'ProjectileAccuracy', label:'Precisione', type:'pct', editable:true, default:false},
+    {key:'ProjectileRange', label:'Gittata', type:'num', editable:true, default:false},
+    {key:'ProjectileSpeed', label:'Vel. Proiettile', type:'num', editable:true, default:false},
+    {key:'CritChance', label:'Crit %', type:'pct', editable:true, default:false},
+    {key:'CritDamage', label:'Crit ×', type:'num', editable:true, default:false},
+    {key:'Socket', label:'Socket', type:'num', editable:true, default:true},
+    {key:'AmmoMagazineSize', label:'Munizioni', type:'num', editable:true, default:false},
+    {key:'AmmoType', label:'Tipo Munizione', type:'text', editable:false, default:false},
+  ];
+  if(opts.dpsNoCrit) cols.push({key:'DPSNoCrit', label:'DPS senza Crit', type:'num', editable:false, default:false});
+  if(opts.neededCost) cols.push({key:'NeededCost', label:'Costo Potenziamento', type:'num', editable:true, default:false});
+  cols.push({key:'Producer', label:'Produttore', type:'text', editable:true, default:false});
+  return cols;
+}
+
+const CATS = [
+  {
+    id:'body', label:'Corpo Principale', plural:'corpi', items: BODY_ITEMS,
+    classField:null, classOptions:[], defaultChartMetric:'HullIntegrity',
+    columns:[
+      {key:'Name', label:'Nome', type:'text', editable:true, default:true, pin:true},
+      {key:'Rarity', label:'Rarità', type:'rarity', editable:true, default:true},
+      {key:'Price', label:'Prezzo', type:'num', editable:true, default:true},
+      {key:'Quality', label:'Qualità', type:'num', editable:true, default:true},
+      {key:'HullIntegrity', label:'Hull', type:'num', editable:true, default:true},
+      {key:'Shield', label:'Scudo', type:'num', editable:true, default:true},
+      {key:'Power', label:'Energia', type:'num', editable:true, default:true},
+      {key:'Heat', label:'Calore', type:'num', editable:true, default:false},
+      {key:'Cargo', label:'Cargo', type:'num', editable:true, default:false},
+      {key:'BoosterSpeedMultiplier', label:'Booster ×', type:'num', editable:true, default:false},
+      {key:'StressDriveSpeedMultiplier', label:'Stress Drive ×', type:'num', editable:true, default:false},
+      {key:'SocketValue', label:'Valore Socket', type:'num', editable:true, default:true},
+      {key:'MaxP1', label:'Max P1', type:'num', editable:false, default:false},
+      {key:'MaxP2', label:'Max P2', type:'num', editable:false, default:false},
+      {key:'MaxP3', label:'Max P3', type:'num', editable:false, default:false},
+      {key:'Producer', label:'Produttore', type:'text', editable:true, default:false},
+    ]
+  },
+  {
+    id:'engine', label:'Motori', plural:'motori', items: ENGINE_ITEMS,
+    classField:null, classOptions:[], defaultChartMetric:'MaxSpeedCheck',
+    columns:[
+      {key:'Name', label:'Nome', type:'text', editable:true, default:true, pin:true},
+      {key:'Rarity', label:'Rarità', type:'rarity', editable:true, default:true},
+      {key:'Price', label:'Prezzo', type:'num', editable:true, default:true},
+      {key:'Quality', label:'Qualità', type:'num', editable:true, default:true},
+      {key:'SpeedIncrement', label:'Velocità', type:'num', editable:true, default:true},
+      {key:'BoostChargeConsumption', label:'Consumo Boost', type:'num', editable:true, default:true},
+      {key:'PowerConsumption', label:'Consumo Energia', type:'num', editable:true, default:false},
+      {key:'Socket', label:'Socket', type:'num', editable:true, default:false},
+      {key:'AdditionalSocket', label:'Socket Extra', type:'num', editable:true, default:false},
+      {key:'MaxSpeedCheck', label:'Velocità Max', type:'num', editable:false, default:true},
+      {key:'NeededCost', label:'Costo Potenziamento', type:'num', editable:true, default:false},
+      {key:'Producer', label:'Produttore', type:'text', editable:true, default:false},
+    ]
+  },
+  {
+    id:'primary', label:'Armi Primarie', plural:'armi primarie', items: PRIMARY_ITEMS,
+    classField:'WeaponClass', classOptions:['Gatling','Laser'], defaultChartMetric:'DPS',
+    columns: weaponColumns({neededCost:true, dpsNoCrit:false})
+  },
+  {
+    id:'secondary', label:'Armi Secondarie', plural:'armi secondarie', items: SECONDARY_ITEMS,
+    classField:'WeaponClass', classOptions:['Rocket','SonicShooter'], defaultChartMetric:'DPS',
+    columns: weaponColumns({neededCost:false, dpsNoCrit:true})
+  },
+];
+const CAT_BY_ID = {}; CATS.forEach(c => CAT_BY_ID[c.id] = c);
+const CAT_LABEL = {}; CATS.forEach(c => CAT_LABEL[c.id] = c.label);
+
+/* ============================== STATE ============================== */
+/* I dati "vivi" (current) vivono in CATS[].items (mutato in blocco dopo il fetch
+   da /api/data), gli "originals" servono solo per dirty-check/revert lato client. */
+let ORIGINALS = {}; CATS.forEach(c => { ORIGINALS[c.id] = {}; });
+
+let colVisibility = {};
+CATS.forEach(c => {
+  let saved = null;
+  try{ saved = JSON.parse(localStorage.getItem('hellgalaxy_cols_'+c.id) || 'null'); }catch(e){ saved = null; }
+  if(saved){ colVisibility[c.id] = saved; }
+  else{
+    const v = {};
+    c.columns.forEach(col => { if(!col.pin) v[col.key] = !!col.default; });
+    colVisibility[c.id] = v;
+  }
+});
+
+let connections = [];
+try{ connections = JSON.parse(localStorage.getItem('hellgalaxy_sheet_connections') || '[]'); }catch(e){ connections = []; }
+let oauthClientId = '';
+try{ oauthClientId = localStorage.getItem('hellgalaxy_oauth_client_id') || ''; }catch(e){ oauthClientId = ''; }
+
+// Elenco dei CSV sorgente inviati (e futuri): un blocco per file in Impostazioni,
+// con lo stesso nome del CSV, dove incollare il link al foglio Google corrispondente.
+const CSV_SOURCES = [
+  {group:'Entities', name:'HS - Entity - ENTITIES.csv'},
+  {group:'Entities', name:'HS - Entity - Modules - Body.csv'},
+  {group:'Entities', name:'HS - Entity - Modules - Engine.csv'},
+  {group:'Entities', name:'HS - Entity - Modules - Primary.csv'},
+  {group:'Entities', name:'HS - Entity - Modules - Secondary.csv'},
+  {group:'Enemies', name:'HS - Enemies - Association.csv'},
+  {group:'Enemies', name:'HS - Enemies - GeneralEnemies.csv'},
+  {group:'Enemies', name:'HS - Enemies - AbilitiesAssociation.csv'},
+  {group:'Enemies', name:'HS - Enemies - AbilitiesLibrary.csv'},
+  {group:'Enemies', name:'HS - Enemies - EnemyWeapons.csv'},
+  {group:'Stations', name:'HS - SpaceStations - SpaceStationRules.csv'},
+  {group:'Stations', name:'HS - SpaceStations - GenericLockRules.csv'},
+  {group:'Quests', name:'HS - Quests - ManualQuestChains.csv'},
+  {group:'Quests', name:'HS - Quests - ManualQuests.csv'},
+];
+let csvSheetLinks = {};
+try{ csvSheetLinks = JSON.parse(localStorage.getItem('hellgalaxy_csv_sheet_links') || '{}'); }catch(e){ csvSheetLinks = {}; }
+function persistCsvSheetLinks(){ try{ localStorage.setItem('hellgalaxy_csv_sheet_links', JSON.stringify(csvSheetLinks)); }catch(e){} }
+
+let producerImages = {}; // popolato dal fetch di /api/data: {name: '/images/producers/xxx.jpg'}
+
+function computeProducers(){
+  const map = {};
+  CATS.forEach(c => {
+    c.items.forEach(i => {
+      const name = (i.Producer || '').trim();
+      const key = name || '— Nessun produttore';
+      if(!map[key]) map[key] = {name: key, real: !!name, count:0, byCat:{}};
+      map[key].count++;
+      map[key].byCat[c.id] = (map[key].byCat[c.id]||0) + 1;
+    });
+  });
+  return Object.values(map).sort((a,b) => a.name.localeCompare(b.name));
+}
+
+let uiState = {};
+CATS.forEach(c => { uiState[c.id] = { search:'', classFilter:'Tutti', rarityFilter:'Tutte', sortKey:'Name', sortDir:1, chartMetric: c.defaultChartMetric, chartMax: null, labelAngle: null }; });
+const SECTIONS = [
+  {id:'entities', label:'Entities'},
+  {id:'quest', label:'Quest'},
+  {id:'stations', label:'Stations'},
+  {id:'enemies', label:'Enemies'},
+  {id:'settings', label:'Impostazioni'},
+];
+let activeSection = 'entities';
+let activeTab = 'body';
+let drawerCtx = null; // {catId, id}
+
+function persistCols(catId){ try{ localStorage.setItem('hellgalaxy_cols_'+catId, JSON.stringify(colVisibility[catId])); }catch(e){} }
+function persistConnections(){ try{ localStorage.setItem('hellgalaxy_sheet_connections', JSON.stringify(connections)); }catch(e){} }
+function persistOauth(){ try{ localStorage.setItem('hellgalaxy_oauth_client_id', oauthClientId); }catch(e){} }
+
+/* ============================== API CLIENT (server.js + SQLite) ============================== */
+async function apiGet(url){
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('Richiesta fallita: ' + url);
+  return res.json();
+}
+async function apiSend(url, method, body){
+  const res = await fetch(url, {method, headers:{'Content-Type':'application/json'}, body: body !== undefined ? JSON.stringify(body) : undefined});
+  if(!res.ok) throw new Error('Richiesta fallita: ' + url);
+  return res.json();
+}
+async function loadDataFromServer(){
+  const data = await apiGet('/api/data');
+  CATS.forEach(c => {
+    const catData = data.categories[c.id] || {items:[], originals:{}};
+    c.items.length = 0;
+    c.items.push(...catData.items);
+    ORIGINALS[c.id] = catData.originals;
+  });
+  producerImages = data.producers || {};
+}
+async function apiSaveModule(catId, id, fields){
+  const {current} = await apiSend('/api/modules/' + encodeURIComponent(id), 'PUT', {fields});
+  const cat = CAT_BY_ID[catId];
+  const idx = cat.items.findIndex(i => i.ID === id);
+  if(idx >= 0) cat.items[idx] = current; else cat.items.push(current);
+  return current;
+}
+async function apiRevertModule(catId, id){
+  const {current} = await apiSend('/api/modules/' + encodeURIComponent(id) + '/revert', 'POST');
+  const cat = CAT_BY_ID[catId];
+  const idx = cat.items.findIndex(i => i.ID === id);
+  if(idx >= 0) cat.items[idx] = current;
+  return current;
+}
+async function apiResetAllModules(){
+  const data = await apiSend('/api/modules/reset-all', 'POST');
+  CATS.forEach(c => {
+    const catData = data.categories[c.id] || {items:[], originals:{}};
+    c.items.length = 0;
+    c.items.push(...catData.items);
+    ORIGINALS[c.id] = catData.originals;
+  });
+}
+async function apiSetProducerImage(name, dataURL){
+  const {image} = await apiSend('/api/producers/' + encodeURIComponent(name), 'PUT', {image: dataURL});
+  producerImages[name] = image;
+  return image;
+}
+async function apiRemoveProducerImage(name){
+  await apiSend('/api/producers/' + encodeURIComponent(name), 'DELETE');
+  delete producerImages[name];
+}
+
+/* ============================== HELPERS ============================== */
+function escapeHtml(s){
+  return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function truncate(s, n){ s = String(s ?? ""); return s.length > n ? s.slice(0,n-1) + "…" : s; }
+
+function resizeImageFile(file, maxDim){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('read failed'));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('decode failed'));
+      img.onload = () => {
+        let w = img.naturalWidth, h = img.naturalHeight;
+        if(w > maxDim || h > maxDim){
+          if(w >= h){ h = Math.round(h * maxDim / w); w = maxDim; }
+          else { w = Math.round(w * maxDim / h); h = maxDim; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#14181c';
+        ctx.fillRect(0,0,w,h);
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.85));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function setupImageDropZone(el, onFile){
+  if(!el || el.dataset.dropWired) return;
+  el.dataset.dropWired = '1';
+  el.classList.add('img-drop-zone');
+  ['dragenter','dragover'].forEach(evt => el.addEventListener(evt, e => {
+    e.preventDefault(); e.stopPropagation();
+    el.classList.add('dragover');
+  }));
+  ['dragleave','dragend'].forEach(evt => el.addEventListener(evt, e => {
+    e.preventDefault(); e.stopPropagation();
+    el.classList.remove('dragover');
+  }));
+  el.addEventListener('drop', e => {
+    e.preventDefault(); e.stopPropagation();
+    el.classList.remove('dragover');
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if(!file) return;
+    if(!file.type.startsWith('image/')){ showToast('File non valido: seleziona un\'immagine'); return; }
+    onFile(file);
+  });
+}
+
+['dragover','drop'].forEach(evt => document.addEventListener(evt, e => e.preventDefault()));
+
+function getRow(catId, base){ return base; } // cat.items contiene già i valori correnti (dal DB)
+function isDirty(catId, id){
+  const cur = CAT_BY_ID[catId].items.find(i => i.ID === id);
+  const orig = ORIGINALS[catId][id];
+  if(!cur || !orig) return false;
+  return Object.keys(orig).some(k => String(cur[k] ?? '') !== String(orig[k] ?? ''));
+}
+function dirtyCountFor(catId){ return CAT_BY_ID[catId].items.filter(i => isDirty(catId, i.ID)).length; }
+function totalDirtyCount(){ return CATS.reduce((sum,c) => sum + dirtyCountFor(c.id), 0) + dirtyEnemyCount(); }
+
+function fmtVal(col, v){
+  if(v === undefined || v === null || v === '') return '—';
+  if(col.type === 'num'){
+    const n = Number(v);
+    if(Number.isNaN(n)) return String(v);
+    const rounded = Math.round(n*100)/100;
+    return rounded.toLocaleString('it-IT');
+  }
+  if(col.type === 'pct'){
+    const n = Number(v) || 0;
+    return (Math.round(n*1000)/10).toLocaleString('it-IT') + '%';
+  }
+  return String(v);
+}
+function sortVal(col, v){
+  if(col.type === 'num' || col.type === 'pct') return Number(v) || 0;
+  if(col.type === 'rarity') return RARITY_ORDER.indexOf(v);
+  return String(v ?? '').toLowerCase();
+}
+
+/* ============================== SHELL BUILD ============================== */
+function buildSectionbar(){
+  const nav = document.getElementById('sectionbar');
+  const mainSections = SECTIONS.filter(s => s.id !== 'settings');
+  const settingsSection = SECTIONS.find(s => s.id === 'settings');
+  const btnHtml = (s, anchored) => `<button class="section-tab ${anchored?'section-settings':''} ${activeSection===s.id?'active':''}" data-section="${s.id}">${escapeHtml(s.label)}</button>`;
+  nav.innerHTML = `<div class="tabgroup">${mainSections.map(s => btnHtml(s, false)).join('')}</div>${settingsSection ? btnHtml(settingsSection, true) : ''}`;
+  nav.querySelectorAll('.section-tab').forEach(el => el.addEventListener('click', () => {
+    activeSection = el.dataset.section;
+    renderAll();
+  }));
+}
+
+function buildTabbar(){
+  const nav = document.getElementById('tabbar');
+  const catTabs = CATS.map(c => {
+    const n = dirtyCountFor(c.id);
+    return `<button class="tab ${activeTab===c.id?'active':''} ${n>0?'hasdirty':''}" data-tab="${c.id}">
+      ${escapeHtml(c.label)} <span class="tabdot">${n}</span>
+    </button>`;
+  }).join('');
+  const producersTab = `<button class="tab ${activeTab==='producers'?'active':''}" data-tab="producers">Produttori</button>`;
+  nav.innerHTML = `<div class="tabgroup">${catTabs}${producersTab}</div>`;
+  nav.querySelectorAll('.tab').forEach(el => el.addEventListener('click', () => {
+    activeTab = el.dataset.tab;
+    renderAll();
+  }));
+}
+
+function buildPanels(){
+  const wrap = document.getElementById('panels');
+  wrap.innerHTML = CATS.map(c => `
+    <section class="panel" id="panel-${c.id}" ${activeTab===c.id ? '' : 'hidden'}>
+      <div class="stats" id="stats-${c.id}"></div>
+      <div class="toolbar">
+        <div class="search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input type="text" class="searchInput" data-cat="${c.id}" placeholder="Cerca per nome, ID o produttore&hellip;">
+        </div>
+        ${c.classField ? `<div class="chips classChips" data-cat="${c.id}"></div>` : ''}
+        <select class="selbox rarityFilter" data-cat="${c.id}"></select>
+        <div class="colpop-wrap">
+          <button class="btn ghost small colBtn" data-cat="${c.id}">Colonne</button>
+          <div class="colpop" id="colpop-${c.id}"></div>
+        </div>
+        <button class="btn primary small syncBtn" data-cat="${c.id}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3M4 6v4h4M20 18v-4h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Sincronizza
+        </button>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head">
+          <div class="chart-title">Confronto moduli<span class="sub" id="chartSub-${c.id}"></span></div>
+          <div class="chart-controls">
+            <label for="chartMetric-${c.id}">Metrica</label>
+            <select class="selbox chartMetricSel" id="chartMetric-${c.id}" data-cat="${c.id}"></select>
+            <label for="chartMax-${c.id}">Scala max</label>
+            <input type="number" class="chart-maxinput chartMaxInput" id="chartMax-${c.id}" data-cat="${c.id}">
+            <button class="btn ghost small chartResetBtn" data-cat="${c.id}">Reset</button>
+            <label>Etichette</label>
+            <div class="chips chartAngleChips" data-cat="${c.id}">
+              <button class="chip" data-cat="${c.id}" data-angle="0">Orizzontale</button>
+              <button class="chip" data-cat="${c.id}" data-angle="45">45&deg;</button>
+              <button class="chip" data-cat="${c.id}" data-angle="90">90&deg;</button>
+            </div>
+          </div>
+        </div>
+        <div class="chart-legend" id="chartLegend-${c.id}"></div>
+        <div class="chart-scroll"><svg id="chartSvg-${c.id}"></svg></div>
+      </div>
+      <div class="table-shell">
+        <div class="table-scroll">
+          <table>
+            <thead><tr id="thead-${c.id}"></tr></thead>
+            <tbody id="tbody-${c.id}"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  `).join('')
+    + `<section class="panel" id="panel-producers" ${activeTab==='producers' ? '' : 'hidden'}></section>`;
+
+  // wire per-category controls once (delegated by data-cat, elements persist across renders unless rebuilt)
+  wrap.querySelectorAll('.searchInput').forEach(el => el.addEventListener('input', e => {
+    uiState[e.target.dataset.cat].search = e.target.value;
+    renderTable(e.target.dataset.cat);
+  }));
+  wrap.querySelectorAll('.rarityFilter').forEach(el => el.addEventListener('change', e => {
+    uiState[e.target.dataset.cat].rarityFilter = e.target.value;
+    renderTable(e.target.dataset.cat);
+  }));
+  wrap.querySelectorAll('.colBtn').forEach(el => el.addEventListener('click', e => {
+    const cat = e.currentTarget.dataset.cat;
+    document.querySelectorAll('.colpop').forEach(p => { if(p.id !== 'colpop-'+cat) p.classList.remove('show'); });
+    document.getElementById('colpop-'+cat).classList.toggle('show');
+  }));
+  wrap.querySelectorAll('.syncBtn').forEach(el => el.addEventListener('click', e => openSyncModal(e.currentTarget.dataset.cat)));
+  wrap.querySelectorAll('.chartMetricSel').forEach(el => el.addEventListener('change', e => {
+    const cat = e.target.dataset.cat;
+    uiState[cat].chartMetric = e.target.value;
+    uiState[cat].chartMax = null;
+    renderChart(cat);
+  }));
+  wrap.querySelectorAll('.chartMaxInput').forEach(el => el.addEventListener('change', e => {
+    const cat = e.target.dataset.cat;
+    const v = Number(e.target.value);
+    uiState[cat].chartMax = (v > 0) ? v : null;
+    renderChart(cat);
+  }));
+  wrap.querySelectorAll('.chartResetBtn').forEach(el => el.addEventListener('click', e => {
+    const cat = e.target.dataset.cat;
+    uiState[cat].chartMax = null;
+    renderChart(cat);
+  }));
+  wrap.querySelectorAll('.chartAngleChips .chip').forEach(el => el.addEventListener('click', e => {
+    const cat = e.target.dataset.cat;
+    uiState[cat].labelAngle = Number(e.target.dataset.angle);
+    renderChart(cat);
+  }));
+  document.addEventListener('click', e => {
+    if(!e.target.closest('.colpop-wrap')) document.querySelectorAll('.colpop').forEach(p => p.classList.remove('show'));
+  });
+}
+
+function buildRaritySelect(catId){
+  const cat = CAT_BY_ID[catId];
+  const present = Array.from(new Set(cat.items.map(i => getRow(catId,i).Rarity))).sort((a,b) => RARITY_ORDER.indexOf(a)-RARITY_ORDER.indexOf(b));
+  const sel = document.querySelector('.rarityFilter[data-cat="'+catId+'"]');
+  sel.innerHTML = `<option value="Tutte">Tutte le rarità</option>` + present.map(r => `<option value="${r}">${r}</option>`).join('');
+  sel.value = uiState[catId].rarityFilter;
+}
+
+function buildClassChips(catId){
+  const cat = CAT_BY_ID[catId];
+  if(!cat.classField) return;
+  const el = document.querySelector('.classChips[data-cat="'+catId+'"]');
+  const counts = { Tutti: cat.items.length };
+  cat.classOptions.forEach(t => counts[t] = cat.items.filter(i => getRow(catId,i)[cat.classField] === t).length);
+  const opts = ['Tutti', ...cat.classOptions];
+  el.innerHTML = opts.map(t => `<button class="chip ${uiState[catId].classFilter===t?'active':''}" data-cat="${catId}" data-cls="${t}">${t} <span class="cnt">${counts[t]}</span></button>`).join('');
+  el.querySelectorAll('.chip').forEach(btn => btn.addEventListener('click', () => {
+    uiState[catId].classFilter = btn.dataset.cls;
+    renderTable(catId);
+  }));
+}
+
+function buildColPop(catId){
+  const cat = CAT_BY_ID[catId];
+  const pop = document.getElementById('colpop-'+catId);
+  const toggleable = cat.columns.filter(c => !c.pin);
+  pop.innerHTML = toggleable.map(c => `
+    <label><input type="checkbox" data-cat="${catId}" data-key="${c.key}" ${colVisibility[catId][c.key] ? 'checked':''}> ${escapeHtml(c.label)}</label>
+  `).join('') + `<div class="colpop-foot"><button data-cat="${catId}" class="colAll">Mostra tutte</button><button data-cat="${catId}" class="colNone">Nascondi tutte</button></div>`;
+  pop.querySelectorAll('input[type=checkbox]').forEach(cb => cb.addEventListener('change', () => {
+    colVisibility[catId][cb.dataset.key] = cb.checked;
+    persistCols(catId);
+    renderTable(catId);
+  }));
+  pop.querySelector('.colAll').addEventListener('click', () => {
+    toggleable.forEach(c => colVisibility[catId][c.key] = true);
+    persistCols(catId); buildColPop(catId); renderTable(catId);
+  });
+  pop.querySelector('.colNone').addEventListener('click', () => {
+    toggleable.forEach(c => colVisibility[catId][c.key] = false);
+    persistCols(catId); buildColPop(catId); renderTable(catId);
+  });
+}
+
+/* ============================== RENDER: STATS ============================== */
+function renderStats(catId){
+  const cat = CAT_BY_ID[catId];
+  const rows = cat.items.map(i => getRow(catId,i));
+  const total = rows.length;
+  let items = [{l:'Totale', n: total, accent:true}];
+  if(cat.classField){
+    cat.classOptions.forEach(t => items.push({l:t, n: rows.filter(r => r[cat.classField]===t).length}));
+  } else {
+    const active = rows.filter(r => Number(r.Price) > 0 || Number(r.Quality) > 0).length;
+    items.push({l:'Configurati', n: active});
+    items.push({l:'Placeholder', n: total-active});
+  }
+  document.getElementById('stats-'+catId).innerHTML = items.map(it => `
+    <div class="stat${it.accent?' accent':''}"><div class="n mono">${it.n}</div><div class="l">${escapeHtml(it.l)}</div></div>
+  `).join('');
+}
+
+/* ============================== RENDER: TABLE ============================== */
+function currentList(catId){
+  const cat = CAT_BY_ID[catId];
+  const st = uiState[catId];
+  let rows = cat.items.map(i => getRow(catId, i));
+  if(cat.classField && st.classFilter !== 'Tutti') rows = rows.filter(r => r[cat.classField] === st.classFilter);
+  if(st.rarityFilter && st.rarityFilter !== 'Tutte') rows = rows.filter(r => r.Rarity === st.rarityFilter);
+  if(st.search.trim()){
+    const q = st.search.trim().toLowerCase();
+    rows = rows.filter(r => (r.Name||'').toLowerCase().includes(q) || (r.ID||'').toLowerCase().includes(q) || (r.Producer||'').toLowerCase().includes(q));
+  }
+  const col = st.sortKey === 'ID' ? {key:'ID', type:'text'} : (cat.columns.find(c => c.key === st.sortKey) || {key:'Name', type:'text'});
+  rows.sort((a,b) => {
+    const av = sortVal(col, a[st.sortKey]), bv = sortVal(col, b[st.sortKey]);
+    if(av < bv) return -1*st.sortDir;
+    if(av > bv) return 1*st.sortDir;
+    return 0;
+  });
+  return rows;
+}
+
+function visibleColumns(catId){
+  const cat = CAT_BY_ID[catId];
+  return cat.columns.filter(c => c.pin || colVisibility[catId][c.key]);
+}
+
+function renderTableHead(catId){
+  const cat = CAT_BY_ID[catId];
+  const st = uiState[catId];
+  const cols = visibleColumns(catId);
+  const idSorted = st.sortKey === 'ID';
+  const idArrow = idSorted ? (st.sortDir===1 ? '↑' : '↓') : '';
+  const th = document.getElementById('thead-'+catId);
+  th.innerHTML = `<th></th><th class="thumb-cell"></th><th data-cat="${catId}" data-key="ID" class="id-col ${idSorted?'sorted':''}">ID<span class="arrow">${idArrow}</span></th>` + cols.map(c => {
+    const sorted = st.sortKey === c.key;
+    const arrow = sorted ? (st.sortDir===1 ? '↑' : '↓') : '';
+    return `<th data-cat="${catId}" data-key="${c.key}" class="${sorted?'sorted':''}">${escapeHtml(c.label)}<span class="arrow">${arrow}</span></th>`;
+  }).join('');
+  th.querySelectorAll('th[data-key]').forEach(el => el.addEventListener('click', () => {
+    const key = el.dataset.key;
+    if(st.sortKey === key) st.sortDir *= -1; else { st.sortKey = key; st.sortDir = 1; }
+    renderTable(catId);
+  }));
+}
+
+function renderCell(col, row){
+  const v = row[col.key];
+  if(col.type === 'rarity'){
+    return `<span class="badge-rarity" style="color:${RARITY_COLOR[v]||'var(--text-dim)'}"><span class="sw" style="background:${RARITY_COLOR[v]||'var(--text-faint)'}"></span>${escapeHtml(v)}</span>`;
+  }
+  if(col.type === 'class'){
+    const color = CLASS_COLOR[v] || 'var(--text-faint)';
+    return `<span class="badge-type" style="color:${color}; border-color:color-mix(in srgb, ${color} 45%, var(--border)); background:color-mix(in srgb, ${color} 14%, var(--surface-3));"><span class="sw" style="background:${color}"></span>${escapeHtml(v)}</span>`;
+  }
+  if(col.type === 'num' || col.type === 'pct'){
+    return `<span class="num-cell">${fmtVal(col, v)}</span>`;
+  }
+  return escapeHtml(v ?? '—');
+}
+
+/* ============================== RENDER: CHART ============================== */
+function chartMetricColumns(cat){
+  return cat.columns.filter(c => c.type === 'num' || c.type === 'pct');
+}
+
+function buildChartMetricSelect(catId){
+  const cat = CAT_BY_ID[catId];
+  const sel = document.getElementById('chartMetric-'+catId);
+  const cols = chartMetricColumns(cat);
+  sel.innerHTML = cols.map(c => `<option value="${c.key}">${escapeHtml(c.label)}</option>`).join('');
+  sel.value = uiState[catId].chartMetric;
+}
+
+function niceStep(maxVal){
+  if(!(maxVal > 0)) return 1;
+  const rough = maxVal / 4;
+  const mag = Math.pow(10, Math.floor(Math.log10(rough)));
+  const norm = rough / mag;
+  let step;
+  if(norm < 1.5) step = 1;
+  else if(norm < 3) step = 2;
+  else if(norm < 7) step = 5;
+  else step = 10;
+  return step * mag;
+}
+
+function roundedTopBarPath(x, y, w, h, r){
+  const bottom = y + h;
+  r = Math.min(r, w/2, h);
+  if(h <= 0) return '';
+  if(h < r){ return `M${x},${bottom} L${x},${bottom-h} L${x+w},${bottom-h} L${x+w},${bottom} Z`; }
+  return `M${x},${bottom} L${x},${y+r} Q${x},${y} ${x+r},${y} L${x+w-r},${y} Q${x+w},${y} ${x+w},${y+r} L${x+w},${bottom} Z`;
+}
+
+function renderChart(catId){
+  const cat = CAT_BY_ID[catId];
+  buildChartMetricSelect(catId);
+  const metricKey = uiState[catId].chartMetric;
+  const col = cat.columns.find(c => c.key === metricKey) || chartMetricColumns(cat)[0];
+  const rows = currentList(catId).slice().sort((a,b) => (Number(b[col.key])||0) - (Number(a[col.key])||0));
+
+  const allValues = cat.items.map(i => Number(getRow(catId,i)[col.key]) || 0);
+  const dataMax = allValues.length ? Math.max(...allValues) : 0;
+  document.getElementById('chartSub-'+catId).textContent = ` · max reale tra tutti i moduli: ${fmtVal(col, dataMax)}`;
+
+  const maxInput = document.getElementById('chartMax-'+catId);
+  // chartMax resta null finche' l'utente non imposta un valore manuale (o preme Reset):
+  // in questo modo la scala segue sempre il massimo reale aggiornato, invece di
+  // "congelarsi" al primo valore calcolato.
+  const isAutoMax = uiState[catId].chartMax === null;
+  const chartMax = isAutoMax ? (dataMax > 0 ? dataMax : 1) : (uiState[catId].chartMax > 0 ? uiState[catId].chartMax : 1);
+  maxInput.value = Math.round(chartMax * 100) / 100;
+
+  const svg = document.getElementById('chartSvg-'+catId);
+  const legend = document.getElementById('chartLegend-'+catId);
+
+  if(!rows.length){
+    svg.style.display = 'none';
+    legend.innerHTML = '';
+    return;
+  }
+  svg.style.display = '';
+
+  const autoAngle = rows.length > 20 ? 90 : (rows.length > 9 ? 45 : 0);
+  const angle = uiState[catId].labelAngle === null ? autoAngle : uiState[catId].labelAngle;
+  const angleChips = document.querySelectorAll('.chartAngleChips[data-cat="'+catId+'"] .chip');
+  angleChips.forEach(ch => ch.classList.toggle('active', Number(ch.dataset.angle) === angle));
+  const LABEL_SPEC = { 0: {pad:34, len:9}, 45: {pad:92, len:17}, 90: {pad:146, len:24} }[angle];
+
+  const barW = 22, gap = 12, plotH = 190, axisW = 52, topPad = 26;
+  const width = axisW + rows.length * (barW + gap) + gap;
+  const height = topPad + plotH + LABEL_SPEC.pad;
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+
+  const usedRarities = Array.from(new Set(rows.map(r => r.Rarity)));
+  legend.innerHTML = RARITY_ORDER.filter(r => usedRarities.includes(r)).map(r => `
+    <div class="lg-item"><span class="lg-sw" style="background:${RARITY_COLOR[r]}"></span>${escapeHtml(r)}</div>
+  `).join('');
+
+  const step = niceStep(chartMax);
+  const ticks = [];
+  for(let v = 0; v <= chartMax + 1e-9; v += step) ticks.push(v);
+  if(ticks.length < 2) ticks.push(chartMax);
+
+  let svgParts = [];
+  ticks.forEach(t => {
+    const y = topPad + plotH - (Math.min(t, chartMax) / chartMax) * plotH;
+    svgParts.push(`<line x1="${axisW}" y1="${y}" x2="${width}" y2="${y}" stroke="var(--border-soft)" stroke-width="1"/>`);
+    svgParts.push(`<text x="${axisW-8}" y="${y+3}" text-anchor="end" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Mono, monospace">${fmtVal(col,t)}</text>`);
+  });
+  svgParts.push(`<line x1="${axisW}" y1="${topPad+plotH}" x2="${width}" y2="${topPad+plotH}" stroke="var(--border)" stroke-width="1"/>`);
+
+  rows.forEach((r, i) => {
+    const val = Number(r[col.key]) || 0;
+    const capped = Math.min(val, chartMax);
+    const h = chartMax > 0 ? (capped / chartMax) * plotH : 0;
+    const x = axisW + gap + i * (barW + gap);
+    const y = topPad + plotH - h;
+    const color = RARITY_COLOR[r.Rarity] || 'var(--text-faint)';
+    const path = roundedTopBarPath(x, y, barW, h, 4);
+    const overflow = val > chartMax;
+    svgParts.push(`<path class="chart-bar" data-cat="${catId}" data-idx="${i}" d="${path}" fill="${color}"></path>`);
+    if(overflow){
+      svgParts.push(`<path d="M${x+barW/2-4},${y+6} L${x+barW/2+4},${y+6} L${x+barW/2},${y-2} Z" fill="var(--danger)"></path>`);
+    }
+    if(i === 0){
+      const labelY = overflow ? y - 8 : Math.max(topPad - 8, y - 8);
+      svgParts.push(`<text x="${x+barW/2}" y="${labelY}" text-anchor="middle" font-size="10" fill="var(--text-dim)" font-family="IBM Plex Sans, sans-serif">${escapeHtml(truncate(r.Name,14))} · ${fmtVal(col,val)}</text>`);
+    }
+    const cx = x + barW/2, baseY = topPad + plotH;
+    const nameLabel = escapeHtml(truncate(r.Name, LABEL_SPEC.len));
+    if(angle === 0){
+      svgParts.push(`<text x="${cx}" y="${baseY+13}" text-anchor="middle" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Sans, sans-serif">${nameLabel}</text>`);
+    } else {
+      svgParts.push(`<text x="${cx}" y="${baseY+9}" text-anchor="end" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Sans, sans-serif" transform="rotate(-${angle} ${cx} ${baseY+9})">${nameLabel}</text>`);
+    }
+  });
+
+  svg.innerHTML = svgParts.join('');
+
+  const tooltip = document.getElementById('chartTooltip');
+  svg.querySelectorAll('.chart-bar').forEach(el => {
+    const r = rows[Number(el.dataset.idx)];
+    const val = Number(r[col.key]) || 0;
+    const showTip = (clientX, clientY) => {
+      tooltip.innerHTML = `<div class="tt-val">${fmtVal(col, val)}${val > chartMax ? ' ⚠' : ''}</div><div class="tt-name">${escapeHtml(r.Name)}</div><div class="tt-rarity">${escapeHtml(r.Rarity)} · ${escapeHtml(r.ID)}</div>`;
+      tooltip.style.left = clientX + 'px';
+      tooltip.style.top = (clientY - 12) + 'px';
+      tooltip.classList.add('show');
+    };
+    el.addEventListener('pointerenter', e => showTip(e.clientX, e.clientY));
+    el.addEventListener('pointermove', e => showTip(e.clientX, e.clientY));
+    el.addEventListener('pointerleave', () => tooltip.classList.remove('show'));
+    el.addEventListener('click', () => openDrawer(catId, r.ID));
+  });
+}
+
+function renderTable(catId){
+  renderStats(catId);
+  buildRaritySelect(catId);
+  buildClassChips(catId);
+  buildColPop(catId);
+  renderChart(catId);
+  renderTableHead(catId);
+  const cols = visibleColumns(catId);
+  const rows = currentList(catId);
+  const tbody = document.getElementById('tbody-'+catId);
+  if(!rows.length){
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="${cols.length+3}">Nessun elemento corrisponde ai filtri.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(r => `
+    <tr data-cat="${catId}" data-id="${escapeHtml(r.ID)}" class="${drawerCtx && drawerCtx.catId===catId && drawerCtx.id===r.ID ? 'selected':''}">
+      <td><span class="dot-edit ${isDirty(catId,r.ID)?'':'hidden-dot'}" title="Modificato"></span></td>
+      <td class="thumb-cell">${r.Image ? `<img class="thumb" src="${r.Image}" alt="">` : `<div class="thumb-placeholder">${escapeHtml((r.Name||'?').slice(0,1))}</div>`}</td>
+      <td class="id-cell mono">${escapeHtml(r.ID)}</td>
+      ${cols.map(c => `<td class="${c.editable ? 'editable-cell' : ''}" data-key="${c.key}" title="${c.editable ? 'Clicca per modificare' : ''}">${renderCell(c, r)}</td>`).join('')}
+    </tr>
+  `).join('');
+  tbody.querySelectorAll('tr[data-id]').forEach(tr => tr.addEventListener('dblclick', () => openDrawer(tr.dataset.cat, tr.dataset.id)));
+  tbody.querySelectorAll('td.editable-cell').forEach(td => td.addEventListener('click', () => startCellEdit(td)));
+  tbody.querySelectorAll('td.thumb-cell').forEach(td => {
+    const tr = td.closest('tr');
+    setupImageDropZone(td, file => applyTableImageDrop(tr.dataset.cat, tr.dataset.id, file));
+  });
+}
+
+function startCellEdit(td){
+  if(td.classList.contains('editing')) return;
+  const tr = td.closest('tr');
+  const catId = tr.dataset.cat, id = tr.dataset.id;
+  const cat = CAT_BY_ID[catId];
+  const key = td.dataset.key;
+  const col = cat.columns.find(c => c.key === key);
+  if(!col || !col.editable) return;
+  const row = cat.items.find(i => i.ID === id);
+  if(!row) return;
+  const currentVal = row[key];
+  const originalHtml = td.innerHTML;
+  // Blocca la larghezza della cella prima di sostituirne il contenuto: senza,
+  // un <select> con opzioni lunghe (es. Rarità) costringerebbe il browser ad
+  // allargare l'intera colonna per farcelo stare.
+  const lockedWidth = td.getBoundingClientRect().width;
+  td.style.width = lockedWidth + 'px';
+  td.classList.add('editing');
+
+  let inputHtml;
+  if(col.type === 'rarity'){
+    inputHtml = `<select class="cell-input">${RARITY_ORDER.map(rr => `<option value="${rr}" ${rr===currentVal?'selected':''}>${rr}</option>`).join('')}</select>`;
+  } else if(col.type === 'num'){
+    inputHtml = `<input class="cell-input" type="number" step="any" value="${Number(currentVal)||0}">`;
+  } else if(col.type === 'pct'){
+    inputHtml = `<input class="cell-input" type="number" step="0.01" min="0" max="1" value="${Number(currentVal)||0}">`;
+  } else {
+    inputHtml = `<input class="cell-input" type="text" value="${escapeHtml(currentVal ?? '')}">`;
+  }
+  td.innerHTML = inputHtml;
+  const inputEl = td.querySelector('.cell-input');
+  inputEl.focus();
+  if(inputEl.select) inputEl.select();
+  inputEl.addEventListener('click', e => e.stopPropagation());
+  inputEl.addEventListener('mousedown', e => e.stopPropagation());
+
+  let done = false;
+  const finish = (html) => { td.classList.remove('editing'); td.style.width = ''; td.innerHTML = html; };
+  const commit = async () => {
+    if(done) return; done = true;
+    let val = inputEl.value;
+    if(col.type === 'num' || col.type === 'pct') val = val === '' ? 0 : Number(val);
+    if(String(val) === String(currentVal ?? '')){ finish(originalHtml); return; }
+    try{
+      await apiSaveModule(catId, id, {[key]: val});
+      renderTable(catId);
+      renderDirtyPill();
+    }catch(e){
+      showToast('Impossibile salvare la modifica');
+      finish(originalHtml);
+    }
+  };
+  const cancel = () => { if(done) return; done = true; finish(originalHtml); };
+  inputEl.addEventListener('blur', commit);
+  inputEl.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === 'Return' || e.keyCode === 13){ e.preventDefault(); inputEl.blur(); }
+    else if(e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27){ e.preventDefault(); cancel(); }
+  });
+}
+
+async function applyTableImageDrop(catId, id, file){
+  const cat = CAT_BY_ID[catId];
+  const base = cat.items.find(i => i.ID === id);
+  if(!base) return;
+  try{
+    const dataURL = await resizeImageFile(file, 320);
+    await apiSaveModule(catId, id, {Image: dataURL});
+    renderAll();
+    showToast('Immagine salvata');
+  }catch(err){ showToast('Immagine non valida'); }
+}
+
+/* ============================== DIRTY PILL / TABS ============================== */
+function renderDirtyPill(){
+  const n = totalDirtyCount();
+  const pill = document.getElementById('dirtyPill');
+  const label = document.getElementById('dirtyLabel');
+  pill.classList.toggle('on', n>0);
+  label.textContent = n === 0 ? "Nessuna modifica" : (n===1 ? "1 modifica in sospeso" : n + " modifiche in sospeso");
+  document.getElementById('resetAllBtn').disabled = n===0;
+}
+
+/* ============================== DRAWER ============================== */
+function openDrawer(catId, id){
+  drawerCtx = {catId, id};
+  const cat = CAT_BY_ID[catId];
+  const base = cat.items.find(i => i.ID === id);
+  const r = getRow(catId, base);
+  document.getElementById('dwId').textContent = r.ID;
+  document.getElementById('dwTitle').textContent = r.Name;
+
+  const editableCols = cat.columns.filter(c => c.editable);
+  const readonlyCols = cat.columns.filter(c => !c.editable);
+
+  let html = `
+    <div class="field">
+      <label>Immagine</label>
+      <div class="img-field">
+        <div id="dwImgPreviewWrap">${r.Image ? `<img class="img-preview" id="dwImgPreview" src="${r.Image}" alt="">` : `<div class="img-preview-placeholder" id="dwImgPreview">Nessuna immagine</div>`}</div>
+        <div class="img-actions">
+          <label class="btn ghost small">Carica immagine<input type="file" accept="image/*" id="dwImgInput"></label>
+          <button type="button" class="btn ghost small danger" id="dwImgRemove" ${r.Image ? '' : 'disabled'}>Rimuovi</button>
+        </div>
+        <input type="hidden" id="f_Image" data-key="Image" value="${escapeHtml(r.Image || '')}">
+      </div>
+    </div>
+    <div class="field">
+      <label for="f_Description">Descrizione</label>
+      <textarea id="f_Description" data-key="Description">${escapeHtml(r.Description)}</textarea>
+    </div>
+  `;
+  html += editableCols.map(c => {
+    if(c.key === 'Name') return `<div class="field"><label for="f_${c.key}">Nome</label><input id="f_${c.key}" data-key="${c.key}" type="text" value="${escapeHtml(r[c.key])}"></div>`;
+    if(c.type === 'rarity'){
+      return `<div class="field"><label for="f_${c.key}">${escapeHtml(c.label)}</label><select id="f_${c.key}" data-key="${c.key}">${RARITY_ORDER.map(rr => `<option value="${rr}" ${rr===r[c.key]?'selected':''}>${rr}</option>`).join('')}</select></div>`;
+    }
+    if(c.type === 'pct'){
+      return `<div class="field"><label for="f_${c.key}">${escapeHtml(c.label)}</label><input id="f_${c.key}" data-key="${c.key}" type="number" step="0.01" min="0" max="1" value="${Number(r[c.key])||0}"><div class="hint">Valore 0–1 (es. 0.25 = 25%)</div></div>`;
+    }
+    if(c.type === 'num'){
+      return `<div class="field"><label for="f_${c.key}">${escapeHtml(c.label)}</label><input id="f_${c.key}" data-key="${c.key}" type="number" step="any" value="${Number(r[c.key])||0}"></div>`;
+    }
+    return `<div class="field"><label for="f_${c.key}">${escapeHtml(c.label)}</label><input id="f_${c.key}" data-key="${c.key}" type="text" value="${escapeHtml(r[c.key])}"></div>`;
+  }).join('');
+
+  if(readonlyCols.length){
+    html += `<div class="drawer-section-title">Info aggiuntive (sola lettura)</div><div class="readonly-grid">` +
+      readonlyCols.map(c => `<div class="ro-item"><div class="k">${escapeHtml(c.label)}</div><div class="v">${fmtVal(c, r[c.key])}</div></div>`).join('') +
+      `</div>`;
+  }
+
+  document.getElementById('drawerBody').innerHTML = html;
+  const applyDrawerImage = async file => {
+    try{
+      const dataURL = await resizeImageFile(file, 320);
+      document.getElementById('f_Image').value = dataURL;
+      document.getElementById('dwImgPreviewWrap').innerHTML = `<img class="img-preview" id="dwImgPreview" src="${dataURL}" alt="">`;
+      document.getElementById('dwImgRemove').disabled = false;
+    }catch(err){ showToast('Immagine non valida'); }
+  };
+  document.getElementById('dwImgInput').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if(file) applyDrawerImage(file);
+  });
+  setupImageDropZone(document.getElementById('dwImgPreviewWrap'), applyDrawerImage);
+  document.getElementById('dwImgRemove').addEventListener('click', () => {
+    document.getElementById('f_Image').value = '';
+    document.getElementById('dwImgPreviewWrap').innerHTML = `<div class="img-preview-placeholder" id="dwImgPreview">Nessuna immagine</div>`;
+    document.getElementById('dwImgRemove').disabled = true;
+  });
+  document.getElementById('dwRevert').disabled = !isDirty(catId, id);
+  document.getElementById('drawer').classList.add('show');
+  document.getElementById('scrim').classList.add('show');
+  renderTable(catId);
+}
+
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('show');
+  document.getElementById('scrim').classList.remove('show');
+  const ctx = drawerCtx;
+  drawerCtx = null;
+  if(ctx) renderTable(ctx.catId);
+}
+
+async function saveDrawer(){
+  if(!drawerCtx) return;
+  const {catId, id} = drawerCtx;
+  const draft = {};
+  document.querySelectorAll('#drawerBody [data-key]').forEach(el => {
+    let val = el.value;
+    if(el.tagName === 'INPUT' && el.type === 'number') val = val === '' ? 0 : Number(val);
+    draft[el.dataset.key] = val;
+  });
+  try{
+    await apiSaveModule(catId, id, draft);
+    showToast("Modifiche salvate nel database");
+    closeDrawer();
+    renderAll();
+  }catch(err){ showToast('Impossibile salvare le modifiche'); }
+}
+
+async function revertDrawer(){
+  if(!drawerCtx) return;
+  const {catId, id} = drawerCtx;
+  try{
+    await apiRevertModule(catId, id);
+    showToast("Riga ripristinata");
+    renderAll();
+    openDrawer(catId, id);
+  }catch(err){ showToast('Impossibile ripristinare la riga'); }
+}
+
+async function resetAllGlobal(){
+  if(totalDirtyCount() === 0) return;
+  if(!confirm("Ripristinare tutte le modifiche in tutte le categorie (incluso Enemies)? L'operazione non può essere annullata.")) return;
+  try{
+    await apiResetAllModules();
+    if(dirtyEnemyCount() > 0) await apiResetAllEnemies();
+    showToast("Tutte le modifiche sono state annullate");
+    renderAll();
+  }catch(err){ showToast('Impossibile ripristinare tutte le modifiche'); }
+}
+
+/* ============================== TOAST ============================== */
+let toastTimer = null;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ============================== SYNC MODAL ============================== */
+function fieldDiff(catId, original, current){
+  const cat = CAT_BY_ID[catId];
+  const out = [];
+  cat.columns.concat([{key:'Description', label:'Descrizione'}, {key:'Image', label:'Immagine'}]).forEach(c => {
+    if(String(current[c.key] ?? '') !== String(original[c.key] ?? '')){
+      if(c.key === 'Image'){
+        out.push({label:c.label, oldVal: original[c.key] ? '[immagine precedente]' : '[nessuna]', newVal: current[c.key] ? '[nuova immagine caricata]' : '[rimossa]'});
+      } else {
+        out.push({label:c.label, oldVal: original[c.key], newVal: current[c.key]});
+      }
+    }
+  });
+  return out;
+}
+
+function connectionsFor(catId){
+  return connections.filter(c => c.category === catId || c.category === 'all');
+}
+
+function connectExplainer(){
+  return `Per rendere reale l’aggiornamento con un click bastano due cose: (1) l’URL del foglio Google reale da collegare (configurabile in <strong>Impostazioni</strong>), e (2) un <em>Client ID OAuth</em> Google (si crea gratis in pochi minuti su Google Cloud Console). A quel punto il tool userà le API di Google Sheets per scrivere direttamente le righe modificate, con il tuo consenso ad ogni sessione.`;
+}
+
+function openSyncModal(catId){
+  const cat = CAT_BY_ID[catId];
+  const ids = cat.items.filter(i => isDirty(catId, i.ID)).map(i => i.ID);
+  const targets = connectionsFor(catId);
+  const body = document.getElementById('modalBody');
+
+  let targetHtml = '';
+  if(targets.length){
+    targetHtml = `<p>Verrà inviato a: ` + targets.map(t => `<strong>${escapeHtml(t.name)}</strong>`).join(', ') + `</p>`;
+  } else {
+    targetHtml = `<div class="callout warn">Nessun foglio Google collegato per <strong>${escapeHtml(cat.label)}</strong>. <button class="btn ghost small" id="goSettingsBtn" style="margin-top:8px;">Vai a Impostazioni</button></div>`;
+  }
+
+  if(!ids.length){
+    body.innerHTML = `
+      <p>Non ci sono modifiche in sospeso in <strong>${escapeHtml(cat.label)}</strong>.</p>
+      ${targetHtml}
+      <div class="callout">Questa è un’<strong>anteprima</strong> della sincronizzazione. ${connectExplainer()}</div>
+    `;
+  } else {
+    const diffHtml = ids.map(id => {
+      const base = cat.items.find(i => i.ID === id);
+      const diffs = fieldDiff(catId, ORIGINALS[catId][id], base);
+      return `
+        <div class="diff-item">
+          <div class="di-name">${escapeHtml(base.Name)} <span class="mono" style="color:var(--text-faint);font-weight:400;">${escapeHtml(id)}</span></div>
+          ${diffs.map(d => `
+            <div style="margin-top:4px;">
+              <div class="di-field">${escapeHtml(d.label)}</div>
+              <div class="di-vals"><span class="old">${escapeHtml(truncate(d.oldVal,50))}</span> &rarr; <span class="new">${escapeHtml(truncate(d.newVal,50))}</span></div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }).join('');
+    body.innerHTML = `
+      <p><strong>${ids.length}</strong> riga${ids.length>1?'/righe':''} di <strong>${escapeHtml(cat.label)}</strong> pronte per l’invio.</p>
+      ${targetHtml}
+      <div class="diff-list">${diffHtml}</div>
+      <div class="callout">Questo pulsante è al momento un <strong>mockup</strong>: le modifiche restano solo in questo browser. ${connectExplainer()}</div>
+    `;
+  }
+  document.getElementById('modalScrim').dataset.cat = catId;
+  document.getElementById('modalScrim').classList.add('show');
+  const goBtn = document.getElementById('goSettingsBtn');
+  if(goBtn) goBtn.addEventListener('click', () => { closeSyncModal(); activeSection = 'settings'; renderAll(); });
+}
+
+function closeSyncModal(){ document.getElementById('modalScrim').classList.remove('show'); }
+
+/* ---------- sync modal generico (Enemies, Stations: non passano dal sistema "connections" per categoria) ---------- */
+function csvLinkTargetHtml(names){
+  const rows = names.map(n => ({name:n, url: (csvSheetLinks[n]||'').trim()}));
+  const connected = rows.filter(r => r.url);
+  if(connected.length === rows.length){
+    return `<p>Verrà inviato a: ` + connected.map(r => `<a href="${escapeHtml(r.url)}" target="_blank" rel="noopener"><strong>${escapeHtml(r.name)}</strong></a>`).join(', ') + `</p>`;
+  }
+  const missing = rows.filter(r => !r.url).map(r => r.name);
+  let html = '';
+  if(connected.length){
+    html += `<p>Verrà inviato a: ` + connected.map(r => `<a href="${escapeHtml(r.url)}" target="_blank" rel="noopener"><strong>${escapeHtml(r.name)}</strong></a>`).join(', ') + `</p>`;
+  }
+  html += `<div class="callout warn">Nessun foglio Google collegato per: <strong>${missing.map(escapeHtml).join(', ')}</strong>. <button class="btn ghost small" id="goSettingsBtn" style="margin-top:8px;">Vai a Impostazioni</button></div>`;
+  return html;
+}
+
+function wireGenericSyncModal(){
+  document.getElementById('modalScrim').classList.add('show');
+  const goBtn = document.getElementById('goSettingsBtn');
+  if(goBtn) goBtn.addEventListener('click', () => { closeSyncModal(); activeSection = 'settings'; renderAll(); });
+}
+
+function openEnemiesSyncModal(){
+  const csvNames = ['HS - Enemies - Association.csv'];
+  const dirty = ENEMIES.filter(e => isDirtyEnemy(e.id));
+  const body = document.getElementById('modalBody');
+  const targetHtml = csvLinkTargetHtml(csvNames);
+  if(!dirty.length){
+    body.innerHTML = `
+      <p>Non ci sono modifiche in sospeso in <strong>Enemies</strong>.</p>
+      ${targetHtml}
+      <div class="callout">Questa è un’<strong>anteprima</strong> della sincronizzazione. ${connectExplainer()}</div>
+    `;
+  } else {
+    const fieldLabels = {tier:'Tier', weaponClass:'Classe arma', integrity:'Integrità', shield:'Scudo', dps:'DPS', accuracy:'Precisione', isBoss:'Boss', inGame:'In gioco'};
+    const diffHtml = dirty.map(e => {
+      const orig = ENEMY_ORIGINALS[e.id] || {};
+      const diffs = ENEMY_DIRTY_KEYS.filter(k => String(e[k] ?? '') !== String(orig[k] ?? ''));
+      return `
+        <div class="diff-item">
+          <div class="di-name">${escapeHtml(e.id)} <span class="mono" style="color:var(--text-faint);font-weight:400;">${escapeHtml(e.ruleId)}</span></div>
+          ${diffs.map(k => `
+            <div style="margin-top:4px;">
+              <div class="di-field">${escapeHtml(fieldLabels[k]||k)}</div>
+              <div class="di-vals"><span class="old">${escapeHtml(String(orig[k] ?? ''))}</span> &rarr; <span class="new">${escapeHtml(String(e[k] ?? ''))}</span></div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }).join('');
+    body.innerHTML = `
+      <p><strong>${dirty.length}</strong> nemic${dirty.length>1?'i':'o'} pronto/i per l’invio.</p>
+      ${targetHtml}
+      <div class="diff-list">${diffHtml}</div>
+      <div class="callout">Questo pulsante è al momento un <strong>mockup</strong>: le modifiche restano solo nel database locale. ${connectExplainer()}</div>
+    `;
+  }
+  wireGenericSyncModal();
+}
+
+function openStationsSyncModal(){
+  const csvNames = ['HS - SpaceStations - SpaceStationRules.csv', 'HS - SpaceStations - GenericLockRules.csv'];
+  const body = document.getElementById('modalBody');
+  const targetHtml = csvLinkTargetHtml(csvNames);
+  body.innerHTML = `
+    <p><strong>${STATIONS.length}</strong> stazioni e <strong>${STATION_CATALOG.length}</strong> voci di catalogo pronte per l’invio.</p>
+    ${targetHtml}
+    <div class="callout">Questa sezione non è ancora modificabile dal tool: la sincronizzazione invierebbe i dati letti dai CSV così come sono. ${connectExplainer()}</div>
+  `;
+  wireGenericSyncModal();
+}
+
+function openQuestsSyncModal(){
+  const csvNames = ['HS - Quests - ManualQuestChains.csv', 'HS - Quests - ManualQuests.csv'];
+  const body = document.getElementById('modalBody');
+  const targetHtml = csvLinkTargetHtml(csvNames);
+  body.innerHTML = `
+    <p><strong>${QUESTS.length}</strong> missioni pronte per l’invio.</p>
+    ${targetHtml}
+    <div class="callout">Questa sezione non è ancora modificabile dal tool: la sincronizzazione invierebbe i dati letti dai CSV così come sono. ${connectExplainer()}</div>
+  `;
+  wireGenericSyncModal();
+}
+
+function copyDiffSummary(){
+  const catId = document.getElementById('modalScrim').dataset.cat;
+  const cat = CAT_BY_ID[catId];
+  const ids = cat.items.filter(i => isDirty(catId, i.ID)).map(i => i.ID);
+  let text = "";
+  if(!ids.length){
+    text = "Nessuna modifica in sospeso in " + cat.label + ".";
+  } else {
+    text = ids.map(id => {
+      const base = cat.items.find(i => i.ID === id);
+      const diffs = fieldDiff(catId, ORIGINALS[catId][id], base);
+      return `${base.Name} (${id}):\n` + diffs.map(d => `  - ${d.label}: "${d.oldVal}" -> "${d.newVal}"`).join('\n');
+    }).join('\n\n');
+  }
+  navigator.clipboard?.writeText(text).then(() => showToast("Riepilogo copiato negli appunti")).catch(() => showToast("Impossibile copiare"));
+}
+
+/* ============================== ZIP (stored, no compression) ============================== */
+let crc32Table = null;
+function crc32(bytes){
+  if(!crc32Table){
+    crc32Table = new Uint32Array(256);
+    for(let n=0; n<256; n++){
+      let c = n;
+      for(let k=0; k<8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      crc32Table[n] = c >>> 0;
+    }
+  }
+  let crc = 0xFFFFFFFF;
+  for(let i=0;i<bytes.length;i++) crc = crc32Table[(crc ^ bytes[i]) & 0xFF] ^ (crc >>> 8);
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+function zU16(v){ return new Uint8Array([v & 0xFF, (v>>8) & 0xFF]); }
+function zU32(v){ return new Uint8Array([v & 0xFF, (v>>8) & 0xFF, (v>>16) & 0xFF, (v>>>24) & 0xFF]); }
+function zConcat(arrs){
+  let total = 0; arrs.forEach(a => total += a.length);
+  const out = new Uint8Array(total);
+  let off = 0; arrs.forEach(a => { out.set(a, off); off += a.length; });
+  return out;
+}
+function zStr(s){ return new TextEncoder().encode(s); }
+function zDosDateTime(d){
+  const time = ((d.getHours() & 0x1F) << 11) | ((d.getMinutes() & 0x3F) << 5) | ((d.getSeconds() >> 1) & 0x1F);
+  const date = (((d.getFullYear()-1980) & 0x7F) << 9) | (((d.getMonth()+1) & 0xF) << 5) | (d.getDate() & 0x1F);
+  return {time, date};
+}
+/** files: [{name, data: Uint8Array}] -> Blob (application/zip), stored method (no deflate needed). */
+function buildZip(files){
+  const {time, date} = zDosDateTime(new Date());
+  const localParts = [], centralParts = [];
+  let offset = 0;
+  files.forEach(f => {
+    const nameBytes = zStr(f.name);
+    const crc = crc32(f.data);
+    const size = f.data.length;
+    const localHeader = zConcat([
+      zU32(0x04034b50), zU16(20), zU16(0), zU16(0),
+      zU16(time), zU16(date),
+      zU32(crc), zU32(size), zU32(size),
+      zU16(nameBytes.length), zU16(0),
+      nameBytes,
+    ]);
+    localParts.push(localHeader, f.data);
+    const centralHeader = zConcat([
+      zU32(0x02014b50), zU16(20), zU16(20), zU16(0), zU16(0),
+      zU16(time), zU16(date),
+      zU32(crc), zU32(size), zU32(size),
+      zU16(nameBytes.length), zU16(0), zU16(0), zU16(0), zU16(0),
+      zU32(0), zU32(offset),
+      nameBytes,
+    ]);
+    centralParts.push(centralHeader);
+    offset += localHeader.length + f.data.length;
+  });
+  const localBlock = zConcat(localParts);
+  const centralBlock = zConcat(centralParts);
+  const eocd = zConcat([
+    zU32(0x06054b50), zU16(0), zU16(0),
+    zU16(files.length), zU16(files.length),
+    zU32(centralBlock.length), zU32(localBlock.length),
+    zU16(0),
+  ]);
+  return new Blob([localBlock, centralBlock, eocd], {type:'application/zip'});
+}
+
+function sanitizeFileName(s){ return String(s).replace(/[^A-Za-z0-9_.-]/g, '_'); }
+
+async function fetchImageBytes(urlPath){
+  const res = await fetch(urlPath);
+  if(!res.ok) throw new Error('immagine non trovata: ' + urlPath);
+  return new Uint8Array(await res.arrayBuffer());
+}
+
+async function exportImagesZip(){
+  const files = [];
+  const manifest = {exportedAt: new Date().toISOString(), modules: [], producers: []};
+
+  for(const cat of CATS){
+    for(const base of cat.items){
+      if(!base.Image) continue;
+      const fname = 'images/' + cat.id + '/' + sanitizeFileName(base.ID) + '.jpg';
+      try{
+        files.push({name: fname, data: await fetchImageBytes(base.Image)});
+        manifest.modules.push({id: base.ID, name: base.Name, category: cat.id, file: fname});
+      }catch(e){ /* immagine mancante su disco: la saltiamo */ }
+    }
+  }
+  for(const name of Object.keys(producerImages)){
+    const imgPath = producerImages[name];
+    if(!imgPath) continue;
+    const fname = 'producers/' + sanitizeFileName(name) + '.jpg';
+    try{
+      files.push({name: fname, data: await fetchImageBytes(imgPath)});
+      manifest.producers.push({name, file: fname});
+    }catch(e){ /* immagine mancante su disco: la saltiamo */ }
+  }
+
+  if(!files.length){ showToast('Nessuna immagine da esportare'); return; }
+  files.unshift({name: 'manifest.json', data: zStr(JSON.stringify(manifest, null, 2))});
+
+  const blob = buildZip(files);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'hellgalaxy_images.zip';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  showToast('ZIP immagini scaricato');
+}
+
+/* ============================== SETTINGS ============================== */
+function renderSettings(){
+  const panel = document.getElementById('panel-settings');
+  const catOptions = [{id:'all', label:'Tutte le categorie'}, ...CATS.map(c => ({id:c.id, label:c.label}))];
+  panel.innerHTML = `
+    <div class="settings-grid">
+      <div class="card">
+        <h3>Autenticazione Google (anteprima)</h3>
+        <p class="sub">Facoltativo per ora: quando collegherai davvero i fogli, questo Client ID OAuth servirà al tool per chiedere il tuo consenso e scrivere sui fogli con le API di Google Sheets. Non viene inviato da nessuna parte, resta solo in questo browser.</p>
+        <div class="field">
+          <label for="oauthInput">Client ID OAuth Google</label>
+          <input type="text" id="oauthInput" placeholder="xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com" value="${escapeHtml(oauthClientId)}">
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Server &amp; database</h3>
+        <p class="sub">I dati di ogni modulo (statistiche, descrizioni, immagini) vivono ora in un database reale (<code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">data/hellgalaxy.db</code>, SQLite) letto e scritto da <code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">server.js</code>. Le immagini caricate vengono salvate come file veri in <code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">images/&lt;categoria&gt;/&lt;ID&gt;.jpg</code>. Per lavorare da un altro computer: copia/sincronizza (es. via Seafile) l'intera cartella del progetto — <code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">data/hellgalaxy.db</code> e <code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">images/</code> incluse — e avvia <code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">node server.js</code> lì. Lavora con il server acceso su un solo computer alla volta, per evitare che la sincronizzazione di cartelle scriva sul database mentre è in uso.</p>
+        <div class="callout">Connesso a <strong>${location.origin}</strong>.</div>
+      </div>
+
+      <div class="card">
+        <h3>Esporta immagini per Unreal Engine</h3>
+        <p class="sub">Scarica uno ZIP con tutte le immagini caricate (armi, corpi, motori, produttori) più un <code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">manifest.json</code> che associa ogni immagine all'ID del modulo. Uno script Python lanciato dentro l'Editor di Unreal (Window &rarr; Developer Tools &rarr; Output Log, o un Editor Utility) può leggere il manifest, importare ogni immagine come Texture2D con <code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">unreal.AssetToolsHelpers</code> e assegnarla al Data Asset corrispondente. Chiedimi in chat lo script di importazione quando sei pronto: te lo preparo su misura per i tuoi percorsi e la tua classe di Data Asset.</p>
+        <button class="btn primary small" id="exportZipBtn">Esporta ZIP immagini</button>
+      </div>
+
+      <div class="card">
+        <h3>Fogli Google collegati</h3>
+        <p class="sub">Associa un foglio Google a una categoria. Il pulsante "Sincronizza" di quella scheda userà questa configurazione come destinazione.</p>
+        <div id="connList"></div>
+        <button class="btn ghost small" id="addConnBtn" style="margin-top:12px;">+ Aggiungi foglio</button>
+        <div class="add-form" id="addForm">
+          <div class="add-form-grid">
+            <div class="field"><label>Nome connessione</label><input type="text" id="newConnName" placeholder="Es. Bilanciamento Armi"></div>
+            <div class="field"><label>Categoria</label><select id="newConnCat">${catOptions.map(o => `<option value="${o.id}">${o.label}</option>`).join('')}</select></div>
+          </div>
+          <div class="field"><label>URL del foglio Google</label><input type="text" id="newConnUrl" placeholder="https://docs.google.com/spreadsheets/d/..."></div>
+          <div class="field"><label>Nome scheda/tab (facoltativo)</label><input type="text" id="newConnTab" placeholder="Es. Primary"></div>
+          <div class="add-form-actions">
+            <button class="btn ghost small" id="cancelConnBtn">Annulla</button>
+            <button class="btn primary small" id="saveConnBtn">Salva foglio</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Fogli Google dei CSV sorgente</h3>
+        <p class="sub">Un blocco per ciascun CSV che mi hai inviato (gi&agrave; importati o futuri): il nome corrisponde esattamente al file, cos&igrave; sai sempre quale foglio Google incollare in quale campo. Salvato solo in questo browser.</p>
+        ${Array.from(new Set(CSV_SOURCES.map(s => s.group))).map(group => `
+          <div class="csv-link-group">
+            <div class="csv-link-group-title">${escapeHtml(group)}</div>
+            ${CSV_SOURCES.filter(s => s.group === group).map(s => {
+              const url = csvSheetLinks[s.name] || '';
+              return `
+              <div class="field">
+                <label>${escapeHtml(s.name)}</label>
+                <div class="csv-link-row">
+                  <input type="text" class="csvLinkInput" data-name="${escapeHtml(s.name)}" placeholder="https://docs.google.com/spreadsheets/d/..." value="${escapeHtml(url)}">
+                  <a class="csv-link-open" ${url ? `href="${escapeHtml(url)}" target="_blank" rel="noopener"` : 'disabled'}>Apri ↗</a>
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  document.getElementById('oauthInput').addEventListener('change', e => { oauthClientId = e.target.value.trim(); persistOauth(); showToast('Client ID salvato localmente'); });
+  panel.querySelectorAll('.csvLinkInput').forEach(el => el.addEventListener('change', e => {
+    csvSheetLinks[e.target.dataset.name] = e.target.value.trim();
+    persistCsvSheetLinks();
+    renderSettings();
+    showToast('Link salvato');
+  }));
+  document.getElementById('exportZipBtn').addEventListener('click', exportImagesZip);
+  document.getElementById('addConnBtn').addEventListener('click', () => document.getElementById('addForm').classList.add('show'));
+  document.getElementById('cancelConnBtn').addEventListener('click', () => document.getElementById('addForm').classList.remove('show'));
+  document.getElementById('saveConnBtn').addEventListener('click', () => {
+    const name = document.getElementById('newConnName').value.trim();
+    const url = document.getElementById('newConnUrl').value.trim();
+    const category = document.getElementById('newConnCat').value;
+    const tab = document.getElementById('newConnTab').value.trim();
+    if(!name || !url){ showToast('Nome e URL sono obbligatori'); return; }
+    connections.push({id: 'c'+Date.now(), name, url, category, tab});
+    persistConnections();
+    document.getElementById('addForm').classList.remove('show');
+    ['newConnName','newConnUrl','newConnTab'].forEach(id => document.getElementById(id).value = '');
+    renderSettings();
+    showToast('Foglio aggiunto');
+  });
+  renderConnList();
+}
+
+function renderConnList(){
+  const el = document.getElementById('connList');
+  if(!connections.length){
+    el.innerHTML = `<div class="conn-empty">Nessun foglio collegato ancora.</div>`;
+    return;
+  }
+  el.innerHTML = connections.map(c => `
+    <div class="conn-row">
+      <div class="cname">${escapeHtml(c.name)}</div>
+      <div>${escapeHtml(CAT_LABEL[c.category] || 'Tutte le categorie')}</div>
+      <div class="curl" title="${escapeHtml(c.url)}">${escapeHtml(c.url)}${c.tab ? ' &middot; '+escapeHtml(c.tab) : ''}</div>
+      <div class="actions"><button class="btn ghost small danger delConnBtn" data-id="${c.id}">Elimina</button></div>
+    </div>
+  `).join('');
+  el.querySelectorAll('.delConnBtn').forEach(btn => btn.addEventListener('click', () => {
+    connections = connections.filter(c => c.id !== btn.dataset.id);
+    persistConnections();
+    renderConnList();
+    showToast('Foglio rimosso');
+  }));
+}
+
+/* ============================== PRODUCERS ============================== */
+function renderProducers(){
+  const panel = document.getElementById('panel-producers');
+  const producers = computeProducers();
+  panel.innerHTML = `
+    <div class="stats">
+      <div class="stat accent"><div class="n mono">${producers.length}</div><div class="l">Produttori</div></div>
+      <div class="stat"><div class="n mono">${producers.filter(p => p.real && producerImages[p.name]).length}</div><div class="l">Con immagine</div></div>
+    </div>
+    <div class="producer-grid">
+      ${producers.map(p => `
+        <div class="producer-card" data-producer="${escapeHtml(p.name)}">
+          <div class="producer-img-wrap" data-producer="${escapeHtml(p.name)}">
+            ${producerImages[p.name]
+              ? `<img class="img-preview" src="${producerImages[p.name]}" alt="${escapeHtml(p.name)}">`
+              : `<div class="img-preview-placeholder">Nessuna immagine</div>`}
+          </div>
+          <div class="pname">${escapeHtml(p.name)}</div>
+          <div class="pcount">${p.count} modul${p.count===1?'o':'i'} &middot; ${Object.keys(p.byCat).map(k => CAT_LABEL[k]+' '+p.byCat[k]).join(', ')}</div>
+          <div class="img-actions">
+            <label class="btn ghost small">
+              Carica
+              <input type="file" accept="image/*" class="producerImgInput" data-producer="${escapeHtml(p.name)}">
+            </label>
+            ${producerImages[p.name] ? `<button class="btn ghost small danger removeProducerImgBtn" data-producer="${escapeHtml(p.name)}">Rimuovi</button>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  const applyProducerImage = async (producer, file) => {
+    try{
+      const dataURL = await resizeImageFile(file, 256);
+      await apiSetProducerImage(producer, dataURL);
+      renderProducers();
+      showToast('Immagine produttore salvata');
+    }catch(err){ showToast('Immagine non valida'); }
+  };
+  panel.querySelectorAll('.producerImgInput').forEach(inp => inp.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if(file) applyProducerImage(e.target.dataset.producer, file);
+  }));
+  panel.querySelectorAll('.producer-img-wrap').forEach(wrap => {
+    setupImageDropZone(wrap, file => applyProducerImage(wrap.dataset.producer, file));
+  });
+  panel.querySelectorAll('.removeProducerImgBtn').forEach(btn => btn.addEventListener('click', async () => {
+    const producer = btn.dataset.producer;
+    try{ await apiRemoveProducerImage(producer); renderProducers(); }
+    catch(err){ showToast('Impossibile rimuovere l\'immagine'); }
+  }));
+}
+
+/* ============================== ENEMIES ============================== */
+let ENEMIES = [];
+let ENEMY_ORIGINALS = {};
+const ENEMY_WEAPON_CLASSES = ['Gatling','Laser','Rocket','SonicShooter','Shotgun','N/D'];
+const ENEMY_DIRTY_KEYS = ['tier','weaponClass','integrity','shield','dps','accuracy','isBoss','inGame'];
+let enemyUi = { search:'', weaponFilter:'Tutti', tierFilter:'Tutti', bossOnly:false, inGameOnly:false, sortKey:'threatIndex', sortDir:-1 };
+
+async function loadEnemies(){
+  const data = await apiGet('/api/enemies');
+  ENEMIES = data.items || [];
+  ENEMY_ORIGINALS = data.originals || {};
+}
+async function apiSaveEnemy(id, fields){
+  const {current} = await apiSend('/api/enemies/' + encodeURIComponent(id), 'PUT', {fields});
+  const idx = ENEMIES.findIndex(e => e.id === id);
+  if(idx >= 0) ENEMIES[idx] = current;
+  return current;
+}
+async function apiRevertEnemy(id){
+  const {current} = await apiSend('/api/enemies/' + encodeURIComponent(id) + '/revert', 'POST');
+  const idx = ENEMIES.findIndex(e => e.id === id);
+  if(idx >= 0) ENEMIES[idx] = current;
+  return current;
+}
+async function apiResetAllEnemies(){
+  const data = await apiSend('/api/enemies/reset-all', 'POST');
+  ENEMIES = data.items || [];
+  ENEMY_ORIGINALS = data.originals || {};
+}
+function isDirtyEnemy(id){
+  const cur = ENEMIES.find(e => e.id === id);
+  const orig = ENEMY_ORIGINALS[id];
+  if(!cur || !orig) return false;
+  return ENEMY_DIRTY_KEYS.some(k => String(cur[k] ?? '') !== String(orig[k] ?? ''));
+}
+function dirtyEnemyCount(){ return ENEMIES.filter(e => isDirtyEnemy(e.id)).length; }
+
+function fmtCompact(v){
+  if(v >= 1000) return (v/1000).toLocaleString('it-IT',{maximumFractionDigits:1}) + 'k';
+  return Math.round(v).toLocaleString('it-IT');
+}
+
+function enemyFilteredList(){
+  let rows = ENEMIES.slice();
+  if(enemyUi.weaponFilter !== 'Tutti') rows = rows.filter(e => e.weaponClass === enemyUi.weaponFilter);
+  if(enemyUi.tierFilter !== 'Tutti') rows = rows.filter(e => String(e.tier) === enemyUi.tierFilter);
+  if(enemyUi.bossOnly) rows = rows.filter(e => e.isBoss);
+  if(enemyUi.inGameOnly) rows = rows.filter(e => e.inGame);
+  if(enemyUi.search.trim()){
+    const q = enemyUi.search.trim().toLowerCase();
+    rows = rows.filter(e => e.id.toLowerCase().includes(q) || e.ruleId.toLowerCase().includes(q));
+  }
+  rows.sort((a,b) => {
+    const av = a[enemyUi.sortKey], bv = b[enemyUi.sortKey];
+    const cmp = typeof av === 'string' ? String(av).localeCompare(String(bv)) : (Number(av)||0) - (Number(bv)||0);
+    return cmp * enemyUi.sortDir;
+  });
+  return rows;
+}
+
+function renderEnemyStats(){
+  const total = ENEMIES.length;
+  const inGame = ENEMIES.filter(e => e.inGame).length;
+  const boss = ENEMIES.filter(e => e.isBoss).length;
+  const maxThreat = ENEMIES.reduce((m,e) => Math.max(m, e.threatIndex), 0);
+  const dirty = dirtyEnemyCount();
+  const items = [
+    {l:'Nemici totali', n: total, accent:true},
+    {l:'In gioco', n: inGame},
+    {l:'Boss', n: boss},
+    {l:'Minaccia max', n: maxThreat.toLocaleString('it-IT')},
+    {l:'Modifiche', n: dirty},
+  ];
+  document.getElementById('enemyStats').innerHTML = items.map(it => `
+    <div class="stat${it.accent?' accent':''}"><div class="n mono">${it.n}</div><div class="l">${escapeHtml(it.l)}</div></div>
+  `).join('');
+}
+
+function buildEnemyWeaponChips(){
+  const wrap = document.getElementById('enemyWeaponChips');
+  const classes = Array.from(new Set(ENEMIES.map(e => e.weaponClass))).sort();
+  const opts = ['Tutti', ...classes];
+  wrap.innerHTML = opts.map(w => {
+    const cnt = w === 'Tutti' ? ENEMIES.length : ENEMIES.filter(e => e.weaponClass === w).length;
+    const active = enemyUi.weaponFilter === w;
+    const color = w === 'Tutti' ? null : (CLASS_COLOR[w] || 'var(--text-faint)');
+    return `<button class="chip ${active?'active':''}" data-weapon="${escapeHtml(w)}">${color?`<span class="sw" style="width:7px;height:7px;border-radius:2px;background:${color};display:inline-block;"></span>`:''}${escapeHtml(w)} <span class="cnt">${cnt}</span></button>`;
+  }).join('');
+  wrap.querySelectorAll('.chip').forEach(el => el.addEventListener('click', () => {
+    enemyUi.weaponFilter = el.dataset.weapon;
+    renderEnemies();
+  }));
+}
+
+function buildEnemyTierSelect(){
+  const sel = document.getElementById('enemyTierFilter');
+  const tiers = Array.from(new Set(ENEMIES.map(e => e.tier))).sort((a,b) => a-b);
+  sel.innerHTML = `<option value="Tutti">Tutti i tier</option>` + tiers.map(t => `<option value="${t}">Tier ${t}</option>`).join('');
+  sel.value = enemyUi.tierFilter;
+}
+
+const ENEMY_COLS = [
+  {key:'ruleId', label:'Archetipo'},
+  {key:'tier', label:'Tier'},
+  {key:'weaponClass', label:'Arma'},
+  {key:'integrity', label:'Integrità'},
+  {key:'shield', label:'Scudo'},
+  {key:'ehp', label:'EHP'},
+  {key:'dps', label:'DPS'},
+  {key:'accuracy', label:'Precisione'},
+  {key:'threatIndex', label:'Minaccia'},
+];
+
+function renderEnemyThead(){
+  const th = document.getElementById('enemyThead');
+  const idSorted = enemyUi.sortKey === 'id';
+  th.innerHTML = `<th></th><th data-key="id" class="${idSorted?'sorted':''}">Nome<span class="arrow">${idSorted?(enemyUi.sortDir===1?'↑':'↓'):''}</span></th>` +
+    ENEMY_COLS.map(c => {
+      const sorted = enemyUi.sortKey === c.key;
+      return `<th data-key="${c.key}" class="${sorted?'sorted':''}">${escapeHtml(c.label)}<span class="arrow">${sorted?(enemyUi.sortDir===1?'↑':'↓'):''}</span></th>`;
+    }).join('') + `<th>Stato</th><th>Abilità</th>`;
+  th.querySelectorAll('th[data-key]').forEach(el => el.addEventListener('click', () => {
+    const key = el.dataset.key;
+    if(enemyUi.sortKey === key) enemyUi.sortDir *= -1; else { enemyUi.sortKey = key; enemyUi.sortDir = key==='id' ? 1 : -1; }
+    renderEnemyTable();
+  }));
+}
+
+function renderEnemyTable(){
+  renderEnemyThead();
+  const rows = enemyFilteredList();
+  const tbody = document.getElementById('enemyTbody');
+  if(!rows.length){
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="${ENEMY_COLS.length+4}">Nessun nemico corrisponde ai filtri.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(e => {
+    const color = CLASS_COLOR[e.weaponClass] || 'var(--text-faint)';
+    const abilitiesTitle = e.abilities.length ? e.abilities.map(a => a.name).join(', ') : 'Nessuna abilità registrata';
+    const dirty = isDirtyEnemy(e.id);
+    const bossColor = 'var(--danger)';
+    return `<tr data-id="${escapeHtml(e.id)}">
+      <td><span class="dot-edit ${dirty?'':'hidden-dot'}" title="Modificato"></span></td>
+      <td class="mono">${escapeHtml(e.id)}${dirty ? `<button type="button" class="btn ghost small revert-enemy-btn" data-id="${escapeHtml(e.id)}" style="padding:2px 6px;font-size:10px;margin-left:6px;" title="Ripristina">↺</button>` : ''}</td>
+      <td>${escapeHtml(e.ruleId)}</td>
+      <td class="editable-cell num-cell" data-key="tier" data-type="num" title="Clicca per modificare">${e.tier}</td>
+      <td class="editable-cell" data-key="weaponClass" data-type="select" title="Clicca per modificare"><span class="badge-type" style="color:${color}; border-color:color-mix(in srgb, ${color} 45%, var(--border)); background:color-mix(in srgb, ${color} 14%, var(--surface-3));"><span class="sw" style="background:${color}"></span>${escapeHtml(e.weaponClass)}</span></td>
+      <td class="editable-cell num-cell" data-key="integrity" data-type="num" title="Clicca per modificare">${e.integrity.toLocaleString('it-IT')}</td>
+      <td class="editable-cell num-cell" data-key="shield" data-type="num" title="Clicca per modificare">${e.shield.toLocaleString('it-IT')}</td>
+      <td class="num-cell">${e.ehp.toLocaleString('it-IT')}</td>
+      <td class="editable-cell num-cell" data-key="dps" data-type="num" title="Clicca per modificare">${Math.round(e.dps).toLocaleString('it-IT')}</td>
+      <td class="editable-cell num-cell" data-key="accuracy" data-type="pct" title="Clicca per modificare">${Math.round(e.accuracy*100)}%</td>
+      <td class="num-cell" style="color:var(--accent); font-weight:600;">${e.threatIndex.toLocaleString('it-IT')}</td>
+      <td>
+        <span class="badge-type toggle-boss" data-id="${escapeHtml(e.id)}" style="cursor:pointer; ${e.isBoss?`color:${bossColor}; border-color:color-mix(in srgb, ${bossColor} 45%, var(--border)); background:color-mix(in srgb, ${bossColor} 14%, var(--surface-3));`:''}" title="Clicca per cambiare">${e.isBoss?'Boss':'Non boss'}</span>
+        <span class="badge-type toggle-ingame" data-id="${escapeHtml(e.id)}" style="cursor:pointer; margin-left:4px; ${e.inGame?'':'opacity:.6;'}" title="Clicca per cambiare">${e.inGame?'In gioco':'Non in gioco'}</span>
+      </td>
+      <td title="${escapeHtml(abilitiesTitle)}">${e.abilities.length}</td>
+    </tr>`;
+  }).join('');
+
+  tbody.querySelectorAll('td.editable-cell').forEach(td => td.addEventListener('click', () => {
+    const tr = td.closest('tr');
+    const id = tr.dataset.id;
+    const key = td.dataset.key;
+    const type = td.dataset.type;
+    startEnemyCellEdit(td, id, key, type);
+  }));
+  tbody.querySelectorAll('.revert-enemy-btn').forEach(el => el.addEventListener('click', async e => {
+    e.stopPropagation();
+    try{ await apiRevertEnemy(el.dataset.id); renderEnemies(); showToast('Nemico ripristinato'); }
+    catch(err){ showToast('Impossibile ripristinare il nemico'); }
+  }));
+  tbody.querySelectorAll('.toggle-boss').forEach(el => el.addEventListener('click', async e => {
+    e.stopPropagation();
+    const enemy = ENEMIES.find(x => x.id === el.dataset.id);
+    if(!enemy) return;
+    try{ await apiSaveEnemy(enemy.id, {isBoss: !enemy.isBoss}); renderEnemies(); }
+    catch(err){ showToast('Impossibile salvare la modifica'); }
+  }));
+  tbody.querySelectorAll('.toggle-ingame').forEach(el => el.addEventListener('click', async e => {
+    e.stopPropagation();
+    const enemy = ENEMIES.find(x => x.id === el.dataset.id);
+    if(!enemy) return;
+    try{ await apiSaveEnemy(enemy.id, {inGame: !enemy.inGame}); renderEnemies(); }
+    catch(err){ showToast('Impossibile salvare la modifica'); }
+  }));
+}
+
+function startEnemyCellEdit(td, enemyId, key, type){
+  if(td.classList.contains('editing')) return;
+  const enemy = ENEMIES.find(e => e.id === enemyId);
+  if(!enemy) return;
+  const currentVal = enemy[key];
+  const originalHtml = td.innerHTML;
+  const lockedWidth = td.getBoundingClientRect().width;
+  td.style.width = lockedWidth + 'px';
+  td.classList.add('editing');
+
+  let inputHtml;
+  if(type === 'select'){
+    inputHtml = `<select class="cell-input">${ENEMY_WEAPON_CLASSES.map(o => `<option value="${o}" ${o===currentVal?'selected':''}>${o}</option>`).join('')}</select>`;
+  } else if(type === 'pct'){
+    inputHtml = `<input class="cell-input" type="number" step="0.01" min="0" max="1" value="${Number(currentVal)||0}">`;
+  } else {
+    inputHtml = `<input class="cell-input" type="number" step="any" value="${Number(currentVal)||0}">`;
+  }
+  td.innerHTML = inputHtml;
+  const inputEl = td.querySelector('.cell-input');
+  inputEl.focus();
+  if(inputEl.select) inputEl.select();
+  inputEl.addEventListener('click', e => e.stopPropagation());
+  inputEl.addEventListener('mousedown', e => e.stopPropagation());
+
+  let done = false;
+  const finish = (html) => { td.classList.remove('editing'); td.style.width = ''; td.innerHTML = html; };
+  const commit = async () => {
+    if(done) return; done = true;
+    let val = inputEl.value;
+    if(type === 'num' || type === 'pct') val = val === '' ? 0 : Number(val);
+    if(String(val) === String(currentVal ?? '')){ finish(originalHtml); return; }
+    try{
+      await apiSaveEnemy(enemyId, {[key]: val});
+      renderEnemies();
+    }catch(err){
+      showToast('Impossibile salvare la modifica');
+      finish(originalHtml);
+    }
+  };
+  const cancel = () => { if(done) return; done = true; finish(originalHtml); };
+  inputEl.addEventListener('blur', commit);
+  inputEl.addEventListener('keydown', e => {
+    if(e.key === 'Enter'){ e.preventDefault(); inputEl.blur(); }
+    else if(e.key === 'Escape'){ e.preventDefault(); cancel(); }
+  });
+}
+
+function renderEnemyThreatChart(){
+  const rows = enemyFilteredList().slice().sort((a,b) => b.threatIndex - a.threatIndex);
+  const svg = document.getElementById('enemyThreatChart');
+  const legend = document.getElementById('enemyClassLegend');
+  if(!rows.length){ svg.style.display = 'none'; legend.innerHTML = ''; return; }
+  svg.style.display = '';
+
+  const usedClasses = Array.from(new Set(rows.map(r => r.weaponClass)));
+  legend.innerHTML = usedClasses.map(c => `<div class="lg-item"><span class="lg-sw" style="background:${CLASS_COLOR[c]||'var(--text-faint)'}"></span>${escapeHtml(c)}</div>`).join('');
+
+  const dataMax = Math.max(...rows.map(r => r.threatIndex));
+  const chartMax = dataMax > 0 ? dataMax : 1;
+  const angle = rows.length > 20 ? 90 : (rows.length > 9 ? 45 : 0);
+  const LABEL_SPEC = { 0: {pad:34, len:9}, 45: {pad:92, len:17}, 90: {pad:146, len:24} }[angle];
+  const barW = 16, gap = 8, plotH = 190, axisW = 52, topPad = 26;
+  const width = axisW + rows.length * (barW + gap) + gap;
+  const height = topPad + plotH + LABEL_SPEC.pad;
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+
+  const step = niceStep(chartMax);
+  const ticks = [];
+  for(let v = 0; v <= chartMax + 1e-9; v += step) ticks.push(v);
+  if(ticks.length < 2) ticks.push(chartMax);
+
+  let parts = [];
+  ticks.forEach(t => {
+    const y = topPad + plotH - (t/chartMax) * plotH;
+    parts.push(`<line x1="${axisW}" y1="${y}" x2="${width}" y2="${y}" stroke="var(--border-soft)" stroke-width="1"/>`);
+    parts.push(`<text x="${axisW-8}" y="${y+3}" text-anchor="end" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Mono, monospace">${Math.round(t).toLocaleString('it-IT')}</text>`);
+  });
+  parts.push(`<line x1="${axisW}" y1="${topPad+plotH}" x2="${width}" y2="${topPad+plotH}" stroke="var(--border)" stroke-width="1"/>`);
+
+  rows.forEach((r,i) => {
+    const h = (r.threatIndex/chartMax) * plotH;
+    const x = axisW + gap + i*(barW+gap);
+    const y = topPad + plotH - h;
+    const color = CLASS_COLOR[r.weaponClass] || 'var(--text-faint)';
+    const path = roundedTopBarPath(x, y, barW, h, 3);
+    parts.push(`<path class="chart-bar enemy-bar" data-idx="${i}" d="${path}" fill="${color}" ${r.isBoss ? 'stroke="var(--danger)" stroke-width="1.5"' : ''}></path>`);
+    const cx = x + barW/2, baseY = topPad + plotH;
+    const nameLabel = escapeHtml(truncate(r.id.replace(/^EN-|^KO-/,''), LABEL_SPEC.len));
+    if(angle === 0){
+      parts.push(`<text x="${cx}" y="${baseY+13}" text-anchor="middle" font-size="9" fill="var(--text-faint)" font-family="IBM Plex Sans, sans-serif">${nameLabel}</text>`);
+    } else {
+      parts.push(`<text x="${cx}" y="${baseY+9}" text-anchor="end" font-size="9" fill="var(--text-faint)" font-family="IBM Plex Sans, sans-serif" transform="rotate(-${angle} ${cx} ${baseY+9})">${nameLabel}</text>`);
+    }
+  });
+
+  svg.innerHTML = parts.join('');
+
+  const tooltip = document.getElementById('chartTooltip');
+  svg.querySelectorAll('.enemy-bar').forEach(el => {
+    const r = rows[Number(el.dataset.idx)];
+    const show = (x,y) => {
+      tooltip.innerHTML = `<div class="tt-val">${r.threatIndex.toLocaleString('it-IT')} minaccia</div><div class="tt-name">${escapeHtml(r.id)}${r.isBoss?' · BOSS':''}</div><div class="tt-rarity">${escapeHtml(r.weaponClass)} · EHP ${r.ehp.toLocaleString('it-IT')} · DPS ${Math.round(r.dps)}</div>`;
+      tooltip.style.left = x+'px'; tooltip.style.top = (y-12)+'px'; tooltip.classList.add('show');
+    };
+    el.addEventListener('pointerenter', e => show(e.clientX, e.clientY));
+    el.addEventListener('pointermove', e => show(e.clientX, e.clientY));
+    el.addEventListener('pointerleave', () => tooltip.classList.remove('show'));
+  });
+}
+
+function logTicks(min, max){
+  if(min <= 0) min = 1;
+  const ticks = [];
+  let mag = Math.pow(10, Math.floor(Math.log10(min)));
+  while(mag <= max * 1.0001){
+    [1,2,5].forEach(m => {
+      const v = m*mag;
+      if(v >= min*0.999 && v <= max*1.001) ticks.push(v);
+    });
+    mag *= 10;
+  }
+  return ticks;
+}
+
+function renderEnemyScatterChart(){
+  const rows = enemyFilteredList();
+  const svg = document.getElementById('enemyScatterChart');
+  if(!rows.length){ svg.style.display = 'none'; return; }
+  svg.style.display = '';
+
+  const ehps = rows.map(r => Math.max(r.ehp,1));
+  const dpss = rows.map(r => Math.max(r.dps,1));
+  const xMin = Math.min(...ehps), xMax = Math.max(...ehps);
+  const yMin = Math.min(...dpss), yMax = Math.max(...dpss);
+
+  const width = 760, height = 380;
+  const padL = 62, padR = 20, padT = 20, padB = 40;
+  const plotW = width-padL-padR, plotH = height-padT-padB;
+
+  const lx0 = Math.log10(xMin*0.85), lx1 = Math.log10(xMax*1.15);
+  const ly0 = Math.log10(yMin*0.85), ly1 = Math.log10(yMax*1.15);
+  const xScale = v => padL + (Math.log10(Math.max(v,1))-lx0)/(lx1-lx0) * plotW;
+  const yScale = v => padT + plotH - (Math.log10(Math.max(v,1))-ly0)/(ly1-ly0) * plotH;
+
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+
+  let parts = [];
+  logTicks(xMin*0.85, xMax*1.15).forEach(v => {
+    const x = xScale(v);
+    parts.push(`<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT+plotH}" stroke="var(--border-soft)" stroke-width="1"/>`);
+    parts.push(`<text x="${x}" y="${padT+plotH+16}" text-anchor="middle" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Mono, monospace">${fmtCompact(v)}</text>`);
+  });
+  logTicks(yMin*0.85, yMax*1.15).forEach(v => {
+    const y = yScale(v);
+    parts.push(`<line x1="${padL}" y1="${y}" x2="${padL+plotW}" y2="${y}" stroke="var(--border-soft)" stroke-width="1"/>`);
+    parts.push(`<text x="${padL-8}" y="${y+3}" text-anchor="end" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Mono, monospace">${fmtCompact(v)}</text>`);
+  });
+  parts.push(`<text x="${padL+plotW/2}" y="${height-6}" text-anchor="middle" font-size="10.5" fill="var(--text-dim)" font-family="IBM Plex Sans, sans-serif">EHP (Integrità + Scudo) · scala log</text>`);
+  parts.push(`<text x="14" y="${padT+plotH/2}" text-anchor="middle" font-size="10.5" fill="var(--text-dim)" font-family="IBM Plex Sans, sans-serif" transform="rotate(-90 14 ${padT+plotH/2})">DPS · scala log</text>`);
+
+  rows.forEach((r,i) => {
+    const cx = xScale(r.ehp), cy = yScale(r.dps);
+    const color = CLASS_COLOR[r.weaponClass] || 'var(--text-faint)';
+    const radius = r.isBoss ? 7 : 4.5;
+    parts.push(`<circle class="scatter-dot" data-idx="${i}" cx="${cx}" cy="${cy}" r="${radius}" fill="${color}" fill-opacity="0.85" stroke="${r.isBoss?'var(--danger)':'var(--surface)'}" stroke-width="${r.isBoss?2:1}"/>`);
+  });
+
+  svg.innerHTML = parts.join('');
+
+  const tooltip = document.getElementById('chartTooltip');
+  svg.querySelectorAll('.scatter-dot').forEach(el => {
+    const r = rows[Number(el.dataset.idx)];
+    const show = (x,y) => {
+      tooltip.innerHTML = `<div class="tt-val">${escapeHtml(r.id)}${r.isBoss?' · BOSS':''}</div><div class="tt-name">EHP ${r.ehp.toLocaleString('it-IT')} · DPS ${Math.round(r.dps)}</div><div class="tt-rarity">${escapeHtml(r.weaponClass)} · Tier ${r.tier} · Minaccia ${r.threatIndex.toLocaleString('it-IT')}</div>`;
+      tooltip.style.left = x+'px'; tooltip.style.top = (y-12)+'px'; tooltip.classList.add('show');
+    };
+    el.addEventListener('pointerenter', e => show(e.clientX, e.clientY));
+    el.addEventListener('pointermove', e => show(e.clientX, e.clientY));
+    el.addEventListener('pointerleave', () => tooltip.classList.remove('show'));
+  });
+}
+
+function renderEnemies(){
+  if(!ENEMIES.length) return;
+  renderEnemyStats();
+  buildEnemyWeaponChips();
+  buildEnemyTierSelect();
+  renderEnemyTable();
+  renderEnemyThreatChart();
+  renderEnemyScatterChart();
+  renderDirtyPill();
+}
+
+/* ============================== STATIONS ============================== */
+let STATIONS = [];
+let STATION_CATALOG = [];
+let stationUi = { search:'', profileFilter:'Tutti' };
+let catalogUi = { search:'', originFilter:'Tutti', rarityFilter:'Tutte', typeFilter:'Tutti', showPlaceholders:false };
+
+async function loadStations(){
+  const data = await apiGet('/data/stations.json');
+  STATIONS = data.stations || [];
+  STATION_CATALOG = data.catalog || [];
+}
+
+function stationById(id){ return STATIONS.find(s => s.id === id); }
+
+function catalogCountByStation(id){
+  return STATION_CATALOG.filter(c => c.unlockStation === id).length;
+}
+
+function stationFilteredList(){
+  let rows = STATIONS.slice();
+  if(stationUi.profileFilter !== 'Tutti') rows = rows.filter(s => s.profile === stationUi.profileFilter);
+  if(stationUi.search.trim()){
+    const q = stationUi.search.trim().toLowerCase();
+    rows = rows.filter(s => s.id.toLowerCase().includes(q));
+  }
+  return rows;
+}
+
+function renderStationStats(){
+  const total = STATIONS.length;
+  const ricche = STATIONS.filter(s => s.profile === 'Ricco').length;
+  const withBlueprint = STATIONS.filter(s => s.blueprint).length;
+  const linkedItems = STATION_CATALOG.filter(c => c.unlockStation).length;
+  const items = [
+    {l:'Stazioni totali', n: total, accent:true},
+    {l:'Profilo Ricco', n: ricche},
+    {l:'Profilo Base', n: total-ricche},
+    {l:'Con blueprint', n: withBlueprint},
+    {l:'Oggetti collegati', n: linkedItems},
+  ];
+  document.getElementById('stationStats').innerHTML = items.map(it => `
+    <div class="stat${it.accent?' accent':''}"><div class="n mono">${it.n}</div><div class="l">${escapeHtml(it.l)}</div></div>
+  `).join('');
+}
+
+function buildStationProfileChips(){
+  const wrap = document.getElementById('stationProfileChips');
+  const opts = ['Tutti','Ricco','Base'];
+  wrap.innerHTML = opts.map(p => {
+    const cnt = p === 'Tutti' ? STATIONS.length : STATIONS.filter(s => s.profile === p).length;
+    const active = stationUi.profileFilter === p;
+    return `<button class="chip ${active?'active':''}" data-profile="${p}">${escapeHtml(p)} <span class="cnt">${cnt}</span></button>`;
+  }).join('');
+  wrap.querySelectorAll('.chip').forEach(el => el.addEventListener('click', () => {
+    stationUi.profileFilter = el.dataset.profile;
+    renderStations();
+  }));
+}
+
+function renderStationThead(){
+  const th = document.getElementById('stationThead');
+  th.innerHTML = `<th>Stazione</th><th>Profilo</th><th>Blueprint</th><th>Evento di sblocco</th><th>Oggetti max/roll</th><th>Sbloccati qui</th>`;
+}
+
+function renderStationTable(){
+  renderStationThead();
+  const rows = stationFilteredList();
+  const tbody = document.getElementById('stationTbody');
+  if(!rows.length){
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="6">Nessuna stazione corrisponde ai filtri.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(s => {
+    const profileColor = s.profile === 'Ricco' ? 'var(--accent)' : 'var(--text-faint)';
+    const rarityBits = RARITY_ORDER.map(r => `<span title="${escapeHtml(r)}" style="color:${RARITY_COLOR[r]}">${s.lootProfile[r][0]}-${s.lootProfile[r][1]}</span>`).join(' <span style="color:var(--border)">/</span> ');
+    return `<tr>
+      <td class="mono">${escapeHtml(s.id)}</td>
+      <td><span class="badge-type" style="color:${profileColor}; border-color:color-mix(in srgb, ${profileColor} 45%, var(--border)); background:color-mix(in srgb, ${profileColor} 14%, var(--surface-3));"><span class="sw" style="background:${profileColor}"></span>${escapeHtml(s.profile)}</span></td>
+      <td>${s.blueprint ? `<span class="mono" style="font-size:11.5px; color:var(--text-dim);">${escapeHtml(s.blueprint)}</span>` : '—'}</td>
+      <td style="font-size:11.5px; color:var(--text-dim);">${s.unlockEvent ? escapeHtml(s.unlockEvent) : '—'}</td>
+      <td style="font-size:11px; white-space:nowrap;">${rarityBits}</td>
+      <td class="num-cell">${catalogCountByStation(s.id)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderStationRarityChart(){
+  const rows = stationFilteredList();
+  const svg = document.getElementById('stationRarityChart');
+  const legend = document.getElementById('stationRarityLegend');
+  if(!rows.length){ svg.style.display = 'none'; legend.innerHTML = ''; return; }
+  svg.style.display = '';
+
+  legend.innerHTML = RARITY_ORDER.map(r => `<div class="lg-item"><span class="lg-sw" style="background:${RARITY_COLOR[r]}"></span>${escapeHtml(r)}</div>`).join('');
+
+  const dataMax = Math.max(...rows.map(s => s.maxTotal), 1);
+  const chartMax = dataMax;
+  const barW = 20, gap = 10, plotH = 190, axisW = 52, topPad = 26;
+  const angle = rows.length > 20 ? 90 : (rows.length > 9 ? 45 : 0);
+  const LABEL_SPEC = { 0: {pad:34, len:9}, 45: {pad:92, len:17}, 90: {pad:146, len:24} }[angle];
+  const width = axisW + rows.length * (barW + gap) + gap;
+  const height = topPad + plotH + LABEL_SPEC.pad;
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+
+  const step = niceStep(chartMax);
+  const ticks = [];
+  for(let v = 0; v <= chartMax + 1e-9; v += step) ticks.push(v);
+  if(ticks.length < 2) ticks.push(chartMax);
+
+  let parts = [];
+  ticks.forEach(t => {
+    const y = topPad + plotH - (t/chartMax) * plotH;
+    parts.push(`<line x1="${axisW}" y1="${y}" x2="${width}" y2="${y}" stroke="var(--border-soft)" stroke-width="1"/>`);
+    parts.push(`<text x="${axisW-8}" y="${y+3}" text-anchor="end" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Mono, monospace">${Math.round(t)}</text>`);
+  });
+  parts.push(`<line x1="${axisW}" y1="${topPad+plotH}" x2="${width}" y2="${topPad+plotH}" stroke="var(--border)" stroke-width="1"/>`);
+
+  rows.forEach((s,i) => {
+    const x = axisW + gap + i*(barW+gap);
+    let yCursor = topPad + plotH;
+    RARITY_ORDER.forEach(r => {
+      const val = s.lootProfile[r][1];
+      const h = (val/chartMax) * plotH;
+      if(h > 0){
+        parts.push(`<rect x="${x}" y="${yCursor-h}" width="${barW}" height="${h}" fill="${RARITY_COLOR[r]}"/>`);
+      }
+      yCursor -= h;
+    });
+    const cx = x + barW/2, baseY = topPad + plotH;
+    const nameLabel = escapeHtml(truncate(s.id.replace(/^SS-/,''), LABEL_SPEC.len));
+    if(angle === 0){
+      parts.push(`<text x="${cx}" y="${baseY+13}" text-anchor="middle" font-size="9" fill="var(--text-faint)" font-family="IBM Plex Sans, sans-serif">${nameLabel}</text>`);
+    } else {
+      parts.push(`<text x="${cx}" y="${baseY+9}" text-anchor="end" font-size="9" fill="var(--text-faint)" font-family="IBM Plex Sans, sans-serif" transform="rotate(-${angle} ${cx} ${baseY+9})">${nameLabel}</text>`);
+    }
+  });
+
+  svg.innerHTML = parts.join('');
+
+  const tooltip = document.getElementById('chartTooltip');
+  svg.querySelectorAll('rect').forEach((el, idx) => {
+    const s = rows[Math.floor(idx / RARITY_ORDER.length)];
+    const show = (x,y) => {
+      const breakdown = RARITY_ORDER.map(r => `${r} ${s.lootProfile[r][0]}-${s.lootProfile[r][1]}`).join(' · ');
+      tooltip.innerHTML = `<div class="tt-val">${escapeHtml(s.id)}</div><div class="tt-name">${s.profile}</div><div class="tt-rarity">${escapeHtml(breakdown)}</div>`;
+      tooltip.style.left = x+'px'; tooltip.style.top = (y-12)+'px'; tooltip.classList.add('show');
+    };
+    el.addEventListener('pointerenter', e => show(e.clientX, e.clientY));
+    el.addEventListener('pointermove', e => show(e.clientX, e.clientY));
+    el.addEventListener('pointerleave', () => tooltip.classList.remove('show'));
+  });
+}
+
+function catalogFilteredList(){
+  let rows = STATION_CATALOG.slice();
+  if(!catalogUi.showPlaceholders) rows = rows.filter(c => !c.isPlaceholder);
+  if(catalogUi.originFilter === 'Stazione') rows = rows.filter(c => c.unlockStation);
+  else if(catalogUi.originFilter === 'Blueprint') rows = rows.filter(c => c.blueprintGated);
+  else if(catalogUi.originFilter === 'Generico') rows = rows.filter(c => !c.unlockStation && !c.blueprintGated);
+  if(catalogUi.rarityFilter !== 'Tutte') rows = rows.filter(c => c.rarity === catalogUi.rarityFilter);
+  if(catalogUi.typeFilter !== 'Tutti') rows = rows.filter(c => (c.moduleType || 'Nessuno') === catalogUi.typeFilter);
+  if(catalogUi.search.trim()){
+    const q = catalogUi.search.trim().toLowerCase();
+    rows = rows.filter(c => c.name.toLowerCase().includes(q) || c.entityId.toLowerCase().includes(q));
+  }
+  rows.sort((a,b) => RARITY_ORDER.indexOf(b.rarity) - RARITY_ORDER.indexOf(a.rarity) || a.name.localeCompare(b.name));
+  return rows;
+}
+
+function renderCatalogStats(){
+  const total = STATION_CATALOG.length;
+  const perStation = STATION_CATALOG.filter(c => c.unlockStation).length;
+  const perBlueprint = STATION_CATALOG.filter(c => c.blueprintGated).length;
+  const inGame = STATION_CATALOG.filter(c => c.inGame).length;
+  const items = [
+    {l:'Voci di catalogo', n: total, accent:true},
+    {l:'Sblocco per stazione', n: perStation},
+    {l:'Sblocco da blueprint', n: perBlueprint},
+    {l:'In gioco', n: inGame},
+  ];
+  document.getElementById('catalogStats').innerHTML = items.map(it => `
+    <div class="stat${it.accent?' accent':''}"><div class="n mono">${it.n}</div><div class="l">${escapeHtml(it.l)}</div></div>
+  `).join('');
+}
+
+function buildCatalogOriginChips(){
+  const wrap = document.getElementById('catalogOriginChips');
+  const opts = ['Tutti','Stazione','Blueprint','Generico'];
+  wrap.innerHTML = opts.map(o => {
+    const active = catalogUi.originFilter === o;
+    return `<button class="chip ${active?'active':''}" data-origin="${o}">${escapeHtml(o)}</button>`;
+  }).join('');
+  wrap.querySelectorAll('.chip').forEach(el => el.addEventListener('click', () => {
+    catalogUi.originFilter = el.dataset.origin;
+    renderStationsCatalog();
+  }));
+}
+
+function buildCatalogRarityChips(){
+  const wrap = document.getElementById('catalogRarityChips');
+  const present = Array.from(new Set(STATION_CATALOG.map(c => c.rarity)));
+  const opts = ['Tutte', ...RARITY_ORDER.filter(r => present.includes(r))];
+  wrap.innerHTML = opts.map(r => {
+    const active = catalogUi.rarityFilter === r;
+    const color = r === 'Tutte' ? null : RARITY_COLOR[r];
+    return `<button class="chip ${active?'active':''}" data-rarity="${escapeHtml(r)}">${color?`<span class="sw" style="width:7px;height:7px;border-radius:2px;background:${color};display:inline-block;"></span>`:''}${escapeHtml(r)}</button>`;
+  }).join('');
+  wrap.querySelectorAll('.chip').forEach(el => el.addEventListener('click', () => {
+    catalogUi.rarityFilter = el.dataset.rarity;
+    renderStationsCatalog();
+  }));
+}
+
+function buildCatalogTypeSelect(){
+  const sel = document.getElementById('catalogTypeFilter');
+  const types = Array.from(new Set(STATION_CATALOG.map(c => c.moduleType || 'Nessuno'))).sort();
+  sel.innerHTML = `<option value="Tutti">Tutti i tipi</option>` + types.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+  sel.value = catalogUi.typeFilter;
+}
+
+function renderCatalogThead(){
+  const th = document.getElementById('catalogThead');
+  th.innerHTML = `<th>Nome</th><th>ID</th><th>Rarità</th><th>Tipo</th><th>Prezzo</th><th>Qualità</th><th>Sblocco</th><th>Evento</th><th>In gioco</th>`;
+}
+
+function renderCatalogTable(){
+  renderCatalogThead();
+  const rows = catalogFilteredList();
+  const tbody = document.getElementById('catalogTbody');
+  if(!rows.length){
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="9">Nessun oggetto corrisponde ai filtri.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(c => {
+    const rColor = RARITY_COLOR[c.rarity] || 'var(--text-dim)';
+    let origin = '—';
+    if(c.unlockStation) origin = `<span class="mono" style="font-size:11.5px; color:var(--accent);">${escapeHtml(c.unlockStation)}</span>`;
+    else if(c.blueprintGated) origin = `<span style="font-size:11.5px; color:var(--text-dim);">Blueprint</span>`;
+    return `<tr>
+      <td>${escapeHtml(c.name)}</td>
+      <td class="mono" style="font-size:11px; color:var(--text-faint);">${escapeHtml(c.entityId)}</td>
+      <td><span class="badge-rarity" style="color:${rColor}"><span class="sw" style="background:${rColor}"></span>${escapeHtml(c.rarity)}</span></td>
+      <td>${c.moduleType ? escapeHtml(c.moduleType) : '—'}</td>
+      <td class="num-cell">${c.price.toLocaleString('it-IT')}</td>
+      <td class="num-cell">${c.quality.toLocaleString('it-IT')}</td>
+      <td>${origin}</td>
+      <td style="font-size:11px; color:var(--text-faint);">${c.unlockRules ? escapeHtml(c.unlockRules) : '—'}</td>
+      <td>${c.inGame ? '✓' : ''}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderCatalogByStationChart(){
+  const rows = STATIONS.map(s => ({ s, count: STATION_CATALOG.filter(c => c.unlockStation === s.id && (catalogUi.showPlaceholders || !c.isPlaceholder)).length }))
+    .filter(r => r.count > 0)
+    .sort((a,b) => b.count - a.count);
+  const svg = document.getElementById('catalogByStationChart');
+  if(!rows.length){ svg.style.display = 'none'; return; }
+  svg.style.display = '';
+
+  const chartMax = Math.max(...rows.map(r => r.count), 1);
+  const angle = rows.length > 20 ? 90 : (rows.length > 9 ? 45 : 0);
+  const LABEL_SPEC = { 0: {pad:34, len:9}, 45: {pad:92, len:17}, 90: {pad:146, len:24} }[angle];
+  const barW = 20, gap = 10, plotH = 170, axisW = 40, topPad = 20;
+  const width = axisW + rows.length * (barW + gap) + gap;
+  const height = topPad + plotH + LABEL_SPEC.pad;
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+
+  const step = niceStep(chartMax);
+  const ticks = [];
+  for(let v = 0; v <= chartMax + 1e-9; v += step) ticks.push(v);
+  if(ticks.length < 2) ticks.push(chartMax);
+
+  let parts = [];
+  ticks.forEach(t => {
+    const y = topPad + plotH - (t/chartMax) * plotH;
+    parts.push(`<line x1="${axisW}" y1="${y}" x2="${width}" y2="${y}" stroke="var(--border-soft)" stroke-width="1"/>`);
+    parts.push(`<text x="${axisW-8}" y="${y+3}" text-anchor="end" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Mono, monospace">${Math.round(t)}</text>`);
+  });
+  parts.push(`<line x1="${axisW}" y1="${topPad+plotH}" x2="${width}" y2="${topPad+plotH}" stroke="var(--border)" stroke-width="1"/>`);
+
+  rows.forEach((r,i) => {
+    const h = (r.count/chartMax) * plotH;
+    const x = axisW + gap + i*(barW+gap);
+    const y = topPad + plotH - h;
+    const color = r.s.profile === 'Ricco' ? 'var(--accent)' : 'var(--text-faint)';
+    const path = roundedTopBarPath(x, y, barW, h, 3);
+    parts.push(`<path class="chart-bar station-bar" data-idx="${i}" d="${path}" fill="${color}"></path>`);
+    const cx = x + barW/2, baseY = topPad + plotH;
+    const nameLabel = escapeHtml(truncate(r.s.id.replace(/^SS-/,''), LABEL_SPEC.len));
+    if(angle === 0){
+      parts.push(`<text x="${cx}" y="${baseY+13}" text-anchor="middle" font-size="9" fill="var(--text-faint)" font-family="IBM Plex Sans, sans-serif">${nameLabel}</text>`);
+    } else {
+      parts.push(`<text x="${cx}" y="${baseY+9}" text-anchor="end" font-size="9" fill="var(--text-faint)" font-family="IBM Plex Sans, sans-serif" transform="rotate(-${angle} ${cx} ${baseY+9})">${nameLabel}</text>`);
+    }
+  });
+
+  svg.innerHTML = parts.join('');
+
+  const tooltip = document.getElementById('chartTooltip');
+  svg.querySelectorAll('.station-bar').forEach(el => {
+    const r = rows[Number(el.dataset.idx)];
+    const show = (x,y) => {
+      tooltip.innerHTML = `<div class="tt-val">${r.count} oggetti</div><div class="tt-name">${escapeHtml(r.s.id)}</div><div class="tt-rarity">Profilo ${escapeHtml(r.s.profile)}</div>`;
+      tooltip.style.left = x+'px'; tooltip.style.top = (y-12)+'px'; tooltip.classList.add('show');
+    };
+    el.addEventListener('pointerenter', e => show(e.clientX, e.clientY));
+    el.addEventListener('pointermove', e => show(e.clientX, e.clientY));
+    el.addEventListener('pointerleave', () => tooltip.classList.remove('show'));
+  });
+}
+
+function renderStations(){
+  if(!STATIONS.length) return;
+  renderStationStats();
+  buildStationProfileChips();
+  renderStationTable();
+  renderStationRarityChart();
+}
+
+function renderStationsCatalog(){
+  if(!STATION_CATALOG.length) return;
+  renderCatalogStats();
+  buildCatalogOriginChips();
+  buildCatalogRarityChips();
+  buildCatalogTypeSelect();
+  renderCatalogTable();
+  renderCatalogByStationChart();
+}
+
+function renderStationsTab(){
+  renderStations();
+  renderStationsCatalog();
+}
+
+/* ============================== QUESTS ============================== */
+let QUESTS = [];
+let questUi = { search:'', chapterFilter:'Tutti', labelFilter:'Tutti', areaFilter:'Tutti', showPlaceholders:false };
+
+async function loadQuests(){
+  const data = await apiGet('/data/quests.json');
+  QUESTS = data.quests || [];
+}
+
+function questFilteredList(){
+  let rows = QUESTS.slice();
+  if(!questUi.showPlaceholders) rows = rows.filter(q => !q.isPlaceholder);
+  if(questUi.chapterFilter !== 'Tutti') rows = rows.filter(q => q.chapter === questUi.chapterFilter);
+  if(questUi.labelFilter !== 'Tutti') rows = rows.filter(q => (q.label || 'Non specificato') === questUi.labelFilter);
+  if(questUi.areaFilter !== 'Tutti') rows = rows.filter(q => (q.area || 'Nessuna') === questUi.areaFilter);
+  if(questUi.search.trim()){
+    const q = questUi.search.trim().toLowerCase();
+    rows = rows.filter(r => r.title.toLowerCase().includes(q) || r.id.toLowerCase().includes(q));
+  }
+  return rows;
+}
+
+function renderQuestStats(){
+  const total = QUESTS.length;
+  const mandatory = QUESTS.filter(q => q.label === 'MANDATORY').length;
+  const secondary = QUESTS.filter(q => q.label === 'SECONDARY').length;
+  const totalCredits = QUESTS.reduce((s,q) => s + q.credits, 0);
+  const items = [
+    {l:'Missioni totali', n: total, accent:true},
+    {l:'Mandatory', n: mandatory},
+    {l:'Secondary', n: secondary},
+    {l:'Crediti totali', n: totalCredits.toLocaleString('it-IT')},
+  ];
+  document.getElementById('questStats').innerHTML = items.map(it => `
+    <div class="stat${it.accent?' accent':''}"><div class="n mono">${it.n}</div><div class="l">${escapeHtml(it.l)}</div></div>
+  `).join('');
+}
+
+function buildQuestChapterChips(){
+  const wrap = document.getElementById('questChapterChips');
+  const present = CHAPTER_ORDER.filter(c => QUESTS.some(q => q.chapter === c));
+  const opts = ['Tutti', ...present];
+  wrap.innerHTML = opts.map(c => {
+    const cnt = c === 'Tutti' ? QUESTS.length : QUESTS.filter(q => q.chapter === c).length;
+    const active = questUi.chapterFilter === c;
+    const color = c === 'Tutti' ? null : CHAPTER_COLOR[c];
+    return `<button class="chip ${active?'active':''}" data-chapter="${escapeHtml(c)}">${color?`<span class="sw" style="width:7px;height:7px;border-radius:2px;background:${color};display:inline-block;"></span>`:''}${escapeHtml(c==='Tutti'?c:CHAPTER_LABEL[c])} <span class="cnt">${cnt}</span></button>`;
+  }).join('');
+  wrap.querySelectorAll('.chip').forEach(el => el.addEventListener('click', () => {
+    questUi.chapterFilter = el.dataset.chapter;
+    renderQuests();
+  }));
+}
+
+function buildQuestLabelChips(){
+  const wrap = document.getElementById('questLabelChips');
+  const opts = ['Tutti','MANDATORY','SECONDARY','Non specificato'];
+  wrap.innerHTML = opts.map(l => {
+    const cnt = l === 'Tutti' ? QUESTS.length : QUESTS.filter(q => (q.label||'Non specificato') === l).length;
+    const active = questUi.labelFilter === l;
+    return `<button class="chip ${active?'active':''}" data-label="${escapeHtml(l)}">${escapeHtml(l)} <span class="cnt">${cnt}</span></button>`;
+  }).join('');
+  wrap.querySelectorAll('.chip').forEach(el => el.addEventListener('click', () => {
+    questUi.labelFilter = el.dataset.label;
+    renderQuests();
+  }));
+}
+
+function buildQuestAreaSelect(){
+  const sel = document.getElementById('questAreaFilter');
+  const areas = Array.from(new Set(QUESTS.map(q => q.area || 'Nessuna'))).sort();
+  sel.innerHTML = `<option value="Tutti">Tutte le aree</option>` + areas.map(a => `<option value="${escapeHtml(a)}">${escapeHtml(a)}</option>`).join('');
+  sel.value = questUi.areaFilter;
+}
+
+function renderQuestThead(){
+  const th = document.getElementById('questThead');
+  th.innerHTML = `<th>Titolo</th><th>ID</th><th>Capitolo</th><th>Tipo</th><th>Giver</th><th>Area</th><th>Livello</th><th>Crediti</th><th>Blueprint</th><th>Reputazione</th><th>Passi</th>`;
+}
+
+function renderQuestTable(){
+  renderQuestThead();
+  const rows = questFilteredList();
+  const tbody = document.getElementById('questTbody');
+  if(!rows.length){
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="11">Nessuna missione corrisponde ai filtri.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(q => {
+    const chapterColor = CHAPTER_COLOR[q.chapter] || 'var(--text-faint)';
+    const labelColor = q.label === 'MANDATORY' ? 'var(--accent)' : (q.label === 'SECONDARY' ? 'var(--text-dim)' : 'var(--text-faint)');
+    const repText = q.reputationRewards.map(r => `${r.faction} ${r.delta>0?'+':''}${r.delta}`).join(', ');
+    const bpText = q.blueprintRewards.join(', ');
+    return `<tr>
+      <td>${escapeHtml(q.title || '(senza titolo)')}</td>
+      <td class="mono" style="font-size:11px; color:var(--text-faint);">${escapeHtml(q.id)}</td>
+      <td><span class="badge-type" style="color:${chapterColor}; border-color:color-mix(in srgb, ${chapterColor} 45%, var(--border)); background:color-mix(in srgb, ${chapterColor} 14%, var(--surface-3));"><span class="sw" style="background:${chapterColor}"></span>${escapeHtml(CHAPTER_LABEL[q.chapter]||q.chapter)}</span></td>
+      <td><span class="badge-type" style="color:${labelColor}; border-color:color-mix(in srgb, ${labelColor} 45%, var(--border)); background:color-mix(in srgb, ${labelColor} 14%, var(--surface-3));">${escapeHtml(q.label || 'Non specificato')}</span></td>
+      <td>${escapeHtml(q.motto || '—')}</td>
+      <td>${escapeHtml(q.area || '—')}</td>
+      <td class="num-cell">${q.level}</td>
+      <td class="num-cell">${q.credits ? q.credits.toLocaleString('it-IT') : '—'}</td>
+      <td title="${escapeHtml(bpText)}">${q.blueprintRewards.length || '—'}</td>
+      <td title="${escapeHtml(repText)}">${q.reputationRewards.length ? repText : '—'}</td>
+      <td class="num-cell">${q.stepCount || '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderQuestChapterChart(){
+  const rows = questFilteredList();
+  const svg = document.getElementById('questChapterChart');
+  const legend = document.getElementById('questLabelLegend');
+  if(!rows.length){ svg.style.display = 'none'; legend.innerHTML = ''; return; }
+  svg.style.display = '';
+
+  const labelKeys = ['MANDATORY','SECONDARY','Non specificato'];
+  const labelColors = { MANDATORY:'var(--accent)', SECONDARY:'var(--text-dim)', 'Non specificato':'var(--text-faint)' };
+  legend.innerHTML = labelKeys.map(l => `<div class="lg-item"><span class="lg-sw" style="background:${labelColors[l]}"></span>${escapeHtml(l)}</div>`).join('');
+
+  const chapters = CHAPTER_ORDER.filter(c => rows.some(q => q.chapter === c));
+  const counts = chapters.map(c => {
+    const qs = rows.filter(q => q.chapter === c);
+    return { chapter:c, MANDATORY: qs.filter(q=>q.label==='MANDATORY').length, SECONDARY: qs.filter(q=>q.label==='SECONDARY').length, 'Non specificato': qs.filter(q=>!q.label).length };
+  });
+  const dataMax = Math.max(...counts.map(c => labelKeys.reduce((s,k)=>s+c[k],0)), 1);
+  const chartMax = dataMax;
+  const barW = 32, gap = 16, plotH = 190, axisW = 40, topPad = 26, labelPad = 34;
+  const width = axisW + counts.length * (barW + gap) + gap;
+  const height = topPad + plotH + labelPad;
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+
+  const step = niceStep(chartMax);
+  const ticks = [];
+  for(let v = 0; v <= chartMax + 1e-9; v += step) ticks.push(v);
+  if(ticks.length < 2) ticks.push(chartMax);
+
+  let parts = [];
+  ticks.forEach(t => {
+    const y = topPad + plotH - (t/chartMax) * plotH;
+    parts.push(`<line x1="${axisW}" y1="${y}" x2="${width}" y2="${y}" stroke="var(--border-soft)" stroke-width="1"/>`);
+    parts.push(`<text x="${axisW-8}" y="${y+3}" text-anchor="end" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Mono, monospace">${Math.round(t)}</text>`);
+  });
+  parts.push(`<line x1="${axisW}" y1="${topPad+plotH}" x2="${width}" y2="${topPad+plotH}" stroke="var(--border)" stroke-width="1"/>`);
+
+  counts.forEach((c,i) => {
+    const x = axisW + gap + i*(barW+gap);
+    let yCursor = topPad + plotH;
+    labelKeys.forEach(l => {
+      const h = (c[l]/chartMax) * plotH;
+      if(h > 0) parts.push(`<rect x="${x}" y="${yCursor-h}" width="${barW}" height="${h}" fill="${labelColors[l]}"/>`);
+      yCursor -= h;
+    });
+    const cx = x + barW/2, baseY = topPad + plotH;
+    parts.push(`<text x="${cx}" y="${baseY+16}" text-anchor="middle" font-size="10" fill="var(--text-dim)" font-family="IBM Plex Sans, sans-serif">${escapeHtml(CHAPTER_LABEL[c.chapter]||c.chapter)}</text>`);
+  });
+
+  svg.innerHTML = parts.join('');
+
+  const tooltip = document.getElementById('chartTooltip');
+  svg.querySelectorAll('rect').forEach((el, idx) => {
+    const c = counts[Math.floor(idx/labelKeys.length)];
+    const show = (x,y) => {
+      const total = labelKeys.reduce((s,k)=>s+c[k],0);
+      tooltip.innerHTML = `<div class="tt-val">${total} missioni</div><div class="tt-name">${escapeHtml(CHAPTER_LABEL[c.chapter]||c.chapter)}</div><div class="tt-rarity">Mandatory ${c.MANDATORY} &middot; Secondary ${c.SECONDARY}</div>`;
+      tooltip.style.left = x+'px'; tooltip.style.top = (y-12)+'px'; tooltip.classList.add('show');
+    };
+    el.addEventListener('pointerenter', e => show(e.clientX, e.clientY));
+    el.addEventListener('pointermove', e => show(e.clientX, e.clientY));
+    el.addEventListener('pointerleave', () => tooltip.classList.remove('show'));
+  });
+}
+
+function renderQuestCreditsChart(){
+  const rows = questFilteredList().filter(q => q.credits > 0).slice().sort((a,b) => b.credits - a.credits);
+  const svg = document.getElementById('questCreditsChart');
+  const legend = document.getElementById('questChapterLegend');
+  if(!rows.length){ svg.style.display = 'none'; legend.innerHTML = ''; return; }
+  svg.style.display = '';
+
+  const usedChapters = Array.from(new Set(rows.map(r => r.chapter)));
+  legend.innerHTML = usedChapters.map(c => `<div class="lg-item"><span class="lg-sw" style="background:${CHAPTER_COLOR[c]}"></span>${escapeHtml(CHAPTER_LABEL[c]||c)}</div>`).join('');
+
+  const chartMax = Math.max(...rows.map(r => r.credits), 1);
+  const angle = rows.length > 20 ? 90 : (rows.length > 9 ? 45 : 0);
+  const LABEL_SPEC = { 0: {pad:34, len:9}, 45: {pad:92, len:17}, 90: {pad:146, len:24} }[angle];
+  const barW = 14, gap = 7, plotH = 190, axisW = 56, topPad = 26;
+  const width = axisW + rows.length * (barW + gap) + gap;
+  const height = topPad + plotH + LABEL_SPEC.pad;
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+
+  const step = niceStep(chartMax);
+  const ticks = [];
+  for(let v = 0; v <= chartMax + 1e-9; v += step) ticks.push(v);
+  if(ticks.length < 2) ticks.push(chartMax);
+
+  let parts = [];
+  ticks.forEach(t => {
+    const y = topPad + plotH - (t/chartMax) * plotH;
+    parts.push(`<line x1="${axisW}" y1="${y}" x2="${width}" y2="${y}" stroke="var(--border-soft)" stroke-width="1"/>`);
+    parts.push(`<text x="${axisW-8}" y="${y+3}" text-anchor="end" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Mono, monospace">${Math.round(t).toLocaleString('it-IT')}</text>`);
+  });
+  parts.push(`<line x1="${axisW}" y1="${topPad+plotH}" x2="${width}" y2="${topPad+plotH}" stroke="var(--border)" stroke-width="1"/>`);
+
+  rows.forEach((r,i) => {
+    const h = (r.credits/chartMax) * plotH;
+    const x = axisW + gap + i*(barW+gap);
+    const y = topPad + plotH - h;
+    const color = CHAPTER_COLOR[r.chapter] || 'var(--text-faint)';
+    const path = roundedTopBarPath(x, y, barW, h, 3);
+    parts.push(`<path class="chart-bar quest-bar" data-idx="${i}" d="${path}" fill="${color}"></path>`);
+    const cx = x + barW/2, baseY = topPad + plotH;
+    const nameLabel = escapeHtml(truncate(r.title, LABEL_SPEC.len));
+    if(angle === 0){
+      parts.push(`<text x="${cx}" y="${baseY+13}" text-anchor="middle" font-size="9" fill="var(--text-faint)" font-family="IBM Plex Sans, sans-serif">${nameLabel}</text>`);
+    } else {
+      parts.push(`<text x="${cx}" y="${baseY+9}" text-anchor="end" font-size="9" fill="var(--text-faint)" font-family="IBM Plex Sans, sans-serif" transform="rotate(-${angle} ${cx} ${baseY+9})">${nameLabel}</text>`);
+    }
+  });
+
+  svg.innerHTML = parts.join('');
+
+  const tooltip = document.getElementById('chartTooltip');
+  svg.querySelectorAll('.quest-bar').forEach(el => {
+    const r = rows[Number(el.dataset.idx)];
+    const show = (x,y) => {
+      tooltip.innerHTML = `<div class="tt-val">${r.credits.toLocaleString('it-IT')} crediti</div><div class="tt-name">${escapeHtml(r.title)}</div><div class="tt-rarity">${escapeHtml(CHAPTER_LABEL[r.chapter]||r.chapter)} &middot; ${escapeHtml(r.id)}</div>`;
+      tooltip.style.left = x+'px'; tooltip.style.top = (y-12)+'px'; tooltip.classList.add('show');
+    };
+    el.addEventListener('pointerenter', e => show(e.clientX, e.clientY));
+    el.addEventListener('pointermove', e => show(e.clientX, e.clientY));
+    el.addEventListener('pointerleave', () => tooltip.classList.remove('show'));
+  });
+}
+
+function renderQuests(){
+  if(!QUESTS.length) return;
+  renderQuestStats();
+  buildQuestChapterChips();
+  buildQuestLabelChips();
+  buildQuestAreaSelect();
+  renderQuestTable();
+  renderQuestChapterChart();
+  renderQuestCreditsChart();
+}
+
+/* ============================== MASTER RENDER ============================== */
+function renderAll(){
+  buildSectionbar();
+  document.getElementById('entitiesSection').hidden = activeSection !== 'entities';
+  ['quest','stations','enemies','settings'].forEach(id => {
+    document.getElementById('panel-'+id).hidden = activeSection !== id;
+  });
+
+  if(activeSection === 'entities'){
+    buildTabbar();
+    CATS.forEach(c => {
+      document.getElementById('panel-'+c.id).hidden = activeTab !== c.id;
+    });
+    document.getElementById('panel-producers').hidden = activeTab !== 'producers';
+    if(activeTab === 'producers'){ renderProducers(); }
+    else { renderTable(activeTab); }
+  } else if(activeSection === 'quest'){
+    renderQuests();
+  } else if(activeSection === 'stations'){
+    renderStationsTab();
+  } else if(activeSection === 'enemies'){
+    renderEnemies();
+  } else if(activeSection === 'settings'){
+    renderSettings();
+  }
+  renderDirtyPill();
+}
+
+/* ============================== WIRE UP (static) ============================== */
+document.getElementById('scrim').addEventListener('click', closeDrawer);
+document.getElementById('dwClose').addEventListener('click', closeDrawer);
+document.getElementById('dwSave').addEventListener('click', saveDrawer);
+document.getElementById('dwRevert').addEventListener('click', revertDrawer);
+document.getElementById('resetAllBtn').addEventListener('click', resetAllGlobal);
+document.getElementById('modalClose').addEventListener('click', closeSyncModal);
+document.getElementById('modalOkBtn').addEventListener('click', closeSyncModal);
+document.getElementById('modalScrim').addEventListener('click', e => { if(e.target.id==='modalScrim') closeSyncModal(); });
+document.getElementById('copyDiffBtn').addEventListener('click', copyDiffSummary);
+
+document.getElementById('enemySearch').addEventListener('input', e => { enemyUi.search = e.target.value; renderEnemies(); });
+document.getElementById('enemyTierFilter').addEventListener('change', e => { enemyUi.tierFilter = e.target.value; renderEnemies(); });
+document.getElementById('enemyBossToggle').addEventListener('click', e => { enemyUi.bossOnly = !enemyUi.bossOnly; e.currentTarget.classList.toggle('active', enemyUi.bossOnly); renderEnemies(); });
+document.getElementById('enemyInGameToggle').addEventListener('click', e => { enemyUi.inGameOnly = !enemyUi.inGameOnly; e.currentTarget.classList.toggle('active', enemyUi.inGameOnly); renderEnemies(); });
+document.getElementById('enemySyncBtn').addEventListener('click', openEnemiesSyncModal);
+
+document.getElementById('stationSearch').addEventListener('input', e => { stationUi.search = e.target.value; renderStations(); });
+document.getElementById('catalogSearch').addEventListener('input', e => { catalogUi.search = e.target.value; renderStationsCatalog(); });
+document.getElementById('catalogTypeFilter').addEventListener('change', e => { catalogUi.typeFilter = e.target.value; renderStationsCatalog(); });
+document.getElementById('catalogPlaceholderToggle').addEventListener('click', e => {
+  catalogUi.showPlaceholders = !catalogUi.showPlaceholders;
+  e.currentTarget.classList.toggle('active', catalogUi.showPlaceholders);
+  renderStationsCatalog();
+});
+document.getElementById('stationSyncBtn').addEventListener('click', openStationsSyncModal);
+
+document.getElementById('questSearch').addEventListener('input', e => { questUi.search = e.target.value; renderQuests(); });
+document.getElementById('questAreaFilter').addEventListener('change', e => { questUi.areaFilter = e.target.value; renderQuests(); });
+document.getElementById('questPlaceholderToggle').addEventListener('click', e => {
+  questUi.showPlaceholders = !questUi.showPlaceholders;
+  e.currentTarget.classList.toggle('active', questUi.showPlaceholders);
+  renderQuests();
+});
+document.getElementById('questSyncBtn').addEventListener('click', openQuestsSyncModal);
+
+async function init(){
+  buildPanels();
+  renderAll();
+  try{
+    await loadDataFromServer();
+  }catch(err){
+    showToast('Impossibile contattare il server: avvia "node server.js" e apri questa pagina da lì');
+  }
+  try{
+    await loadEnemies();
+  }catch(err){
+    console.error('Impossibile caricare data/enemies.json', err);
+  }
+  try{
+    await loadStations();
+  }catch(err){
+    console.error('Impossibile caricare data/stations.json', err);
+  }
+  try{
+    await loadQuests();
+  }catch(err){
+    console.error('Impossibile caricare data/quests.json', err);
+  }
+  renderAll();
+}
+init();
+</script>

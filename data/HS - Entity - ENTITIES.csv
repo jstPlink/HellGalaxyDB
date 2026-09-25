@@ -1,0 +1,290 @@
+(ID),Label,BriefDescription,EntityType,BasePrice,BaseRarity,Icon,LabelKey,DescriptionKey,ProducerIcon,ModuleType,Quality,,,,,,,,ModuleType BAKCUP 26.03.26
+COL-Crystal,Crystal,[C],Collectable,12,Uncommon,T_COL_Crystal,COL-Crystal-Name,COL-Crystal-Description,,,,,,,,,,,
+COL-Gold,Gold,[C],Collectable,10,Common,T_COL_Gold,COL-Gold-Name,COL-Gold-Description,,,,,,,,,,,
+COL-Aluminium,Aluminium,[C],Collectable,6,Common,T_COL_Aluminium,COL-Aluminium-Name,COL-Aluminium-Description,,,,,,,,,,,
+COL-MetalJunk,Metal Junk,[C],Collectable,2,Salvage,T_COL_Iron,COL-MetalJunk-Name,COL-MetalJunk-Description,,,,,,,,,,,
+COL-Radium,Radium,[C],Collectable,15,Epic,T_COL_Radium,COL-Radium-Name,COL-Radium-Description,,,,,,,,,,,
+COL-Recondigen,Recondigen,[C],Collectable,13,Epic,T_COL_Orichalcum,COL-Recondigen-Name,COL-Recondigen-Description,,,,,,,,,,,
+COL-IC_Raw,Ionic Coal,"Early Imperial explorers dismissed this strange coal, until raiders found it shields brainwaves, and maybe more.",Consumable,8,Epic,T_CON_IC_Raw_Base,COL-IC_Raw-Name,COL-IC_Raw-Description,,,,,,,,,,,
+COL-EngineSphere,Not Found,Used to power up the Monolith Door Engines,Collectable,0,Epic,,COL-EngineSphere-Name,COL-EngineSphere-Description,TTF,,,,,,,,,,
+COL-RehunRelic,Rehun,The biological remnant of Ban Krylam. Emits a bioecho reacting to the Colossi or their remains.,Collectable,0,Uncommon,T_COL_Bolognum,COL-RehunRelic-Name,COL-RehunRelic-Description,TTF,,,,,,,,,,
+COL-IC_Green_Light,G-Light Ion,A simple Ionic product that soothes nerves and calms the raider’s mind.,Consumable,20,Common,T_CON_IC_Raw_Base,COL-IC_Green_Light-Name,COL-IC_Green_Light-Description,,,,,,,,,,,
+COL-IC_Green,G-Ion,"Enhanced version of G-Light Ion, processed with raw iron for stronger calming effect.",Consumable,250,Uncommon,T_CON_IC_Raw_Base,COL-IC_Green-Name,COL-IC_Green-Description,,,,,,,,,,,
+COL-IC_Green_Dark,Green Dark Ionic Coal,Green Dark Ionic Coal,Consumable,500,Rare,T_CON_IC_Raw_Base,COL-IC_Green_Dark-Name,COL-IC_Green_Dark-Description,,,,,,,,,,,
+COL-IC_White_Light,W-Light Ion,"Used on weak minds, W-Light Ion can cause serious damage. Raiders use it to boost performance.",Consumable,250,Uncommon,T_CON_IC_Raw_Base,COL-IC_White_Light-Name,COL-IC_White_Light-Description,,,,,,,,,,,
+COL-IC_Red_Light,R-Light Ion,"Before battle, some raiders gather to face the R-Light Ion together, surrendering to mystical exaltation.",Consumable,250,Uncommon,T_CON_IC_Raw_Base,COL-IC_Red_Light-Name,COL-IC_Red_Light-Description,,,,,,,,,,,
+COL-IC_Orange_Light,O-Light Ion,"The Gold Guild once combined different Ionics, creating a powerful mental booster tied to G-Light and R-Light concentrations, until one raider revealed the secret.",Consumable,5,Common,T_CON_IC_Raw_Base,COL-IC_Orange_Light-Name,COL-IC_Orange_Light-Description,,,,,,,,,,,
+COL-WeaponCoolerA_S,Cooler,Isaac Greyling began trading with Neterun thanks to this consumable’s strengths. Its flaws later let the Empire requisition it for free.,Consumable,5,Common,,COL-WeaponCoolerA_S-Name,COL-WeaponCoolerA_S-Description,,,,,,,,,,,
+COL-WeaponCoolerA_M,M-weapon cooler,"Slightly better than the previous model, it highlights how the Isaac Greyling Foundry stopped investing in cooler improvements.",Consumable,25,Uncommon,,COL-WeaponCoolerA_M-Name,COL-WeaponCoolerA_M-Description,,,,,,,,,,,
+COL-WeaponCoolerA_L,L-weapon cooler,This excellent cooler is an unlicensed modified version of the previous model. Greyling tried to claim rights but then changed his mind.,Consumable,100,Rare,,COL-WeaponCoolerA_L-Name,COL-WeaponCoolerA_L-Description,,,,,,,,,,,
+COL-WeaponCoolerB,K&B Smoother,"The K&B heatsink improves on all competitors. Early prototypes exploded, but later versions met safety standards.",Consumable,1,Common,,COL-WeaponCoolerB-Name,COL-WeaponCoolerB-Description,,,,,,,,,,,
+COL-PowerFuel_S,Powerfuel S,Fuel mix with old nootropic compounds. Increases top speed for a short time.,Consumable,5,Common,,COL-PowerFuel_S-Name,COL-PowerFuel_S-Description,,,,,,,,,,,
+COL-PowerFuel_M,Powerfuel M,"Like Powerfuel S, it boosts speed but lasts longer.",Consumable,20,Uncommon,,COL-PowerFuel_M-Name,COL-PowerFuel_M-Description,,,,,,,,,,,
+COL-PowerFuel_L,Powerfuel L,"The best speed booster, with the longest duration.",Consumable,75,Rare,,COL-PowerFuel_L-Name,COL-PowerFuel_L-Description,,,,,,,,,,,
+COL-AimBoost_S,Aimtrain S,"A Rebext dopaminergic compound that enhances accuracy. Constantly modified, its original recipe is long forgotten, or deliberately lost.",Consumable,1,Common,,COL-AimBoost_S-Name,COL-AimBoost_S-Description,,,,,,,,,,,
+COL-AimBoost_M,Aimtrain M,A stronger derivative of Aimtrain S. Rumored to exist in ingestible form.,Consumable,50,Uncommon,,COL-AimBoost_M-Name,COL-AimBoost_M-Description,,,,,,,,,,,
+COL-AimBoost_L,Aimtrain L,Rebext’s pride and the longest-lasting aim booster. A key tool in the victory against the Mhafeks.,Consumable,100,Rare,,COL-AimBoost_L-Name,COL-AimBoost_L-Description,,,,,,,,,,,
+COL-PowerAmmo,Purger Alpha,"An Entity gem from Old Joe’s mind: lose something, gain something. Here, firepower is the gain.",Consumable,1,Common,,COL-PowerAmmo-Name,COL-PowerAmmo-Description,,,,,,,,,,,
+COL-WeaponOverloadA,Gunner B,"""Never lose your way."" Tolec’s slogan suits the GunnerX, which boosts weapon power.",Consumable,1,Common,,COL-WeaponOverloadA-Name,COL-WeaponOverloadA-Description,,,,,,,,,,,
+COL-WeaponOverloadB,Gunner B+,"Tolec’s founder Abby once called herself a pacifist. After her ousting, the company turned to weapons, and with Gunner B+, pacifism became a memory.",Consumable,50,Uncommon,,COL-WeaponOverloadB-Name,COL-WeaponOverloadB-Description,,,,,,,,,,,
+COL-NetShieldEnhancer_S,Neterhold,"Its processes remain unknown, but the Neterhold recharges and enhances raider shields. Found near Neterun ruins of uncertain origin.",Consumable,10,Common,,COL-NetShieldEnhancer_S-Name,COL-NetShieldEnhancer_S-Description,,,,,,,,,,,
+COL-NetShieldEnhancer_M,Neterhorld Improved,"Similar to the Neterhold, it recharges shields with slightly longer duration. Contains traces of echilium.",Consumable,50,Uncommon,,COL-NetShieldEnhancer_M-Name,COL-NetShieldEnhancer_M-Description,,,,,,,,,,,
+COL-NetShieldEnhancer_L,Neterhold Extended,"In addition to restoring the body’s shield, it increases its power for a time. Rare, found in remote and dangerous areas, often guarded by the Alters.",Consumable,200,Rare,,COL-NetShieldEnhancer_L-Name,COL-NetShieldEnhancer_L-Description,,,,,,,,,,,
+COL-ShieldRecover_S,ShieldTech X,"Developed by Abby’s Shield, it bypasses safety locks in the generator’s grid to restore shields faster.",Consumable,5,Common,,COL-ShieldRecover_S-Name,COL-ShieldRecover_S-Description,,,,,,,,,,,
+COL-ShieldRecover_M,ShieldTech XX,"Abby opposed tampering with her shield designs, which she saw as art. But after losing control of her company, others enhanced the model beyond safety limits.",Consumable,25,Uncommon,,COL-ShieldRecover_M-Name,COL-ShieldRecover_M-Description,,,,,,,,,,,
+COL-ShieldRecover_L,ShieldTech XXX,"Desperate as her shields were pushed to extremes, Abby witnessed the creation of Immun-Def L, the ultimate defense regenerator, charging shields to the limit without explosion.",Consumable,100,Rare,,COL-ShieldRecover_L-Name,COL-ShieldRecover_L-Description,,,,,,,,,,,
+COL-IntegrityRecover_S,Helisum +,Soothes minor body injuries. Patented by Entity.,Consumable,15,Common,,COL-IntegrityRecover_S-Name,COL-IntegrityRecover_S-Description,,,,,,,,,,,
+COL-IntegrityRecover_M,Helisum ++,Soothes serious body injuries. Patented by Entity.,Consumable,100,Uncommon,,COL-IntegrityRecover_M-Name,COL-IntegrityRecover_M-Description,,,,,,,,,,,
+COL-IntegrityRecover_L,Helisum +++,Soothes critical body injuries. Patented by Entity.,Consumable,500,Rare,,COL-IntegrityRecover_L-Name,COL-IntegrityRecover_L-Description,,,,,,,,,,,
+COL-StationSupply_A,Ubique Mnemonic File,A broken mnemonic record. Can reconstruct a neural fragment.,Consumable,10,Uncommon,,COL-StationSupply_A-Name,COL-StationSupply_A-Description,,,,,,,,,,,
+COL-StationSupply_B,,[C],Consumable,10,Uncommon,,COL-StationSupply_B-Name,COL-StationSupply_B-Description,,,,,,,,,,,
+COL-StationSupply_C,,,Consumable,10,Uncommon,,COL-StationSupply_C-Name,COL-StationSupply_C-Description,,,,,,,,,,,
+COL-StationSupply_D,,,Consumable,10,Uncommon,,COL-StationSupply_D-Name,COL-StationSupply_D-Description,,,,,,,,,,,
+COL-StationSupply_E,,,Consumable,10,Uncommon,,COL-StationSupply_E-Name,COL-StationSupply_E-Description,,,,,,,,,,,
+COL-StationSupply_F,,,Consumable,10,Uncommon,,COL-StationSupply_F-Name,COL-StationSupply_F-Description,,,,,,,,,,,
+COL-StationSupply_G,,,Consumable,10,Uncommon,,COL-StationSupply_G-Name,COL-StationSupply_G-Description,,,,,,,,,,,
+COL-StationSupply_H,,,Consumable,10,Uncommon,,COL-StationSupply_H-Name,COL-StationSupply_H-Description,,,,,,,,,,,
+COL-StationSupply_I,,,Consumable,10,Uncommon,,COL-StationSupply_I-Name,COL-StationSupply_I-Description,,,,,,,,,,,
+COL-StationSupply_J,,,Consumable,10,Uncommon,,COL-StationSupply_J-Name,COL-StationSupply_J-Description,,,,,,,,,,,
+COL-StationSupply_K,,,Consumable,10,Uncommon,,COL-StationSupply_K-Name,COL-StationSupply_K-Description,,,,,,,,,,,
+COL-StationSupply_L,,,Consumable,10,Uncommon,,COL-StationSupply_L-Name,COL-StationSupply_L-Description,,,,,,,,,,,
+COL-StationSupply_M,,,Consumable,10,Uncommon,,COL-StationSupply_M-Name,COL-StationSupply_M-Description,,,,,,,,,,,
+COL-StationSupply_N,,,Consumable,10,Uncommon,,COL-StationSupply_N-Name,COL-StationSupply_N-Description,,,,,,,,,,,
+COL-StationSupply_O,,,Consumable,10,Uncommon,,COL-StationSupply_O-Name,COL-StationSupply_O-Description,,,,,,,,,,,
+COL-StationSupply_P,,,Consumable,10,Uncommon,,COL-StationSupply_P-Name,COL-StationSupply_P-Description,,,,,,,,,,,
+COL-StationSupply_Q,,,Consumable,10,Uncommon,,COL-StationSupply_Q-Name,COL-StationSupply_Q-Description,,,,,,,,,,,
+COL-StationSupply_R,,,Consumable,10,Uncommon,,COL-StationSupply_R-Name,COL-StationSupply_R-Description,,,,,,,,,,,
+COL-StationSupply_S,,,Consumable,10,Uncommon,,COL-StationSupply_S-Name,COL-StationSupply_S-Description,,,,,,,,,,,
+COL-StationSupply_T,,,Consumable,10,Uncommon,,COL-StationSupply_T-Name,COL-StationSupply_T-Description,,,,,,,,,,,
+COL-StationSupply_U,,,Consumable,10,Uncommon,,COL-StationSupply_U-Name,COL-StationSupply_U-Description,,,,,,,,,,,
+COL-StationSupply_V,,,Consumable,10,Uncommon,,COL-StationSupply_V-Name,COL-StationSupply_V-Description,,,,,,,,,,,
+COL-StationSupply_W,,,Consumable,10,Uncommon,,COL-StationSupply_W-Name,COL-StationSupply_W-Description,,,,,,,,,,,
+COL-StationSupply_X,Lexon Mnemonic File,A broken mnemonic record. Can reconstruct a neural fragment.,Consumable,10,Uncommon,,COL-StationSupply_X-Name,COL-StationSupply_X-Description,,,,,,,,,,,
+COL-StationSupply_Y,Smuggled Tracker,An old tracking system once sold to Kaledo Station.,Consumable,10,Uncommon,,COL-StationSupply_Y-Name,COL-StationSupply_Y-Description,,,,,,,,,,,
+COL-StationSupply_Z,Joe's Data,A high-strength drive built to endure extreme conditions.,Consumable,10,Uncommon,,COL-StationSupply_Z-Name,COL-StationSupply_Z-Description,,,,,,,,,,,
+PY-P1_P1_S,Arm Red,[C],Module,0,Salvage,T_MOD_PY-P1_P1,PY-P1_P1_S-Name,PY-P1_P1_S-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P1_P1_M,Arm Red,[C],Module,0,Salvage,T_MOD_PY-P1_P1,PY-P1_P1_M-Name,PY-P1_P1_M-Description,TTF,Structural,10,,,,,,,,
+PY-P1_P1_L,Arm Red,[C],Module,0,Salvage,T_MOD_PY-P1_P1,PY-P1_P1_L-Name,PY-P1_P1_L-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P1_P2_S,Arm Green to Red,[C],Module,0,Salvage,T_MOD_PY-P1_P2,PY-P1_P2_S-Name,PY-P1_P2_S-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P1_P2_M,Arm Green to Red,[C],Module,0,Salvage,T_MOD_PY-P1_P2,PY-P1_P2_M-Name,PY-P1_P2_M-Description,TTF,Structural,10,,,,,,,,
+PY-P1_P2_L,Arm Green to Red,[C],Module,0,Salvage,T_MOD_PY-P1_P2,PY-P1_P2_L-Name,PY-P1_P2_L-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P2_P2_S,Arm Green,[C],Module,0,Salvage,T_MOD_PY-P2_P2,PY-P2_P2_S-Name,PY-P2_P2_S-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P2_P2_M,Arm Green,[C],Module,0,Salvage,T_MOD_PY-P2_P2,PY-P2_P2_M-Name,PY-P2_P2_M-Description,TTF,Structural,10,,,,,,,,
+PY-P2_P2_L,Arm Green,[C],Module,0,Salvage,T_MOD_PY-P2_P2,PY-P2_P2_L-Name,PY-P2_P2_L-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P2_DP1_S,Arm Green to Double Red,[C],Module,0,Salvage,T_DP1,PY-P2_DP1_S-Name,PY-P2_DP1_S-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P2_DP1_M,Arm Green to Double Red,[C],Module,0,Salvage,T_DP1,PY-P2_DP1_M-Name,PY-P2_DP1_M-Description,TTF,Structural,10,,,,,,,,
+PY-P2_DP1_L,Arm Green to Double Red,[C],Module,0,Salvage,T_DP1,PY-P2_DP1_L-Name,PY-P2_DP1_L-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P3_P3_S,Arm Blue,[C],Module,0,Salvage,T_MOD_PY-P3_P3,PY-P3_P3_S-Name,PY-P3_P3_S-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P3_P3_M,Arm Blue,[C],Module,0,Salvage,T_MOD_PY-P3_P3,PY-P3_P3_M-Name,PY-P3_P3_M-Description,TTF,Structural,10,,,,,,,,
+PY-P3_P3_L,Arm Blue,[C],Module,0,Salvage,T_MOD_PY-P3_P3,PY-P3_P3_L-Name,PY-P3_P3_L-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P3_DP1_S,Arm Blue to Double Red,[C],Module,0,Salvage,T_DP1,PY-P3_DP1_S-Name,PY-P3_DP1_S-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P3_DP1_M,Arm Blue to Double Red,[C],Module,0,Salvage,T_DP1,PY-P3_DP1_M-Name,PY-P3_DP1_M-Description,TTF,Structural,10,,,,,,,,
+PY-P3_DP1_L,Arm Blue to Double Red,[C],Module,0,Salvage,T_DP1,PY-P3_DP1_L-Name,PY-P3_DP1_L-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P3_DP2_S,Arm Blue to Double Green,[C],Module,0,Salvage,T_DP2,PY-P3_DP2_S-Name,PY-P3_DP2_S-Description,TTF,Structural,10,,,,,,,,Structural
+PY-P3_DP2_M,Arm Blue to Double Green,[C],Module,0,Salvage,T_DP2,PY-P3_DP2_M-Name,PY-P3_DP2_M-Description,TTF,Structural,10,,,,,,,,
+PY-P3_DP2_L,Arm Blue to Double Green,[C],Module,0,Salvage,T_DP2,PY-P3_DP2_L-Name,PY-P3_DP2_L-Description,TTF,Structural,10,,,,,,,,Structural
+Special01_PY-P1_P1_S,Arm Red,[C],Module,0,Salvage,T_MOD_PY-P1_P1,Special01_PY-P1_P1_S-Name,Special01_PY-P1_P1_S-Description,TTF,Structural,10,,,,,,,,Structural
+BODY00-StaringBody,Evo,"""The bodies of new humans will be cockpits. Their limit, the universe."" With these words, Abby Shield introduced the Evo, the standard body of every raider.",Module,900,Uncommon,T_MB_StartingBody,BODY00-StaringBody-Name,BODY00-StaringBody-Description,Abby,MainBody,480,,,,,,,,MainBody
+BODY01-Spartan,Beyond,"An evolution of Abby’s basic model, designed to carry more powerful weapons.",Module,2700,Legendary,T_MB_SpartanShip,BODY01-Spartan-Name,BODY01-Spartan-Description,KnB,MainBody,770,,,,,,,,MainBody
+BODY02-Dragon,Lizard Moon,"An old Maison Melies design for early Imperial ships, later stolen by Isaac Greyling Foundry. Basic, mid-strength, with no notable features.",Module,2100,Mythic,T_MB_DragonShip,BODY02-Dragon-Name,BODY02-Dragon-Description,Entity,MainBody,690,,,,,,,,MainBody
+BODY03-Principal,Iron Creed,"The story goes that the first Iron leader, the Great Apostate, slew so many rivals that he forged a new hull from the pieces of their bodies.",Module,1300,Rare,T_MB_PrincipalBody,BODY03-Principal-Name,BODY03-Principal-Description,IGF,MainBody,550,,,,,,,,MainBody
+BODY04-AppioBody,Bios,"The HomeInSpace Company designed the Bios for their Mugai mining raiders, seeking durable bodies. They later became the Empire’s main problem in the Mining Soul Revolution.",Module,1300,Rare,T_MB_AppioBody,BODY04-AppioBody-Name,BODY04-AppioBody-Description,Tolec,MainBody,550,,,,,,,,MainBody
+BODY02a-Dragon_Iron,Iron Lizard,"A modification of the Lizard Moon, built by the Iron Guild after several prototypes. To choose the best, raiders were installed in them and fought each other.",Module,0,Salvage,T_MB_DragonShip,BODY02a-Dragon_Iron-Name,BODY02a-Dragon_Iron-Description,Maison,MainBody,0,,,,,,,,MainBody
+BODY02b-Dragon_Gold,Gold Lizard,"A modified Lizard Moon based on the original body, enhanced with the famous Injectable Gold used by Gold Guild raiders.",Module,0,Salvage,T_MB_DragonShip,BODY02b-Dragon_Gold-Name,BODY02b-Dragon_Gold-Description,Maison,MainBody,0,,,,,,,,MainBody
+BODY10-IronBody,Not Found,#N/A,Module,0,Salvage,T_MB_SpartanShip,BODY10-IronBody-Name,BODY10-IronBody-Description,TTF,MainBody,0,,,,,,,,MainBody
+BODY11-GoldBody,Not Found,#N/A,Module,0,Salvage,T_MB_SpartanShip,BODY11-GoldBody-Name,BODY11-GoldBody-Description,TTF,MainBody,0,,,,,,,,MainBody
+BODY12-MaalaxmiBody,Newcult,The Malaxdon are closed to the world beyond the Tree. Their rejection of traditional modules led them to develop a body grounded in their belief in Balance.,Module,0,Salvage,T_MB_DragonShip,BODY12-MaalaxmiBody-Name,BODY12-MaalaxmiBody-Description,TTF,MainBody,0,,,,,,,,MainBody
+BODY13-AlienBody,Colonizer,"Old Imperial colonies can be a source of great satisfaction, especially when adapting alien ship cockpits for raider bodies. The Colonizer has been tested in some of the Human Empire’s most important expansion wars.",Module,0,Salvage,T_MB_DragonShip,BODY13-AlienBody-Name,BODY13-AlienBody-Description,IGF,MainBody,0,,,,,,,,MainBody
+BODY14-IronScale,IronSun,"The Iron Guild’s latest and greatest body, forged from the capital ship carcasses of past leaders.",Module,3200,Legendary,T_BODY14-IronScale,BODY14-IronScale-Name,BODY14-IronScale-Description,IGF,MainBody,840,,,,,,,,MainBody
+BODY15-GoldWings,Chrysos,Countless experiments were needed to achieve this body. Raiders who wield it spread golden glory across the Imperial colonies.,Module,3200,Rare,T_BODY15-GoldWings,BODY15-GoldWings-Name,BODY15-GoldWings-Description,IGF,MainBody,840,,,,,,,,MainBody
+BODY16-IronScaleRust,Recycled IronSun,"The Iron Guild’s latest and greatest body, forged from the capital ship carcasses of past leaders.
+Recycled body.",Module,2900,Legendary,T_BODY16-IronScaleRust,BODY16-IronScaleRust-Name,BODY16-IronScaleRust-Description,IGF,MainBody,800,,,,,,,,MainBody
+BODY17-GoldWingsDust,Recycled Chrysos,"Countless experiments were needed to achieve this body. Raiders who wield it spread golden glory across the Imperial colonies.
+Recycled body.",Module,2700,Rare,T_BODY17-GoldWingsDust,BODY17-GoldWingsDust-Name,BODY17-GoldWingsDust-Description,IGF,MainBody,770,,,,,,,,MainBody
+SBDY01-SuperEagle,Not Found,#N/A,Module,0,Salvage,T_SB_Eagle,SBDY01-SuperEagle-Name,SBDY01-SuperEagle-Description,Cagetastic,MainBody,0,,,,,,,,MainBody
+SBDY01-Eagle,Eagle,"No one sued when Entity stole the ""Beyond"" trademark from Abbey's Shield. The result is a light, fast, capacious raider body.",Module,3400,Legendary,T_SB_Eagle,SBDY01-Eagle-Name,SBDY01-Eagle-Description,Abby,MainBody,860,,,,,,,,MainBody
+SBDY02-Classic,Algor,"Following its vision of “Realizing the future as if it were already present,” TTF System created the Algor, a prized raider body born from its own AI’s investments.",Module,0,Salvage,T_SB_Base,SBDY02-Classic-Name,SBDY02-Classic-Description,TTF,MainBody,0,,,,,,,,MainBody
+SBDY03-Fly,Zephyros,"Derived from imperial suites where users were connected to each other, this tech evolved into a raider body. Zephyros uses connection data to minimize power use.",Module,2700,Legendary,T_SB_Fly,SBDY03-Fly-Name,SBDY03-Fly-Description,Entity,MainBody,780,,,,,,,,MainBody
+SBDY04-Fregade,Talon,"Imperial explorers were the first to use this Maison Melies-designed high-pressure hull. Once a simple cockpit, it became a raider hull during early Neterun colonization.",Module,0,Salvage,T_SB_Fregade,SBDY04-Fregade-Name,SBDY04-Fregade-Description,Maison,MainBody,0,,,,,,,,MainBody
+SBDY05-Helicon,Helicon,"Project One Record
+Though the team is decimated, the Family demands continuity. Mind installation onto Helicon underway. Biological body will be destroyed.",Module,4200,Legendary,,SBDY05-Helicon-Name,SBDY05-Helicon-Description,KnB,MainBody,940,,,,,,,,MainBody
+SBDY06-Blade,Prism,Sharp like a Mhafek’s pain.,Module,3500,Legendary,,SBDY06-Blade-Name,SBDY06-Blade-Description,TTF,MainBody,870,,,,,,,,MainBody
+InternalCargo_XS,[C],[C],Item,0,Salvage,T_MOD_Cargo_S,InternalCargo_XS-Name,InternalCargo_XS-Description,Tolec,,#N/A,,,,,,,,
+InternalCargo_S,[C],[C],Item,0,Salvage,T_MOD_Cargo_S,InternalCargo_S-Name,InternalCargo_S-Description,Tolec,,#N/A,,,,,,,,
+InternalCargo_M,[C],[C],Item,0,Salvage,T_MOD_Cargo_M,InternalCargo_M-Name,InternalCargo_M-Description,Rebext,,#N/A,,,,,,,,
+InternalCargo_L,[C],[C],Item,0,Salvage,T_MOD_Cargo_L,InternalCargo_L-Name,InternalCargo_L-Description,Tolec,,#N/A,,,,,,,,
+TestAiAugSys,Not Found,AI for augmented reality,Item,0,Epic,,TestAiAugSys-Name,TestAiAugSys-Description,Cagetastic,,#N/A,,,,,,,,
+TestHeatSink,Not Found,Repair from heat,Item,0,Epic,,TestHeatSink-Name,TestHeatSink-Description,HomeInSpace,,#N/A,,,,,,,,
+HeatSink_Tier0,Greyling Cooler,Isaac Greyling was oddly proud of this modest heat sink that bears his name.,Item,0,Common,T_Item_HeatSink_A,HeatSink_Tier0-Name,HeatSink_Tier0-Description,IGF,,#N/A,,,,,,,,
+HeatSink_Tier1,Rebooter,Uses heat dissipation from recycled organic material gathered after the Great Fixing Attack.,Item,0,Common,T_Item_HeatSink_A,HeatSink_Tier1-Name,HeatSink_Tier1-Description,Rebext,,#N/A,,,,,,,,
+HeatSink_Tier2,Entity Cooler,"""Old Joe reaches where Isaac Greyling does not."" This heat sink proves it.",Item,0,Rare,T_Item_HeatSink_B,HeatSink_Tier2-Name,HeatSink_Tier2-Description,Entity,,#N/A,,,,,,,,
+HeatSink_Tier3,K&B Powerplus,"Developed alongside the K&B Smoother, this heat sink offers an enviable fire rate and reliable stability.",Item,0,Epic,T_Item_HeatSink_C,HeatSink_Tier3-Name,HeatSink_Tier3-Description,KnB,,#N/A,,,,,,,,
+TestPowPlan,Not Found,Resource for energy,Item,0,Epic,,TestPowPlan-Name,TestPowPlan-Description,Cagetastic,,#N/A,,,,,,,,
+PowPlan_Tier0,Storer NW,"A simple, cheap battery mass-produced by Maison Méliès. It turned out toxic for some Imperial explorers.",Item,0,Common,T_Item_Power_A,PowPlan_Tier0-Name,PowPlan_Tier0-Description,Maison,,#N/A,,,,,,,,
+PowPlan_Tier1,Storer NNW,"An evolution of the NW battery, created after the previous model was banned for lung toxicity, not an issue for raiders without lungs, according to Isaac Greyling.",Item,0,Common,T_Item_Power_A,PowPlan_Tier1-Name,PowPlan_Tier1-Description,IGF,,#N/A,,,,,,,,
+PowPlan_Tier2,Halfway Supporter,"None of HIS’s engineers could name this battery better. Not too efficient, not too inefficient.",Item,0,Rare,T_Item_Power_B,PowPlan_Tier2-Name,PowPlan_Tier2-Description,HomeInSpace,,#N/A,,,,,,,,
+PowPlan_Tier3,The Brightest,The most powerful power source a raider can mount. Developed by Rebext’s own artificial intelligences.,Item,0,Epic,T_Item_Power_C,PowPlan_Tier3-Name,PowPlan_Tier3-Description,Rebext,,#N/A,,,,,,,,
+TestRadar,Not Found,Tool to see objects in space,Item,0,Epic,,TestRadar-Name,TestRadar-Description,KnB,,#N/A,,,,,,,,
+TestSecEng,Not Found,Base propulsion,Item,0,Epic,,TestSecEng-Name,TestSecEng-Description,Rebext,,#N/A,,,,,,,,
+SecEng_Tier1,Not Found,Base propulsion,Item,0,Epic,,SecEng_Tier1-Name,SecEng_Tier1-Description,Rebext,,#N/A,,,,,,,,
+TestShieldGen,Not Found,Base protection,Item,0,Epic,,TestShieldGen-Name,TestShieldGen-Description,Entity,,#N/A,,,,,,,,
+ShieldGen_Tier0,Numen,"A common shield generator by Cagetastic, scaled down from the tech once used to build cages.",Item,0,Epic,T_Item_Shield_A,ShieldGen_Tier0-Name,ShieldGen_Tier0-Description,Cagetastic,,#N/A,,,,,,,,
+ShieldGen_Tier1,Bodyguard,"Lets the raider focus on offense while absorbing hits. Abby said she was inspired by the immune system, though how remains unknown.",Item,0,Epic,T_Item_Shield_A,ShieldGen_Tier1-Name,ShieldGen_Tier1-Description,Abby,,#N/A,,,,,,,,
+ShieldGen_Tier2,DF Support,The first shield generator produced by Abby’s Shield and among the last projects personally overseen by Abby.,Item,0,Epic,T_Item_Shield_B,ShieldGen_Tier2-Name,ShieldGen_Tier2-Description,Abby,,#N/A,,,,,,,,
+ShieldGen_Tier3,No-Troubles,"When Abby’s Shield unveiled this model, Imperial investors were thrilled. Despite its grand name, it’s one of the best shield generators on the market.",Item,0,Epic,T_Item_Shield_C,ShieldGen_Tier3-Name,ShieldGen_Tier3-Description,Abby,,#N/A,,,,,,,,
+TestTractBeam,Not Found,#N/A,Item,0,Epic,,TestTractBeam-Name,TestTractBeam-Description,TTF,,#N/A,,,,,,,,
+TestWarpDrive,Not Found,#N/A,Item,0,Epic,,TestWarpDrive-Name,TestWarpDrive-Description,Tolec,,#N/A,,,,,,,,
+SonicMatterCollector_S,Not Found,#N/A,Item,0,Salvage,T_MOD_SonicExtractor_L,SonicMatterCollector_S-Name,SonicMatterCollector_S-Description,TTF,,#N/A,,,,,,,,
+MOD00-StartingShipEngine,Fibuljet,"Designed by HIS to save weight and cost, it was later mass-produced by the colonists of NGCC 97-Aleph.",Module,0,Salvage,T_MOD_Engine_S,MOD00-StartingShipEngine-Name,MOD00-StartingShipEngine-Description,HomeInSpace,MainEngine,0,,,,,,,,
+MOD00a-InternalEngine_00,[C],[C],Module,0,Salvage,T_MOD_Engine_S,MOD00a-InternalEngine_00-Name,MOD00a-InternalEngine_00-Description,TTF,,#N/A,,,,,,,,
+MOD00a-InternalEngine_01,[C],[C],Module,0,Salvage,T_MOD_Engine_S,MOD00a-InternalEngine_01-Name,MOD00a-InternalEngine_01-Description,TTF,,#N/A,,,,,,,,
+MOD00-PrincipalShipEngine,Nervprop,"During the War of the Artifacts, many Imperial explorers might have survived if only they’d had an engine like this.",Module,0,Salvage,T_MB_PrincipalBody,MOD00-PrincipalShipEngine-Name,MOD00-PrincipalShipEngine-Description,Maison,MainEngine,0,,,,,,,,MainEngine
+MOD00-DragonShipEngine,Flexxor Z9,"Kin designed this prosthesis for Imperial veterans, but Behl repurposed it as a raider engine after a subject leapt from orbit.",Module,0,Salvage,T_MB_DragonShip,MOD00-DragonShipEngine-Name,MOD00-DragonShipEngine-Description,KnB,MainEngine,0,,,,,,,,MainEngine
+MOD00-SpartanShipEngine,Ildorboost,"Another stroke of genius from Isaac Greyling, who built this engine from a design stolen in Abby Shield’s archives.",Module,0,Salvage,T_MB_SpartanShip,MOD00-SpartanShipEngine-Name,MOD00-SpartanShipEngine-Description,IGF,MainEngine,0,,,,,,,,MainEngine
+MOD01-Engine_XS,EX-S,"A low-cost engine from Entity, mass-produced under Old Joe’s motto: ‘If you don’t have anything better, why not this?’",Module,300,Common,T_EngineXS,MOD01-Engine_XS-Name,MOD01-Engine_XS-Description,Entity,MainEngine,380,,,,,,,,MainEngine
+MOD01-Engine_S,Speeder,"Entity brand, a slight improvement over the basic model. Used on Iron and Gold raider ships during the Pact of the Guilds.",Module,800,Epic,T_MOD_Engine_S,MOD01-Engine_S-Name,MOD01-Engine_S-Description,Entity,MainEngine,610,,,,,,,,MainEngine
+MOD01-EngineLevel_S,Speeder Mod 0,"Unauthorized modifications unlocked the S-Engine’s control stakes, creating a new, upgradeable version.",Module,0,Salvage,,MOD01-EngineLevel_S-Name,MOD01-EngineLevel_S-Description,Rebext,MainEngine,0,,,,,,,,MainEngine
+MOD01-EngineLevel1_S,Speeder Mod 1,"Unauthorized modifications unlocked the S-Engine’s control stakes, creating a new, upgradeable version.",Module,0,Salvage,,MOD01-EngineLevel1_S-Name,MOD01-EngineLevel1_S-Description,Rebext,MainEngine,0,,,,,,,,MainEngine
+MOD01-EngineLevel2_S,Speeder Mod 2,"Unauthorized modifications unlocked the S-Engine’s control stakes, creating a new, upgradeable version.",Module,0,Salvage,,MOD01-EngineLevel2_S-Name,MOD01-EngineLevel2_S-Description,Rebext,MainEngine,0,,,,,,,,MainEngine
+MOD01-EngineLevel3_S,Speeder Mod 3,"Unauthorized modifications unlocked the S-Engine’s control stakes, creating a new, upgradeable version.",Module,0,Salvage,,MOD01-EngineLevel3_S-Name,MOD01-EngineLevel3_S-Description,Rebext,MainEngine,0,,,,,,,,MainEngine
+MOD01-EngineLevel4_S,Speeder Mod 4,"Unauthorized modifications unlocked the S-Engine’s control stakes, creating a new, upgradeable version.",Module,0,Salvage,,MOD01-EngineLevel4_S-Name,MOD01-EngineLevel4_S-Description,Rebext,MainEngine,0,,,,,,,,MainEngine
+MOD01a-Engine_Iron_S,Irongine,"The Iron Raiders tested their engines on prisoners forced to escape the Hole’s gravity. One succeeded, became a guild leader, and his engine was named Irongine.",Module,0,Salvage,T_MOD_Engine_S,MOD01a-Engine_Iron_S-Name,MOD01a-Engine_Iron_S-Description,Entity,MainEngine,0,,,,,,,,MainEngine
+MOD01b-Engine_S_Premium,Boosted S,"Right after the Pact of the Guilds, before hostilities resumed, Iron and Gold collaborated to improve the common engine used by their raiders, one of their last peaceful pacts.",Module,0,Salvage,T_Engine_S_Premium,MOD01b-Engine_S_Premium-Name,MOD01b-Engine_S_Premium-Description,Rebext,MainEngine,0,,,,,,,,MainEngine
+MOD01c-Engine_S_Outpost,Utority Propulser ,Cagetastic developed this engine from cage-building drone tech. It proved so efficient that it was repurposed for raider engines.,Module,0,Salvage,T_MOD41-Gatling_S,MOD01c-Engine_S_Outpost-Name,MOD01c-Engine_S_Outpost-Description,Cagetastic,MainEngine,0,,,,,,,,MainEngine
+MOD02-Engine_M,Propulser 44,"Manufactured by HomeInSpace, a safe and reliable engine used by most raiders.",Module,0,Salvage,T_Engine_M,MOD02-Engine_M-Name,MOD02-Engine_M-Description,HomeInSpace,MainEngine,0,,,,,,,,MainEngine
+MOD02b-Engine_M_Poor,Recycled Propulser 44,"Manufactured by HomeInSpace, a fairly safe engine used by most raiders.
+Recycled Module.",Module,400,Uncommon,T_Engine_M_Poor,MOD02b-Engine_M_Poor-Name,MOD02b-Engine_M_Poor-Description,HomeInSpace,MainEngine,460,,,,,,,,MainEngine
+MOD02c-Engine_M_Premium,Medium Engine (Premium),Medium Engine (Premium),Module,0,Salvage,T_Engine_M_Premium,MOD02c-Engine_M_Premium-Name,MOD02c-Engine_M_Premium-Description,HomeInSpace,MainEngine,0,,,,,,,,MainEngine
+MOD02d-EngineGold_M,Goold Boost,"The Gold Guild forged this engine from the rarest Neterun materials, believing it their greatest creation and a tribute to their golden god.",Module,0,Salvage,T_MOD_Engine_M,MOD02d-EngineGold_M-Name,MOD02d-EngineGold_M-Description,Tolec,MainEngine,0,,,,,,,,MainEngine
+MOD02e-EngineLevel_M,Propulser 44 Mod 0,"Home In Space gave elite raiders the codes to build an upgradeable version of their engine, likely in exchange for valuable loot.",Module,0,Salvage,T_MOD_Engine_M,MOD02e-EngineLevel_M-Name,MOD02e-EngineLevel_M-Description,HomeInSpace,MainEngine,0,,,,,,,,MainEngine
+MOD03-Engine_L,Propulser 45,The HIS Propulser 44 patent evolved into this Reduced Transmission model. Save energy and go the distance.,Module,0,Salvage,T_Engine_L,MOD03-Engine_L-Name,MOD03-Engine_L-Description,HomeInSpace,MainEngine,0,,,,,,,,MainEngine
+MOD03b-Engine_L_Poor,Recycled Propulser 45,"The HIS M-engine patent evolved into this Reduced Transmission model. Save energy and go the distance, if you know your way around the galaxy.
+Recycled Module.",Module,600,Rare,T_Engine_L_Poor,MOD03b-Engine_L_Poor-Name,MOD03b-Engine_L_Poor-Description,HomeInSpace,MainEngine,520,,,,,,,,MainEngine
+MOD03c-Engine_L_Premium,Large Engine (Premium),Large Engine (Premium),Module,0,Salvage,T_Engine_L_Premium,MOD03c-Engine_L_Premium-Name,MOD03c-Engine_L_Premium-Description,Cagetastic,MainEngine,0,,,,,,,,MainEngine
+MOD04-Cargo_XS,[C],[C],Module,0,Salvage,T_MOD_Cargo_S,MOD04-Cargo_XS-Name,MOD04-Cargo_XS-Description,IGF,,#N/A,,,,,,,,
+MOD04-Cargo_S,[C],[C],Module,0,Salvage,T_MOD_Cargo_S,MOD04-Cargo_S-Name,MOD04-Cargo_S-Description,HomeInSpace,,#N/A,,,,,,,,
+MOD05-Cargo_M,[C],[C],Module,0,Salvage,T_MOD_Cargo_M,MOD05-Cargo_M-Name,MOD05-Cargo_M-Description,IGF,,#N/A,,,,,,,,
+MOD06-Cargo_L,[C],[C],Module,0,Salvage,T_MOD_Cargo_L,MOD06-Cargo_L-Name,MOD06-Cargo_L-Description,Tolec,,#N/A,,,,,,,,
+MOD07-Gun_S_00,Lon-1,A scout raider weapon used in major colonial wars of the Human Empire. Patented by Tolec.,Module,500,Uncommon,T_GunS00,MOD07-Gun_S_00-Name,MOD07-Gun_S_00-Description,Tolec,Gatling,499,,,,,,,,Gatling
+MOD07-Gun_S_01,Lon-2,"The Lon-2 keeps all the merits of the Lon-1 while fixing its flaws. A decisive weapon in early raider wars, used in the Guilds’ attack on the Core planet.",Module,100,Salvage,T_MOD_Gun_01,MOD07-Gun_S_01-Name,MOD07-Gun_S_01-Description,Entity,Gatling,222,,,,,,,,Gatling
+MOD07-Gun_S_02,Meteor Phaser,"Designed by Isaac Greyling, the Meteor Phaser was widely used in the Thornstone region for resource extraction.",Module,800,Epic,T_GunS02,MOD07-Gun_S_02-Name,MOD07-Gun_S_02-Description,IGF,Gatling,612,,,,,,,,Gatling
+MOD07-Gun_S_03,Omega Phaser,"An old Opal Mhafek project before their extermination. After the war, K&B obtained the original design for free.",Module,600,Rare,T_GunS03,MOD07-Gun_S_03-Name,MOD07-Gun_S_03-Description,KnB,Gatling,537,,,,,,,,Gatling
+MOD07-Gun_S_04,Pulser Mk1,"A direct evolution of the Mk1, made necessary during the Great Fixing Attack, when the Empire destroyed insurgent colonies.",Module,600,Rare,T_GunS04,MOD07-Gun_S_04-Name,MOD07-Gun_S_04-Description,KnB,Laser,521,,,,,,,,Laser
+MOD07-Gun_S_05,Pulser Mk2,"The latest pulser on the market. Easy to master but expensive, it uses energy storage tech for greater damage than earlier models.",Module,100,Salvage,T_MOD_Gun_05,MOD07-Gun_S_05-Name,MOD07-Gun_S_05-Description,KnB,Laser,222,,,,,,,,Laser
+MOD07-Gun_S_06,Pulser Mk3,An IGF spy stole the Pulser MK1 concept. Their designers kept the base structure but added “Warp” projectile triggering for better energy use.,Module,100,Salvage,T_MOD_Gun_06,MOD07-Gun_S_06-Name,MOD07-Gun_S_06-Description,KnB,Laser,222,,,,,,,,Laser
+MOD07-Gun_S_07,Warp Pulser,An IGF spy stole the Pulser MK1 concept. Their designers kept the base structure but added “Warp” projectile triggering for better energy use.,Module,100,Salvage,T_MOD_Gun_07,MOD07-Gun_S_07-Name,MOD07-Gun_S_07-Description,IGF,Gatling,222,,,,,,,,Gatling
+MOD07-Gun_S_07_Premium,Warp Pulser Plus,An IGF spy stole the Pulser MK1 concept. Their designers kept the base structure but added “Warp” projectile triggering for better energy use.,Module,100,Salvage,T_MOD_Gun_07,MOD07-Gun_S_07_Premium-Name,MOD07-Gun_S_07_Premium-Description,IGF,Gatling,222,,,,,,,,Gatling
+MOD08-Gun_M,Tower Gun,"The HomeInSpace Company once used turrets as station defenses. Old Joe first mounted them on a ship, inspiring other raiders.",Module,100,Salvage,T_MOD_Gun_M,MOD08-Gun_M-Name,MOD08-Gun_M-Description,HomeInSpace,Gatling,222,,,,,,,,
+MOD10-Laser_S,Standard Beam,"A simple Cagetastic energy weapon, known for its commercial success and effectiveness against shields.",Module,300,Common,T_Laser_S,MOD10-Laser_S-Name,MOD10-Laser_S-Description,Cagetastic,Laser,401,,,,,,,,Laser
+MOD10a-IntLaser,Internal Laser,Internal Laser,Module,0,Salvage,T_MOD_Laser_S,MOD10a-IntLaser-Name,MOD10a-IntLaser-Description,TTF,,#N/A,,,,,,,,
+MOD10b-Laser_S_Poor,Recycled Standard Beam,"A simple Cagetastic energy weapon, known for its commercial success and effectiveness against shields. Recycled Module.",Module,500,Uncommon,T_Laser_S_Poor,MOD10b-Laser_S_Poor-Name,MOD10b-Laser_S_Poor-Description,Cagetastic,Laser,500,,,,,,,,Laser
+MOD10c-Laser_Starting,Old Joe's Beam,"An entry-level laser by Entity, founded by raider Joe Santoro. Effective against shields.",Module,400,Uncommon,T_Laser_S_Poor,MOD10c-Laser_Starting-Name,MOD10c-Laser_Starting-Description,Entity,Laser,451,,,,,,,,Laser
+MOD11b-Laser_L_Poor,Recycled Collimator H,"After Cagetastic's cage success, the Empire invested heavily. Cagetastic repaid with the Collimator H, effective against shields.
+Recycled Module.",Module,100,Salvage,T_MOD_Laser_L,MOD11b-Laser_L_Poor-Name,MOD11b-Laser_L_Poor-Description,Cagetastic,Laser,222,,,,,,,,Laser
+MOD11-Laser_L,Collimator H,"After Cagetastic's success in cage construction, the Empire invested heavily in the company. Cagetastic repaid the trust with the Collimator H, effective against shields.",Module,100,Salvage,T_MOD_Laser_L,MOD11-Laser_L-Name,MOD11-Laser_L-Description,Cagetastic,Laser,222,,,,,,,,Laser
+MOD11c-Laser_L_Premium,Large Laser (Premium),Large Laser (Premium),Module,100,Salvage,T_MOD_Laser_L,MOD11c-Laser_L_Premium-Name,MOD11c-Laser_L_Premium-Description,Cagetastic,Laser,222,,,,,,,,Laser
+MOD12-RocketLauncher_M,[C],[C],Module,0,Salvage,T_MOD_RocketLauncher_M,MOD12-RocketLauncher_M-Name,MOD12-RocketLauncher_M-Description,Rebext,Rocket,0,,,,,,,,Rocket
+MOD12a-RocketLauncher_M_Poor,Recycled Maydeath,"A mid-level rocket launcher built in the giant metal factories of the first space colonies in the Galaxy of Neterun.
+Recycled Module.",Module,0,Salvage,T_MOD_RocketLauncher_L,MOD12a-RocketLauncher_M_Poor-Name,MOD12a-RocketLauncher_M_Poor-Description,Rebext,Rocket,0,,,,,,,,Rocket
+MOD13-RocketLauncher_L,[C],[C],Module,0,Salvage,T_MOD_RocketLauncher_L,MOD13-RocketLauncher_L-Name,MOD13-RocketLauncher_L-Description,Rebext,Rocket,0,,,,,,,,Rocket
+MOD13a-RocketLauncher_L_Poor,Recycled Falxed,"If a raider wants a rocket launcher, this is the best they can get. Many say firing a missile with the Falxed feels like becoming human again.
+Recycled Module.",Module,0,Salvage,T_MOD_RocketLauncher_L,MOD13a-RocketLauncher_L_Poor-Name,MOD13a-RocketLauncher_L_Poor-Description,Rebext,Rocket,0,,,,,,,,Rocket
+MOD14-AlienRocketLauncher_L,[C],[C],Module,0,Salvage,T_MOD_RocketLauncher_Alien,MOD14-AlienRocketLauncher_L-Name,MOD14-AlienRocketLauncher_L-Description,Entity,Rocket,0,,,,,,,,Rocket
+MOD15-Gatling_00,RaidGun,"Small automatic weapons mounted on raider bodies. Like most Imperial models, RaidGuns are supplied by Isaac Greyling Foundry.",Module,300,Common,T_MOD_Gatling_01,MOD15-Gatling_00-Name,MOD15-Gatling_00-Description,IGF,Gatling,375,,,,,,,,
+MOD15-Gatling_01,K&B Actuator 999,"Behl begged the Alchemist for a versatile material for a new weapon, the Actuator. The Alchemist refused until Kin offered him a side arm from a forgotten war.",Module,300,Common,T_MOD_Gatling_01,MOD15-Gatling_01-Name,MOD15-Gatling_01-Description,IGF,Gatling,375,,,,,,,,
+MOD15-Gatling_02,InnerSun,Built by the TTF’s advanced AI before the incident with Imperial authorities. Uses sunyus tech to increase target accuracy.,Module,300,Common,T_MOD_Gatling_01,MOD15-Gatling_02-Name,MOD15-Gatling_02-Description,IGF,Gatling,375,,,,,,,,
+MOD15-Gatling_03,OnsGun,"An evolution of the RaidGun, created by Isaac Greyling Foundry using low-grade orichalcum. Some claimed it interfered with brainwaves. Greyling called it jealousy.",Module,0,Salvage,T_MOD_Gatling_01,MOD15-Gatling_03-Name,MOD15-Gatling_03-Description,IGF,,#N/A,,,,,,,,
+MOD15a-IntGatling,RaidGun,"Small automatic weapons mounted on raider ships. Like most basic Imperial models, RaidGuns are supplied by Isaac Greyling Foundry.",Module,0,Salvage,T_MOD_Gatling_01,MOD15a-IntGatling-Name,MOD15a-IntGatling-Description,IGF,,#N/A,,,,,,,,
+MOD15b-IntGatling,Internal Gatling B,Internal Gatling B,Module,0,Salvage,T_MOD_Gatling_01,MOD15b-IntGatling-Name,MOD15b-IntGatling-Description,IGF,,#N/A,,,,,,,,
+MOD16-MineDropper,[C],[C],Module,0,Salvage,T_MOD_MineDropper,MOD16-MineDropper-Name,MOD16-MineDropper-Description,KnB,,#N/A,,,,,,,,
+MOD17-SonicMatterExtractor_S,[C],[C],Module,0,Salvage,T_MOD_SonicExtractor_S,MOD17-SonicMatterExtractor_S-Name,MOD17-SonicMatterExtractor_S-Description,IGF,,#N/A,,,,,,,,
+MOD18-SonicMatterExtractor_M,[C],[C],Module,0,Salvage,T_MOD_SonicExtractor_M,MOD18-SonicMatterExtractor_M-Name,MOD18-SonicMatterExtractor_M-Description,IGF,,#N/A,,,,,,,,
+MOD19-SonicMatterExtractor_L,[C],[C],Module,0,Salvage,T_MOD_SonicExtractor_L,MOD19-SonicMatterExtractor_L-Name,MOD19-SonicMatterExtractor_L-Description,IGF,,#N/A,,,,,,,,
+MOD20-Blades,[C],[C],Module,100,Salvage,T_MOD_Blades,MOD20-Blades-Name,MOD20-Blades-Description,Maison,Gatling,222,,,,,,,,
+MOD21-Gatling_02,K&B FrontierDream,"When Kin proposed evolving their basic gatling, Behl hesitated. Kin showed him a raider effortlessly slaughtering aliens, then revealed the name. Behl was instantly convinced.",Module,100,Salvage,T_MOD_Gatling_02,MOD21-Gatling_02-Name,MOD21-Gatling_02-Description,KnB,Gatling,222,,,,,,,,Gatling
+MOD21b-Gatling_02_Poor,Recycled K&B FrontierDream,"When Kin suggested improving their gatling, Behl doubted him. Then Kin showed a slaughter test, and the name. Behl was sold.
+Recycled Module.",Module,100,Salvage,T_MOD_Gatling_02,MOD21b-Gatling_02_Poor-Name,MOD21b-Gatling_02_Poor-Description,KnB,Gatling,222,,,,,,,,Gatling
+MOD21c-Gatling_02_Premium,Large Gatling (Premium),Large Gatling (Premium),Module,100,Salvage,T_MOD_Gatling_02,MOD21c-Gatling_02_Premium-Name,MOD21c-Gatling_02_Premium-Description,KnB,Gatling,222,,,,,,,,Gatling
+MOD22-Bomb,[C],[C],Module,0,Salvage,T_MOD_Bomb,MOD22-Bomb-Name,MOD22-Bomb-Description,Cagetastic,,#N/A,,,,,,,,
+MOD23-MOAB666,[C],[C],Module,0,Salvage,T_MOD_MOAB666,MOD23-MOAB666-Name,MOD23-MOAB666-Description,IGF,,#N/A,,,,,,,,
+MOD24-NeptuneMissile,[C],,Module,0,Salvage,T_MOD_NeptuneMissile,MOD24-NeptuneMissile-Name,MOD24-NeptuneMissile-Description,Entity,,#N/A,,,,,,,,
+MOD26-Shield_01,[C],[C],Module,0,Salvage,,MOD26-Shield_01-Name,MOD26-Shield_01-Description,HomeInSpace,,#N/A,,,,,,,,
+MOD27-Shield_02,[C],[C],Module,0,Salvage,,MOD27-Shield_02-Name,MOD27-Shield_02-Description,Rebext,,#N/A,,,,,,,,
+MOD28-HeatShield,[C],[C],Item,0,Salvage,,MOD28-HeatShield-Name,MOD28-HeatShield-Description,Tolec,,#N/A,,,,,,,,
+MOD29-FuelTank,[C],[C],Module,0,Salvage,T_MOD_FuelTank,MOD29-FuelTank-Name,MOD29-FuelTank-Description,Maison,,#N/A,,,,,,,,
+MOD30-RocketLauncher_S,RocketMind,,Module,0,Salvage,T_MOD_RocketLauncher_S,MOD30-RocketLauncher_S-Name,MOD30-RocketLauncher_S-Description,TTF,Rocket,0,,,,,,,,Rocket
+MOD30a-RocketLauncher_S_Poor,Recycled RocketMind,"""When a raider with a gatling meets a raider with a rocket launcher, the gatling raider is a dead raider."" With this claim, Toward The Future System announced the successful brain-linked rocket launcher.
+Recycled Module.",Module,400,Uncommon,T_MOD_RocketLauncher_S,MOD30a-RocketLauncher_S_Poor-Name,MOD30a-RocketLauncher_S_Poor-Description,TTF,Rocket,443,,,,,,,,Rocket
+MOD30b-StartingRocketLauncher,Raiderizer,"An Imperial, lightweight rocket launcher. A stripped-down version of more powerful models.",Module,100,Uncommon,T_MOD_RocketLauncher_S,MOD30b-StartingRocketLauncher-Name,MOD30b-StartingRocketLauncher-Description,KnB,Rocket,460,,,,,,,,Rocket
+MOD31-WormCargo,[C],,Module,0,Salvage,T_MOD_WormCargo,MOD31-WormCargo-Name,MOD31-WormCargo-Description,Entity,,#N/A,,,,,,,,
+MOD32-WormEngine,[C],,Module,0,Salvage,,MOD32-WormEngine-Name,MOD32-WormEngine-Description,Entity,MainEngine,0,,,,,,,,
+MOD33-WormTail,[C],,Module,0,Salvage,,MOD33-WormTail-Name,MOD33-WormTail-Description,Abby,,#N/A,,,,,,,,
+MOD34-MaalaxmiEngine_S,Liturgon,,Module,0,Salvage,,MOD34-MaalaxmiEngine_S-Name,MOD34-MaalaxmiEngine_S-Description,Entity,,#N/A,,,,,,,,
+MOD35-MaalaxmiEngine_M,Liturgon Mid,,Module,0,Salvage,,MOD35-MaalaxmiEngine_M-Name,MOD35-MaalaxmiEngine_M-Description,Entity,,#N/A,,,,,,,,
+MOD36-MaalaxmiEngine_L,Liturgon Ful,,Module,0,Salvage,,MOD36-MaalaxmiEngine_L-Name,MOD36-MaalaxmiEngine_L-Description,Entity,,#N/A,,,,,,,,
+MOD37-StdToolbox,Repairer,[C],Module,0,Uncommon,T_MOD_ToolBox,MOD37-StdToolbox-Name,MOD37-StdToolbox-Description,TTF,,#N/A,,,,,,,,
+MOD38-DefuseToolbox,Not Found,A defuse toolbox that can defuse explosive things.,Module,0,Rare,T_MOD_DefuseToolbox,MOD38-DefuseToolbox-Name,MOD38-DefuseToolbox-Description,TTF,,#N/A,,,,,,,,
+MOD40-RaiderGatling01,Not Found,,Module,100,Salvage,,MOD40-RaiderGatling01-Name,MOD40-RaiderGatling01-Description,Rebext,Gatling,222,,,,,,,,Gatling
+MOD41-Gatling_S,K&B Gun,"The first, glorious K&B model. Compact, easy to mount, used by every raider. ""Freedom spree. K&B.""",Module,300,Common,T_MOD41-Gatling_S,MOD41-Gatling_S-Name,MOD41-Gatling_S-Description,KnB,Gatling,374,,,,,,,,Gatling
+MOD41a-Gatling_S_Poor,Recycled K&B Gun,"The first, glorious K&B model. Compact, easy to mount, used by every raider. ""Freedom spree. K&B.""
+Recycled Module.",Module,400,Uncommon,T_MOD41-Gatling_S,MOD41a-Gatling_S_Poor-Name,MOD41a-Gatling_S_Poor-Description,KnB,Gatling,424,,,,,,,,Gatling
+MOD41b-Gatling_S_Premium,Faultysoul Z4,Said to be created by a Soul Landing prisoner before being accused of starting a riot and extracted. Marketed by Entity.,Module,600,Rare,T_MOD41-Gatling_S,MOD41b-Gatling_S_Premium-Name,MOD41b-Gatling_S_Premium-Description,Entity,Gatling,539,,,,,,,,Gatling
+MOD41c-Gatling_S_Marianan,Faultysoul Z5,Used by many bounty hunter raiders. The Faultysoul Z5 was designed by a Soul Landing prisoner after witnessing her cellmate’s extraction.,Module,800,Epic,T_MOD41-Gatling_S,MOD41c-Gatling_S_Marianan-Name,MOD41c-Gatling_S_Marianan-Description,Entity,Gatling,622,,,,,,,,Gatling
+MOD42-Gatling_M,Medium Gatling,Medium Gatling,Module,100,Salvage,T_MOD_Gatling_02,MOD42-Gatling_M-Name,MOD42-Gatling_M-Description,KnB,Gatling,222,,,,,,,,Gatling
+MOD50-SonicMatterShooter_S,TAI SHO-Gun,"An advanced version of the SHO-Gun by TowardTheFuture Systems, conceived while its founders were intoxicated by their first exposure to sonic matter.",Module,0,Common,T_MOD50_SonicShooter_S,MOD50-SonicMatterShooter_S-Name,MOD50-SonicMatterShooter_S-Description,KnB,SonicShooter,0,,,,,,,,SonicShooter
+MOD50b-SonicMatterShooter_XS,SHO-Gun,An entry-level sonic matter weapon. Rebext developed the Sonic HOpe Gun after extensive prison riot research at Soul Landing.,Module,100,Common,T_MOD50_SonicShooter_S,MOD50b-SonicMatterShooter_XS-Name,MOD50b-SonicMatterShooter_XS-Description,Rebext,SonicShooter,500,,,,,,,,SonicShooter
+MOD51-SonicMatterShooter_M,Spherical Harmon,"""It is necessary to harness the resonance between sonic matter and the raider’s soul to reach the essence of the Galaxy."" With these words, mystic Hedorn Orizein founded HomeInSpace and proposed this sonic matter shooter.",Module,0,Common,T_MOD_SonicExtractor_M,MOD51-SonicMatterShooter_M-Name,MOD51-SonicMatterShooter_M-Description,HomeInSpace,SonicShooter,0,,,,,,,,SonicShooter
+MOD52-SonicMatterShooter_L,The Mundi,"The perfect bond between human mind and sonic matter. Built through painful experiments on Soul Landing prisoners, the Mundi’s origin remains secret.",Module,0,Common,T_MOD_SonicExtractor_L,MOD52-SonicMatterShooter_L-Name,MOD52-SonicMatterShooter_L-Description,Rebext,SonicShooter,0,,,,,,,,SonicShooter
+MOD53-GatlingIron_M,Scalphunter,"Accuracy, power, speed. These were the Three Isotopes’ demands to the Iron Raiders when designing a guild gatling. Tested in a sortie against Gold Raiders, a total slaughter.",Module,100,Salvage,T_MOD_Gun_00,MOD53-GatlingIron_M-Name,MOD53-GatlingIron_M-Description,KnB,Gatling,222,,,,,,,,Gatling
+MOD54-LaserGold_S,GodBeam,"Result of gold nanoparticle research, this module lets Gold Raiders enhance Cagetastic’s laser weapons.",Module,100,Salvage,T_MOD_Laser_L,MOD54-LaserGold_S-Name,MOD54-LaserGold_S-Description,Cagetastic,Laser,222,,,,,,,,Laser
+MOD55-GatlingLevel_S,K&B Gun Mod 0,"Against their research team’s advice, Kin & Behl created an alterable version of their famous gatling. Then fired the entire department.",Module,100,Salvage,T_MOD_Gun_00,MOD55-GatlingLevel_S-Name,MOD55-GatlingLevel_S-Description,KnB,Gatling,222,,,,,,,,Gatling
+MOD55-GatlingLevel1_S,K&B Gun Mod 1,"Against their research team’s advice, Kin & Behl created an alterable version of their famous gatling. Then fired the entire department.",Module,0,Salvage,T_MOD_Gun_01,MOD55-GatlingLevel1_S-Name,MOD55-GatlingLevel1_S-Description,KnB,,#N/A,,,,,,,,
+MOD55-GatlingLevel2_S,K&B Gun Mod 2,"Against their research team’s advice, Kin & Behl created an alterable version of their famous gatling. Then fired the entire department.",Module,0,Salvage,T_MOD_Gun_02,MOD55-GatlingLevel2_S-Name,MOD55-GatlingLevel2_S-Description,KnB,,#N/A,,,,,,,,
+MOD55-GatlingLevel3_S,K&B Gun Mod 3,"Against their research team’s advice, Kin & Behl created an alterable version of their famous gatling. Then fired the entire department.",Module,0,Salvage,T_MOD_Gun_03,MOD55-GatlingLevel3_S-Name,MOD55-GatlingLevel3_S-Description,KnB,,#N/A,,,,,,,,
+MOD55-GatlingLevel4_S,K&B Gun Mod 4,"Against their research team’s advice, Kin & Behl created an alterable version of their famous gatling. Then fired the entire department.",Module,0,Salvage,T_MOD_Gun_04,MOD55-GatlingLevel4_S-Name,MOD55-GatlingLevel4_S-Description,KnB,,#N/A,,,,,,,,
+MOD56-LaserLevel_S,Standard Beam Mod 0,"A hacked version of Cagetastic’s Beam, for raiders seeking more from the base model. Effective against shields.",Module,100,Salvage,T_MOD_Laser_S,MOD56-LaserLevel_S-Name,MOD56-LaserLevel_S-Description,Cagetastic,Laser,222,,,,,,,,Laser
+MOD56-Organic_S,Balancer,The Tree Wars caused massive losses for both Malaxdon and Imperials. This module marked peace and guaranteed Tree ecosystem stability.,Module,0,Salvage,T_OrganicWeapon_S_Starting,MOD56-Organic_S-Name,MOD56-Organic_S-Description,Rebext,,#N/A,,,,,,,,
+MOD56c-Organic_Starting,Honorary Balancer,"The High Malaxdon built the Balancer to harvest sonic matter quickly and painlessly, preserving their cult’s ethics and alliance with the Empire.",Module,0,Salvage,T_OrganicWeapon_S_Starting,MOD56c-Organic_Starting-Name,MOD56c-Organic_Starting-Description,KnB,,#N/A,,,,,,,,
+MOD57-Organic_M,Kindoom,"An advanced Balancer made after HIS negotiated trade deals with the Malaxdon, securing Tree resources for the company.",Module,0,Salvage,T_MOD_Gun_00,MOD57-Organic_M-Name,MOD57-Organic_M-Description,Rebext,,#N/A,,,,,,,,
+MOD57-RocketLauncherLevel_S,Rocket Launcher Mod 0,"""Any trouble, raider?"" With this message, TTF announced their flagship rocket launcher was now upgradeable.",Module,0,Salvage,T_MOD_RocketLauncher_S,MOD57-RocketLauncherLevel_S-Name,MOD57-RocketLauncherLevel_S-Description,TTF,Rocket,0,,,,,,,,Rocket
+MOD58-Organic_L,Enlighster,"The ultimate Balancer module. Unauthorized by Yalda Nor, it's the result of The Alchemist's partnership with K&B and a successful bribe of the High Malaxdon.",Module,0,Salvage,T_MOD_Gun_00,MOD58-Organic_L-Name,MOD58-Organic_L-Description,KnB,,#N/A,,,,,,,,
+MOD59-OrganicLevel_S,Balancer Mod 0,"An upgradeable Balancer, early prototype of an experimental module. Like the base version, it’s highly effective against Neterun’s creatures.",Module,0,Salvage,T_MOD_Gun_00,MOD59-OrganicLevel_S-Name,MOD59-OrganicLevel_S-Description,KnB,,#N/A,,,,,,,,
+MOD60-AlienGatling_S,RRX,Tolec’s reward for weapons that blinded enemy teams during Tomorrow’s War. Alien tech finally let the company rival K&B.,Module,100,Salvage,T_MOD_Gun_00,MOD60-AlienGatling_S-Name,MOD60-AlienGatling_S-Description,Tolec,Gatling,222,,,,,,,,Gatling
+MOD61-AlienGatling_M,RRX-2,"Tolec gave RRX prototypes to Imperial colonists for testing. They enhanced them with Orichalcum, wiping out insurgents and prompting immediate production of the improved model.",Module,100,Salvage,T_MOD_Gun_00,MOD61-AlienGatling_M-Name,MOD61-AlienGatling_M-Description,Tolec,Gatling,222,,,,,,,,Gatling
+MOD62-AlienEngine_S,Aheadisk,The Tomorrow’s Wars let the Empire steal Pterost tech and sell it to the highest bidder. Entity used the parts to craft this engine.,Module,0,Salvage,T_MOD_Engine_S,MOD62-AlienEngine_S-Name,MOD62-AlienEngine_S-Description,IGF,MainEngine,0,,,,,,,,MainEngine
+MOD63-EWasEngine,Haze Piston,"I was never born.
+Then I was born dead.
+Who did this to me?
+Now I can get back on the move.",Module,400,Uncommon,T_Item_Power_A,MOD63-EWasEngine-Name,MOD63-EWasEngine-Description,IGF,MainEngine,430,,,,,,,,MainEngine
+MOD64-BladeEngine,Prism - Lapis Drive,Silent like the Mhafek homeworld.,Module,1000,Mythic,T_BladeEngine,MOD64-BladeEngine-Name,MOD64-BladeEngine-Description,IGF,MainEngine,680,,,,,,,,MainEngine
+MOD65-BladeLaser,Prism - Clear Laser,Iridescent like a Mhafek’s thoughts.,Module,800,Epic,T_BladeLaser,MOD65-BladeLaser-Name,MOD65-BladeLaser-Description,IGF,Laser,614,,,,,,,,Laser
+MOD66-BladeGatling,Not Found,#N/A,Module,1100,Mythic,T_Item_Power_A,MOD66-BladeGatling-Name,MOD66-BladeGatling-Description,IGF,Gatling,712,,,,,,,,Gatling
+MOD67-BladeRocketLauncher,Prism - Opaline Launcher,Brutal like the Mhafek’s memories.,Module,2100,Legendary,T_BladeRocket,MOD67-BladeRocketLauncher-Name,MOD67-BladeRocketLauncher-Description,IGF,Rocket,945,,,,,,,,Rocket
+MOD68-HeliconEngine,Helicon - DB Thruster I,"Project One Record
+Mind-sonic matter experiments ongoing with an unaffiliated prisoner. The subject killed two of my colleagues. Noted anomalous traits, suggestive of multiple personalities.",Module,0,Salvage,,MOD68-HeliconEngine-Name,MOD68-HeliconEngine-Description,IGF,MainEngine,0,,,,,,,,MainEngine
+MOD69-HeliconGatling,Helicon Weaponry ++,"Development Ones Record
+The subject responded appropriately. Sonic matter preserves fundamental mind data.  The subject's anomalous screams are aiding in the calibration of their brain waves.",Module,100,Salvage,,MOD69-HeliconGatling-Name,MOD69-HeliconGatling-Description,IGF,Gatling,222,,,,,,,,Gatling
+MOD70-HeliconEngine_Premium,Helicon Thruster II,"Project One Record
+Mind-sonic matter experiments ongoing with an unaffiliated prisoner. The subject killed two of my colleagues. Noted anomalous traits, suggestive of multiple personalities.",Module,800,Epic,,MOD70-HeliconEngine_Premium-Name,MOD70-HeliconEngine_Premium-Description,IGF,MainEngine,620,,,,,,,,MainEngine
+MOD71-HeliconGatling_Premium,Helicon Weaponry +,"Project One Record
+The subject's mind has vanished; we don't know how. Fortunately, we have other Raider Ones, and the Imperial Family was pleas...",Module,1500,Legendary,,MOD71-HeliconGatling_Premium-Name,MOD71-HeliconGatling_Premium-Description,IGF,Gatling,816,,,,,,,,Gatling
+MOD72-GatlingGold_S,Serkor,"A smuggler once offered the Gold Guild leader pieces of ancient Neterunian tech. Inspired by the whispers he heard, he built the Sekor weapon.",Module,100,Salvage,T_Item_Power_A,MOD72-GatlingGold_S-Name,MOD72-GatlingGold_S-Description,IGF,Gatling,222,,,,,,,,Gatling
+MOD73-GatlingIron_S,Wastemaker,"The last Hole Wars saw countless Gold Raider deaths, made possible largely by this trusted Iron Guild gatling.",Module,100,Salvage,T_MOD73-GatlingIron_S,MOD73-GatlingIron_S-Name,MOD73-GatlingIron_S-Description,IGF,Gatling,222,,,,,,,,Gatling
+MOD74-RadiantLaser_L,Kubeam,"When the Gold Guild leader first used the Kubeam, his brainwaves were said to be infused with golden particles, at least according to Cagetastic, its creator.",Module,400,Uncommon,T_MOD74-RadiantLaser_L,MOD74-RadiantLaser_L-Name,MOD74-RadiantLaser_L-Description,IGF,Laser,437,,,,,,,,Laser
+MOD75-DragonThrust_M,Iron Sage,"An engine built during one of the Iron Guild’s dominant eras, beginning when the Great Apostate destroyed several primitive Gold Harvest Pyramids.",Module,700,Rare,T_MOD75-DragonThrust_M,MOD75-DragonThrust_M-Name,MOD75-DragonThrust_M-Description,IGF,MainEngine,570,,,,,,,,MainEngine
+MOD76-BlastLaser_S,Collimator Fe-1,"Originally an industrial tool for raider bodies production, this laser was soon repurposed into a devastating weapon. Just like everything else the raiders touch.",Module,900,Epic,T_MOD76-BlastLaser_S,MOD76-BlastLaser_S-Name,MOD76-BlastLaser_S-Description,IGF,Laser,643,,,,,,,,Laser
+MOD77-LaserSpike_S,K&B Beamplier,"""Lasers don't blow targets to pieces,"" Behl said, before Kin seduced Abby away from Abby's Shields. Now there's the K&B Beamplier, and it blows targets to pieces.",Module,900,Epic,T_MOD77-LaserSpike_S,MOD77-LaserSpike_S-Name,MOD77-LaserSpike_S-Description,KnB,Laser,630,,,,,,,,Laser
+PY_P2-DP1_IronPylon_M,Iron Arm Green to Double Red,[C],Module,0,Salvage,T_PY_P2-DP1_IronPylon_M,PY_P2-DP1_IronPylon_M-Name,PY_P2-DP1_IronPylon_M-Description,IGF,Structural,10,,,,,,,,Structural
+PY-P2_DP1_GoldPylon_M,Gold Arm Green to Double Red,[C],Module,0,Salvage,T_PY-P2_DP1_GoldPylon_M,PY-P2_DP1_GoldPylon_M-Name,PY-P2_DP1_GoldPylon_M-Description,IGF,Structural,10,,,,,,,,Structural
+MOD78-RageGun_S,Raidgun 230A,"It took Isaac Greyling exactly 229 tests to upgrade his RaidGun. Half that number might have been enough, but why pass up Imperial funding?",Module,700,Rare,T_MOD73-GatlingIron_S,MOD78-RageGun_S-Name,MOD78-RageGun_S-Description,KnB,Gatling,571,,,,,,,,Gatling
+MOD00-EagleShipEngine,Flexxor Z10,Removing the seat belts from the old Z9 gave it a new lease on life.,Module,200,Salvage,T_SB_Eagle,MOD00-EagleShipEngine-Name,MOD00-EagleShipEngine-Description,,MainEngine,260,,,,,,,,MainEngine
+MOD00-FlyShipEngine,Warp Focalizer,Neural data from Imperials driven mad in connecting suites was used to forge this module's mind-engine interface.,Module,100,Salvage,T_SB_Fly,MOD00-FlyShipEngine-Name,MOD00-FlyShipEngine-Description,,MainEngine,240,,,,,,,,MainEngine
+MOD00-HeliconShipEngine,HS Thruster,"Project One Record
+..ed. We've bottled minds as messages, cast into a sea of stars. May that sea welcome my memories.",Module,100,Salvage,T_SB_Helicon,MOD00-HeliconShipEngine-Name,MOD00-HeliconShipEngine-Description,,MainEngine,230,,,,,,,,MainEngine
+MOD00-BladeShipEngine,Flare Drive,Everything shimmered inside a Mhafek’s body. Just like this engine.,Module,200,Salvage,,MOD00-BladeShipEngine-Name,MOD00-BladeShipEngine-Description,,MainEngine,290,,,,,,,,MainEngine
+MOD00-IronScaleShipEngine,IG9,"A miniature Irongine, crafted as a memento for the raider who became the Iron leader.",Module,100,Salvage,T_BODY14-IronScale,MOD00-IronScaleShipEngine-Name,MOD00-IronScaleShipEngine-Description,,MainEngine,220,,,,,,,,MainEngine
+MOD00-GoldWingsShipEngine,CW-6S1,"May your mind flow as freely as gold, or so says a teaching of the golden god.",Module,100,Salvage,T_BODY15-GoldWings,MOD00-GoldWingsShipEngine-Name,MOD00-GoldWingsShipEngine-Description,,MainEngine,220,,,,,,,,MainEngine
+BoosterGenerator_S,BoosterGenerator_S-Name,BoosterGenerator_S-Description,Item,0,Salvage,,BoosterGenerator_S-Name,BoosterGenerator_S-Description,,,#N/A,,,,,,,,
+BoosterGenerator_XS,BoosterGenerator_XS-Name,BoosterGenerator_XS-Description,Item,0,Salvage,,BoosterGenerator_XS-Name,BoosterGenerator_XS-Description,,,#N/A,,,,,,,,
+BoosterGenerator_M,BoosterGenerator_M-Name,BoosterGenerator_M-Description,Item,0,Salvage,,BoosterGenerator_M-Name,BoosterGenerator_M-Description,,,#N/A,,,,,,,,
+BoosterGenerator_L,BoosterGenerator_L-Name,BoosterGenerator_L-Description,Item,0,Salvage,,BoosterGenerator_L-Name,BoosterGenerator_L-Description,,,#N/A,,,,,,,,

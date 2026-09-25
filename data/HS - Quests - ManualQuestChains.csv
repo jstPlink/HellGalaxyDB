@@ -1,0 +1,233 @@
+QuestChainActorGiver,QuestChainID,SuggestedLevel,Repeatable,QuestChainProbability,QuestChainLockConditions,QuestChainPreRequisite,OnAccepted,OnTracked,Reward,Title,Motto,Description,QuestChainLogic,QuestChainGiver,QuestChainLabel,AutoAccept,AutoTrack,TriggerEventId,QE,QS,QT,
+QGS0Global,SY00Q00,1,No,,,EV_CC_CUT_Begin,,,,"New Body, New Life",E-Stand,You have been reborn as a raider. Get used to your new body.,RESET,PERSONAL,MANDATORY,TRUE,TRUE,,,,,Birth
+QGS0Global,SY00Q01,1,No,,,EV_QE_SY00Q00,,,,A Dangerous Galaxy,E-Stand,"You’ve learned to move, but the Empire needs stronger raiders. Destroy the training turrets.",RESET,PERSONAL,MANDATORY,TRUE,TRUE,,,,,Birth
+QGS0Global,SY00Q02,1,No,,,EV_QE_SY00Q01,,,CR_350,Cloak & Bullets,E-Stand,You destroyed the turrets brilliantly. Now do the same against moving targets: drones.,RESET,PERSONAL,MANDATORY,TRUE,TRUE,,,,,Birth
+QGS0Global,SY00Q03,1,No,,,EV_QE_SY00Q02,,,CR_200,The Sonic Matter,Homerus,"Sonic matter is the most valuable resource in Neterun. As a raider, you must learn to collect and deliver it to the Human Empire.",RESET,PERSONAL,MANDATORY,TRUE,TRUE,,,,,Birthyrock
+QGS0Global,SY00Q04,1,No,,,EV_QE_SY00Q09,,,,Call to Arms,Homerus,You’ve received a distorted signal from Prometheus Station. Homerus cannot provide more details.,RESET,PERSONAL,MANDATORY,TRUE,TRUE,,,,,Birthyrock
+QGS0-SY00Q05,SY00Q05,1,No,,,EV_QE_SY00Q03,,,CR_600,Damn Anomalies,E-Stand,An Imperial detector has picked up irregular signals. The Empire offers a reward to anyone who finds the cause.,RESET,PERSONAL,MANDATORY,TRUE,TRUE,,,,,Birthyrock
+QGS0-SY00Q06,SY00Q06,1,No,,,EV_CC_CUT_SSPrometheusActive,,,CR_500,Broken Stuff,E-Stand,"The Colossus attack damaged Prometheus, causing malfunctions. The Empire needs a raider to restore order.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Prometheus
+QGS0Global,SY00Q07,1,No,,,EV_QE_SY00Q13,,,,The Power You Need,Homerus,"Following the Colossus attack, the exit gate from the area seems locked down. Old Joe, the Empire's right-hand man, asks you to reactivate it.",RESET,PERSONAL,MANDATORY,TRUE,TRUE,,,,,Prometheus
+QGS0Global,SY00Q08,1,No,,,EV_QE_SY00Q03-NO,,,,,,,RESET,PERSONAL,,TRUE,FALSE,,,,,
+QGS0Global,SY00Q09,1,No,,,EV_QE_SY00Q05,,,CR_350,Deadly Biology #1,E-Stand,The Empire seeks new data to arm its raiders against Neterunian creatures. You may be the one to provide it.,RESET,PERSONAL,MANDATORY,TRUE,TRUE,,,,,Birthyrock
+QGS0Global,SY00Q10,1,No,,,EV_QE_SY00Q03,,,CR_450,Herd Control,E-Stand,Hunt down and eliminate a specified number of Zanion across the galaxy to claim a bounty from the Imperials.,RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Birthyrock
+QGS0Global,SY00Q11,1,No,,,EV_QE_SY00Q03,,,CR_400,Raider’s Business #1,E-Stand,"Gather sonic matter from the creatures you cross paths with along your route, then beam it over to the Imperials using a transponder.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Birthyrock
+QGS0Global,SY00Q12,1,No,,,EV_CC_CUT_SSDumpActive,,,CR_700,Dead Stay Quiet,E-Stand,"The cerebrally active E-Was damaged the Dump, shutting it down. Reactivate it with generators.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Birthyrock
+QGS0Global,SY00Q13,1,No,,,EV_QE_SY00Q04,,,CR_1500,Alter Ego,Old Joe,The Colossus has breached the cage protecting the Prometheus area. The Imperials are looking for a raider willing to restore it.,RESET,PERSONAL,MANDATORY,TRUE,TRUE,,,,,Prometheus
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+QGS1Global,SY01Q00,1,No,,,EV_QE_SY00Q07,,,CR_1000,Attack by Batiki!,Old Joe,The Core area is in crisis. Old Joe needs your help.,RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,Mugai
+QGS1-OldJoe,SY01Q01,1,No,,,EV_QE_SY01Q00,,,CR_1300,Recycling Consciousness,Old Joe,Old Joe seeks mnemonic data from fallen raiders’ modules to resurrect them.,RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Mugai
+QGS1-OldJoe,SY01Q02,1,No,,,EV_QE_SY01Q01,,,CR_1000,The Hunt,?,A raider with an unknown ID is under Batiki threat. Save him.,RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Mugai
+QGS1-OldJoe,SY01Q03,1,No,,,EV_QE_sbav,,,CR_1500,Entry-Level Souls,Old Joe,"Old Joe often assigns less skilled raiders to pilot cargo ships into mining areas. Normally harmless, but after the Batiki attack he needs you to escort one of his most important ships.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Mugai
+QGS1-OldJoe,SY01Q04,1,No,,,EV_QE_SY01Q00,,,CR_2000,Fragments of Old Memories,Red#?#,You receive a distress call from a raider who seems disoriented and in shock.,RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Mugai
+QGS1Global,SY01Q05,1,No,,,EV_QE_SY01Q00,,,CR_4000,Something Precious,Old Joe,"Mugai Station’s defenses are restored, but the Batiki still hold the Precious Four Stations, vital to raider colonies. Old Joe calls on you to help reclaim them.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,PreciousFour
+QGS1Global,SY01Q06,1,No,,,EV_TC_SY01Q05_C,,,CR_2500,Help the Crystal,Old Joe,Crystal Station is surrounded by the Batiki elite. Defeat them before reactivation.,RESET,PERSONAL,MANDATORY,TRUE,FALSE,,,,,PreciousFour
+QGS1Global,SY01Q07,1,No,,,EV_TC_SY01Q05_C,,,CR_2500,Help the Emerald,Old Joe,Batiki tech is jamming Emerald Station’s systems. Destroy it for Old Joe.,RESET,PERSONAL,MANDATORY,TRUE,FALSE,,,,,PreciousFour
+QGS1Global,SY01Q08,1,No,,,EV_TC_SY01Q05_C,,,CR_2500,Help the Opaleum,Old Joe,Batiki interferometers surround Opaleum Station. Destroy them.,RESET,PERSONAL,MANDATORY,TRUE,FALSE,,,,,PreciousFour
+QGS1Global,SY01Q09,1,No,,,EV_TC_SY01Q05_C,,,CR_2500,Help the Sapphirum,Old Joe,"Batiki stole a generator from Sapphirum Station, preventing its restoration.",RESET,PERSONAL,MANDATORY,TRUE,FALSE,,,,,PreciousFour
+QGS1-SSEmerald,SY01Q10,1,No,,,EV_QE_SY01Q05,,,"CR_7000
+BLPU_BODY01-Spartan",Ballad of Thornstone,Oran,"You defended the Precious Four, and your fame is spreading. Now Oran is asking for your help.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,PreciousFour
+QGS1-LayOff,SY01Q11,1,No,,,EV_RP_EN-Haruz,,,CR_9000,Neterunian Mysticism,Lay Off,Treasure hunter Lay Off found a strange Neterunian ruin and seeks your help to explore it.,RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,
+QGS1-IronStand,SY01Q12,1,No,,,EV_CC_CUT_HARU_DIALOGUE,,,CR_5000,Raider's Blood,Rod Hally,"A distress call reaches you. It comes from a raider named Rod, who left a trail for you to find him.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,AsteroidWay
+QGS1-GoldStand,SY01Q12,1,No,,,EV_CC_CUT_ERAST_DIALOGUE,,,CR_5000,Raider's Blood,Rod Hally,"A distress call reaches you. It comes from a raider named Rod, who left a trail for you to find him.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,
+QGS1-IronStand,SY01Q13,1,No,,,EV_TC_SY01Q16_H3,,,"CR_3000
+IAL_UP_200
+GAL_DOWN_200
+BLPU_BODY16-IronScaleRust
+BLPU_MOD75-DragonThrust_M
+BLPU_PY_P2-DP1_IronPylon_M",Iron’s Way - Join the Iron,Haru Okabe,"Haru, leader of the Iron Guild, offers to take you into her ranks. Eliminate the targets she designates and return their IDs to her.",FAIL,PERSONAL,SECONDARY,TRUE,FALSE,,,,,AsteroidWay
+QGS1-GoldStand,SY01Q14,1,No,,,EV_TC_SY01Q16_H3,,,"CR_3000
+GAL_UP_200
+IAL_DOWN_200
+BLPU_BODY17-GoldWingsDust
+BLPU_MOD74-RadiantLaser_L
+BLPU_PY-P2_DP1_GoldPylon_M","My Lord, the Gold - Join the Gold",Koyash,"Koyash, leader of the Gold Guild, asks you to retrieve two pure gold spheres lost during an Iron Raider attack.",FAIL,PERSONAL,SECONDARY,TRUE,FALSE,,,,,AsteroidWay
+QGS1-SSGalilean,SY01Q15,1,No,,,EV_TC_SY01Q19_A5,,,CR_5000,"Outpost, the Lost Base",Kathlee Fares,"Outpost, an old Imperial base, has communication issues. Kathlee Fares asks you to investigate with her.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Outpost
+QGS1Global,SY01Q16,1,No,,,EV_QE_SY01Q00,,,,"Ban Krylam, the First Colossus",Homerus,"According to a raider legend, slaying the Neterun Colossi offers a way to escape the galaxy. Homerus leads you onto the trail of one of them: Ban Krylam.",RESET,HOMERUS,MANDATORY,TRUE,FALSE,,,,,Marianan
+QGS1-SSMarianan,SY01Q17,1,No,,,EV_CC_CUT_SSMariananActive,,,CR_6000,Debt of Pain,Sun “The Judger” Lori,"Sun Lori, a renowned bounty hunter, sends a call for help. For someone of her reputation, this is unusual.",RESET,,SECONDARY,TRUE,FALSE,,,,,Marianan
+QGS1-SSOpaleum,SY01Q18,1,No,,,EV_QE_sbav,,,CR_6000,Conscience Run,Old Joe,"Old Joe has learned of other Interferometers scattered through the Core Areas. He asks you to destroy them. Their exact locations are unknown, but scanner signals reveal four sites: near Mugai Station’s speedgate road, inside Crystal Station among the Precious Four, near Cargo Port in the Guild Stands, and at Kaledo Station in the Outpost.",RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1Global,SY01Q19,1,No,,,EV_QE_SY01Q16,,,,What Remains of a Colossus,Homerus,"Razan rewards you with the Sonic Matter weapon. With it, you can return to the Rehun, break its defenses, and let Homerus analyze it.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,Outpost
+QGS1Global,SY01Q20,1,No,,,EV_QE_sbav,,,,"Ban Xerte, the Second Colossus",Homerus,"After Homerus’ analysis, you learn the Colossi may be vulnerable to the poison of Ban Xerte. To confirm, you must reach the Neterunian Tree area and find Ban Xerte.",RESET,HOMERUS,,TRUE,TRUE,,,,,
+QGS1-IronStand,SY01Q21,1,No,,,EV_CC_CUT_SSAsteroidDumpActive,,,CR_4000,Excess Souls,Old Joe,Old Joe has shared the coordinates of one of his wrecks for examination,RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,AsteroidWay
+QGS1Global,SY01Q22,1,No,,,EV_QE_SY01Q35,,,,"Ban Krylam: Or, The Whale",Homerus,,RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS1-SSMarianan,SY01Q23,1,No,,,EV_QE_SY01Q17,,,CR_5000,"Old Mates, Ones Memory",Sun “The Judger” Lori,"Struck by your abilities, Sun Lori challenges you to hunt down a series of targets ahead of rival bounty hunters. Kill the targets and retrieve their memories to prove their deaths.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Marianan
+QGS1-SSGalilean,SY01Q24,1,No,,,EV_CC_CUT_SSGalileanActive,,,CR_5000,Enough is Enough,E-Stand,"The containment field of a Neterunian monument in the area is malfunctioning, causing an anomalous surge of creatures. Repair the system while keeping the local Zanion packs at bay.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Outpost
+QGS1-SSCrystal,SY01Q26,1,No,,,EV_QE_SY01Q05,,,"CR_2000
+BLPU_MOD64-BladeEngine",Deja Vu,E-Stand,The Batiki have exploited an anomalous signal in the Containment Field Generator that hasn't stabilized yet. Track down the anomaly and eliminate it.,RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,PreciousFour
+QGS1-SSSapphirum,SY01Q25,1,No,,,EV_QE_SY01Q05,,,CR_4000,Strong Interaction,E-Stand,"The battery plant Atoms, vital for the Precious Four, is under attack. E-Stand asks you to defend and restore it.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,PreciousFour
+QGS1-SSMarianan,SY01Q27,1,No,,,"EV_QE_SY00Q09
+EV_CC_CUT_SSMariananActive",,,CR_2000,Deadly Biology #2,E-Stand,Husks you supplied revealed anomalies in the Zanion population. The Imperials demand more husks and promise good pay.,RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Marianan
+QGS1-SSGalilean,SY01Q28,1,No,,,"EV_QE_SY01Q27
+EV_CC_CUT_SSGalileanActive",,,CR_2000,Deadly Biology #3,E-Stand,"While studying Marianan husks, Imperials detect anomalies in Zanion breeding in the Core. More husks are required to trace the source.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Outpost
+QGS1-SSGalilean,SY01Q29,1,No,,,EV_QE_SY01Q28,,,CR_2000,Deep Cleaning,E-Stand,The husk data you provided to the Imperials reveals that the origin of the anomalous Zanion growth is a mutated nest in the Guild Stands area. Purge the nest.,RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Outpost
+QGS1-SSGalilean,SY01Q30,1,No,,,"EV_QE_SY01Q05
+EV_CC_CUT_SSGalileanActive",,,CR_4000,A Stint in Outpost,H,"One of the most peripheral zones of the Central Region, the Outpost Monitoring Sector, has gone offline. Bring its sensor nodes back online.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,Outpost
+QGS1-SSEmerald,SY01Q31,1,No,,,EV_QE_SY01Q10,,,"CR_900
+BLPU_MOD65-BladeLaser",Once Upon a Massacre,E-Stand,"In an mining area of Imperial interest, an old defense system has been reactivated. Bring the threat back to safe levels.",RESET,PERSONAL,SECONDARY,TRUE,FALSE,,,,,
+QGS1Global,SY01Q32,1,No,,,EV_QE_SY04Q06,,,,Snake Tongs,Homerus,"Consulting the Neterunian Oracle, you've discovered that slaying the colossus Ban Hudel will grant you a weapon against the colossus Ban Krylam. Fire sonic matter at old Neterunian technology to lure Ban Hudel into a trap.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS1Global,SY01Q33,1,No,,,EV_QE_SY01Q32,,,,The Armilla,Homerus,The legend was true. Retrieve the Armilla that animated Ban Hudel.,RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS1Global,SY01Q34,1,No,,,EV_QE_SY01Q19,,,,Veiled Neterun,Homerus,Homerus knows of a region containing ancient Neterunian technology that can help you analyze Ban Krylam's Rehun and establish a strategy against it. Reactivate the Neseref and reach the area.,RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS1Global,SY01Q35,1,No,,,EV_QE_SY01Q33,,,,Take The Mask Off,Homerus,"You have finally recovered Ban Hudel's Armilla, pulsing with its energy toxin. Now, head to Marianan and kill Ban Krylam.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS1Global,SY01Q36,1,No,,,EV_QE_SY01Q22,,,,Legends and Truth,Homerus,"Ban Hudel and Ban Krylam's Armillae resonate together, creating a portal that will allow you to safely cross the Alters surrounding the Galaxy of Neterun and escape.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+QGS0-SY00Q05,QMIN00,1,No,,,EV_CC_CUT_SSPrometheusActive,,,CR_1000,Aluminium for Prometheus Station,Prometheus Station,Deliver a standard lot of aluminium to Prometheus Station,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-OldJoe,QMIN01,1,No,,,EV_CC_CUT_SY01Q00_E,,,CR_2000,Aluminium for Mugai Station,Mugai Station,Deliver a major shipment of aluminium to Mugai Station.,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-OldJoe,QMIN02,1,No,,,EV_CC_CUT_SY01Q00_E,,,CR_1500,Gold for Mugai Station,Mugai Station,Deliver a sizable cache of gold to Mugai Station.,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-OldJoe,QMIN03,1,No,,,EV_none-CC_CUT_SY01Q00_E,,,,Zinc Delivery #1,Mugai Station,Deliver a small amount of zync to Mugai Station,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-SSCrystal,QMIN04,1,No,,,EV_QE_SY01Q06,,,"CR_1000
+BLPU_MOD67-BladeRocketLauncher",Crystal for Crystal Station,Crystal Station,Deliver a standard lot of crystal to Crystal Station.,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-SSMarianan,QMIN05,1,No,,,EV_CC_CUT_SSMariananActive,,,CR_1000,Crystal for Marianan Station,Marianan Station,Deliver a standard lot of crystal to Marianan Station.,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-SSEmerald,QMIN06,1,No,,,EV_none-QE_SY01Q07,,,,Crystal Delivery #1,Kaledo Station,Deliver a small amount of crystal to Kaledo Station.,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-SSGalilean,QMIN07,1,No,,,EV_CC_CUT_SSGalileanActive,,,CR_500,Recondigen for Kaledo Station,Kaledo Station,Deliver a small sample of recondigen to Kaledo Station.,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-SSCrystal,QMIN08,1,No,,,EV_QE_SY01Q06,,,CR_1000,Radium for Crystal Station,Crystal Station,Deliver a standard lot of radium to Crystal Station.,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-SSMarianan,QMIN09,1,No,,,EV_CC_CUT_SSMariananActive,,,CR_500,Ionic Coal for Marianan Station,Marianan Station,Deliver a small sample of ionic coal to Marianan Station.,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-SSMarianan,QMIN10,1,No,,,EV_none-QE_QMIN09,,,,Radium Delivery #2,Marianan Station,Deliver a reasonable amount of radium to Marianan Station.,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-OldJoe,QMIN11,1,No,,,EV_none-QE_QMIN10,,,,Radium Delivery #3,Marianan Station,Deliver a large shipment of radium to Marianan Station.,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-GoldStand,QMIN12,1,No,,,EV_CC_CUT_ERAST_DIALOGUE,,,CR_500,Gold for Gold Last Stand,Gold Last Stand,Deliver a small sample of gold to Gold Last Stand.,RESET,,SECONDARY,TRUE,FALSE,,,,,
+QGS1-IronStand,QMIN13,1,No,,,EV_CC_CUT_HARU_DIALOGUE,,,CR_500,Aluminium for Iron Last Stand,Iron Last Stand,Deliver a small sample of aluminium to Iron Last Stand.,RESET,,SECONDARY,TRUE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+QGS2Global,SY02Q00,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS2Global,SY02Q01,1,No,,EV_QS_SY02Q03,EV_QE_sbav,,,,[C],[C],[C],RESET,IRON,MANDATORY,TRUE,TRUE,,,,,
+QGS2Global,SY02Q02,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,IRON,MANDATORY,TRUE,TRUE,,,,,
+QGS2Global,SY02Q03,1,No,,EV_QS_SY02Q01,EV_QE_sbav,,,,[C],[C],[C],RESET,GOLD,MANDATORY,TRUE,TRUE,,,,,
+QGS2Global,SY02Q04,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,GOLD,MANDATORY,TRUE,TRUE,,,,,
+QGS2Global,SY02Q05,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,IRON,MANDATORY,TRUE,TRUE,,,,,
+QGS2Global,SY02Q06,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,GOLD,MANDATORY,TRUE,TRUE,,,,,
+QGS2Mutoid,SY02Q07,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,IRON,SECONDARY,FALSE,FALSE,,,,,
+QGS2Mutoid,SY02Q08,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,GOLD,SECONDARY,FALSE,FALSE,,,,,
+QGS2IronMoon,SY02Q09,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,IRON,SECONDARY,FALSE,FALSE,,,,,
+QGS2IronMoon,SY02Q10,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,IRON,SECONDARY,FALSE,FALSE,,,,,
+QGS2IronMoon,SY02Q11,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,IRON,SECONDARY,FALSE,FALSE,,,,,
+QGS2IronMoon,SY02Q12,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,IRON,SECONDARY,FALSE,FALSE,,,,,
+QGS2Sesamus,SY02Q13,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,GOLD,SECONDARY,FALSE,FALSE,,,,,
+QGS2Sesamus,SY02Q14,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,GOLD,SECONDARY,FALSE,FALSE,,,,,
+QGS2Sesamus,SY02Q15,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,GOLD,SECONDARY,FALSE,FALSE,,,,,
+QGS2Sesamus,SY02Q16,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,GOLD,SECONDARY,FALSE,FALSE,,,,,
+QGS2Global,SY02Q17,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS2Global,SY02Q18,1,No,,,EV_QE_sbav,,,,[C],[C],[C],RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+QGS2Global,SY02QGold,2,No,,EV_QE_SY01Q13,,,,"GAL_UP_200
+IAL_DOWN_200",War of the Guilds,Koyash,"""After completing Koyash’s mission, you can now enter the Hole, the guilds’ domain. Fight as a Gold Raider in their war.",FAIL,GOLD,MANDATORY,TRUE,TRUE,,,,,
+QGS2Global,SY02QIron,2,No,,EV_QE_SY01Q14,,,,"IAL_UP_200
+GAL_DOWN_200",War of the Guilds,Haru Okabe,"After completing Haru Okabe’s mission, you can now enter the Hole, ruled by the guilds. Fight as an Iron Raider in their war.",FAIL,IRON,MANDATORY,TRUE,TRUE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+QGS2Global,SY02Q19,1,No,,EV_QE_SY01Q13,EV_QE_SY02QGold,,,,Gold Trust,Koyash,"The guild war intensifies. Hard Steel, a key Iron Guild station, is your next target. Its conquest would strike a decisive blow.",RESET,GOLD,MANDATORY,TRUE,TRUE,,,,,
+QGS2Global,SY02Q20,1,No,,EV_QE_SY01Q13,EV_QE_SY02QGold,,,,Strike at the Iron’s Heart,Koyash,Koyash stresses that strategic dominance of the Hole is vital. He asks you to capture Iron Ore Station for Gold.,RESET,GOLD,MANDATORY,TRUE,FALSE,,,,,
+QGS2Global,SY02Q21,1,No,,EV_QE_SY01Q13,EV_QE_SY02QGold,,,,Rebirth in Gold,Koyash,"Koyash insists loyalty to the God of Gold must be proven. Capture Finery Forge Station, and a rich reward awaits.",RESET,GOLD,MANDATORY,TRUE,FALSE,,,,,
+QGS2Global,SY02Q22,1,No,,EV_QE_SY01Q14,EV_QE_SY02QIron,,,,Iron Trust,Haru Okabe,"Haru explains Iron’s goal is to destabilize Gold. To achieve this, she urges you to seize their stations.",RESET,IRON,MANDATORY,TRUE,TRUE,,,,,
+QGS2Global,SY02Q23,1,No,,EV_QE_SY01Q14,EV_QE_SY02QIron,,,,Iron Storm,Haru Okabe,"The more foes you defeat during Varna Station’s conquest, the more glory you’ll earn with Haru and the Iron Guild.",RESET,IRON,MANDATORY,TRUE,FALSE,,,,,
+QGS2Global,SY02Q24,1,No,,EV_QE_SY01Q14,EV_QE_SY02QIron,,,,Natural Enemies,Haru Okabe,Haru argues Heusos Station is crucial to Gold’s power. Conquering it would strip Koyash of a key asset. She orders you to take it and destroy every enemy,RESET,IRON,MANDATORY,TRUE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+QGS3Global,SY03Q00,1,No,,,,,,,Colossal Hunting,Homerus,"There’s no trace of Ban Xerte in the Tree, but the bio-echo of the Rehun seems to be resonating towards one of the Tree’s areas. Homerus suggests you follow the echo in hopes of finding the Colossus.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS3Global,SY03Q01,1,No,,,EV_QE_SY03Q00,,,,The Approval of a Cult,Yalda Nor,"The Malaxdon are unwelcoming to raiders from colonies outside the Tree. Yalda has decided that if you want her help, you must first find some of her siblings who got lost during an investigation.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS3Global,SY03Q02,1,No,,,EV_QE_SY03Q01,,,,Cultist Souls,Yalda Nor,"Outsider, you have saved one of us, and you deserve my attention. I will try to help you and give you the answers you seek.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS3Global,SY03Q03,1,No,,,EV_QE_SY03Q02,,,,The Lexon Schism,Homerus,"The neural fragment of the High Lexon contained a memory in the Last Ruins area, possibly related to Tale Shoo. Yalda told us that he was responsible for the schism the Malaxdon suffered because of Ban Xerte itself, and the bounty the Malaxdon placed on his body. By finding Tale, we will find Ban Xerte and his biological remnant.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS3Global,SY03Q04,1,No,,,EV_QE_SY03Q03,,,MAL_UP_200,The One Who Betrays,Homerus,"An ancient Neterunian Lump allowed us to find traces of the Lexon, the raiders who started the Malaxdon schism. The tracks lead us to the Forbidden Ruins, other Neterunian rests now inhabited by creatures and Alters.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS3Global,SY03Q05,1,No,,,EV_QE_SY03Q04,,,,The Sanctum of Ban Xerte,Homerus,,RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS3-Macbeth,SY03Q06,1,No,,,EV_QE_SY03Q00,,,,When the Human Empire Fails,Old Joe,"The Human Empire is constantly searching for resources. From this perspective, the Neterunian Tree may contain several, but not all raiders are willing to face the danger and collect them. But you are different, right? Besides, we pay well.",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Macbeth,SY03Q07,1,No,,,EV_QE_SY03Q06,,,,Finding a Symbiont - Spore Haustor,Old Joe,"You have collected the first Haustor, a kind of symbiotic material. There are other types in dangerous areas of the Tree. Collect them for me.",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Macbeth,SY03Q08,1,No,,,EV_QE_SY03Q06,,,,Finding a Symbiont - Capsule Haustor,Old Joe,"You have collected the first Haustor, a kind of symbiotic material. There are other types in dangerous areas of the Tree. Collect them for me.",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Macbeth,SY03Q09,1,No,,,EV_QE_SY03Q06,,,,Finding a Symbiont - Flare Haustor,Old Joe,"You have collected the first Haustor, a kind of symbiotic material. There are other types in dangerous areas of the Tree. Collect them for me.",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Macbeth,SY03Q10,1,No,,,EV_QE_SY03Q00,,,,Sworn Enemies,Old Joe,"The Batiki, damned bastards, have built one of their bases here. They must be eliminated. As always.",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Equilibrium,SY03Q11,1,No,,,EV_QE_SY01Q21,,,MAL_UP_100,Bullets Purge,Yalda Nor,"Hey, look who's back. You've come a long way to make it this far.... Well, I'm not good at pleasantries. Actually, I hate wasting time, so: you handled the Blaise Adcott deal brilliantly, and now I want you for another hunt. Prey hiding in the far corners of the Tree.",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Macbeth,SY03Q12,1,No,,,,,,,A Job for the Few,Razan,"My favorite raider! You’re not afraid of the depths of the Tree, you are a true hero. But I don't want to go there, you know? That's why I need your help. I will pay you well, you have my word, my word!",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Equilibrium,SY03Q13,1,No,,,EV_QE_SY03Q02,,,MAL_UP_100,Once Upon a Time,Yalda Nor,"We need your help. I had sent a group of Malaxdon siblings to scout the Eerie Ruins area for evidence of the aggressive creatures invading Our Tree, but they never returned",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Equilibrium,SY03Q14,1,No,,,EV_QE_SY03Q03,,,,A New Dawn,Dawn,"If you get this message, follow the signal.",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Equilibrium,SY03Q15,1,No,,,EV_QE_SY03Q14,,,MAL_UP_100,Rises Again,Dawn,I am helpless. They drag me along. Help me.,RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Equilibrium,SY03Q16,1,No,,,EV_QE_SY03Q15,,,MAL_UP_100,Yard Time,Dawn,"I thank you for saving me, but my brother Set is still in the hands of the Lexon. Find the area where they are holding him and do to him what you did to me. ",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Equilibrium,SY03Q17,1,No,,,EV_QE_SY03Q02,,,MAL_UP_100,Forbidden Experiments,Yalda Nor,"Even if you come from outside the Tree, maybe we can trust you. A group of hunter raiders killed some Tree creatures and ran away. We put a bounty on their bodies, and we want to know what they did.",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Equilibrium,SY03Q18,1,No,,,"EV_QE_SY03Q02
+EV_QE_SY01Q25",,,,Raider’s Oath,J,"Did you think you were the only one who could make it this far? You idiot! You killed me twice, you won't succeed a third time!",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Equilibrium,SY03Q19,1,No,,,EV_QE_SY03Q03,,,MAL_UP_100,Lexon Troubles,Yalda Nor,"The Lexon have moved into areas forbidden to us. They have managed to use destructive alien technology, taking advantage of the attack they made on Equilibrium. We need help to find and disable it.",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Equilibrium,SY03Q20,1,No,,,EV_QE_SY03Q05,,,,Galaxy Soul,?,"Yes, it's you... It's truly you...",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3-Macbeth,SY03Q21,1,No,,,EV_QE_sbav,,,,Loyal Friend,Razan,"The morays affair... wow, you were amazing. I like warriors like you. You had no mercy for those creatures, and maybe you can help me again.",RESET,IMPERIAL,SECONDARY,TRUE,FALSE,,,,,
+QGS3Global,SY03Q22,1,No,,,EV_QE_SY03Q05,,,,Awaken,Homerus,,RESET,IMPERIAL,MANDATORY,TRUE,TRUE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+QGS4Global,SY04Q00,1,No,,,,,,CR_1000,Awaken The Ruins,Homerus,"You have arrived at the long-dead Neterunian Ruins, haunted by Alters. To use their hidden technology, you must reactivate them.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS4Global,SY04Q01,1,No,,,EV_QE_SY04Q00,,,CR_1000,Along the Twisted Branches,Homerus,The first Heka is not enough to revive the central structure. Follow the branches leading toward the outer edges of the area to find and reactivate four more Heka.,RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS4Global,SY04Q02,1,No,,,EV_QE_SY04Q00,,,CR_1000,Heka Tep,Homerus,Shoot sonic matter at the Heka Tep core to reactivate it and defend it.,RESET,HOMERUS,MANDATORY,TRUE,FALSE,,,,,
+QGS4Global,SY04Q03,1,No,,,EV_QE_SY04Q00,,,CR_1000,Heka Res,Homerus,Shoot sonic matter at the Heka Res core to reactivate it and defend it.,RESET,HOMERUS,MANDATORY,TRUE,FALSE,,,,,
+QGS4Global,SY04Q04,1,No,,,EV_QE_SY04Q00,,,CR_1000,Heka Sha,Homerus,Shoot sonic matter at the Heka Sha core to reactivate it and defend it.,RESET,HOMERUS,MANDATORY,TRUE,FALSE,,,,,
+QGS4Global,SY04Q05,1,No,,,EV_QE_SY04Q00,,,CR_1000,Heka Ha,Homerus,Shoot sonic matter at the Heka Ha core to reactivate it and defend it.,RESET,HOMERUS,MANDATORY,TRUE,FALSE,,,,,
+QGS4Global,SY04Q06,1,No,,,EV_QE_SY04Q01,,,"CR_2000
+BLPU_SBDY05-Helicon",Its Fate Lies in the Void,Homerus,"All Heka units are synchronized. The energy threshold has been reached. Power surges into the central structure, awakening the Oracle to be consulted on the Rehun.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+QGS4Global,SY04Q07,1,No,,,EV_QE_SY04Q05,,,CR_1000,Neterunian Etching,Homerus,Homerus detects a strong energy fluctuation. There might be something out there.,RESET,HOMERUS,SECONDARY,TRUE,FALSE,,,,,
+QGS4Global,SY04Q08,1,No,,,EV_QE_SY04Q03,,,BLPU_MOD71-HeliconGatling_Premium,Neterunian Initiation,Homerus,The reactivation of the Heka has restored power to an aging Neterunian initiation facility. Explore it.,RESET,HOMERUS,SECONDARY,TRUE,FALSE,,,,,
+QGS4Global,SY04Q09,1,No,,,EV_QE_SY04Q04,,,BLPU_MOD70-HeliconEngine_Premium,Neterunian Archive,Homerus,"Homerus has detected an ancient Neterunian archive, which may contain useful information.",RESET,HOMERUS,SECONDARY,TRUE,FALSE,,,,,
+QGS4Global,SY04Q10,1,No,,,EV_QE_SY04Q02,,,CR_1000,Neterunian Pain,Homerus,Homerus detects a strong energy fluctuation. There might be something out there.,RESET,HOMERUS,SECONDARY,TRUE,FALSE,,,,,
+QGS4Global,SY01Q32,1,No,,,EV_QE_SY04Q06,,,,Snake Tongs,Homerus,"Consulting the Neterunian Oracle, you've discovered that slaying the colossus Ban Hudel will grant you a weapon against the colossus Ban Krylam. Fire sonic matter at old Neterunian technology to lure Ban Hudel into a trap.",RESET,HOMERUS,MANDATORY,TRUE,TRUE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,FALSE,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,
+,,,,,,,,,,,,,,,,,FALSE,,,,,

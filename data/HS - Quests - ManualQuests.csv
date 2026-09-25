@@ -1,0 +1,1766 @@
+QuestChainID,QuestID,Checkpoint,BlockSaveGame,IsStationRoomCheckpoint,OnActivate,OnComplete,WaitEventBeforePanel,ActorCenterEventId,FailDistance,Task0,Task0Text,Task0POI,Task1,Task1Text,Task1POI,Task2,Task2Text,Task2POI,Task3,Task3Text,Task3POI,Task4,Task4Text,Task4POI,FailEvent,Timer (seconds),OnEndTimerEvent,RollbackLocationId,DescriptionOverride
+SY00Q00,SY00Q00_A,NO_CHECKPOINT,FALSE,FALSE,MSOE_IntroLimbo,,,,,EV_TSC_Visual,Shift perspective,,,//,,,//,,,//,,,//,,,,,,NONE
+,,NO_CHECKPOINT,FALSE,FALSE,CS_CUT_SY00Q00_C,,,,,EV_CC_CUT_SY00Q00_C,//,,,//,,,//,,,//,,,//,,,,,,//
+SY00Q00,SY00Q00_C,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_TSC_LookAround,Calibrate bionic eye,,EV_TSC_Move,Engage thrusters,,EV_TSC_Rotate,Sync rotation systems,,EV_TSC_UpDown,Sync vertical lift,,EV_TSC_Boost,Hit the boost,,,,,,NONE
+SY00Q01,SY00Q01_A,NO_CHECKPOINT,TRUE,FALSE,"CS_CUT_OpenDoor_SY00Q00
+MMAUTO_START
+MSAE_LimboHorrorBegin
+LD_SY00Q01_A",,,,,EV_CC_CUT_SY00Q01_B,Go ahead,[SYS_0 TS_SUB-Birth TS_Zone_ReachPoint],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q01,SY00Q01_C,CHECKPOINT_ALWAYS,TRUE,FALSE,,"ULD_SY00Q01_A
+MSOE_FightTurretsLimbo
+MMAUTO_STOP",,,,EV_DE_Turret-SY00Q01(8),Destroy all the training turrets,[SYS_0 TS_SUB-Birth TS_Turret-SY00Q01],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q02,SY00Q02_A,NO_CHECKPOINT,TRUE,FALSE,CS_CUT_OpenDoor_SY00Q01,MSAT_PRE_FIGHT,,,,EV_RP_Zone_ReachPoint2,Enter the second room,[SYS_0 TS_SUB-Birth TS_Zone_ReachPoint2],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q02,SY00Q02_B,CHECKPOINT_ALWAYS,TRUE,FALSE,LD_SY00Q02_B,"ULD_SY00Q02_B
+CI_COL-IntegrityRecover_M(3)",,,,EV_WO_DroneWave_SY00Q02_B,Survive the drone attack,[SYS_0 TS_SUB-Birth TS_EN-DronePirate],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q03,SY00Q03_A0,NO_CHECKPOINT,TRUE,FALSE,"CS_CUT_OpenDoor_SY00Q02
+LD_SY00Q03_A0","LD_SY00Q03_A1
+CS_CUT_SY00Q03_A1",,,,EV_RP_Zone_SY00Q03_A,Reach Birthy Rock Station,[SYS_0 TS_SUB-BirthyRock],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q03,SY00Q03_A01,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-StationRec-BirthyRock,Sync with the Birthy Rock hub to land,[SYS_0 TS_SUB-BirthyRock TS_INT-StationRec-BirthyRock],,//,,,//,,,//,,,,,,,,,NONE
+,,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_TSC_OpenRaiderLog,//,,,//,,,//,,,//,,,,,,,,,//
+SY00Q03,SY00Q03_A,CHECKPOINT_ALWAYS,FALSE,TRUE,ULD_SY00Q03_A0,ULD_SY00Q03_A1,,,,EV_BU_MOD30b-StartingRocketLauncher,Take a Raiderizer in Birthy Rock Station,[SYS_0 TS_SUB-BirthyRock TS_SS-BirthyRock],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q03,SY00Q03_A1,CHECKPOINT_ALWAYS,FALSE,TRUE,,LD_SY00Q03_A,,,,EV_MM_MOD30b-StartingRocketLauncher,Mount the Raiderizer ,[SYS_0 TS_SUB-BirthyRock TS_SS-BirthyRock],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q03,SY00Q03_B,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_CA_COL-SonicMatter_Green(10),Collect ten Sonic Matter Units,"[SYS_0 TS_SUB-BirthyRock TS_EN-Zanion]
+[SYS_0 TS_SUB-BirthyRock TS_COL-SonicMatter_Green]",,//,,,//,,,//,,,,,,,,BirthyRock-Station,"You are inside a Zanion nest. Kill them to collect thirty units of sonic matter, then deliver it to the Human Empire."
+SY00Q03,SY00Q03_B1,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_DC_TST_SY00Q03_B1,Consult Homerus,,,//,,,//,,,//,,,,,,,,,NONE
+SY00Q03,SY00Q03_C,CHECKPOINT_ALWAYS,FALSE,FALSE,,ULD_SY00Q03_A,,,,EV_SND_COL-SonicMatter,Use the Transponder to send sonic matter,[SYS_0 TS_SUB-BirthyRock TS_TM-SMTransponder_01],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q04,SY00Q04_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_EXG_SG-Stix,Locate the source of the distorted transmission,[SYS_0 TS_SUB-Prometheus],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q04,SY00Q04_A1,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_SY00Q04_A1
+CS_CUT_SY00Q04_A1","ULD_SY00Q04_A1
+",,,,EV_CC_CUT_SY00Q04_A1,[H] - wait for cutscene,,,//,,,//,,,//,,,,,,,,,NONE
+SY00Q04,SY00Q04_B,NO_CHECKPOINT,TRUE,FALSE,"LD_SY00Q04_B
+CS_CUT_SY00Q04_B0
+MMAUTO_START
+MSAE_TensionBeat","MSOE_TensionBeat
+MMAUTO_STOP",,,,EV_AGC_TM-AntiGhost_01,Get to the Repulsion System and activate it,[SYS_0 TS_SUB-Prometheus TS_TM-AntiGhost_01],,//,,,//,,,//,,,//,,,,,,"Escape the Alters, who entered the area following a giant Colossus attack, and activate the Repulsion System to push them back."
+SY00Q04,SY00Q04_B1,CHECKPOINT_ALWAYS,TRUE,FALSE,CS_CUT_SY00Q04_B,ULD_SY00Q04_B,,,,EV_CC_CUT_SY00Q04_B,[H] - wait for cutscene,,,,,,,,,,,,,,,,,,NONE
+SY00Q04,SY00Q04_C,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_SR_Soul,Use the Stabilizer to recover your Stability,[SYS_0 TS_SUB-Prometheus TS_INT-SoulReset],,//,,,//,,,//,,,//,,,,,,Alters have lowered your Stability. Homerus advises using a Stabilizer.
+SY00Q04,SY00Q04_D,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_DC_TST_SY00Q04_D,Consult Homerus,,,//,,,//,,,//,,,,,,,,,NONE
+SY00Q05,SY00Q05_A0,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-ImperialAntenna_SY00Q05,Connect to the Imperial Node L-1,[SYS_0 TS_SUB-BirthyRock TS_INT-ImperialAntenna_SY00Q05],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q05,SY00Q05_A,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,"EV_RP_Zone_ScrapYard_B, EV_RP_SS-Casbhangar",Go to E-Was Dump,[SYS_0 TS_SUB-BirthyRock TS_Zone_ScrapYard_B],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q05,SY00Q05_A1,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_CQ_SSDumpEvent,Eliminate the sources of the interference near Dump Station,[SYS_0 TS_SUB-BirthyRock TS_SS-Casbhangar],,//,,,//,,,//,,,,,,,,,"A group of reborn E-Was, raiders who should have been decommissioned, are causing trouble at the Dump Station. Eliminate them."
+SY00Q05,SY00Q05_B,CHECKPOINT_ALWAYS,FALSE,TRUE,LD_SY00Q05_C,,,,,EV_DC_TC_SY00Q05_A1,Consult Homerus,,,,,,,,,,,,,,,,,,NONE
+SY00Q05,SY00Q05_C,CHECKPOINT_ALWAYS,FALSE,FALSE,,ULD_SY00Q05_C,,,,EV_IC_INT-MemoryFragment_Jammer00,Examine the neural fragment,[SYS_0 TS_SUB-BirthyRock TS_INT-MemoryFragment_Jammer00],,,,,,,,,,,,,,,,,"You discovered that the E-Was were reborn because of an abandoned neural fragment, a raider memory. Examine it."
+SY00Q06,SY00Q06_A,NO_CHECKPOINT,FALSE,FALSE,LD_SY00Q06_QuestZone,ULD_SY00Q06_QuestZone,,,,EV_RP_Zone_FaceDepot,Go to Cage Control Area,[SYS_0 TS_SUB-Prometheus TS_Zone_FaceDepot],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q06,SY00Q06_B,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_SY00Q06_A
+MMAUTO_START
+MSAE_LimboFight-NoLevel",ULD_SY00Q06_A,,Zone_FaceDepot,70000,EV_WO_DroneWave_SY00Q06_A,Destroy malfunctioning drones,[SYS_0 TS_SUB-Prometheus TS_DroneWave_SY00Q06_A],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q06,SY00Q06_C,CHECKPOINT_ALWAYS,FALSE,FALSE,MSAE_Tension-Soft,"MSOE_Tension-Soft
+MMAUTO_STOP",,Zone_FaceDepot,70000,EV_IC_INT-SignalOnTilt(2),Activate the antennas,[SYS_0 TS_SUB-Prometheus TS_INT-SignalOnTilt],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q07,SY00Q07_A,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_SY00Q04_G,,,,,EV_RP_EN-EmpireCapitalShip,Join Old Joe near Prometheus Station,[SYS_0 TS_SUB-Prometheus TS_SS-Caemeterium],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q07,SY00Q07_B0,CHECKPOINT_ALWAYS,FALSE,TRUE,"
+CR_100",,,,,EV_BU_MOD10c-Laser_Starting,Buy the Old Joe's Laser in Prometheus Station,[SYS_0 TS_SUB-Prometheus TS_SS-Caemeterium],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q07,SY00Q07_B,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_MM_MOD10c-Laser_Starting,Equip the Old Joe's Laser,[SYS_0 TS_SUB-Prometheus TS_SS-Caemeterium],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q07,SY00Q07_C,NO_CHECKPOINT,FALSE,FALSE,LD_SY00Q07_D,,,,,EV_RP_Wave_SY00Q07_D,Follow the signal,[SYS_0 TS_SUB-Prometheus TS_Wave_SY00Q07_D],,//,,,//,,,//,,,//,,,,,,Follow the jamming signal detected by Homerus.
+SY00Q07,SY00Q07_D,CHECKPOINT_ALWAYS,TRUE,FALSE,"MMAUTO_START
+MSAE_LimboFight-NoLevel","MSOE_LimboFight-NoLevel
+MMAUTO_STOP
+ULD_SY00Q07_D",,,,EV_WO_Wave_SY00Q07_D,Clear the area of Zanion,[SYS_0 TS_SUB-Prometheus TS_Wave_SY00Q07_D],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q07,SY00Q07_D1,NO_CHECKPOINT,FALSE,FALSE,LD_SY00Q07_C,,,,,EV_RP_Wave_SY00Q07_C,Investigate the signal source,[SYS_0 TS_SUB-Prometheus TS_Wave_SY00Q07_C],,,,,,,,,,,,,,,,,NONE
+SY00Q07,SY00Q07_D2,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_LimboFight-NoLevel","MSOE_LimboFight-NoLevel
+MMAUTO_STOP",,,,EV_WO_Wave_SY00Q07_C,Eliminate the threat,[SYS_0 TS_SUB-Prometheus TS_Wave_SY00Q07_C],,,,,,,,,,,,,,,,,NONE
+SY00Q07,SY00Q07_E,CHECKPOINT_ALWAYS,TRUE,FALSE,,"ULD_SY00Q07_C
+EAL_UP_50",,,,EV_IC_INT-MemoryFragment_Jammer,Examine the neural fragment,[SYS_0 TS_SUB-Prometheus TS_INT-MemoryFragment_Jammer],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q07,SY00Q07_F,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_SS-Caemeterium,Report back to Old Joe at Prometheus Station,[SYS_0 TS_SUB-Prometheus TS_SS-Caemeterium],,//,,,//,,,//,,,,,,,,,"You eliminated the signal source blocking the gate, a raider known as J. Report back to Old Joe."
+SY00Q07,SY00Q07_G,NO_CHECKPOINT,TRUE,FALSE,,,,,,EV_DC_TST_SY00Q07_G,Link Old Joe,,,//,,,//,,,//,,,,,,,,,NONE
+SY00Q07,SY00Q07_H,CHECKPOINT_ALWAYS,TRUE,FALSE,,ULD_SY00Q04_G,,,,EV_SL_EN-EmpireCapitalShip,[H] - wait for cutscene,,,//,,,//,,,//,,,,,,,,,NONE
+SY00Q07,SY00Q07_I,CHECKPOINT_ALWAYS,FALSE,FALSE,,CR_1000,,,,EV_IC_INT-MappingSystem_SY00Q04,Reactivate the mapping system,[SYS_0 TS_SUB-Prometheus TS_INT-MappingSystem_SY00Q04],,//,,,//,,,//,,,,,,,,,NONE
+,SY00Q07_L,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_DC_TST_SY00Q07_L,,,,//,,,//,,,//,,,,,,,,,NONE
+SY00Q07,SY00Q07_M,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RP_SUB-MugaiMabe,Go to the Core,[SYS_0 TS_SUB-Prometheus TS_GA-Ascension],,//,,,//,,,//,,,,,,,,,"Now that you've sorted things out after the Colossus attack, you can continue your journey toward The Core. Follow Old Joe to the Mugai Station area."
+SY00Q08,SY00Q08_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_QuestGiver_SY00Q05,,[SYS_0 TS_SUB-BirthyRock TS_MN-QuestGiver_Monitor],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q08,SY00Q08_B,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_TST_SY00Q05_A0,,[SYS_0 TS_SUB-BirthyRock TS_MN-QuestGiver_Monitor],,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q09,SY00Q09_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-ImperialConsole,Upload Zanion bio-traces to the ship’s scanner,[SYS_0 TS_SUB-BirthyRock TS_INT-ImperialConsole],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q09,SY00Q09_A1,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_Sy00Q09_ZanionNest,Reach the Zanion nest,[SYS_0 TS_SUB-BirthyRock TS_Zone_Sy00Q09_ZanionNest],,,,,,,,,,,,,,,,,NONE
+SY00Q09,SY00Q09_A2,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_DC_TC_SY00Q09_A1,Consult Homerus,,,,,,,,,,,,,,,,,,NONE
+SY00Q09,SY00Q09_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_00_BirthyRock_ZanionQuest,ULD_00_BirthyRock_ZanionQuest,,,,EV_IC_INT-ZanionButt(6),Use the scanner to locate Zanion Husks and collect them,"[SYS_0 TS_SUB-BirthyRock TS_Zone_Sy00Q09_ZanionNest]
+[SYS_0 TS_SUB-BirthyRock TS_INT-ZanionButt]",,//,,,//,,,//,,,,,,,,BirthyRock-Station,NONE
+SY00Q09,SY00Q09_C,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-ImperialRelay_SY00Q09,Connect to the Imperial Relay to transmit the data on the husks,[SYS_0 TS_SUB-BirthyRock TS_INT-ImperialRelay_SY00Q09],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q10,SY00Q10_A,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_DE_EN-Zanion(10),Kill Zanion,,,//,,,//,,,//,,,,,,,,BirthyRock-Station,NONE
+SY00Q11,SY00Q11_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_SND_COL-SonicMatter(30),Collect and deliver 30 Sonic Matter Units,,,//,,,//,,,//,,,//,,,,,,NONE
+SY00Q12,SY00Q12_A0,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-StabilityAntenna,Examine the Dump Stability Antenna,[SYS_0 TS_SUB-BirthyRock TS_INT-StabilityAntenna],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q12,SY00Q12_A,CHECKPOINT_SAFE,FALSE,FALSE,,ULD_SY00Q12_A,,,,EV_IC_INT-DumpGenerator_SY00Q12(3),Use the scanner to locate three generators in the Dump area and collect them,"[SYS_0 TS_SUB-BirthyRock TS_Zone_ScrapYard_B]
+[SYS_0 TS_SUB-BirthyRock TS_INT-DumpGenerator_SY00Q12]",,//,,,//,,,//,,,//,,,,,Dump-Station,NONE
+SY00Q12,SY00Q12_B,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-DumpGeneratorRoot_SY00Q12,Reinstall a generator in the Primary Power Unit,[SYS_0 TS_SUB-BirthyRock TS_INT-DumpGeneratorRoot_SY00Q12],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q12,SY00Q12_C,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-DumpGeneratorRoot_SY00Q12_2,Reinstall a generator in the Backup Battery,[SYS_0 TS_SUB-BirthyRock TS_INT-DumpGeneratorRoot_SY00Q12_2],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q12,SY00Q12_D,NO_CHECKPOINT,FALSE,FALSE,,ULD_SY00Q12-PRE,,,,EV_IC_INT-DumpGeneratorRoot_SY00Q12_3,Reinstall a generator in the Control Node,[SYS_0 TS_SUB-BirthyRock TS_INT-DumpGeneratorRoot_SY00Q12_3],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q12,SY00Q12_E,CHECKPOINT_ALWAYS,FALSE,FALSE,"LD_SY00Q12_E
+CS_CUT_DumpReactivation_SY00Q12
+MMAUTO_START","ULD_SY00Q12_E
+LD_SY00Q12-POST
+MMAUTO_STOP",,,,EV_CC_CUT_DumpReactivation_SY00Q12,//,,,//,,,//,,,//,,,,,,,,,//
+SY00Q13,SY00Q13_A0,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_SS-Caemeterium,Reach Prometheus Station,[SYS_0 TS_SUB-Prometheus TS_SS-Caemeterium],,,,,,,,,,,,,,,,,NONE
+SY00Q13,SY00Q13_A1,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_SY00Q04_G
+CS_CUT_SY00Q04_G",,,,,EV_CC_CUT_SY00Q04_G,[H] - wait for cutscene,,,,,,,,,,,,,,,,,,//
+SY00Q13,SY00Q13_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RP_Zone_SY0Q13_CageFixing,Reach the Cage Monitoring Bay,[SYS_0 TS_SUB-Prometheus TS_INT-ImperialConsole_SY00Q13],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q13,SY00Q13_B,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-ImperialConsole_SY00Q13,Register at the Imperial console to exit the cage,[SYS_0 TS_SUB-Prometheus TS_INT-ImperialConsole_SY00Q13],,//,,,//,,,//,,,,,,,,,"You are about to leave the cage. The Human Empire warns that once you leave, you cannot return until your mission is complete."
+SY00Q13,SY00Q13_C,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_SY00Q13_C
+CS_CUT_SY00Q13_C","ULD_SY00Q13_C
+LD_SY00Q13_C1",,,,EV_CC_CUT_SY00Q13_C,[H] - wait for cutscene,,,//,,,//,,,//,,,,,,,,,NONE
+SY00Q13,SY00Q13_C1,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_SY00Q13_D
+MMAUTO_START
+MSAE_Ghost-Horror-Exploration",,,,,EV_IC_INT-OldAntighost_SY00Q13,Use the Proto-Repulsor just outside the cage to activate its protection system,[SYS_0 TS_SUB-Prometheus TS_INT-OldAntighost_SY00Q13],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q13,SY00Q13_D,CHECKPOINT_SAFE,TRUE,FALSE,"MMAUTO_START
+MSAE_Ghost-Horror-Exploration",ULD_SY00Q13_C1,,,,EV_IC_INT-GateActivator_SY00Q13-a,Use the scanner to locate and activate Trigger Unit-A1,[SYS_0 TS_SUB-Prometheus TS_INT-GateActivator_SY00Q13-a],EV_IC_INT-GateActivator_SY00Q13-b,Use the scanner to locate and activate Trigger Unit-B1,[SYS_0 TS_SUB-Prometheus TS_INT-GateActivator_SY00Q13-b],EV_IC_INT-GateActivator_SY00Q13-c,Use the scanner to locate and activate Trigger Unit-C1,[SYS_0 TS_SYS_0 TS_SUB-Prometheus TS_INT-GateActivator_SY00Q13-c],,//,,,,,,,,,You are outside the cage. Use your scanner to track down the three trigger needed to reboot the speedgate network and reach the old Colonial Perimeter. Engage any Proto-Repulsors in the area if the Alters attempt to possess you.
+SY00Q13,SY00Q13_D1,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_IC_INT-SpeedgateSwitch_SY00Q13,Power up the speedgate road with the Igniter,[SYS_0 TS_SUB-Prometheus TS_INT-SpeedgateSwitch_SY00Q13],,,,,,,,//,,,,,,,,,NONE
+SY00Q13,SY00Q13_E,CHECKPOINT_ALWAYS,TRUE,FALSE,LD_SY00Q13_E,ULD_SY00Q13_E,,,,EV_RP_Zone_SY0Q13_SafetyArea,Reach the Colonial Perimeter,[SYS_0 TS_SUB-Prometheus TS_Zone_SY0Q13_SafetyArea],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q13,SY00Q13_F,CHECKPOINT_SAFE,TRUE,FALSE,"MMAUTO_START
+MSAE_Ghost-Horror-Exploration",,,,,EV_IC_INT-CageSpareParts_SY00Q13(7),Find Reactor Cell units in the area,[SYS_0 TS_SUB-Prometheus TS_INT-CageSpareParts_SY00Q13],,//,,,//,,,//,,,,,,,,,Scan the expansive Colonial Perimeter to locate and retrieve the reactor cells. There is no turning back until you secure every single one.
+SY00Q13,SY00Q13_G,NO_CHECKPOINT,TRUE,FALSE,LD_SY00Q13_G,"ULD_SY00Q13_G
+ULD_SY00Q13_D
+MSOE_Ghost-Horror-Exploration
+",,,,EV_RP_Zone_SY0Q13_EndCutsceneTrigger,Go back,[SYS_1 TS_SUB-Prometheus TS_POI-SY00Q13],,//,,,//,,,//,,,,,,,,,NONE
+SY00Q13,SY00Q13_H,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_SY00Q13_H
+CS_CUT_SY00Q13_H","ULD_SY00Q13_H
+MMAUTO_STOP",,,,EV_CC_CUT_SY00Q13_H,[H] - wait for cutscene,,,//,,,//,,,//,,,,,,,,,NONE
+SY00Q13,SY00Q13_I,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-CellHolder,Deposit the load in the Cell Holder,[SYS_0 TS_SUB-Prometheus TS_INT-CellHolder],,//,,,,,,//,,,,,,,,,Transfer the energy from the reactor cells into the cell holder to restore the cage.
+SY01Q00,SY01Q00_A0,CHECKPOINT_ALWAYS,FALSE,FALSE,"LD_01-SY01Q00-JoeCapital
+LD_01-SY01Q00-OldJoesCargo",,,,,EV_DC_TST_SY01Q00_A0,Consult Homerus,,,//,,,,,,//,,,,,,,,,NONE
+SY01Q00,SY01Q00_A1,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_EN-EmpireCapitalShip,Join Old Joe at Mugai Station,[SYS_1 TS_SUB-MugaiMabe SS-MugaiBabe],,//,,,,,,//,,,,,,,,,NONE
+SY01Q00,SY01Q00_A2,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_DC_TST_SY01Q00_A2,Link Old Joe,,,//,,,,,,//,,,,,,,,,NONE
+,,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,"EV_RP_Zone_TutorialScanner, EV_RP_INT-CargoMemory_SY01Q00",//,[SYS_1 TS_SUB-MugaiMabe TS_Zone_TutorialScanner],,//,,,,,,//,,,,,,,,,//
+,,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_TSC_Scan,//,"[SYS_1 TS_SUB-MugaiMabe TS_Zone_TutorialScanner]
+[SYS_1 TS_SUB-MugaiMabe TS_INT-Cargo_SY01Q00]",,//,,,,,,//,,,,,,,,,//
+SY01Q00,SY01Q00_A5,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-CargoMemory_SY01Q00,Use the scanner to locate the Cargo Memory and examine it,"[SYS_1 TS_SUB-MugaiMabe TS_Zone_TutorialScanner]
+[SYS_1 TS_SUB-MugaiMabe TS_INT-CargoMemory_SY01Q00]",,//,,,,,,//,,,,,,,,,NONE
+SY01Q00,SY01Q00_A6,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_DC_TST_SY01Q00_A6,Link Old Joe,,,//,,,,,,//,,,,,,,,,NONE
+SY01Q00,SY01Q00_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-JoeCargoPiece_SY01Q00,Use the scanner to locate Old Joe's lost cargo ship near the speedgate road and examine its memory,[SYS_1 TS_SUB-MugaiMabe TS_INT-JoeCargoPiece_SY01Q00],,//,,,//,,,//,,,//,,,,,,"Mugai Station is locked down, and Old Joe's cargo, required to bring it back online, never arrived. Use your scanner along the area's speedgate road to locate the cargo and its high value data core."
+SY01Q00,SY01Q00_B1,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY01Q00_A1
+MMAUTO_START
+MSAE_FightTurretsLimbo
+CS_CUT_SY01Q00_A1",ULD_01-SY01Q00_A1,,,,EV_CC_CUT_SY01Q00_A1,,,,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q00,SY01Q00_C,NO_CHECKPOINT,TRUE,FALSE,LD_01-SY01Q00_B,"MSAE_TensionBeat_LOW
+ULD_01-SY01Q00_B",,INT-OldJoesCargo,32000,CARGO_COL-StationSupply_Z,Retrieve Joe's data,"[SYS_1 TS_SUB-MugaiMabe TS_ENEG-SY01Q00_C]
+[SYS_1 TS_SUB-MugaiMabe TS_COL-StationSupply_Z]",EV_EGE_ENEG-SY01Q00_C,Kill the Batiki,[SYS_1 TS_SUB-MugaiMabe TS_ENEG-SY01Q00_C],,//,,,//,,,//,,,,,,The Batiki destroyed the cargo vessel and stole the data required to bring the station back online. Retrieve the data core and return it to Mugai Station.
+SY01Q00,SY01Q00_C1,NO_CHECKPOINT,TRUE,FALSE,LD_01-SY01Q00_A,,,,,"EV_RP_ZONE_Sy1_Ss0_MUGAI_MABE, EV_RP_EN-EmpireCapitalShip",Back to Mugai Station,[SYS_1 TS_SUB-MugaiMabe TS_ZONE_Sy1_Ss0_MUGAI_MABE],,,,,,,,//,,,,,,90.0,FAIL,,NONE
+SY01Q00,SY01Q00_C2,CHECKPOINT_ALWAYS,TRUE,FALSE,"MSAE_Fight_Zaniboni
+MPAR_Intensity_1","ULD_01-SY01Q00_A
+MSOE_Fight_Zaniboni
+MMAUTO_STOP",,SS-MugaiBabe,30000,EV_EGE_ENEG-SY01Q00_D,Destroy the assaulting Batiki force,[SYS_1 TS_SUB-MugaiMabe TS_ENEG-SY01Q00_D],,,,,,,,//,,,,,,,,,NONE
+SY01Q00,SY01Q00_D,NO_CHECKPOINT,FALSE,FALSE,,CIR_COL-StationSupply_Z,,,,EV_IC_INT-MugaiHub_SY01Q00,Transmit data to Mugai Hub to reactivate station defenses,[SYS_1 TS_SUB-MugaiMabe TS_ZONE-S1-Mug_Imperial TS_INT-MugaiHub_SY01Q00],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q00,SY01Q00_D1,NO_CHECKPOINT,TRUE,FALSE,,,,,,EV_DC_TST_SY01Q00_D1,Link Old Joe,,,,,,,,,//,,,,,,,,,NONE
+SY01Q00,SY01Q00_E,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY01Q00_E
+CS_CUT_SY01Q00_E",ULD_01-SY01Q00_E,,,,EV_CC_CUT_SY01Q00_E,[H] - wait for cutscene,,,,,,,,,//,,,,,,,,,NONE
+SY01Q00,SY01Q00_E1,NO_CHECKPOINT,TRUE,FALSE,,,,,,EV_DC_TST_SY01Q00_E1,Link Old Joe,,,,,,,,,//,,,,,,,,,NONE
+SY01Q00,SY01Q00_E2,CHECKPOINT_ALWAYS,TRUE,FALSE,,ULD_01-SY01Q00-JoeCapital,,,,EV_SL_EN-EmpireCapitalShip,[H] - wait for cutscene,,,,,,,,,//,,,,,,,,,NONE
+SY01Q01,SY01Q01_0A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-ImperialAntenna_SY01Q01,Connect to the Imperial Node C-1,[SYS_1 TS_SUB-MugaiMabe TS_INT-ImperialAntenna_SY01Q01],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q01,SY01Q01_A,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_01-SY1Q01_A,ULD_01-SY1Q01_A,,,,EV_IC_INT-OldJoesShips(2),Search for two modules,[SYS_1 TS_SUB-MugaiMabe TS_INT-OldJoesShips],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q01,SY01Q01_B,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY1Q01_A1,ULD_01-SY1Q01_A1,,,,EV_IC_INT-NewJoeModule_SY01Q01A,Search for the last module,[SYS_1 TS_SUB-MugaiMabe TS_INT-NewJoeModule_SY01Q01A],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q01,SY01Q01_C,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY1Q01_B
+MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_2",,,Wave_SY1Q01,40000,EV_WO_Wave_SY1Q01,Destroy drones,[SYS_1 TS_SUB-MugaiMabe TS_Wave_SY1Q01],,//,,,//,,,//,,,//,,,,,,
+SY01Q01,SY01Q01_D,CHECKPOINT_ALWAYS,TRUE,FALSE,MSAE_Tension-Soft,"ULD_01-SY1Q01_B
+MSOE_Tension-Soft
+MMAUTO_STOP",,INT-ControlSystemSY01Q01,40000,EV_IC_INT-ControlSystemSY01Q01,Get the tracking system,[SYS_1 TS_SUB-MugaiMabe TS_INT-ControlSystemSY01Q01],,//,,,//,,,//,,,//,,,,,,Investigation reveals that the raider modules you recovered were destroyed by malfunctioning drones. Head to the Raflesia drone sorting facility to determine if the anomaly originates there.
+SY01Q01,SY01Q01_E,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY1Q01_C,,,,,"EV_RP_Zone_SP_Sy1_Ss0_02, EV_RP_SP_Raflesia",Reach Raflesia,[SYS_1 TS_SUB-MugaiMabe TS_Zone_SP_Sy1_Ss0_02 TS_SP_Raflesia],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q01,SY01Q01_F,CHECKPOINT_ALWAYS,TRUE,FALSE,"MMAUTO_START
+MSAE_LimboFight-NoLevel","ULD_01-SY1Q01_C
+MSOE_LimboFight-NoLevel
+MMAUTO_STOP
+CIR_COL-ControlSystem",,SP_Raflesia,35000,EV_DE_Turret-SY1Q01(6),Destroy the Raflesia turrets causing the anomaly,[SYS_1 TS_SUB-MugaiMabe TS_SP_Raflesia TS_Turret-SY1Q01],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q02,SY01Q02_A,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY01Q02_QuestZone,ULD_01-SY01Q02_QuestZone,,,,EV_RP_SP_Cave,Reach the Cavity,[SYS_1 TS_SUB-MugaiMabe TS_SP_Cave],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q02,SY01Q02_B,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY01Q02_A
+MMAUTO_START
+MSAE_Fight_Zaniboni
+MPAR_Intensity_1","ULD_01-SY01Q02_A
+MSOE_Fight_Zaniboni
+MMAUTO_STOP",,Wave_SY01Q02_A,30000,EV_WO_Wave_SY01Q02_A,Destroy Gamma Batiki,[SYS_1 TS_SUB-MugaiMabe TS_SP_Cave TS_Wave_SY01Q02_A],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q02,SY01Q02_C,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_Sy1_Ss0_A08,Reach Mining Eden,[SYS_1 TS_SUB-MugaiMabe TS_Zone_Sy1_Ss0_A08],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q02,SY01Q02_D,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY01Q02_B
+MMAUTO_START
+MSAE_Fight_Zaniboni
+MPAR_Intensity_1","ULD_01-SY01Q02_B
+MSOE_Fight_Zaniboni
+MMAUTO_STOP",,Wave_SY01Q02_B,30000,EV_WO_Wave_SY01Q02_B,Destroy Beta Batiki,[SYS_1 TS_SUB-MugaiMabe TS_Zone_Sy1_Ss0_A08 TS_Wave_SY01Q02_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q02,SY01Q02_E,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_SP_Yaksha,Find the endangered raider,[SYS_1 TS_SUB-MugaiMabe TS_SP_Yaksha],,//,,,//,,,//,,,//,,,,,,You encountered more Batiki but found no trace of the raider. Homerus is picking up a new signal from him.
+SY01Q02,SY01Q02_F,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY01Q02_C
+MMAUTO_START
+MSAE_Fight_Frabetti
+MPAR_Intensity_1","ULD_01-SY01Q02_C
+MSOE_Fight_Frabetti
+MMAUTO_STOP",,Wave_SY01Q02,30000,EV_WO_Wave_SY01Q02,Kill all the Batiki,[SYS_1 TS_SUB-MugaiMabe TS_SP_Yaksha TS_Wave_SY01Q02],,//,,,//,,,//,,,//,,,,,,"At the location marked by Homerus, you discover the endangered raider was a trap set by the Batiki."
+SY01Q03,SY01Q03_A,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY01Q03_A,,,,,EV_RP_EscortCargo-SY01Q03,Reach the mining area,[SYS_1 TS_SUB-MugaiMabe TS_Zone_SP_Sy1_Ss0_00 TS_EscortCargo-SY01Q03],,//,,,//,,,//,,,//,,EV_DE_EscortCargo-SY01Q03,,,,NONE
+SY01Q03,SY01Q03_B,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY01Q03_B,"ULD_01-SY01Q03_B
+ULD_01-SY01Q03_A",,,,EV_CAPY_EscortCargo-SY01Q03,Protect the cargo,[SYS_1 TS_SUB-MugaiMabe TS_Zone_SP_Sy1_Ss0_00 TS_EscortCargo-SY01Q03],,//,,,//,,,//,,,//,,EV_DE_EscortCargo-SY01Q03,,,,NONE
+SY01Q04,SY01Q04_A,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_01-SY01Q04_Redda,,,,,EV_IC_INT-ReddaSpeak_SY01Q04,Contact the raider who asked for help,[SYS_1 TS_SUB-MugaiMabe TS_EN-Redda],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q04,SY01Q04_B,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_Sy1_Ss0_A16,Reach Mugai Down,[SYS_1 TS_SUB-MugaiMabe TS_Zone_Sy1_Ss0_A16],,//,,,//,,,//,,,//,,,,,,The raider who requested your assistance appears to have dropped something near a Neterunian statue in the Mugai Down sector. Use your scanner to investigate the area and locate the lost payload.
+SY01Q04,SY01Q04_C,CHECKPOINT_SAFE,TRUE,FALSE,"LD_01-SY01Q04_C
+MMAUTO_START
+MSAE_Movement_Fight_Frabetti","MSOE_Movement_Fight_Frabetti
+MMAUTO_STOP",,Zone_Sy1_Ss0_A16,30000,EV_IC_INT-MemoryFragment,Find the statue and use your scanner to locate what the raider lost,[SYS_1 TS_SUB-MugaiMabe TS_Zone_Sy1_Ss0_A16 TS_INT-MemoryFragment],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q04,SY01Q04_D,NO_CHECKPOINT,FALSE,FALSE,,ULD_01-SY01Q04_C,,,,EV_RP_EN-Redda,Bring the neural fragment back to the raider,[SYS_1 TS_SUB-MugaiMabe TS_Zone_SP_Sy1_Ss0_06 TS_EN-Redda],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q04,SY01Q04_E,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY01Q04_E
+MMAUTO_START
+MSAE_LimboFight-NoLevel","ULD_01-SY01Q04_E
+ULD_01-SY01Q04_Redda
+MSOE_LimboFight-NoLevel
+MMAUTO_STOP",,Wave_SY01Q04_E,30000,EV_WO_Wave_SY01Q04_E,Fight against Ubique,[SYS_1 TS_SUB-MugaiMabe TS_Zone_SP_Sy1_Ss0_06 TS_EN-Ubique],,//,,,//,,,//,,,//,,,,,,"You have successfully recovered the neural fragment lost by Redda X, which contains her entire memory core. Ubique, another raider, is now hunting for it and demands you hand it over."
+SY01Q05,SY01Q05_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_RP_Zone_Sy1_Ss0_A00, EV_RP_SG-ArenaWay",Reach the gate to the Precious Four area,[SYS_1 TS_SUB-MugaiMabe TS_SG-ArenaWay],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q05,SY01Q05_B,NO_CHECKPOINT,TRUE,FALSE,LD_01-SY01Q05_B,ULD_01-SY01Q05_B,,SG-ArenaWay,35000,EV_WO_Wave_SY01Q05_B,Blast away the Batiki around the gate,[SYS_1 TS_SUB-MugaiMabe TS_Wave_SY01Q05_B],,//,[SYS_1 TS_EN_BatikiGuard],,//,,,//,,,//,,,,,,NONE
+SY01Q05,SY01Q05_B1,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY01Q05_B0
+CS_CUT_SY01Q05_B1
+MMAUTO_START","ULD_01-SY01Q05_B0
+ULD_01-SY01Q16_POI1
+MMAUTO_STOP",,,,EV_CC_CUT_SY01Q05_B1,[H] - wait for cutscene,,,,,,,,,//,,,,,,,,,NONE
+SY01Q05,SY01Q05_C,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_EXG_SG-Merapi,Go to the Precious Four area,[SYS_1 TS_SUB-TheCore],,//,,,//,,,//,,,//,,,,,,You secured the gate area. Old Joe reports that the Batiki are striking all four stations at once and asks you to intervene on every front.
+SY01Q05,SY01Q05_C1,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY01Q05_C0
+CS_CUT_SY01Q05_C1
+MMAUTO_START","ULD_01-SY01Q05_C0
+MMAUTO_STOP",,,,EV_CC_CUT_SY01Q05_C1,[H] - wait for cutscene,,,,,,,,,//,,,,,,,,,NONE
+SY01Q05,SY01Q05_D,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_QE_SY01Q06,Help Crystal Station,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SS_Crystal_CED],EV_QE_SY01Q07,Help Emerald Station,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SS_Emerald_PowerGen],EV_QE_SY01Q08,Help Opaleum Station,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SS_Opaleum_Foundry],EV_QE_SY01Q09,Help Sapphirum Station,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SS_Sapphirum_Factory],,//,,,,,,NONE
+SY01Q05,SY01Q05_E,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_RP_Zone_Sy1_Ss2_MN_CurlyCore, EV_RP_MN-CurlyCore",Reach Dyrcona,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_MN_CurlyCore],,//,,,//,,,//,,,//,,,0.0,,,"You protected the four stations, but the fight is not over. Dyrcona, the Batiki leader, joins the battle to seek revenge against you."
+SY01Q05,SY01Q05_F,NO_CHECKPOINT,TRUE,FALSE,"LD_03-SY01Q05_F
+CS_CUT_SY01Q05_F
+MMAUTO_START
+MSAE_FightTurretsLimbo",,,,,EV_CC_CUT_SY01Q05_F,[H] - wait for cutscene,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q05,SY01Q05_G,CHECKPOINT_ALWAYS,TRUE,FALSE,"MPAR_Intensity_1
+LD_03-SY01Q05_G","EAL_UP_150
+ULD_03-SY01Q16_POI2
+ULD_03-SY01Q05_G
+MSOE_FightTurretsLimbo
+MMAUTO_STOP",,,,EV_DE_EN-Dyrcona,Eliminate the generators and core to destroy Dyrcona's capital ship,[SYS_1 TS_SUB-TheCore TS_EN-Dyrcona],,//,,,//,,,//,,,//,,,0.0,,,NONE
+SY01Q06,SY01Q06_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_RP_Zone_Sy1_Ss2_SS_Crystal_CED, EV_RP_SS-Crystal",Reach Crystal Station,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SS_Crystal_CED],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q06,SY01Q06_B,NO_CHECKPOINT,TRUE,FALSE,"LD_03-SY01Q06_B
+LD_03-SY01Q06_C
+MMAUTO_START
+MSAE_LimboFight-NoLevel","ULD_03-SY01Q06_B
+MSAE_Tension-Soft",,SS-Crystal,50000,EV_WO_Wave_SY01Q06_B,Crush Batiki's commandos,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SS_Crystal_CEDl TS_Wave_SY01Q06_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q06,SY01Q06_B1,NO_CHECKPOINT,TRUE,FALSE,,"MSOE_Tension-Soft
+MMAUTO_STOP",,SS-Crystal,50000,EV_IC_INT-StationRec-Crystal,Sync with the Crystal Station hub to land,[SYS_1 TS_SUB-TheCore TS_INT-StationRec-Crystal],,//,,,,,,,,,,,,,,,NONE
+SY01Q06,SY01Q06_C,CHECKPOINT_ALWAYS,TRUE,FALSE,CS_CUT_SY01Q06_C,ULD_03-SY01Q06_C,,,,EV_CC_CUT_SY01Q06_C,[H] - wait for cutscene,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q07,SY01Q07_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_RP_Zone_Sy1_Ss2_SS_Emerald_PowerGen, EV_RP_SS-Emerald",Reach Emerald Station,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SS_Emerald_PowerGen],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q07,SY01Q07_B,NO_CHECKPOINT,TRUE,FALSE,"LD_03-SY01Q07_B
+MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_1",ULD_03-SY01Q07_B,,SS_Emerald,50000,EV_DE_INT-VirusPurple(6),Use the scanner to locate the Batiki's Viruses and destroy them,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SS_Emerald_PowerGen TS_INT-VirusPurple],,//,,,//,,,//,,,//,,,180.0,FAIL,,The Batiki have deployed virus totems that are locking down Emerald Station. Use your scanner to locate and destroy them to neutralize the threat.
+SY01Q07,SY01Q07_C,NO_CHECKPOINT,TRUE,FALSE,"LD_03-SY01Q07_C
+MPAR_Intensity_2","ULD_03-SY01Q07_C
+MSAE_Tension-Soft",,SS_Emerald,50000,EV_WO_Wave_SY01Q07_C,Destroy the backup Batiki,[SYS_1 TS_SUB-TheCore TS_Wave_SY01Q07_C],,//,,,//,,,,,,,,,,,,Purge the remaining Batiki forces around the station
+SY01Q07,SY01Q07_C1,NO_CHECKPOINT,TRUE,FALSE,,"MSOE_Tension-Soft
+MMAUTO_STOP",,SS_Emerald,50000,EV_IC_INT-StationRec-Emerald,Sync with the Emerald Station hub to land,[SYS_1 TS_SUB-TheCore TS_INT-StationRec-Emerald],,//,,,,,,,,,,,,,,,NONE
+SY01Q07,SY01Q07_D,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_03-SY01Q07_D
+CS_CUT_SY01Q07_D",ULD_03-SY01Q07_D,,,,EV_CC_CUT_SY01Q07_D,[H] - wait for cutscene,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q08,SY01Q08_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_RP_Zone_Sy1_Ss2_SS_Opaleum_Foundry, EV_RP_SS-Opaleum",Reach Opaleum Station,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SS_Opaleum_Foundry],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q08,SY01Q08_B,NO_CHECKPOINT,TRUE,FALSE,"LD_03-SY01Q08_B
+MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_1",,,SS-Opaleum,50000,EV_DE_INT-Interferometer(3),Destroy the Interferometers,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SS_Opaleum_Foundry TS_INT-Interferometer],,//,,,//,,,//,,,//,,,,,,"Destroy the Batiki interferometers surrounding Opaleum Station, then stand alongside Old Joe to defend the station."
+SY01Q08,SY01Q08_C,NO_CHECKPOINT,TRUE,FALSE,"LD_03-SY01Q08_C
+MPAR_Intensity_2","ULD_03-SY01Q08_B
+ULD_03-SY01Q08_C
+MSAE_Tension-Soft",,SS-Opaleum,50000,EV_WO_Wave_SY01Q08_C,Fight alongside Old Joe's capital ship against the Batiki,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SS_Opaleum_Foundry TS_Wave_SY01Q08_C],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q08,SY01Q08_C1,NO_CHECKPOINT,TRUE,FALSE,,"MSOE_Tension-Soft
+MMAUTO_STOP",,SS-Opaleum,50000,EV_IC_INT-StationRec-Opaleum,Sync with the Opaleum Station hub to land,[SYS_1 TS_SUB-TheCore TS_INT-StationRec-Opaleum],,//,,,,,,,,,,,,,,,NONE
+SY01Q08,SY01Q08_D,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_03-SY01Q08_D
+CS_CUT_SY01Q08_D",ULD_03-SY01Q08_D,,,,EV_CC_CUT_SY01Q08_D,,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q09,SY01Q09_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_RP_Zone_Sy1_Ss2_SS_Sapphirum_Factory, EV_RP_SS-Sapphirum",Reach Sapphirum Station,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SS_Sapphirum_Factory],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q09,SY01Q09_B,NO_CHECKPOINT,TRUE,FALSE,"LD_03-SY01Q09_B
+CS_CUT_SY01Q09_B
+MMAUTO_START
+MSAE_FightLimbo",,,Cargo2_SY01Q09,40000,EV_DE_Cargo2_SY01Q09,Chase the fleeing cargo ships and recover the stolen generator,"[SYS_1 TS_SUB-TheCore TS_Cargo2_SY01Q09]
+[SYS_1 TS_SUB-TheCore TS_Cargo1_SY01Q09]",,//,,,//,,,//,,,//,,EV_EF_Cargo2_SY01Q09,,,,"The stolen generator is aboard one of three Batiki cargo ships fleeing through a backgate. Intercept the cargo vessel before it escapes, retrieve the generator core, and bring it back to the station to bring it online."
+SY01Q09,SY01Q09_C,CHECKPOINT_ALWAYS,TRUE,FALSE,MSAE_Tension-Exploration,"MSOE_Tension-Exploration
+MMAUTO_STOP",,INT-Generator_A,40000,EV_IC_INT-Generator_A,Get the station's generator,[SYS_1 TS_SUB-TheCore TS_INT-Generator_A],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q09,SY01Q09_D,NO_CHECKPOINT,FALSE,FALSE,,ULD_03-SY01Q09_B,,,,EV_IC_INT-GeneratorRoot,Reinstall the generator in the Station's engine module,[SYS_1 TS_SUB-TheCore TS_INT-GeneratorRoot],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q09,SY01Q09_D1,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Tension-Soft","MSOE_Tension-Soft
+MMAUTO_STOP",,SS_Sapphirum_Factory,30000,EV_IC_INT-StationRec-Sapphirum,Sync with the Sapphirum Station hub to land,[SYS_1 TS_SUB-TheCore TS_INT-StationRec-Sapphirum],,//,,,,,,,,,,,,,,,NONE
+SY01Q09,SY01Q09_E,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_03-SY01Q09_E
+CS_CUT_SY01Q09_E",ULD_03-SY01Q09_E,,,,EV_CC_CUT_SY01Q09_E,[H] - wait for cutscene,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q10,SY01Q10_A,NO_CHECKPOINT,FALSE,FALSE,"LD_03-SY01Q10_Oran
+LD_03-SY01Q10_A",ULD_03-SY01Q10_A,,,,EV_IC_INT-OranSpeak_SY01Q10A,Contact Oran,[SYS_1 TS_SUB-TheCore TS_EN-Oran],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q10,SY01Q10_A1,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_DC_TST_SY01Q10_A1,Link Oran,,,//,,,,,,,,,,,,,,,NONE
+SY01Q10,SY01Q10_B1,NO_CHECKPOINT,FALSE,FALSE,"LD_03-SY01Q10_B1
+LD_03-EnemiesQ10_Turrets",ULD_03-SY01Q10_B1,,,,EV_IC_INT-BrainImplant_Opaleum,Retrieve Op-BI,[SYS_1 TS_SUB-TheCore TS_INT-BrainImplant_Opaleum],EV_IC_INT-BrainImplant_Sapphire,Retrieve Saph-BI,[SYS_1 TS_SUB-TheCore TS_INT-BrainImplant_Sapphire],,//,,,,,,,,,,,,NONE
+SY01Q10,SY01Q10_B2,CHECKPOINT_SAFE,TRUE,FALSE,"LD_03-SY01Q10_B
+MMAUTO_START
+MSAE_Fight_Frabetti
+MPAR_Intensity_1","ULD_03-SY01Q10_B
+MSOE_Fight_Frabetti
+MMAUTO_STOP",,Wave_SY01Q10_B1,50000,EV_WO_Wave_SY01Q10_B1,Kill the Batiki,[SYS_1 TS_SUB-TheCore TS_Wave_SY01Q10_B1],,//,,,//,,,,,,,,,,,,NONE
+SY01Q10,SY01Q10_C1,NO_CHECKPOINT,FALSE,FALSE,LD_03-SY01Q10_C1,ULD_03-SY01Q10_C1,,,,EV_IC_INT-BrainImplant_Emerald,Retrieve Em-BI,[SYS_1 TS_SUB-TheCore TS_INT-BrainImplant_Emerald],EV_IC_INT-BrainImplant_Crystal,Retrieve Cryl-BI,[SYS_1 TS_SUB-TheCore TS_INT-BrainImplant_Crystal],,,,,,,,,,,,,,NONE
+SY01Q10,SY01Q10_C2,CHECKPOINT_SAFE,TRUE,FALSE,"LD_03-SY01Q10_C
+MMAUTO_START
+MSAE_Fight_Frabetti
+MPAR_Intensity_1","ULD_03-SY01Q10_C
+MSOE_Fight_Frabetti
+MMAUTO_STOP",,Wave_SY01Q10_C,50000,EV_WO_Wave_SY01Q10_C,Destroy the Batiki,[SYS_1 TS_SUB-TheCore TS_Wave_SY01Q10_C],,,,,,,,,,,,,,,,,NONE
+SY01Q10,SY01Q10_F,NO_CHECKPOINT,FALSE,FALSE,LD_03-SY01Q10_F,"ULD_03-SY01Q10_F
+LD_03-SY01Q10_G",,,,EV_IC_INT-OranSpeak_SY01Q10F,Bring BIs back to Oran,[SYS_1 TS_SUB-TheCore TS_EN-Oran],,//,,,//,,,//,,,//,,,,,,You have secured the stolen implants from the Batiki. Transport them back to Oran.
+SY01Q10,SY01Q10_G,NO_CHECKPOINT,TRUE,FALSE,CS_CUT_SY01Q10_G,"ULD_03-SY01Q10_G
+ULD_03-SY01Q10_Oran",,,,EV_CC_CUT_SY01Q10_G,[H] - wait for cutscene,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q10,SY01Q10_H,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_03-SY01Q10_H
+MMAUTO_START
+MSAE_Fight_Zaniboni
+MPAR_Intensity_1","ULD_03-SY01Q10_H
+ULD_03-EnemiesQ10_Turrets
+MSOE_Fight_Zaniboni
+MMAUTO_STOP",,Wave_SY01Q10_H,50000,EV_WO_Wave_SY01Q10_H,Kill Oran and the Batiki commando,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SG_AsteroidWay TS_Wave_SY01Q10_H],,//,,,//,,,//,,,//,,,,,,"Oran orchestrated the stolen implant scheme alongside the Batiki to retaliate for your successful defense of the Precious Four, stations built upon the sacrifice of his people, the Mhaafek."
+SY01Q11,SY01Q11_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Gath5,Reach the location Lay Off has transmitted to you,[SYS_1 TS_SUB-AsteroidWay TS_Gath05],,,,,,,,,,,,,,,,,NONE
+SY01Q11,SY01Q11_B,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_GO_Gath5,Enter Ahm-Kha and find its power source,[SYS_1 TS_SUB-AsteroidWay TS_Gath05],,//,,,//,,,//,,,//,,,,,,"At the ruin, your AI realizes Lay Off misunderstood its nature. He somehow holds the key to enter this ancient Neterunian structure, which hides a treasure."
+SY01Q11,SY01Q11_C,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RP_EN-Lay,Go back to Lay Off,[SYS_1 TS_SUB-AsteroidWay TS_EN-Lay],,//,,,//,,,//,,,//,,,,,,"You found the treasure: a Neterunian rune Homerus names Medheru. Lay Off begs you to deliver it, offering a reward."
+SY01Q12,SY01Q12_A0,NO_CHECKPOINT,FALSE,FALSE,LD_04-SY01Q12_A0,,,,,EV_IC_INT-RodolfoClue,Follow the trail to find Rod,[SYS_1 TS_SUB-AsteroidWay TS_INT-RodolfoClue],,,,,,,,,,,,,,,,,NONE
+SY01Q12,SY01Q12_A,NO_CHECKPOINT,TRUE,FALSE,"LD_04-SY01Q12_A
+MMAUTO_START
+MSAE_Tension-Exploration",ULD_04-SY01Q12_A0,,,,"EV_RP_Zone_Sy1_Ss3_A01, EV_RP_EN-Rodolfo",Reach Rod Hally,[SYS_1 TS_SUB-AsteroidWay TS_Zone_Sy1_Ss3_A01 TS_EN-Rodolfo],,//,,,//,,,//,,,//,,,70.0,FAIL,,NONE
+SY01Q12,SY01Q12_B,CHECKPOINT_ALWAYS,TRUE,FALSE,"MSAE_Fight_Zaniboni
+MPAR_Intensity_1","MSOE_Fight_Zaniboni
+MMAUTO_STOP",,Zone_Sy1_Ss3_A01,30000,EV_EGE_ENEG-SY01Q12_B,Help Rod against morays,[SYS_1 TS_SUB-AsteroidWay TS_ENEG-SY01Q12_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q12,SY01Q12_C,CHECKPOINT_SAFE,FALSE,FALSE,,ULD_04-SY01Q12_A,,,,EV_VR_QuestSignal_A,Destroy moray secretion to reactivate A-Signal,[SYS_1 TS_SUB-AsteroidWay TS_QuestSignal_A],EV_EGE_ENEG-SY01Q12_C,Clear the area of morays,[SYS_1 TS_SUB-AsteroidWay TS_ENEG-SY01Q12_C],,//,,,//,,,//,,,,,,"You rescued Rod from the morays, but he is still unable to finish his job. Locate the comm signals blocked by moray secretions and bring them back online."
+SY01Q12,SY01Q12_D,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_VR_QuestSignal_B,Destroy moray secretion to reactivate B-Signal,[SYS_1 TS_SUB-AsteroidWay TS_QuestSignal_B],EV_EGE_ENEG-SY01Q12_D,Clear the area of morays,[SYS_1 TS_SUB-AsteroidWay TS_ENEG-SY01Q12_D],,//,,,//,,,//,,,,,,NONE
+SY01Q13,SY01Q13_A0,NO_CHECKPOINT,FALSE,FALSE,LD_04-SY01Q13_A,,,,,EV_RP_Wave_SY01Q13_A,Reach the location given by Haru,[SYS_1 TS_SUB-AsteroidWay TS_Wave_SY01Q13_A],,,,,,,,,,,,,,,,,NONE
+SY01Q13,SY01Q13_A,CHECKPOINT_SAFE,FALSE,FALSE,,ULD_04-SY01Q13_A,,Wave_SY01Q13_A,30000,EV_WO_Wave_SY01Q13_A,Scalp the enemy raiders,[SYS_1 TS_SUB-AsteroidWay TS_Wave_SY01Q13_A],,//,,,//,,,//,,,//,,"EV_QE_SY01Q14
+EV_QE_SY02Q03",,,,NONE
+SY01Q13,SY01Q13_B0,NO_CHECKPOINT,FALSE,FALSE,LD_05-SY01Q13_B,,,,,EV_RP_Wave_SY01Q13_B,Find the second group of Iron enemies,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q13_B],,,,,,,,,,,,,,,,,NONE
+SY01Q13,SY01Q13_B,CHECKPOINT_SAFE,FALSE,FALSE,,ULD_05-SY01Q13_B,,Wave_SY01Q13_B,30000,EV_WO_Wave_SY01Q13_B,Scalp the enemy raiders,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q13_B],,//,,,//,,,//,,,//,,"EV_QE_SY01Q14
+EV_QE_SY02Q03",,,,NONE
+SY01Q13,SY01Q13_C0,NO_CHECKPOINT,FALSE,FALSE,LD_05-SY01Q13_C,,,,,EV_RP_Wave_SY01Q13_C,Find the last group of Iron enemies,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q13_C],,,,,,,,,,,,,,,,,NONE
+SY01Q13,SY01Q13_C,CHECKPOINT_SAFE,FALSE,FALSE,,ULD_05-SY01Q13_C,,Wave_SY01Q13_C,30000,EV_WO_Wave_SY01Q13_C,Scalp the enemy raiders,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q13_C],,//,,,//,,,,,,,,"EV_QE_SY01Q14
+EV_QE_SY02Q03",,,,NONE
+SY01Q13,SY01Q13_D,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-HaruSpeak_SY01Q13,Bring scalps to Haru,[SYS_1 TS_SUB-AsteroidWay TS_EN-Haru],,//,,,//,,,//,,,//,,"EV_QE_SY01Q14
+EV_QE_SY02Q03",,,,NONE
+SY01Q14,SY01Q14_A0,NO_CHECKPOINT,FALSE,FALSE,LD_05-SY01Q14_A,,,,,EV_RP_INT-GoldSphere_A,Reach the location given by Koyash,[SYS_1 TS_SUB-Outpost TS_INT-GoldSphere_A],,,,,,,,,,,,,,,,,NONE
+SY01Q14,SY01Q14_A01,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,INT-GoldSphere_A,30000,EV_WO_Wave_SY01Q14_A01,Kill the Iron Raiders guarding the gold sphere,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q14_A01],,,,,,,,,,,,,,,,,NONE
+SY01Q14,SY01Q14_A,CHECKPOINT_ALWAYS,TRUE,FALSE,,ULD_05-SY01Q14_A,,,30000,EV_IC_INT-GoldSphere_A,Recover the first gold sphere,[SYS_1 TS_SUB-Outpost TS_INT-GoldSphere_A],,//,,,//,,,,,,,,"EV_QE_SY01Q13
+EV_QE_SY02Q01",,,,NONE
+SY01Q14,SY01Q14_A1,NO_CHECKPOINT,FALSE,FALSE,LD_05-SY01Q14_A1,,,,,EV_RP_Wave_SY01Q14_A1,Reach the Iron Raider unit,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q14_A1],,,,,,,,,,,,,,,,,NONE
+SY01Q14,SY01Q14_A2,CHECKPOINT_ALWAYS,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Zaniboni","ULD_05-SY01Q14_A1
+MSOE_Fight_Zaniboni
+MMAUTO_STOP",,,30000,EV_WO_Wave_SY01Q14_A1,Kill Iron Raiders,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q14_A1],,,,,,,,,,,,,,,,,NONE
+SY01Q14,SY01Q14_B,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_05-SY01Q14_B,ULD_05-SY01Q14_B,,,,EV_IC_INT-GoldSphere_B,Recover the second gold sphere,[SYS_1 TS_SUB-Outpost TS_INT-GoldSphere_B],,//,,,//,,,,,,,,"EV_QE_SY01Q13
+EV_QE_SY02Q01",,,,NONE
+SY01Q14,SY01Q14_C,CHECKPOINT_ALWAYS,FALSE,FALSE, , ,,,,EV_IC_INT-KoyashSpeak_SY01Q14,Bring the two spheres to Koyash,[SYS_1 TS_SUB-Outpost TS_EN-Erast],,//,,,//,,,,,,,,"EV_QE_SY01Q13
+EV_QE_SY02Q01",,,,NONE
+SY01Q15,SY01Q15_A,NO_CHECKPOINT,FALSE,FALSE,LD_05-SY01Q15_A,CS_CUT_SY01Q15_A,,,,EV_RP_EN-Kathlee,Reach Kathlee,[SYS_1 TS_SUB-Outpost TS_EN-Kathlee],,//,,,//,,,,,,,,,,,,NONE
+SY01Q15,SY01Q15_B,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_TensionBeat_SOFT",,,EN-Kathlee,15000,EV_EF_EN-Kathlee,Follow Kathlee,[SYS_1 TS_SUB-Outpost TS_EN-Kathlee],,//,,,//,,,,,,,,,,,,NONE
+SY01Q15,SY01Q15_C,NO_CHECKPOINT,TRUE,FALSE,"LD_05-SY01Q15_D
+CS_CUT_SY01Q15_C
+MSAE_Fight_Carnemolla",ULD_05-SY01Q15_A,,,,EV_CC_CUT_SY01Q15_C,[H] - wait for cutscene,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q15,SY01Q15_D,CHECKPOINT_ALWAYS,TRUE,FALSE,MPAR_Intensity_2,"ULD_05-SY01Q15_D
+",,ENEG-SY01Q15_D,38000,EV_EGE_ENEG-SY01Q15_D,Kill the creatures,[SYS_1 TS_SUB-Outpost TS_ENEG-SY01Q15_D],,//,,,//,,,,,,,,,,,,"You discover Outpost has been attacked by morays, crippling its systems. Eliminate them and restore communications."
+SY01Q15,SY01Q15_E,CHECKPOINT_ALWAYS,FALSE,FALSE,MSAE_Tension-Soft,"MSOE_Tension-Soft
+MMAUTO_STOP
+LD_SY01Q15-POST2",,INT-ScannerSY01Q15,30000,EV_IC_INT-ScannerSY01Q15,Use Kathlee's code,[SYS_1 TS_SUB-Outpost TS_INT-ScannerSY01Q15],,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_A,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_02-SY01Q16_A,ULD_02-SY01Q16_A,,,,EV_EXG_SG-Galeras,Go to Marianan area,[SYS_1 TS_SUB-Marianan],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q16,SY01Q16_A1,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_INT-AntiGhost_Marianan,Activate the Repulsion System,[SYS_1 TS_SUB-Marianan TS_INT-AntiGhost_Marianan],,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_A2,CHECKPOINT_ALWAYS,TRUE,FALSE,CS_CUT_SY01Q16_A2,,,,,EV_CC_CUT_SY01Q16_A2,[H] - wait for cutscene,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_A3,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY01Q16_A3,,,,,EV_RP_Wave_SY01Q16_A4,Track Ionic,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q16_A4],,,,,,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_A4,CHECKPOINT_ALWAYS,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_1","ULD_02-SY01Q16_A3
+MSOE_Fight_Carnemolla
+MMAUTO_STOP",,Wave_SY01Q16_A4,60000,EV_WO_Wave_SY01Q16_A4,Kill the morays,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q16_A4],,,,,,,,,,,,,,,,,"Marianan lacks a containment cage, leaving it infested with Alter Masks. Retrieve ionic carbon from a moray nest to use as protection against the Masks."
+SY01Q16,SY01Q16_B,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_02-SY01Q16_B,,,,,CARGO_COL-IC_Raw,Collect Ionic Coal,[SYS_1 TS_SUB-Marianan TS_Zone_SY1_SS2_IonicField],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q16,SY01Q16_C0,CHECKPOINT_SAFE,FALSE,FALSE,LD_02-SY01Q16_C0,"ULD_02-SY01Q16_B
+ULD_02-SY01Q16_C0",,,,"EV_RP_Zone_SY1_SS2_RehunArea, EV_RP_INT-DamagedRehun_SY01Q16",Reach the search area,[SYS_1 TS_SUB-Marianan TS_Zone_SY1_SS2_RehunArea],,//,,,//,,,//,,,//,,,,,Safe-Rehun-1,"No one knows how to defeat Ban Krylam. You must first find a clue, a biological remnant that allows you to study it."
+SY01Q16,SY01Q16_C,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_IC_INT-DamagedRehun_SY01Q16,Use the scanner to find a clue on Ban Krylam,"[SYS_1 TS_SUB-Marianan TS_Zone_SY1_SS2_RehunArea]
+[SYS_1 TS_SUB-Marianan TS_INT-DamagedRehun_SY01Q16]",,//,,,//,,,,,,,,,,,Safe-Rehun-1,NONE
+SY01Q16,SY01Q16_C1,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY01Q16_C1,,,,,EV_RP_Wave_SY01Q16_C2,Follow the bio-trace to another Rehun,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q16_C2],,,,,,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_C2,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_1","MSOE_Fight_Carnemolla
+MMAUTO_STOP",,Wave_SY01Q16_C2,60000,EV_WO_Wave_SY01Q16_C2,Kill the bounty hunters,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q16_C2],,,,,,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_C3,CHECKPOINT_ALWAYS,TRUE,FALSE,,ULD_02-SY01Q16_C1,,,,EV_IC_INT-MemoryFragment_Jammer01,Examine the neural fragment,[SYS_1 TS_SUB-Marianan TS_INT-MemoryFragment_Jammer01],,,,,,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_D,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_RP_INT-Rehun,Return to the Rehun echo,[SYS_1 TS_SUB-Marianan TS_TM-RehunShield_SY01Q16],,//,,,//,,,//,,,//,,,,,Safe-Rehun-2,NONE
+SY01Q16,SY01Q16_E,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_ZERODMG_TM-RehunShield_SY01Q16,Break the protection of the Rehun,[SYS_1 TS_SUB-Marianan TS_TM-RehunShield_SY01Q16],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q16,SY01Q16_F0,CHECKPOINT_SAFE,TRUE,FALSE,,,,,,EV_DC_TST_SY01Q16_F0,Consult Homerus,,,//,,,//,,,,,,,,,,,Safe-Rehun-2,NONE
+SY01Q16,SY01Q16_F,CHECKPOINT_ALWAYS,FALSE,TRUE,,,,,,EV_RE_SS-Marianan,Land in Marianan Station,[SYS_1 TS_SUB-Marianan TS_SS-Marianan],,//,,,//,,,//,,,//,,,,,,"Ban Krylam's biological product, the Rehun, is protected by a shield impervious to your weapons. Homerus claims that the smugglers might have a solution: an imperial-forbidden sonic matter weapon. To get in touch with one of them, you'll need to use Marianan Station's encrypted channel."
+SY01Q16,SY01Q16_F1,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_DC_TST_SY01Q16_F1,Link Razan,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_F2,CHECKPOINT_SAFE,FALSE,FALSE,LD_02-SY01Q16_D,,,,,EV_RP_Zone_QuestTriggerSY01Q16F2,Follow Razan’s coordinates,[SYS_1 TS_SUB-Marianan TS_Zone_QuestTriggerSY01Q16F2],,,,,,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_G0,CHECKPOINT_SAFE,FALSE,FALSE,,ULD_02-SY01Q16_D,,,,EV_IC_INT-MemoryFragment_Razan00,Use the scanner to locate and examine the Peak Neural Fragment,"[SYS_1 TS_SUB-Marianan TS_INT-MemoryFragment_Razan00]
+[SYS_1 TS_SUB-Marianan TS_Zone_QuestTriggerSY01Q16F2]",,//,,,//,,,//,,,//,,,,,,"Razan, an arms smuggler, can procure the sonic matter weapon you require. You must locate and retrieve two neural fragments she lost. If bounty hunters recover them, her location and operations will be compromised."
+SY01Q16,SY01Q16_G,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY01Q16_G,,,,,EV_RP_Zone_SY1_SS2_DreamFragment,Follow the trail to the second fragment,[SYS_1 TS_SUB-Marianan TS_Zone_SY1_SS2_DreamFragment],,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_G1,CHECKPOINT_ALWAYS,TRUE,FALSE,,ULD_02-SY01Q16_G,,Zone_SY1_SS2_DreamFragment,46000,EV_IC_INT-MemoryFragment_Razan01,Retrieve and examine the Dream Neural Fragment,"[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q16_G]
+[SYS_1 TS_SUB-Marianan TS_INT-MemoryFragment_Razan01]",,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_G2,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_EXG_SG-ForbiddenWay,Return to Mugai Station area,[SYS_1 TS_SUB-MugaiMabe],,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_G3,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_EXG_SG-Sakurajima,Bring the fragments to Razan in the Guild Stands area,[SYS_1 TS_SUB-AsteroidWay],,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_G4,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_04-SY01Q16_G4,,,,,EV_RP_EN-Haru,Ask Haru about Razan,[SYS_1 TS_SUB-AsteroidWay TS_EN-Haru],EV_RP_EN-Erast,Ask Koyash Dey about Razan,[SYS_1 TS_SUB-AsteroidWay TS_EN-Erast],EV_RP_EN-Lay,Ask Lay Off about Razan,[SYS_1 TS_SUB-AsteroidWay TS_EN-Lay],,,,,,,,,,,"While tracking Razan, her signal vanishes. Her fragments lead you to three raiders who may know where she is. Find her."
+SY01Q16,SY01Q16_G5,NO_CHECKPOINT,FALSE,FALSE,LD_04-SY01Q16_E,ULD_04-SY01Q16_G4,,,,"EV_RP_Zone_SY01Q16_MurenaNest, EV_RP_EN-Razan",Reach the location identified by Homerus from the data obtained,[SYS_1 TS_SUB-AsteroidWay TS_Zone_SY01Q16_MurenaNest],,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_G6,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_1","MSOE_Fight_Carnemolla
+MMAUTO_STOP",,ENEG-SY01Q16_G6,50000,EV_EGE_ENEG-SY01Q16_G6,Kill the morays,[SYS_1 TS_SUB-AsteroidWay TS_ENEG-SY01Q16_G6],EV_DE_TM-MoraySecretion_SY01Q16(3),Destroy the moray secretion and save Razan,[SYS_1 TS_SUB-AsteroidWay TS_TM-MoraySecretion_SY01Q16],,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_H1,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_DC_TST_SY01Q16_H1,Link Razan,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_H2,NO_CHECKPOINT,FALSE,FALSE,LD_04-SY01Q16_H2,,,,,"EV_RP_Zone_SY1_SS4_HuntersSY01Q16, EV_RP_ENEG-SY01Q16_H2",Reach the bounty hunters' location,[SYS_1 TS_SUB-AsteroidWay TS_Zone_SY1_SS4_HuntersSY01Q16],,//,,,//,,,,,,,,,,,,"Morays weren’t the only danger. Bounty hunters are after Razan. She is grateful for your aid, but the fight continues."
+SY01Q16,SY01Q16_H3,CHECKPOINT_ALWAYS,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_1","ULD_04-SY01Q16_H2
+MSOE_Fight_Carnemolla
+MMAUTO_STOP",,Zone_SY1_SS4_HuntersSY01Q16,40000,EV_EGE_ENEG-SY01Q16_H2,Kill the bounty hunters on Razan's trail,[SYS_1 TS_SUB-AsteroidWay TS_ENEG-SY01Q16_H2],,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_H4,NO_CHECKPOINT,FALSE,FALSE,LD_05-SY01Q16_H4,,,,,"EV_RP_Wave_SY01Q16_H4, EV_RP_Zone_Sy1_SS5_Q16KaledoBounty",Arrive at Kaledo Station,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q16_H4],,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_H5,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_1","MSOE_Fight_Carnemolla
+MMAUTO_STOP",,Wave_SY01Q16_H4,40000,EV_WO_Wave_SY01Q16_H4,Eliminate the bounty hunters on Razan's trail,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q16_H4],,//,,,//,,,,,,,,,,,,NONE
+SY01Q16,SY01Q16_H6,CHECKPOINT_ALWAYS,TRUE,FALSE,,ULD_05-SY01Q16_H4,,,,EV_IC_INT-MemoryFragment_Jammer02,Gather more data from J’s memories,[SYS_1 TS_SUB-Outpost TS_INT-MemoryFragment_Jammer02],,,,,,,,,,,,,,,,,"Hidden among the bounty hunters tracking Razan was J, a hunter who is actually after you. Examine the neural fragment to find out why he's hunting you."
+SY01Q16,SY01Q16_I,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_02-SY01Q16_I,"ULD_02-SY01Q16_I
+ULD_04-SY01Q16_E",,,,EV_IC_INT-StationCircuits_SY01Q16,Repair the Kaledo Station hub power unit,[SYS_1 TS_SUB-Outpost TS_INT-StationCircuits_SY01Q16],,//,,,//,,,,,,,,,,,,Repair the power unit of Kaledo Station to reactivate it and retrieve the sonic matter weapon promised by Razan.
+SY01Q16,SY01Q16_L0,CHECKPOINT_ALWAYS,FALSE,TRUE,,,,,,EV_BU_MOD50b-SonicMatterShooter_XS,Take a SHO-Gun in Kaledo Station,[SYS_1 TS_SUB-Outpost TS_SS-Galilean],,,,,,,,,,,,,,,,,
+SY01Q16,SY01Q16_L,CHECKPOINT_ALWAYS,FALSE,TRUE,,,,,,EV_MM_MOD50b-SonicMatterShooter_XS,Mount the SHO-Gun,[SYS_1 TS_SUB-Outpost TS_SS-Galilean],,//,,,//,,,,,,,,,,,,NONE
+SY01Q17,SY01Q17_A,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY01Q17_A,,,,,EV_IC_INT-SunLoriSpeak_SY01Q17,Contact Sun Lori,[SYS_1 TS_SUB-Marianan TS_EN-Lori],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q17,SY01Q17_A1,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_DC_TST_SY01Q17_A1,Link Sun Lori,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q17,SY01Q17_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_02-SY01Q17_B,ULD_02-SY01Q17_B,,,,EV_IC_INT-MemoryFragment_Blaise,Locate and recover a clue about Blaise,"[SYS_1 TS_SUB-Marianan TS_Zone_Sy1_SS2_Q17BlaiseMemory]
+[SYS_1 TS_SUB-Marianan TS_INT-MemoryFragment_Blaise]",,//,,,//,,,//,,,//,,,,,,"You meet Sun Lori, who seeks Blaise Adcott. She offers a reward if you find him. Homerus reveals Blaise was one of the Raider Ones, the first raiders in Neterun."
+SY01Q17,SY01Q17_C,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY01Q17_C,,,,,EV_RP_MN-Blaise,Follow Blaise's last memory,[SYS_1 TS_SUB-Marianan TS_MN-Blaise],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q17,SY01Q17_D,NO_CHECKPOINT,FALSE,FALSE,,ULD_02-SY01Q17_C,,,,EV_IC_INT-BlaiseJunk,Take a piece of Blaise's destroyed ship,[SYS_1 TS_SUB-Marianan TS_INT-BlaiseJunk],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q17,SY01Q17_E,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_02-SY01Q17_D
+MMAUTO_START
+MSAE_LimboFight-NoLevel","ULD_02-SY01Q17_D
+MSOE_LimboFight-NoLevel
+MMAUTO_STOP",,Wave_SY01Q17_E,30000,EV_WO_Wave_SY01Q17_E,Kill Ubique,[SYS_1 TS_SUB-Marianan TS_EN-Ubique],,//,,,//,,,//,,,//,,,,,,"You find Blaise destroyed, apparently killed by a raider identified as Ubique."
+SY01Q17,SY01Q17_F,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RP_EN-Lori,Bring the piece to Sun Lori,[SYS_1 TS_SUB-Marianan TS_EN-Lori],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q18,SY01Q18_A,NO_CHECKPOINT,FALSE,FALSE,LD_03-SY01Q18_A,ULD_03-SY01Q18_A,,,,EV_DE_TM_Interferometer_SY01Q18-01,Use the scanner to locateand the Batiki Interferometer in Mugai Area and destroy it,[SYS_1 TS_SUB-MugaiMabe TS_TM_Interferometer_SY01Q18-01],EV_DE_TM_Interferometer_SY01Q18-02,Use the scanner to locate the Batiki Interferometer in Precious Four Area and destroy it,[SYS_1 TS_SUB-TheCore TS_TM_Interferometer_SY01Q18-02],EV_DE_TM_Interferometer_SY01Q18-03,Use the scanner to locate the Batiki Interferometer in Guild Stands Area and destroy it,[SYS_1 TS_SUB-AsteroidWay TS_TM_Interferometer_SY01Q18-03],EV_DE_TM_Interferometer_SY01Q18-04,Use the scanner to locate the Batiki Interferometer in Oupost Area and destroy it,[SYS_1 TS_SUB-Outpost TS_TM_Interferometer_SY01Q18-04],,//,,,,,,NONE
+SY01Q19,SY01Q19_A1,NO_CHECKPOINT,FALSE,FALSE,LD_05-SY01Q19_A1,,,,,EV_RP_Wave_SY01Q19_A2,Reach the Zanion pack,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q19_A2],,,,,,,,,,,,,,,,,NONE
+SY01Q19,SY01Q19_A2,CHECKPOINT_ALWAYS,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_1","ULD_05-SY01Q19_A1
+MSOE_Fight_Carnemolla
+MMAUTO_STOP",,Wave_SY01Q19_A2,50000,EV_WO_Wave_SY01Q19_A2,Replenish your sonic matter,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q19_A2],,,,,,,,,,,,,,,,,Recharge the sonic matter weapon by drawing energy from a nearby pack of Zanions.
+,SY01Q19_A3,,FALSE,FALSE,,,,,,EV_DC_TST_SY01Q19_A3,Consult Homerus,,,,,,,,,,,,,,,,,,NONE
+SY01Q19,SY01Q19_A4,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_05-SY01Q19_A4,ULD_05-SY01Q19_A4,,,,EV_DMG_TM-NeserefInducer_SY01Q19,Shoot sonic matter at the Neseref Inducer,[SYS_1 TS_SUB-Outpost TS_TM-NeserefInducer_SY01Q19],,,,,,,,,,,,,,,,,"Sonic matter can be used to reanimate Neterunian technology. Homerus directs you to a nearby Neseref, a Neterunian portal, that must be reactivated."
+SY01Q19,SY01Q19_A5,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_EXG_SG-MariOut,Use the Neseref to reach Marianan,[SYS_1 TS_SUB-Outpost TS_SG-OutMari],,,,,,,,,,,,,,,,,NONE
+SY01Q19,SY01Q19_A,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY01Q19_A,ULD_02-SY01Q19_A,,,,EV_DE_TM-RehunShield_SY01Q16,Break the protection of the Rehun,[SYS_1 TS_SUB-Marianan TS_INT-Rehun TS_TM-RehunShield_SY01Q16],,//,,,//,,,//,,,,,,,,,Use the sonic matter weapon to breach the Rehun's shield and analyze it
+SY01Q19,SY01Q19_B,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_0",,,INT-Rehun,30000,EV_IC_INT-Rehun,Examine the Rehun,[SYS_1 TS_SUB-Marianan TS_INT-Rehun TS_TM-RehunShield_SY01Q16],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q19,SY01Q19_C,CHECKPOINT_ALWAYS,TRUE,FALSE,MPAR_Intensity_2,"MSOE_Fight_Carnemolla
+MMAUTO_STOP",,INT-Rehun,45000,EV_CQ_RehunEvent_SY01Q19,Protect yourself from the onslaught of creatures drawn to the Rehun,[SYS_1 TS_SUB-Marianan TS_INT-Rehun TS_TM-RehunShield_SY01Q16],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q20,SY01Q20_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_EG_GA-Nomoirum,Go to the Neterunian Tree,[SYS_1 TS_SUB-Outpost TS_GA-Nomoirum],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q21,SY01Q21_A0,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-CargoMemory_SY01Q21,Examine Old Joe’s Wreck,[SYS_1 TS_SUB-AsteroidWay TS_INT-CargoMemory_SY01Q21],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q21,SY01Q21_A,NO_CHECKPOINT,FALSE,FALSE,LD_04-SY01Q21_A,,,,,EV_RP_POI-SY01Q21,Use the scanner to locate anomalous E-Was in the Support Dump Area,"[SYS_1 TS_SUB-AsteroidWay TS_Zone_SY01Q21_Dump]
+[SYS_1 TS_SUB-AsteroidWay TS_POI-SY01Q21]",,//,,,//,,,//,,,,,,,,,NONE
+SY01Q21,SY01Q21_B,CHECKPOINT_ALWAYS,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_1","ULD_04-SY01Q21_A
+MSOE_Fight_Carnemolla
+MMAUTO_STOP",,Wave_SY01Q21_B,30000,EV_WO_Wave_SY01Q21_B,Kill all E-Was,[SYS_1 TS_SUB-AsteroidWay TS_Wave_SY01Q21_B],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q22,SY01Q22_A0,CHECKPOINT_ALWAYS,FALSE,FALSE,ULD_02-Whale,,,,,EV_EXG_SG-MariOut,Reach Marianan,[SYS_1 TS_SUB-Marianan],,,,,,,,,,,,,,,,,NONE
+SY01Q22,SY01Q22_A1,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_02-SY01Q22_A,,,,,EV_RP_Zone_QuestTriggerSY01Q22A1,Follow the Ban Krylam's path,[SYS_1 TS_SUB-Marianan TS_Zone_QuestTriggerSY01Q22A1],,,,,,,,,,,,,,,,,NONE
+SY01Q22,SY01Q22_A2,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_02-SY01Q22_A2,,,,,EV_RP_TM-NeterunianBattery_SY01Q22,Scan the nearby area for a Ban Krylam-effective weapon,"[SYS_1 TS_SUB-Marianan TS_TM-NeterunianBattery_SY01Q22]
+[SYS_1 TS_SUB-Marianan TS_Zone_QuestTriggerSY01Q22A1]",,,,,,,,,,,,,,,,,You are on the trail of Ban Krylam. Use the scanner to locate and use a launch point in the area to fire the energy toxin at the Colossus and drop its defenses.
+SY01Q22,SY01Q22_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_DMG_TM-NeterunianBattery_SY01Q22,Use the Heka,[SYS_1 TS_SUB-Marianan TS_TM-NeterunianBattery_SY01Q22],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q22,SY01Q22_B0,NO_CHECKPOINT,TRUE,FALSE,,ULD_02-SY01Q22_A2,,,,EV_DC_TST_SY01Q22_B0,Consult Homerus,,,,,,,,,,,,,,,,,,
+SY01Q22,SY01Q22_B,NO_CHECKPOINT,TRUE,FALSE,"LD_02-SY01Q22_B
+CS_CUT_SY01Q22_B
+MMAUTO_START
+MSAE_Fight-Horror
+MPAR_Intensity_0",,,,,EV_CC_CUT_SY01Q22_B,[H] - wait for cutscene,,,//,,,//,,,//,,,,,,,,,NONE
+SY01Q22,SY01Q22_C,NO_CHECKPOINT,TRUE,FALSE,LD_02-SY01Q22_C,ULD_02-SY01Q22_C,,KO-Whale,150000,EV_DE_TM-WhaleScale_SY01Q22(6),Weaken Ban Krylam by shattering its scales,[SYS_1 TS_SUB-Marianan TS_TM-WhaleScale_SY01Q22],,//,,,//,,,//,,,,,,,,,"The Heka fired the toxin at Ban Krylam, nullifying its defenses. Cubit, the fading capital ship, has it pinned down. Attack its scales to weaken it."
+SY01Q22,SY01Q22_D,NO_CHECKPOINT,TRUE,FALSE,"LD_02-SY01Q22_D
+MPAR_Intensity_1",ULD_02-SY01Q22_D,,KO-Whale,150000,EV_WO_Wave_SY01Q22_D,Eliminate the threat before it disrupts the Heka's flow,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q22_D],,//,,,//,,,//,,,,,,120.0,,,The Heka is under attack. Defend it to ensure it maintains the toxin stream on Ban Krylam.
+SY01Q22,SY01Q22_E,NO_CHECKPOINT,TRUE,FALSE,LD_02-SY01Q22_E,ULD_02-SY01Q22_E,,KO-Whale,150000,EV_DE_TM-WhaleScale_SY01Q22E(6),Tear more scales from Ban Krylam,[SYS_1 TS_SUB-Marianan TS_TM-WhaleScale_SY01Q22E],,//,,,,,,,,,,,,,,,Strip away the Colossus's remaining scales and defend the Heka whenever it comes under attack.
+SY01Q22,SY01Q22_F,NO_CHECKPOINT,TRUE,FALSE,"LD_02-SY01Q22_F
+MPAR_Intensity_2",ULD_02-SY01Q22_F,,KO-Whale,150000,EV_WO_Wave_SY01Q22_F,Clear the creatures surrounding the Heka,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q22_F],EV_WO_Wave_SY01Q22_F1,Kill all alterized raiders around the Heka,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q22_F1],,,,,,,,,,,180.0,,,NONE
+SY01Q22,SY01Q22_G,NO_CHECKPOINT,TRUE,FALSE,LD_02-SY01Q22_G,"ULD_02-SY01Q22_G
+MSOE_Fight-Horror
+MMAUTO_STOP",,KO-Whale,150000,EV_DE_TM-WhaleScale_SY01Q22G(6),Make Ban Krylam suffer while Homerus overloads the Heka,[SYS_1 TS_SUB-Marianan TS_TM-WhaleScale_SY01Q22G],,,,,,,,,,,,,,,,,NONE
+,,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_02-SY01Q22_H
+CS_CUT_SY01Q22_H",,,,,EV_CC_CUT_SY01Q22_H,[H] - wait for cutscene,,,,,,,,,,,,,,,,,,//
+,,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_QuestTriggerSY01Q22,//,[SYS_1 TS_SUB-Marianan TS_Zone_QuestTriggerSY01Q22],,,,,,,,,,,,,EV_WhaleWin,,,,//
+SY01Q22,SY01Q22_L,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_02-SY01Q22_L
+CS_CUT_SY01Q22_L","ULD_02-SY01Q22_L
+ULD_02-SY01Q22_A
+ULD_02-SY01Q22_B",,,,EV_CC_CUT_SY01Q22_L,[H] - wait for cutscene,,,,,,,,,,,,,,,,,,NONE
+SY01Q22,SY01Q22_M,NO_CHECKPOINT,FALSE,FALSE,"LD_02-SY01Q22_M
+LD_02-SY01Q22_GhostCapital",ULD_02-SY01Q22_M,,,,EV_IC_INT-Armilla_BanKrylam,Retrieve the second Armilla,[SYS_1 TS_SUB-Marianan TS_INT-Armilla_BanKrylam],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q22,SY01Q22_N,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_DC_TST_SY01Q22_N,"Link Cubit, Fading Capital",,,,,,,,,,,,,,,,,,NONE
+SY01Q23,SY01Q23_A,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY01Q23_A,,,,,"EV_RP_Wave_SY01Q23_B, EV_RP_Zone_Sy1_SS2_Q23Fight1",Reach the hunting area,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q23_B],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_B,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Frabetti
+MPAR_Intensity_1",,,Wave_SY01Q23_B,60000,EV_WO_Wave_SY01Q23_B,Collect the first bounty,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q23_B],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_B1,CHECKPOINT_ALWAYS,TRUE,FALSE,MSAE_Tension-Soft,,,Wave_SY01Q23_B,60000,EV_IC_INT-MemoryFragment_Faceless00,Examine the neural fragment,[SYS_1 TS_SUB-Marianan TS_INT-MemoryFragment_Faceless00],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_C,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY01Q23_C,,,,,"EV_RP_Zone_Sy1_SS2_Q23Fight2, EV_RP_Wave_SY01Q23_D",Reach the hunting area,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q23_D],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_D,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Frabetti
+MPAR_Intensity_1",,,Wave_SY01Q23_D,60000,EV_WO_Wave_SY01Q23_D,Collect the second bounty,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q23_D],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_D1,CHECKPOINT_ALWAYS,TRUE,FALSE,MSAE_Tension-Soft,"CR_5000
+ULD_02-SY01Q23_C
+MSOE_Tension-Soft
+MMAUTO_STOP",,Wave_SY01Q23_D,60000,EV_IC_INT-MemoryFragment_Reyton00,Examine the neural fragment,[SYS_1 TS_SUB-Marianan TS_INT-MemoryFragment_Reyton00],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_E,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY01Q23_E,,,,,"EV_RP_Zone_Sy1_SS2_Q23Fight3, EV_RP_Wave_SY01Q23_F",Reach the hunting area,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q23_F],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_F,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Frabetti
+MPAR_Intensity_1",,,Wave_SY01Q23_F,60000,EV_WO_Wave_SY01Q23_F,Collect the third bounty,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q23_F],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_F1,CHECKPOINT_ALWAYS,TRUE,FALSE,MSAE_Tension-Soft,"CR_5000
+ULD_02-SY01Q23_E
+MSOE_Tension-Soft
+MMAUTO_STOP",,Wave_SY01Q23_F,60000,EV_IC_INT-MemoryFragment_Huty00,Examine the neural fragment,[SYS_1 TS_SUB-Marianan TS_INT-MemoryFragment_Huty00],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_G,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY01Q23_G,,,,,"EV_RP_Zone_Sy1_SS2_Q23Fight4, EV_RP_Wave_SY01Q23_H",Reach the hunting area,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q23_H],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_H,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Frabetti
+MPAR_Intensity_1",,,Wave_SY01Q23_H,60000,EV_WO_Wave_SY01Q23_H,Collect the fourth bounty,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q23_H],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_H1,CHECKPOINT_ALWAYS,TRUE,FALSE,MSAE_Tension-Soft,"CR_5000
+ULD_02-SY01Q23_G
+MSOE_Tension-Soft
+MMAUTO_STOP",,Wave_SY01Q23_H,60000,EV_IC_INT-MemoryFragment_Tonath00,Examine the neural fragment,[SYS_1 TS_SUB-Marianan TS_INT-MemoryFragment_Tonath00],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_I,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY01Q23_I,,,,,"EV_RP_Zone_Sy1_SS2_Q23Fight5, EV_RP_Wave_SY01Q21_L",Reach the hunting area,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q23_L],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q23,SY01Q23_L,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Frabetti
+MPAR_Intensity_1",,,Wave_SY01Q23_L,60000,EV_WO_Wave_SY01Q23_L,Collect the fifth bounty,[SYS_1 TS_SUB-Marianan TS_Wave_SY01Q23_L],,//,,,//,,,//,,,,,,,,,"You eliminated Sun Lori's targets, discovering they were the original Raider Ones group. Bound to a shared resurrection network, if one returns, they all return. Someone wants them permanently erased. Track down and eliminate the final target, Ubique."
+SY01Q23,SY01Q23_L1,CHECKPOINT_ALWAYS,TRUE,FALSE,MSAE_Tension-Soft,"ULD_02-SY01Q23_I
+MSOE_Tension-Soft
+MMAUTO_STOP",,Wave_SY01Q23_L,60000,EV_IC_INT-MemoryFragment_Ubique01,Examine the neural fragment,[SYS_1 TS_SUB-Marianan TS_INT-MemoryFragment_Ubique01],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q24,SY01Q24_A0,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-ImperialAntenna_SY01Q24,Connect to the Imperial Node C-2,[SYS_1 TS_SUB-Outpost TS_INT-ImperialAntenna_SY01Q24],,,,,,,,//,,,,,,,,,NONE
+SY01Q24,SY01Q24_A,NO_CHECKPOINT,FALSE,FALSE,LD_05-SY01Q24_A,,,,,"EV_RP_Wave_SY01Q24_B, EV_RP_Zone_Sy1_SS5_Q24Sphere",Reach the area of the Neterunian spherical monument,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q24_B],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q24,SY01Q24_B,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_2",ULD_05-SY01Q24_A,,Zone_Sy1_SS5_Q24Sphere,35000,EV_WO_Wave_SY01Q24_B,Kill all creatures,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q24_B],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q24,SY01Q24_C,NO_CHECKPOINT,TRUE,FALSE,MSAE_Tension-Soft,,,Zone_Sy1_SS5_Q24Sphere,35000,EV_IC_INT-SphereController_SY01Q24_C,Reactivate the first Containment Device,[SYS_1 TS_SUB-Outpost TS_INT-SphereController_SY01Q24_C],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q24,SY01Q24_D,NO_CHECKPOINT,TRUE,FALSE,"LD_05-SY01Q24_D
+MSAE_Fight_Carnemolla
+MPAR_Intensity_2""",ULD_05-SY01Q24_D,,Zone_Sy1_SS5_Q24Sphere,35000,EV_WO_Wave_SY01Q24_D,Exterminate newborn creatures,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q24_D],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q24,SY01Q24_E,NO_CHECKPOINT,TRUE,FALSE,MSAE_Tension-Soft,,,Zone_Sy1_SS5_Q24Sphere,35000,EV_IC_INT-SphereController_SY01Q24_E,Reactivate the second Containment Device,[SYS_1 TS_SUB-Outpost TS_INT-SphereController_SY01Q24_E],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q24,SY01Q24_F,NO_CHECKPOINT,TRUE,FALSE,"LD_05-SY01Q24_F
+MSAE_Fight_Carnemolla
+MPAR_Intensity_2""",ULD_05-SY01Q24_F,,Zone_Sy1_SS5_Q24Sphere,35000,EV_WO_Wave_SY01Q24_F,Exterminate newborn creatures,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q24_F],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q24,SY01Q24_G,NO_CHECKPOINT,TRUE,FALSE,MSAE_Tension-Soft,,,Zone_Sy1_SS5_Q24Sphere,35000,EV_IC_INT-SphereController_SY01Q24_G,Reactivate the third Containment Device,[SYS_1 TS_SUB-Outpost TS_INT-SphereController_SY01Q24_G],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q24,SY01Q24_H,NO_CHECKPOINT,TRUE,FALSE,"LD_05-SY01Q24_H
+MSAE_Fight_Carnemolla
+MPAR_Intensity_2""",ULD_05-SY01Q24_H,,Zone_Sy1_SS5_Q24Sphere,35000,EV_WO_Wave_SY01Q24_H,Exterminate newborn creatures,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q24_H],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q24,SY01Q24_I,NO_CHECKPOINT,TRUE,FALSE,MSAE_Tension-Soft,,,Zone_Sy1_SS5_Q24Sphere,35000,EV_IC_INT-SphereController_SY01Q24_M,Reactivate the fourth Containment Device,[SYS_1 TS_SUB-Outpost TS_INT-SphereController_SY01Q24_M],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q24,SY01Q24_L,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_05-SY01Q24_L
+MSAE_Fight_Carnemolla
+MPAR_Intensity_2""","ULD_05-SY01Q24_L
+MSOE_Fight_Carnemolla
+MMAUTO_STOP",,Zone_Sy1_SS5_Q24Sphere,35000,EV_WO_Wave_SY01Q24_L,Exterminate newborn creatures,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q24_L],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q25,SY01Q25_A,NO_CHECKPOINT,FALSE,FALSE,LD_03-SY01Q25_A,ULD_03-SY01Q25_A,,,,EV_RP_Zone_Sy1_Ss2_SP_Atom,Reach the Battery Plant area,[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SP_Atom],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q25,SY01Q25_A1,NO_CHECKPOINT,TRUE,FALSE,LD_03-AtomEnemies,,,SP_Ts_Atom,34000,EV_EGE_ENEG-SY01Q25_A1,Kill the Batiki,[SYS_1 TS_SUB-TheCore TS_ENEG-SY01Q25_A1],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q25,SY01Q25_B,NO_CHECKPOINT,TRUE,FALSE,LD_03-SY01Q25_B,ULD_03-SY01Q25_B,,SP_Ts_Atom,34000,EV_WO_Wave_SY01Q25_B,Kill Ubique,[SYS_1 TS_SUB-TheCore TS_Wave_SY01Q25_B],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q25,SY01Q25_B1,NO_CHECKPOINT,TRUE,FALSE,,,,SP_Ts_Atom,34000,EV_DC_TST_SY01Q25_B1,,,,//,,,//,,,//,,,,,,,,,NONE
+SY01Q25,SY01Q25_C,CHECKPOINT_ALWAYS,TRUE,FALSE,,ULD_03-AtomEnemies,,SP_Ts_Atom,34000,EV_IC_INT-AtomSwitch(15),Find the Power Triggers to reactivate the Atoms,[SYS_1 TS_SUB-TheCore TS_INT-AtomSwitch],,//,,,//,,,//,,,,,,,,,"You've successfully defended the Battery Plant against a wave of Batiki and an erratic raider, Ubique. Now, breach the facility and bring it back online. Use your scanner to locate and activate all Power Triggers."
+SY01Q26,SY01Q26_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-ImperialConsole_SY01Q26,Connect to the Control Console to access area data,[SYS_1 TS_SUB-TheCore TS_INT-ImperialConsole_SY01Q26],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q26,SY01Q26_B,NO_CHECKPOINT,FALSE,FALSE,LD_03-MemoryMorgana,ULD_03-MemoryMorgana,,,,EV_IC_INT-MemoryFragment_EWas04,Locate and examine the source of disturbance near the Containment Field Generator,"[SYS_1 TS_SUB-TheCore TS_Zone_Sy1_Ss2_SP_Morgana]
+[SYS_1 TS_SUB-TheCore TS_INT-MemoryFragment_EWas04]",,//,,,//,,,//,,,,,,,,,NONE
+SY01Q26,SY01Q26_C,NO_CHECKPOINT,TRUE,FALSE,LD_03-SY01Q26_C,,,Wave_SY01Q26_C,35000,EV_WO_Wave_SY01Q26_C,Kill out-of-control E-Was Raiders,[SYS_1 TS_SUB-TheCore TS_Wave_SY01Q26_C],,//,,,//,,,//,,,,,,,,,You trace the anomaly to a neural fragment of an E-Was Raider. Examining it triggers an attack from active E-Was.
+SY01Q26,SY01Q26_D,CHECKPOINT_ALWAYS,TRUE,FALSE,,ULD_03-SY01Q26_C,,Wave_SY01Q26_C,35000,EV_IC_INT-MemoryFragment_EWas01,Examine the neural fragment,[SYS_1 TS_SUB-TheCore TS_INT-MemoryFragment_EWas01],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q27,SY01Q27_A,CHECKPOINT_SAFE,FALSE,FALSE,LD_02-SY01Q27_A,,,,,EV_IC_INT-ZanionButt_SY01Q27(6),Locate and harvest husks from the Zanion nests in the Marianan area,"[SYS_1 TS_SUB-Marianan TS_Zone_SY01Q27_ZanionNest]
+[SYS_1 TS_SUB-Marianan TS_INT-ZanionButt_SY01Q27]",,//,,,//,,,//,,,,,,,,Marianan-Station,NONE
+SY01Q27,SY01Q27_B,CHECKPOINT_ALWAYS,FALSE,FALSE,,ULD_02-SY01Q27_A,,,,EV_IC_INT-ImperialRelay_SY01Q27,Connect to the Imperial Relay to transmit the data on the husks,[SYS_1 TS_SUB-Marianan TS_INT-ImperialRelay_SY01Q27],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q28,SY01Q28_A,CHECKPOINT_SAFE,FALSE,FALSE,LD_05-SY01Q28_A,,,,,EV_IC_INT-ZanionButt_SY01Q28(6),Locate and harvest husks from the Zanion nests in the Outpost area,"[SYS_1 TS_SUB-Outpost  TS_Zone_SY01Q28_ZanionNest]
+[SYS_1 TS_SUB-Outpost  TS_INT-ZanionButt_SY01Q28]",,//,,,//,,,//,,,,,,,,Outpost-Station,NONE
+SY01Q28,SY01Q28_B,CHECKPOINT_ALWAYS,FALSE,FALSE,,ULD_05-SY01Q28_A,,,,EV_IC_INT-ImperialRelay_SY01Q28,Connect to the Imperial Relay to transmit the data on the husks,[SYS_1 TS_SUB-Outpost TS_INT-ImperialRelay_SY01Q28],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q29,SY01Q29_A0,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-ImperialAntenna_SY01Q29,Connect to the Imperial Node C-3,[SYS_1 TS_SUB-AsteroidWay TS_INT-ImperialAntenna_SY01Q29],,,,,,,,//,,,,,,,,,NONE
+SY01Q29,SY01Q29_A,NO_CHECKPOINT,FALSE,FALSE,LD_04-SY01Q29_A,,,,,EV_RP_Wave_SY01Q29_B,Go to the Zanion Nest in the Guild Stands area,[SYS_1 TS_SUB-AsteroidWay TS_Wave_SY01Q29_B],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q29,SY01Q29_B,CHECKPOINT_SAFE,TRUE,FALSE,,ULD_04-SY01Q29_A,,Wave_SY01Q29_B,40000,EV_WO_Wave_SY01Q29_B,Clean Up,[SYS_1 TS_SUB-AsteroidWay TS_Wave_SY01Q29_B],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q30,SY01Q30_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_SY01Q30_MonitoringSector,Reach the Outpost Monitoring Sector,[SYS_1 TS_SUB-Outpost TS_Zone_SY01Q30_MonitoringSector],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q30,SY01Q30_B,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-Switcher_SY01Q30A,Bring Sensor Node Grid O-I online,[SYS_1 TS_SUB-Outpost TS_INT-Switcher_SY01Q30A],EV_IC_INT-Switcher_SY01Q30B,Bring Sensor Node Grid O-II online,[SYS_1 TS_SUB-Outpost TS_INT-Switcher_SY01Q30B],EV_IC_INT-Switcher_SY01Q30C,Bring Sensor Node Grid O-III online,[SYS_1 TS_SUB-Outpost TS_INT-Switcher_SY01Q30C],,//,,,,,,,,,NONE
+SY01Q30,SY01Q30_C,NO_CHECKPOINT,TRUE,FALSE,"LD_05-SY01Q30_C
+CS_CUT_SY01Q30_C
+MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_Intensity_0",,,,,EV_CC_CUT_SY01Q30_C,,,,//,,,//,,,//,,,,,,,,,NONE
+SY01Q30,SY01Q30_D,CHECKPOINT_ALWAYS,TRUE,FALSE,MPAR_Intensity_2,"ULD_05-SY01Q30_C
+ULD_05-SY01Q30_A
+MSOE_Fight_Carnemolla
+MMAUTO_STOP",,EN-BountyH,40000,EV_DE_EN-BountyH,Destroy H's capital ship,,EV_WO_Wave_SY01Q30_C,Kill all bounty hunters,[SYS_1 TS_SUB-Outpost TS_Wave_SY01Q30_C],,//,,,//,,,,,,,,,"The Monitoring Sector malfunction was a trap set by a bounty hunter named H, a rival of J's who wants you dead. Eliminate him."
+SY01Q31,SY01Q31_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-ImperialAntenna_SY01Q31,Connect to the Imperial Node F-1,[SYS_1 TS_SUB-TheCore TS_INT-ImperialAntenna_SY01Q31],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q31,SY01Q31_B,NO_CHECKPOINT,FALSE,FALSE,LD_03-SY01Q31_B,,,,,EV_RP_Zone_QuestTriggerSY01Q31,Reach Glint Belt,[SYS_1 TS_SUB-TheCore TS_Zone_QuestTriggerSY01Q31],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q31,SY01Q31_C,CHECKPOINT_ALWAYS,TRUE,FALSE,,ULD_03-SY01Q31_B,,Zone_QuestTriggerSY01Q31,40000,EV_DE_Turret-SY01Q31(12),Find and terminate area neural turrets,[SYS_1 TS_SUB-TheCore TS_Zone_QuestTriggerSY01Q31],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q32,SY01Q32_A0,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RP_SUB-Marianan,Return to the Core and intercept Ban Hudel,[SYS_4 TS_SUB-Ruins TS_GA_Neseref_RuinsCore],,//,,,//,,,//,,,//,,,,,,NONE
+SY01Q32,SY01Q32_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RP_SUB-AsteroidWay,Return to Guild Stands,[SYS_1 TS_SUB-AsteroidWay],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q32,SY01Q32_A1,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_04-SY01Q32_A1,,,,,EV_RP_Zone_QuestTriggerSY01Q32A1,Use sonic matter at Neseref Junction to draw Ban Hudel,[SYS_1 TS_SUB-AsteroidWay TS_Zone_QuestTriggerSY01Q32A1],,//,,,//,,,,,,,,,,,,NONE
+SY01Q32,SY01Q32_A2,NO_CHECKPOINT,FALSE,FALSE,,ULD_04-SY01Q32_A1,,,,EV_DMG_TM-NeserefJunctionA,Shoot sonic matter at the Henu Junction,[SYS_1 TS_SUB-AsteroidWay TS_TM-NeserefJunctionA],EV_DMG_TM-NeserefJunctionB,Shoot sonic matter at the Heb Junction,[SYS_1 TS_SUB-AsteroidWay TS_TM-NeserefJunctionB],EV_DMG_TM-NeserefJunctionC,Shoot sonic matter at the Henet Junction,[SYS_1 TS_SUB-AsteroidWay TS_TM-NeserefJunctionC],,,,,,,,,,,NONE
+SY01Q32,SY01Q32_B,NO_CHECKPOINT,TRUE,FALSE,"LD_04-SY01Q32_B
+CS_CUT_Boss_Snake_Arrive
+MMAUTO_START
+MSAE_Fight-Movement-Neterunian
+MPAR_Intensity_0",,,,,EV_CC_CUT_Boss_Snake_Arrive,[H] - wait for cutscene,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q32,SY01Q32_C,CHECKPOINT_ALWAYS,TRUE,FALSE,MPAR_Intensity_2,"MSOE_Fight-Movement-Neterunian
+MMAUTO_STOP",,KO-Snake,150000,EV_DE_KO-Snake,Kill Ban Hudel,,,//,,,//,,,,,,,,,,,,Slay Ban Hudel by striking its weak points.
+SY01Q33,SY01Q33_A,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_04-SY01Q33_A,ULD_04-SY01Q33_A,,,,EV_IC_INT-Armilla_BanHudel,Take the Armilla,[SYS_1 TS_SUB-AsteroidWay TS_INT-Armilla_BanHudel],,//,,,//,,,//,,,,,,,,,NONE
+SY01Q34,SY01Q34_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_DMG_TM-NeserefInducer_CoreRuins,Activate the Neseref with a sonic matter weapon,[SYS_1 TS_SUB-Marianan TM-NeserefInducer_CoreRuins],,//,,,//,,,,,,,,,,,,NONE
+SY01Q34,SY01Q34_B,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_EG_GA_Neseref_CoreRuins,Explore the Neterunian Ruins,[SYS_1 TS_SUB-Marianan TS_GA_Neseref_CoreRuins],,//,,,//,,,,,,,,,,,,NONE
+SY01Q35,SY01Q35_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_EXG_SG-Ulawun,Use the Neseref to travel to Marianan,[SYS_1 TS_SUB-Outpost],,//,,,//,,,,,,,,,,,,NONE
+SY01Q35,SY01Q35_B,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_DC_TST_SY01Q35_B,Consult Homerus,,,//,,,//,,,,,,,,,,,,NONE
+SY01Q35,SY01Q35_C,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_QuestTriggerSY01Q35C,Resolve sonic matter misuse violation,[SYS_1 TS_SUB-Outpost TS_Zone_QuestTriggerSY01Q35C],,//,,,//,,,,,,,,,,,,"You used sonic matter to reactivate Neterunian technology, employing a contraband weapon. The Human Empire, represented by Old Joe, demands you answer for the violation."
+SY01Q35,SY01Q35_C1,NO_CHECKPOINT,TRUE,FALSE,"LD_05-SY01Q35_D
+MMAUTO_START
+MSAE_FightTurretsLimbo",,,Zone_QuestTriggerSY01Q35C,60000,EV_DC_TST_SY01Q35_C1,Link Old Joe,,,,,,,,,,,,,,,,,,
+SY01Q35,SY01Q35_D,CHECKPOINT_ALWAYS,TRUE,FALSE,MPAR_Intensity_1,"ULD_05-SY01Q35_D
+MSOE_FightTurretsLimbo
+MMAUTO_STOP",,Zone_QuestTriggerSY01Q35C,60000,EV_DE_EN-JammerCapital,Obliterate J's first capital,,EV_DE_EN-JammerCapitalB,Obliterate J's second capital,,EV_DE_EN-BadOldJoe,Obliterate Old Joe's capital,,,,,,,,,,,,NONE
+SY01Q35,SY01Q35_E,NO_CHECKPOINT,FALSE,FALSE,LD_05-SY01Q35_E,,,,,EV_RP_INT-MemoryFragment_Jammer03,Approach J’s neural fragment,[SYS_1 TS_SUB-Outpost TS_INT-MemoryFragment_Jammer03],,,,,,,,,,,,,,,,,"You have slain Old Joe and J once and for all, creating a power vacuum in the colonies of this galaxy. Take J's neural fragment and seek the truth about your bond."
+SY01Q35,SY01Q35_F,CHECKPOINT_ALWAYS,TRUE,FALSE,,ULD_05-SY01Q35_E,,,,EV_IC_INT-MemoryFragment_Jammer03,Extract J’s final memory,[SYS_1 TS_SUB-Outpost TS_INT-MemoryFragment_Jammer03],,,,,,,,,,,,,,,,,NONE
+SY01Q36,SY01Q36_A,NO_CHECKPOINT,FALSE,FALSE,"LD_02-SY01Q36_A
+LD_02-SY01Q36_A2
+CS_CUT_SY01Q36_A","CS_CUT_ENDGAME
+ULD_02-SY01Q36_A",,,,EV_RP_Zone_QuestTriggerSY01Q36A,Escape the Galaxy of Neterun,[SYS_1 TS_SUB-Marianan TS_Zone_QuestTriggerSY01Q36A],,,,,,,,,,,,,,,,,NONE
+,,,FALSE,FALSE,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,//
+,,,FALSE,FALSE,,,,,,,,,,,,,,,,,,,,,,,,,//
+,,,FALSE,FALSE,,,,,,,,,,,,,,,,,,,,,,,,,//
+,,,FALSE,FALSE,,,,,,,,,,,,,,,,,,,,,,,,,//
+QMIN00,QMIN00_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-Aluminium(20, SS-Caemeterium)",Deliver aluminium to Prometheus Station,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN01,QMIN01_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-Aluminium(40, SS-MugaiBabe)",Deliver aluminium to Mugai Station,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN02,QMIN02_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-Gold(30, SS-MugaiBabe)",Deliver gold to Mugai Station,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN03,QMIN03_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-Gold(50, SS-MugaiBabe)",Deliver zync to Mugai Station,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN04,QMIN04_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-Crystal(20, SS-Crystal)",Deliver crystal to Crystal Station,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN05,QMIN05_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-Crystal(20, SS-Marianan)",Deliver crystal to Marianan Station,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN06,QMIN06_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-Recondigen(5, SS-Galilean)",Deliver crystal to Kaledo Station,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN07,QMIN07_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-Recondigen(10, SS-Galilean)",Deliver recondigen to Kaledo Station,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN08,QMIN08_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-Radium(20, SS-Crystal)",Deliver radium to Crystal Station,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN09,QMIN09_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-IC_Raw(10, SS-Marianan)",Deliver ionic coal to Marianan Station,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN10,QMIN10_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-IC_Raw(20, SS-Marianan)",Deliver radium to Marianan Station,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN11,QMIN11_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-IC_Raw(30, SS-Marianan)",Deliver radium to Marianan Station,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN12,QMIN12_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-Gold(10, SS-GoldLastStand)",Deliver gold to Gold Last Stand,,,//,,,//,,,//,,,//,,,,,,NONE
+QMIN13,QMIN13_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,"EV_SE_COL-Aluminium(10, SS-IronLastStand)",Deliver aluminium to Iron Last Stand,,,//,,,//,,,//,,,//,,,,,,NONE
+,,,,,,,,,,,,,,//,,,//,,,//,,,,,,,,,//
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,//
+,,CHECKPOINT_SAFE,FALSE,FALSE,"LD_01-SY02Q00_A0
+CS_CUT_SY02Q00_A0",ULD_01-SY02Q00_A0,,,,EV_CC_CUT_SY02Q00_A0,[H] Wait for cutscene,,,//,,,//,,,//,,,,,,,,,//
+SY02Q00,SY02Q00_A,NO_CHECKPOINT,FALSE,FALSE,"LD_01-HARU
+LD_01-ERAST",,,,,"EV_RP_EN-Haru, EV_RP_EN-Erast",[C],"[SYS_2 TS_SUB-InsectKiss TS_EN-Haru]
+[SYS_2 TS_SUB-InsectKiss TS_EN-Erast]",,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q01,SY02Q01_A,CHECKPOINT_SAFE,FALSE,FALSE,"ULD_01-ERAST
+IAL_UP_200
+GAL_DOWN_200",,DC_TST_SY02Q01_A,,,EV_CQ_SS-Smaug,[C],[SYS_2 TS_SUB-InsectKiss TS_Zone_SY2-OutpostGold-Smaug],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q01,SY02Q01_B,NO_CHECKPOINT,FALSE,FALSE,,"LD_01-SY02Q01_B
+CS_CUT_SY02Q01_B",DC_TST_SY02Q01_B,,,EV_IC_INT-GoldConsole-SY02Q01(2),[C],[SYS_2 TS_SUB-InsectKiss TS_INT-GoldConsole-SY02Q01],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q01,SY02Q01_C,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_DE_EN-Vassal,[C],[SYS_2 TS_SUB-InsectKiss TS_EN-Vassal],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q01,SY02Q01_D,NO_CHECKPOINT,FALSE,FALSE,LD_01-HARU,ULD_01-SY02Q01_B,DC_TST_SY02Q01_D,,,EV_RP_EN-Haru,[C],[SYS_2 TS_SUB-InsectKiss TS_EN-Haru],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q02,SY02Q02_A,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY02Q02_A,,,,,EV_EGE_ENEG-SY02Q02_A,[C],[SYS_2 TS_SUB-InsectKiss TS_ENEG-SY02Q02_A],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q02,SY02Q02_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_01-SY02Q02_B,"ULD_01-SY02Q02_B
+CI_INT-NuclearBomb",,,,EV_IC_INT-NuclearBomb,[C],"[SYS_2 TS_SUB-InsectKiss TS_Wave_SY02Q02_B]
+[SYS_2 TS_SUB-InsectKiss TS_INT-NuclearBomb]",,//,,,//,,,//,,,,,,,,,NONE
+SY02Q02,SY02Q02_C,CHECKPOINT_SAFE,FALSE,FALSE,,"CIR_INT-NuclearBomb
+ULD_01-SY02Q02_A",,,,EV_IC_INT-IronGru,[C],[SYS_2 TS_SUB-InsectKiss TS_INT-IronGru],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q02,SY02Q02_D,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_SUB-IronSector,[C],[SYS_2 TS_SUB-IronSector],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q02,SY02Q02_E,CHECKPOINT_SAFE,FALSE,FALSE,LD_02-SY02Q02_E,ULD_02-SY02Q02_E,,,,EV_WO_Wave_SY02Q02_E,[C],[SYS_2 TS_SUB-IronSector TS_Wave_SY02Q02_E],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q02,SY02Q02_F,CHECKPOINT_SAFE,FALSE,FALSE,LD_02-SY02Q02_F,ULD_02-SY02Q02_F,,,,EV_WO_Wave_SY02Q02_F,[C],[SYS_2 TS_SUB-IronSector TS_Wave_SY02Q02_F],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q02,SY02Q02_G,NO_CHECKPOINT,FALSE,FALSE,LD_03-SY02Q02_G,,,,,EV_WO_Wave_SY02Q02_G,[C],[SYS_2 TS_SUB-IronProtectorate TS_Wave_SY02Q02_G],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q02,SY02Q02_H,NO_CHECKPOINT,FALSE,FALSE,"LD_03-SY02Q02_H
+CS_CUT_SY02Q02_H","ULD_03-SY02Q02_H
+ULD_01-HARU
+ULD_03-SY02Q02_G
+IAL_UP_400
+GAL_DOWN_400",,,,EV_CC_CUT_SY02Q02_H,[H] wait for cutscene,,,//,,,//,,,//,,,,,,,,,//
+SY02Q03,SY02Q03_A,CHECKPOINT_SAFE,FALSE,FALSE,"GAL_UP_200
+IAL_DOWN_200
+ULD_01-HARU
+LD_01-SY02Q03_A",,DC_TST_SY02Q03_A,,,EV_CQ_SS-Morya,[C],[SYS_2 TS_SUB-InsectKiss TS_Zone_SY2-OutpostIron-Morya],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q03,SY02Q03_B,NO_CHECKPOINT,FALSE,FALSE,,"LD_01-SY02Q03_B
+ULD_01-SY02Q03_A
+CS_CUT_SY02Q03_B",DC_TST_SY02Q03_B,,,EV_IC_INT-InjectableGold,[C],[SYS_2 TS_SUB-InsectKiss TS_INT-InjectableGold],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q03,SY02Q03_C,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_DE_EN-Volcano,[C],[SYS_2 TS_SUB-InsectKiss TS_EN-Volcano],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q03,SY02Q03_D,NO_CHECKPOINT,FALSE,FALSE,LD_01-ERAST,"ULD_01-SY02Q03_B
+CIR_INT-InjectableGold",DC_TST_SY02Q03_D,,,EV_RP_EN-Erast,[C],[SYS_2 TS_SUB-InsectKiss TS_EN-Erast],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q04,SY02Q04_A,CHECKPOINT_SAFE,FALSE,FALSE,LD_01-SY02Q04_A,,,,,EV_WO_Wave_SY02Q04_A,[C],[SYS_2 TS_SUB-InsectKiss TS_Wave_SY02Q04_A],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q04,SY02Q04_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_01-SY02Q04_B,,,,,EV_IC_INT-IronBomb-SY02Q04(3),[C],[SYS_2 TS_SUB-InsectKiss TS_INT-IronBomb-SY02Q04],,//,,,//,,,//,,,,,,360.0,,,NONE
+SY02Q04,SY02Q04_C,CHECKPOINT_SAFE,FALSE,FALSE,LD_01-ERAST,"ULD_01-SY02Q04_A
+ULD_01-SY02Q04_B",,,,EV_RP_EN-Erast,[C],[SYS_2 TS_SUB-InsectKiss TS_EN-Erast],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q04,SY02Q04_D,CHECKPOINT_SAFE,FALSE,FALSE,LD_01-SY02Q04_D,ULD_01-SY02Q04_D,,,,EV_IC_INT-CompressedGold-SY02Q04,[C],[SYS_2 TS_SUB-InsectKiss TS_INT-CompressedGold-SY02Q04],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q04,SY02Q04_E,CHECKPOINT_SAFE,FALSE,FALSE,LD_01-SY02Q04_E,LD_01-SY02Q04_E,,,,EV_WO_Wave_SY02Q04_E,[C],[SYS_2 TS_SUB-InsectKiss TS_Wave_SY02Q04_E],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q04,SY02Q04_F,CHECKPOINT_SAFE,FALSE,FALSE,"ULD_01-ERAST
+LD_06-SY02Q04_F",ULD_06-SY02Q04_F,,,,EV_WO_Wave_SY02Q04_F,[C],[SYS_2 TS_SUB-Maelstrom TS_Wave_SY02Q04_F],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q04,SY02Q04_G,NO_CHECKPOINT,FALSE,FALSE,LD_06-SY02Q04_G,,,,,EV_RP_MN-OblivionSphere,[C],[SYS_2 TS_SUB-Maelstrom TS_MN-OblivionSphere],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q04,SY02Q04_H,CHECKPOINT_SAFE,FALSE,FALSE,LD_06-SY02Q04_H,"ULD_06-SY02Q04_H
+ULD_06-SY02Q04_G
+GAL_UP_400
+IAL_DOWN_400",,,,EV_WO_Wave_SY02Q04_H,[C],[SYS_2 TS_SUB-Maelstrom TS_Wave_SY02Q04_H],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q05,SY02Q05_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_MN-OblivionSphere,[C],[SYS_2 TS_SUB-Maelstrom TS_MN-OblivionSphere],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q05,SY02Q05_B,NO_CHECKPOINT,FALSE,FALSE,"LD_06-SY02Q05_B
+CS_CUT_SY02Q05_B",,,,,EV_CC_CUT_SY02Q05_B,[H] wait for cutscene,,,//,,,//,,,//,,,,,,,,,//
+SY02Q05,SY02Q05_C,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_DE_KO-Turtle,[C],[SYS_2 TS_SUB-Maelstrom TS_KO-Turtle],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q05,SY02Q05_D,NO_CHECKPOINT,FALSE,FALSE,,"ULD_06-SY02Q05_B
+IAL_UP_600
+GAL_DOWN_600",,,,EV_IC_INT-MemoryFragment_Chrysomal00,[C],[SYS_2 TS_SUB-Maelstrom TS_INT-MemoryFragment_Chrysomal00],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q06,SY02Q06_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-SlotCompressedGold,[C],[SYS_2 TS_SUB-Maelstrom TS_INT-SlotCompressedGold],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q06,SY02Q06_B,CHECKPOINT_SAFE,FALSE,FALSE,"LD_06-SY02Q05_B
+CS_CUT_SY02Q05_B",,,,,EV_CC_CUT_SY02Q05_B,[H] wait for cutscene,,,//,,,//,,,//,,,,,,,,,//
+SY02Q06,SY02Q06_C,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_DE_KO-Turtle,[C],[SYS_2 TS_SUB-Maelstrom TS_KO-Turtle],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q06,SY02Q06_D,NO_CHECKPOINT,FALSE,FALSE,,"ULD_06-SY02Q05_B
+GAL_UP_600
+IAL_DOWN_600",,,,EV_IC_INT-MemoryFragment_Chrysomal00,[C],[SYS_2 TS_SUB-Maelstrom TS_INT-MemoryFragment_Chrysomal00],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q07,SY02Q07_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_SUB-Maelstrom,[C],[SYS_2 TS_SUB-Maelstrom],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q07,SY02Q07_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_06-SY02Q07_B,ULD_06-SY02Q07_B,,,,EV_WO_Wave_SY02Q07_B,[C],[SYS_2 TS_SUB-Maelstrom TS_Wave_SY02Q07_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q07,SY02Q07_C,CHECKPOINT_SAFE,FALSE,FALSE,LD_06-SY02Q07_C,ULD_06-SY02Q07_C,,,,CARGO_COL-GoldCode_A,[C],[SYS_2 TS_SUB-Maelstrom TS_Wave_SY02Q07_C TS_COL-GoldCode_A],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q07,SY02Q07_D,CHECKPOINT_SAFE,FALSE,FALSE,LD_06-SY02Q07_D,ULD_06-SY02Q07_D,,,,CARGO_COL-GoldCode_B,[C],[SYS_2 TS_SUB-Maelstromm TS_Wave_SY02Q07_D TS_COL-GoldCode_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q07,SY02Q07_E,CHECKPOINT_SAFE,FALSE,FALSE,LD_06-SY02Q07_E,ULD_06-SY02Q07_E,,,,CARGO_COL-GoldCode_C,[C],[SYS_2 TS_SUB-Maelstrom TS_Wave_SY02Q07_E TS_COL-GoldCode_C],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q07,SY02Q07_F,NO_CHECKPOINT,FALSE,FALSE,LD_06-SY02Q07_F,ULD_06-SY02Q07_F,,,,EV_RP_EN-AngryMiner-SY02Q07,[C],[SYS_2 TS_SUB-Maelstrom TS_EN-IronContact_SY02Q07_F],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q08,SY02Q08_A,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_RP_SUB-Maelstrom,[C],[SYS_2 TS_SUB-Maelstrom],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q08,SY02Q08_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_06-SY02Q08_B,ULD_06-SY02Q08_B,,,,EV_WO_Wave_SY02Q08_B,[C],[SYS_2 TS_SUB-Maelstrom TS_Wave_SY02Q08_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q08,SY02Q08_C,CHECKPOINT_SAFE,FALSE,FALSE,LD_06-SY02Q08_C,ULD_06-SY02Q08_C,,,,EV_WO_Wave_SY02Q08_C,[C],[SYS_2 TS_SUB-Maelstrom TS_Wave_SY02Q08_C],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q08,SY02Q08_D,CHECKPOINT_SAFE,FALSE,FALSE,LD_06-SY02Q08_D,ULD_06-SY02Q08_D,,,,CARGO_COL-GoldenLoot_A,[C],[SYS_2 TS_SUB-Maelstrom TS_Wave_SY02Q08_D TS_EN-GM_SH03 TS_COL-GoldenLoot_A],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q08,SY02Q08_E,NO_CHECKPOINT,FALSE,FALSE,LD_06-SY02Q08_E,,,,,EV_RP_EN-HeraldMiner-SY02Q08,[C],[SYS_2 TS_SUB-Maelstrom TS_EN-HeraldMiner_SY02Q08_E],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q08,SY02Q08_F,NO_CHECKPOINT,FALSE,FALSE,LD_06-SY02Q08_F,"ULD_06-SY02Q08_F
+ULD_06-SY02Q08_E",,,,EV_WO_Pickaxewave_SY02Q08_F,[C],[SYS_2 TS_SUB-Maelstrom TS_EN-BrotherPickaxe],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q09,SY02Q09_A,CHECKPOINT_SAFE,FALSE,FALSE,"
+LD_01-SY02Q09_A",ULD_01-SY02Q09_A,,,,EV_WO_Wave_SY02Q09_A,[C],[SYS_2 TS_SUB-InsectKiss TS_Wave_SY02Q09_A],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q09,SY02Q09_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_01-SY02Q09_B,ULD_01-SY02Q09_B,,,,EV_WO_Wave_SY02Q09_B,[C],[SYS_2 TS_SUB-InsectKiss TS_Wave_SY02Q09_B],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q09,SY02Q09_C,NO_CHECKPOINT,FALSE,FALSE,LD_04-SY02Q09_C,"ULD_04-SY02Q09_C
+IAL_UP_25
+GAL_DOWN_25",,,,EV_WO_Wave_SY02Q09_C,[C],[SYS_2 TS_SUB-GoldSector TS_Wave_SY02Q09_C],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q10,SY02Q10_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_SUB-GoldSector,[C],[SYS_2 TS_SUB-GoldSector],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q10,SY02Q10_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_04-SY02Q10_B,,,,,EV_WO_Wave_SY02Q10_B,[C],[SYS_2 TS_SUB-GoldSector TS_EN-AngryMiner-SY02Q10],,//,,,//,,,//,,,,,EV_DE_EN-AngryMiner-SY02Q10,,,,NONE
+SY02Q10,SY02Q10_C,CHECKPOINT_SAFE,FALSE,FALSE,,ULD_04-SY02Q10_B,,,,EV_RP_Zone_SY2-OutpostGold-Klondike,[C],[SYS_2 TS_SUB-GoldSector TS_Zone_SY2-OutpostGold-Klondike],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q10,SY02Q10_D,NO_CHECKPOINT,FALSE,FALSE,,"IAL_UP_25
+GAL_DOWN_25",,,,EV_IC_INT-GoldConsole-SY02Q10(4),[C],[SYS_2 TS_SUB-GoldSector TS_INT-GoldConsole-SY02Q10],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q11,SY02Q11_A,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_RP_Zone_SY2-OutpostGold-Mandir,[C],[SYS_2 TS_SUB-GoldSector TS_Zone_SY2-OutpostGold-Mandir],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q11,SY02Q11_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_04-SY02Q11_B,,,,,EV_DE_TM-GoldCargo_A(12),[C],[SYS_2 TS_SUB-GoldSector TS_TM-GoldCargo_A],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q11,SY02Q11_C,CHECKPOINT_SAFE,FALSE,FALSE,LD_04-SY02Q11_C,ULD_04-SY02Q11_C,,,,EV_WO_Wave_SY02Q11_C,[C],[SYS_2 TS_SUB-GoldSector TS_Wave_SY02Q11_C],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q11,SY02Q11_D,NO_CHECKPOINT,FALSE,FALSE,LD_04-SY02Q11_D,"ULD_04-SY02Q11_D
+IAL_UP_25
+GAL_DOWN_25",,,,EV_WO_Wave_SY02Q11_D,[C],[SYS_2 TS_SUB-GoldSector TS_Wave_SY02Q11_D],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q12,SY02Q12_A,CHECKPOINT_SAFE,FALSE,FALSE,LD_04-SY02Q12_A,ULD_04-SY02Q12_A,,,,EV_WO_Wave_SY02Q12_A,[C],[SYS_2 TS_SUB-GoldSector TS_Wave_SY02Q12_A],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q12,SY02Q12_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_04-SY02Q12_B,ULD_04-SY02Q12_B,,,,EV_WO_Wave_SY02Q12_B,[C],[SYS_2 TS_SUB-GoldSector TS_Wave_SY02Q12_B],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q12,SY02Q12_C,CHECKPOINT_SAFE,FALSE,FALSE,LD_05-SY02Q12_C,"ULD_05-SY02Q12_C
+LD_05-SY02Q12_D
+CS_CUT_SY02Q12_C",,,,EV_WO_Wave_SY02Q12_C,[C],[SYS_2 TS_SUB-GoldFeud TS_Wave_SY02Q12_C],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q12,SY02Q12_D,NO_CHECKPOINT,FALSE,FALSE,,ULD_05-SY02Q12_D,,,,EV_DE_KO_Turtle,[C],[SYS_2 TS_SUB-GoldFeud TS_KO-Turtle],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q13,SY02Q13_A,CHECKPOINT_SAFE,FALSE,FALSE,LD_01-SY02Q13_A,ULD_01-SY02Q13_A,,,,CARGO_COL-IronLoot00(2),[C],[SYS_2 TS_SUB-InsectKiss TS_Wave_SY02Q13_A TS_COL-IronLoot00],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q13,SY02Q13_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_02-SY02Q13_B,ULD_02-SY02Q13_B,,,,EV_WO_Wave_SY02Q13_B,[C],[SYS_2 TS_SUB-IronSector TS_Wave_SY02Q13_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q13,SY02Q13_C,CHECKPOINT_SAFE,FALSE,FALSE,LD_02-SY02Q13_C,ULD_02-SY02Q13_C,,,,EV_WO_Wave_SY02Q13_C,[C],[SYS_2 TS_SUB-IronSector TS_Wave_SY02Q13_C],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q13,SY02Q13_D,NO_CHECKPOINT,FALSE,FALSE,,"GAL_UP_25
+IAL_DOWN_25",,,,EV_RE_SS-Heusos,[C],[SYS_2 TS_SUB-InsectKiss TS_Zone_SY2-OutpostGold-Heusos],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q14,SY02Q14_A,CHECKPOINT_SAFE,FALSE,FALSE,LD_02-SY02Q14_A,ULD_02-SY02Q14_A,,,,EV_WO_Wave_SY02Q14_A,[C],[SYS_2 TS_SUB-IronSector TS_Wave_SY02Q14_A],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q14,SY02Q14_B,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_RP_Zone_SY2-OutpostIron-Kong,[C],[SYS_2 TS_SUB-IronSector TS_Zone_SY2-OutpostIron-Kong],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q14,SY02Q14_C,NO_CHECKPOINT,FALSE,FALSE,,"GAL_UP_25
+IAL_DOWN_25",,,,EV_DE_Quest-IronAntenna(4),[C],[SYS_2 TS_SUB-IronSector TS_Quest-IronAntenna],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q15,SY02Q15_A,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_RP_SS-IronMeteor,[C],[SYS_2 TS_SUB-IronSector TS_SS-IronMeteor],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q15,SY02Q15_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_02-SY02Q15_B,,,,,EV_DE_TM-IronCargo_A(12),[C],[SYS_2 TS_SUB-IronSector TS_TM-IronCargo_A],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q15,SY02Q15_C,CHECKPOINT_SAFE,FALSE,FALSE,LD_02-SY02Q15_C,ULD_02-SY02Q15_C,,,,EV_WO_Wave_SY02Q15_C,[C],[SYS_2 TS_SUB-IronSector TS_Wave_SY02Q15_C],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q15,SY02Q15_D,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY02Q15_D,"ULD_02-SY02Q15_D
+GAL_UP_25
+IAL_DOWN_25",,,,EV_WO_Wave_SY02Q15_D,[C],[SYS_2 TS_SUB-IronSector TS_Wave_SY02Q15_D],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q16,SY02Q16_A,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY02Q16_A,ULD_02-SY02Q16_A,,,,EV_WO_Wave_SY02Q16_A,[C],[SYS_2 TS_SUB-IronSector TS_Wave_SY02Q16_A],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q16,SY02Q16_B,CHECKPOINT_SAFE,FALSE,FALSE,LD_02-SY02Q16_B,ULD_02-SY02Q16_B,,,,EV_WO_Wave_SY02Q16_B,[C],[SYS_2 TS_SUB-IronSector TS_Wave_SY02Q16_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q16,SY02Q16_C,CHECKPOINT_SAFE,FALSE,FALSE,LD_03-SY02Q16_C,ULD_03-SY02Q16_C,,,,EV_DE_EN-Isotope(3),[C],[SYS_2 TS_SUB-IronProtectorate TS_EN-Isotope],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q16,SY02Q16_D,NO_CHECKPOINT,FALSE,FALSE,"LD_03-SY02Q16_D
+CS_CUT_SY02Q16_D",ULD_03-SY02Q16_D,,,,EV_CC_CUT_SY02Q16_D,[H] wait for cutscene,,,//,,,//,,,//,,,,,,,,,//
+SY02Q17,SY02Q17_A,,FALSE,FALSE,,,,,,EV_EG_GA-Nomoirum,[C],[SYS_2 TS_SUB-InsectKiss TS_GA-Nomoirum],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q18,SY02Q18_A,,FALSE,FALSE,,,,,,EV_EG_GA-Nomoirum,[C],[SYS_2 TS_SUB-InsectKiss TS_GA-Nomoirum],,//,,,//,,,//,,,//,,,,,,NONE
+,,,FALSE,FALSE,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,//
+,,,FALSE,FALSE,,,,,,,//,,,//,,,//,,,//,,,,,,,,,//
+SY02QGold,SY02QGold_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RE_SS-Heusos,Land at the Heusos Station in the Hole area,[SYS_2 TS_SUB-InsectKiss TS_SS-Heusos],,//,,,//,,,//,,,,,EV_QE_SY02QIron,,,,NONE
+SY02QIron,SY02QIron_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RE_SS-FineryForge,Land at the Finery Forge Station in the Hole area,[SYS_2 TS_SUB-InsectKiss TS_SS-FineryForge],,//,,,//,,,//,,,,,EV_QE_SY02QGold,,,,NONE
+,,,FALSE,FALSE,,,,,,,//,,,//,,,//,,,//,,,,,,,,,//
+SY02Q19,SY02Q19_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_CC_CUT_SY02Fort-Iron-01,Conquer Hard Steel,[SYS_2 TS_SUB-InsectKiss TS_Zone_SY2-OutpostIron-Morya],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q20,SY02Q20_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_CC_CUT_SY02Fort-Iron-02,Conquer Iron Ore,[SYS_2 TS_SUB-InsectKiss TS_Zone_SY2-OutpostIron-IronOre],,//,,,//,,,//,,,//,,,,,,NONE
+SY02Q21,SY02Q21_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_CC_CUT_SY02Fort-Iron-03,Conquer Finery Forge,[SYS_2 TS_SUB-InsectKiss TS_Zone_SY2-OutpostIron-FineryForge],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q22,SY02Q22_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_CC_CUT_SY02Fort-Gold-01,Conquer Theia,[SYS_2 TS_SUB-InsectKiss TS_Zone_SY2-OutpostGold-Theia],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q23,SY02Q23_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_CC_CUT_SY02Fort-Gold-02,Conquer Varna,[SYS_2 TS_SUB-InsectKiss TS_Zone_SY2-OutpostGold-Smaug],,//,,,//,,,//,,,,,,,,,NONE
+SY02Q24,SY02Q24_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_CC_CUT_SY02Fort-Gold-03,Conquer Heusos,[SYS_2 TS_SUB-InsectKiss TS_Zone_SY2-OutpostGold-Heusos],,//,,,//,,,//,,,,,,,,,NONE
+,,,FALSE,FALSE,,,,,,,,,,//,,,//,,,//,,,,,,,,,//
+,,,,,,,,,,,,,,//,,,//,,,//,,,,,,,,,//
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,//
+SY03Q00,SY03Q00_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RP_SS-Macbeth,Forward into the Tree,[SYS_3 TS_SUB-Tree TS_SS-Macbeth],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q00,SY03Q00_B,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_RP_Zone_SY3_Ss1_Archeo-0,Follow Rehun's bio-echo,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-0],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q00,SY03Q00_C,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Exploration-Horror",,,TM-MalaxdonRelic_SY03Q00,35000,EV_IC_INT-Relic_SY03Q00,Use the scanner to locate and examine the trace,"[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-0]
+[SYS_3 TS_SUB-Tree TS_INT-Relic_SY03Q00]",,//,,,//,,,//,,,,,,,,,"Homerus has calibrated the scanner to track the Rehun's bio-echo. Now, you need to find where the echo leads."
+SY03Q00,SY03Q00_D,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY03Q00_D
+CS_CUT_SY03Q00_D
+MSAE_FIght-Horror",ULD_01-SY03Q00_D,,TM-MalaxdonRelic_SY03Q00,35000,EV_CC_CUT_SY03Q00_D,[H] - wait for cutscene,,,//,,,//,,,//,,,,,,,,,NONE
+SY03Q00,SY03Q00_E,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY03Q00_E
+MPAR_Intensity_1",ULD_01-SY03Q00_E,,TM-MalaxdonRelic_SY03Q00,35000,EV_WO_Wave_SY03Q00_E,Kill the menacing creatures,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q00_E],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q00,SY03Q00_F,CHECKPOINT_ALWAYS,TRUE,FALSE,MSAE_Tension-Soft,"MSOE_Tension-Soft
+MMAUTO_STOP",,INT-Membrane_SY03Q00,35000,EV_IC_INT-Membrane_SY03Q00,Take what the creature left,[SYS_3 TS_SUB-Tree TS_INT-Membrane_SY03Q00],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q00,SY03Q00_G,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_SS-Macbeth,Return to Stump Station,[SYS_3 TS_SUB-Tree TS_SS-Macbeth],,//,,,//,,,//,,,//,,,,,,"The Rehun's bio-echo led you to a destroyed ship. You found it had been attacked by strange explosive creatures and managed to recover a surviving sample. The Rehun's echo reacted to the sample but weakened again once you collected it. 
+Homerus suggests contacting Yalda, leader of the Malaxdon, raiders who worship the Tree and its creatures. She will help you with the sample."
+SY03Q00,SY03Q00_G1,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_DC_TST_SY03Q00_G1,[H] wait for dialogue,,,,,,//,,,//,,,,,,,,,NONE
+SY03Q01,SY03Q01_A,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q01_A,,,,,EV_RP_Zone_SY3_Ss1_MiddleTemple,Reach the Middle Temple area,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_MiddleTemple],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q01,SY03Q01_B,NO_CHECKPOINT,FALSE,FALSE,,ULD_01-SY03Q01_A,,,,EV_IC_INT-MemoryFragment_MalaxdonSY03Q01,Use the Malaxdon's neural fragment to find a clue,[SYS_3 TS_SUB-Tree TS_INT-MemoryFragment_MalaxdonSY03Q01],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q01,SY03Q01_C,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_RP_Zone_SY3_Ss1_Archeo-1,Reach Eerie Ruins,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-1],,//,,,//,,,//,,,//,,,,,,"You found a neural fragment from a dead Malaxdon. Homerus extracted coordinates pointing to the Eerie Ruins, where the Malaxdon were headed, in pursuit of someone. Yalda claims the targets were Lexon, a sect of former Malaxdon who abandoned Great We, the common AI installed in all Malaxdon ships."
+SY03Q01,SY03Q01_C1,CHECKPOINT_SAFE,FALSE,FALSE,"MMAUTO_START
+MSAE_Movement_Fight_Frabetti",,,Zone_SY3_Ss1_Archeo-1,100000,EV_IC_INT-Archeo1Activator,Connect to the Neseref,[SYS_3 TS_SUB-Tree TS_INT-Archeo1Activator],,,,,//,,,//,,,,,,,,,"As soon as you arrive at the Eerie Ruins, Homerus senses the energy of a Neseref, an ancient Neterunian transport. Your AI can connect to the Neseref's network, enabling you to travel quickly along the Tree."
+SY03Q01,SY03Q01_D,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY03Q01_B
+MAL_UP_100",,,Zone_SY3_Ss1_Archeo-1,100000,EV_RP_EN-Maalaxmi_SY03Q01,Reach the Malaxdon in distress,[SYS_3 TS_SUB-Tree TS_EN-Maalaxmi_SY03Q01],,//,,,//,,,//,,,,,,,,,"Homerus managed to connect to the Neseref network. From now on, you can connect and use any Neseref you find. 
+You noticed a Malaxdon in distress, undoubtedly part of the team Yalda sent to investigate the area."
+SY03Q01,SY03Q01_E,CHECKPOINT_SAFE,TRUE,FALSE,"LD_01-SY03Q01_C
+MSAE_Fight-Neterunian
+MPAR_Intensity_1",ULD_01-SY03Q01_C,,Wave_SY03Q01_C,45000,EV_WO_Wave_SY03Q01_C,Kill the Lexon,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-1],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q01,SY03Q01_F,CHECKPOINT_SAFE,FALSE,FALSE,"LD_01-SY03Q01_F
+MSAE_Movement_Fight_Frabetti","ULD_01-SY03Q01_F
+LD_01-SY03Q01_D
+MSOE_Movement_Fight_Frabetti
+MMAUTO_STOP",,Zone_SY3_Ss1_Archeo-1,70000,EV_IC_INT-MalaxdonPiece_SY03Q01(3),Use the scanner to locate and collect Malaxdon's Modules in the lower part of Eerie Ruins,"[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_RuinsDown]
+[SYS_3 TS_SUB-Tree TS_INT-MalaxdonPiece_SY03Q01]",,//,,,//,,,//,,,,,,,,,"ou have found that the Malaxdon were killed by Lexon, just as Yalda feared, confirming Yalda's fears. Yalda gives no further explanation, but she will consider your task complete once you bring her the modules of her fallen siblings to extract their last moments, which are considered sacred by the Malaxdon."
+SY03Q01,SY03Q01_G,CHECKPOINT_ALWAYS,FALSE,FALSE,,ULD_01-SY03Q01_B,,,,EV_RP_EN-Kuzmina,Meet Yalda near Middle Temple Station,[SYS_3 TS_SUB-Tree TS_EN-Kuzmina],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q02,SY03Q02_A,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q01_D,ULD_01-SY03Q01_D,,,,EV_RP_Zone_SY3_Ss1_Equilibrium,Reach Equilibrium Station,[SYS_3 TS_SUB-Tree TS_SS-Equilibrium],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q02,SY03Q02_B,NO_CHECKPOINT,TRUE,FALSE,"
+LD_01-SY03Q02_B
+CS_CUT_SY03Q02_B
+MMAUTO_START
+MSAE_Fight-Neterunian",ULD_01-SY03Q02_B,,,,EV_CC_CUT_SY03Q02_B,[H] wait for cutscene,,,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q02,SY03Q02_C,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY03Q02_C
+MPAR_Intensity_1",LD_01-SY03Q02_C1,,Zone_SY3_Ss1_Equilibrium,65000,EV_GI_SY02Q03_C,Use the three Bastions to reactivate Equilibrium's defenses,[SYS_3 TS_SUB-Tree TS_INT-Bastion_SY03Q02],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q02,SY03Q02_C1,CHECKPOINT_ALWAYS,TRUE,FALSE,MPAR_Intensity_2,"ULD_01-SY03Q02_C1
+MSOE_Fight-Neterunian
+MMAUTO_STOP
+ULD_01-SY03Q02_C",,Zone_SY3_Ss1_Equilibrium,65000,EV_WO_Wave_SY03Q02_C1,Destroy Lexon reinforcements,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q02_C1],,//,,,//,,,//,,,,,,,,,NONE
+,,NO_CHECKPOINT,FALSE,FALSE,,"MSOE_Tension-Soft
+MMAUTO_STOP",,,,EV_IC_INT-StationRec-Equilibrium,//,[SYS_3 TS_SUB-Tree TS_INT-StationRec-Equilibrium],,//,,,//,,,//,,,,,,,,,//
+,,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY03Q02_D
+CS_CUT_SY03Q02_D
+",ULD_01-SY03Q02_D,,,,EV_CC_CUT_SY03Q02_D,[H] wait for cutscene,,,//,,,//,,,//,,,//,,,,,,//
+SY03Q02,SY03Q02_E,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_MM_MOD56c-Organic_Starting,Mount the Honorary Balancer,[SYS_3 TS_SUB-Tree TS_SS-Equilibrium],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q02,SY03Q02_F,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_SY3_Ss1_Rottami-SY03Q02,Find the fleeing Lexons,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Rottami-SY03Q02],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q02,SY03Q02_G,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY03Q02_G
+MMAUTO_START
+MSAE_TensionBeat_LOW",,,,40000,EV_DE_TM-OrganicNest_SY03Q02,Destroy the organic lock,[SYS_3 TS_SUB-Tree TS_TM-OrganicNest_SY03Q02],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q02,SY03Q02_H,NO_CHECKPOINT,TRUE,FALSE,,ULD_01-SY03Q02_G,,Zone_SY3_Ss1_Rottami-SY03Q02,40000,EV_IC_INT-MemoryFragment_ClueSY03Q02,Examine the neural fragment,[SYS_3 TS_SUB-Tree TS_INT-MemoryFragment_ClueSY03Q02],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q02,SY03Q02_I,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY03Q02_I
+MSAE_LimboFight-NoLevel","ULD_01-SY03Q02_I
+MSOE_LimboFight-NoLevel
+MMAUTO_STOP","
+",Wave_SY03Q02_I,40000,EV_WO_Wave_SY03Q02_I,Kill all attacking Zanion,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q02_I],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q02,SY03Q02_L,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_SY3_Ss1_Rottami-2,Reach the position of the Lexon High Adepts,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Rottami-2],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q02,SY03Q02_M,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY03Q02_F
+MMAUTO_START
+MSAE_Fight-Neterunian
+MPAR_Intensity_2",,,Wave_SY03Q02_F,40000,EV_WO_Wave_SY03Q02_F,Kill the Lexon High Adepts,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q02_F],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q02,SY03Q02_N,CHECKPOINT_ALWAYS,TRUE,FALSE,MSAE_Tension-Soft,"ULD_01-SY03Q02_F
+MSOE_Tension-Soft
+MMAUTO_STOP",,Wave_SY03Q02_F,40000,EV_IC_INT-MemoryFragment_HighLexon00,Get information from the neural fragment,[SYS_3 TS_SUB-Tree TS_INT-MemoryFragment_HighLexon00],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q02,SY03Q02_O,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RP_SS-Equilibrium,Return to Equilibrium Station,[SYS_3 TS_SUB-Tree TS_SS-Equilibrium],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q03,SY03Q03_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_SY3_Ss1_Archeo-2,Search for traces of Tale Shoo in the Last Ruins area,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-2],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q03,SY03Q03_A1,CHECKPOINT_SAFE,TRUE,FALSE,"LD_01-SY03Q03_A1
+MMAUTO_START
+MSAE_Fight-Neterunian","ULD_01-SY03Q03_A1
+MSOE_Tension-Soft
+MMAUTO_STOP",,Wave_SY03Q03_A1,40000,EV_WO_Wave_SY03Q03_A1,Eliminate the Lexon,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q03_A1],,,,,//,,,//,,,,,,,,,NONE
+SY03Q03,SY03Q03_B,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-NeterunianLump_SY03Q03,Use the scanner to locate and use a Neterunian Lump,"[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-2]
+[SYS_3 TS_SUB-Tree TS_INT-NeterunianLump_SY03Q03]",,//,,,//,,,//,,,,,,,,,NONE
+SY03Q03,SY03Q03_C,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY03Q03_C
+MMAUTO_START
+MSAE_Fight-Horror
+MPAR_Intensity_2","ULD_01-SY03Q03_C
+MSOE_Fight-Horror
+MMAUTO_STOP",,ENEG-SY03Q03_C,40000,EV_EGE_ENEG-SY03Q03_C,Kill the Lexon,[SYS_3 TS_SUB-Tree TS_ENEG-SY03Q03_C],CARGO_COL-StationSupply_X,Get a clue about Tale Shoo,"[SYS_3 TS_SUB-Tree TS_ENEG-SY03Q03_C]
+[SYS_3 TS_SUB-Tree TS_COL-StationSupply_X]",,//,,,//,,,,,,,,,NONE
+SY03Q03,SY03Q03_C1,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RP_Zone_SY3_Ss1_MiddleTemple,Return to Middle Temple,[SYS_3 TS_SUB-Tree TS_SS-MiddleTemple],,,,,//,,,//,,,,,,,,,NONE
+SY03Q03,SY03Q03_C2,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q03_C3,,,,,EV_RP_Wave_SY03Q03_C3,Reconstruct the mnemonic data you got from the cultist,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q03_C3],,,,,//,,,//,,,,,,,,,NONE
+SY03Q03,SY03Q03_C3,CHECKPOINT_ALWAYS,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight-Horror
+MPAR_Intensity_2","ULD_01-SY03Q03_C3
+MSOE_Fight-Horror
+MMAUTO_STOP",,Wave_SY03Q03_C3,40000,EV_WO_Wave_SY03Q03_C3,Don't let the Lexon stop you,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q03_C3],,,,,//,,,//,,,,,,,,,NONE
+SY03Q03,SY03Q03_D,CHECKPOINT_ALWAYS,FALSE,FALSE,,CIR_COL-StationSupply_X,,,,EV_IC_INT-MemoryRepair_SY03Q03,Run the Analyzer in Equilibrium to restore the Lexon's neural fragment,[SYS_3 TS_SUB-Tree TS_INT-MemoryRepair_SY03Q03],,,,,//,,,//,,,,,,,,,NONE
+SY03Q03,SY03Q03_E,CHECKPOINT_ALWAYS,FALSE,FALSE,"LD_01-SY03Q03_F
+MMAUTO_START
+MSAE_Tension_Horror","ULD_01-SY03Q03_F
+MSOE_Tension_Horror
+MMAUTO_STOP",,INT-MemoryFragment_LexonCultist00,10000,EV_IC_INT-MemoryFragment_LexonCultist00,Examine the restored fragment,[SYS_3 TS_SUB-Tree TS_INT-MemoryFragment_LexonCultist00],,,,,//,,,//,,,,,,,,,NONE
+SY03Q04,SY03Q04_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_SY3_Ss1_Archeo-3,Reach the Lexon shelter in Forbidden Ruins,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-3],,,,,//,,,//,,,,,,,,,NONE
+SY03Q04,SY03Q04_B,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_IC_INT-Mechanism_SY03Q04(4),Use the scanner to locate and unlock shelter opening mechanisms,"[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-3]
+[SYS_3 TS_SUB-Tree TS_INT-Mechanism_SY03Q04]",,,,,//,,,//,,,,,,,,,NONE
+SY03Q04,SY03Q04_B1,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q04_B2,,,,,"EV_RP_INT-FinalMechanism_SY03Q04, EV_RP_Wave_SY03Q04_B2",Unlock last mechanism,[SYS_3 TS_SUB-Tree TS_INT-FinalMechanism_SY03Q04],,,,,//,,,//,,,,,,,,,NONE
+SY03Q04,SY03Q04_B2,CHECKPOINT_SAFE,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight-Horror
+MPAR_Intensity_2","ULD_01-SY03Q04_B2
+MSOE_Fight-Horror
+MMAUTO_STOP",,Wave_SY03Q04_B2,40000,EV_WO_Wave_SY03Q04_B2,Destroy all the Lexon cultists,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q04_B2],,,,,//,,,//,,,,,,,,,NONE
+SY03Q04,SY03Q04_C,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-FinalMechanism_SY03Q04,Unlock last mechanism,[SYS_3 TS_SUB-Tree TS_INT-FinalMechanism_SY03Q04],,,,,//,,,//,,,,,,,,,NONE
+SY03Q04,SY03Q04_D,NO_CHECKPOINT,TRUE,FALSE,LD_01-SY03Q04_D,ULD_01-SY03Q04_D,,,,EV_RP_Zone_SY03Q04_D_Trigger,Find Tale Shoo,[SYS_3 TS_SUB-Tree TS_Zone_SY03Q04_D_Trigger],,,,,//,,,//,,,,,,,,,NONE
+,,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY03Q04_E
+CS_CUT_SY03Q04_E","ULD_01-SY03Q04_E
+LD_01-SY03Q04_F",,,,EV_CC_CUT_SY03Q04_E,[H] - wait for cutscene,,,,,,//,,,//,,,,,,,,,//
+SY03Q04,SY03Q04_F,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY03Q04_F
+MMAUTO_START
+MSAE_Fight_Frabetti
+MPAR_Intensity_2",ULD_01-GhostArea_Archeo3,,,,EV_DE_EN-Tale,Kill Tale Shoo,[SYS_3 TS_SUB-Tree TS_EN-Tale],,,,,//,,,//,,,,,,,,,NONE
+SY03Q04,SY03Q04_G,CHECKPOINT_ALWAYS,TRUE,FALSE,MSAE_Tension-Soft,"ULD_01-SY03Q04_F
+MSOE_Tension-Soft
+MMAUTO_STOP",,,,EV_IC_INT-MemoryFragment_TaleShoo00,Examine the neural fragment,[SYS_3 TS_SUB-Tree TS_INT-MemoryFragment_TaleShoo00],,,,,//,,,//,,,,,,,,,NONE
+SY03Q04,SY03Q04_H,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RP_SS-Equilibrium,Reach Equilibrium Station,"[SYS_3 TS_SUB-Tree TS_SS-Equilibrium]
+[SYS_3 TS_SUB-Tree TS_teletrasporto neteruniano]",,,,,//,,,//,,,,,,,,,NONE
+SY03Q05,SY03Q05_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,LD_02-SY03Q05_A-Tempio,,,,EV_RP_SUB-Mosque,Use the Neterunian Gate to reach the Sanctum,[SYS_3 TS_SUB-Mosque],,,,,//,,,//,,,,,,,,,NONE
+SY03Q05,SY03Q05_B,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY03Q05_B,,,,,EV_RP_Zone_SY3_Ss1_Sanctum00,Enter the Sanctum,[SYS_3 TS_SUB-Mosque TS_Zone_SY3_Ss1_Sanctum00],,,,,//,,,//,,,,,,,,,NONE
+SY03Q05,SY03Q05_C,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_02-SY03Q05_C
+CS_CUT_SY03Q05_C",ULD_02-SY03Q05_C,,,,EV_CC_CUT_SY03Q05_C,[H] - wait for cutscene,,,,,,//,,,//,,,,,,,,,NONE
+SY03Q05,SY03Q05_D,CHECKPOINT_ALWAYS,FALSE,FALSE,LD_02-SY03Q05_D,,,,,EV_IC_INT-BluCode_SY03Q05,Find Ban Xerte's secrection,,,,,,//,,,//,,,,,,,,,NONE
+SY03Q05,SY03Q05_E,CHECKPOINT_ALWAYS,FALSE,FALSE,,"ULD_02-SY03Q05_B
+LD_02-SY03Q05_E",,,,EV_IC_INT-DoorOpener_SY03Q05,Advance further into the Sanctum,,,,,,//,,,//,,,,,,,,,NONE
+SY03Q05,SY03Q05_F,NO_CHECKPOINT,FALSE,FALSE,LD_02-SY03Q05_F,"ULD_02-SY03Q05_F
+ULD_02-SY03Q05_E",,,,EV_RP_Zone_Temple_LocustTriggerArea,Continue your search,,,,,,//,,,//,,,,,,,,,NONE
+SY03Q05,SY03Q05_G,CHECKPOINT_ALWAYS,TRUE,FALSE,LD_02-SY03Q05_G,,,,,EV_WO_Wave_SY03Q05_G,Survive the locusts,,,,,,//,,,//,,,,,,,,,NONE
+SY03Q05,SY03Q05_H,NO_CHECKPOINT,FALSE,FALSE,,ULD_02-SY03Q05_G,,,,EV_IC_INT-GunUpdate_SY03Q05,Use the scanner to locate toxocycle,[SYS_3 TS_SUB-Mosque TS_INT-GunUpdate_SY03Q05],,,,,//,,,//,,,,,,,,,NONE
+SY03Q05,SY03Q05_I,CHECKPOINT_ALWAYS,TRUE,FALSE,LD_02-SY03Q05_I,,,,,EV_DE_AllTentacle,Repel Tentacled Spores,,,,,,//,,,//,,,,,,120.0,FAIL,,NONE
+SY03Q05,SY03Q05_L,CHECKPOINT_SAFE,TRUE,FALSE,LD_02-SY03Q05_I1,"ULD_02-SY03Q05_I
+ULD_02-SY03Q05_I1",,,,EV_RP_Zone_Temple_MedusaFinaleTriggerArea,Enter the Sanctum's Sacred Room,,,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q05,SY03Q05_M,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-MedusaFluid_SY03Q05,Collect the secrection,[SYS_3 TS_SUB-Mosque TS_INT-MedusaFluid_SY03Q05],,,,,//,,,//,,,,,,,,,NONE
+SY03Q05,SY03Q05_N,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_RP_Zone_Temple_SafeAreaFinalTrigger,Leave the Sanctum,[SYS_3 TS_SUB-Mosque TS_Zone_Temple_SafeAreaFinalTrigger],,,,,//,,,//,,,,,,,,,NONE
+SY03Q06,SY03Q06_A,CHECKPOINT_SAFE,FALSE,FALSE,,CI_INT-ClumpHaustor_SY03Q06,,,,EV_IC_INT-ClumpHaustor_SY03Q06,Use the scanner to locate and collect a Clump Haustor in Timeless Ruins,"[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-0]
+[SYS_3 TS_SUB-Tree TS_INT-ClumpHaustor_SY03Q06]",,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q06,SY03Q06_B,CHECKPOINT_ALWAYS,FALSE,FALSE,,CIR_INT-ClumpHaustor_SY03Q06,,,,EV_RE_SS-Macbeth,Deliver the Clump Haustor to Stump Station,[SYS_3 TS_SUB-Tree TS_SS-Macbeth],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q07,SY03Q07_A,CHECKPOINT_SAFE,FALSE,FALSE,,CI_INT-SporeHaustor_SY03Q07,,,,EV_IC_INT-SporeHaustor_SY03Q07,Use the scanner to locate and collect a Spore Haustor in Eerie Ruins,"[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-1]
+[SYS_3 TS_SUB-Tree TS_INT-SporeHaustor_SY03Q07]",,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q07,SY03Q07_B,CHECKPOINT_ALWAYS,FALSE,FALSE,,CIR_INT-SporeHaustor_SY03Q07,,,,EV_RE_SS-Macbeth,Deliver the Spore Haustor to Stump Station,[SYS_3 TS_SUB-Tree TS_SS-Macbeth],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q08,SY03Q08_A,CHECKPOINT_SAFE,FALSE,FALSE,,CI_INT-CapsuleHaustor_SY03Q08,,,,EV_IC_INT-CapsuleHaustor_SY03Q08,Use the scanner to locate and collect a Capsule Haustor in Last Ruins,"[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-2]
+[SYS_3 TS_SUB-Tree TS_INT-CapsuleHaustor_SY03Q08]",,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q08,SY03Q08_B,CHECKPOINT_ALWAYS,FALSE,FALSE,,CIR_INT-CapsuleHaustor_SY03Q08,,,,EV_RE_SS-Macbeth,Deliver the Capsule Haustor to Stump Station,[SYS_3 TS_SUB-Tree TS_SS-Macbeth],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q09,SY03Q09_A,CHECKPOINT_SAFE,FALSE,FALSE,,CI_INT-FlareHaustor_SY03Q09,,,,EV_IC_INT-FlareHaustor_SY03Q09,Use the scanner to locate and collect a Flare Haustor in Forbidden Ruins,"[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-3]
+[SYS_3 TS_SUB-Tree TS_INT-FlareHaustor_SY03Q09]",,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q09,SY03Q09_B,CHECKPOINT_ALWAYS,FALSE,FALSE,,CIR_INT-FlareHaustor_SY03Q09,,,,EV_RE_SS-Macbeth,Deliver the Flare Haustor to Stump Station,[SYS_3 TS_SUB-Tree TS_SS-Macbeth],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q10,SY03Q10_A,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q10_A,,,,,EV_RP_MN-PirateBase,"Discover the Batiki depot, Other World",[SYS_3 TS_SUB-Tree TS_MN-PirateBase],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q10,SY03Q10_B,NO_CHECKPOINT,FALSE,FALSE,,ULD_01-SY03Q10_A,,,,EV_DE_INT-Interferometer(10),Destroy all Interferometers,[SYS_3 TS_SUB-Tree TS_INT-Interferometer],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q10,SY03Q10_C,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY03Q10_C
+MMAUTO_START
+MSAE_Fight_Zaniboni
+MPAR_Intensity_1","ULD_01-SY03Q10_C
+MSOE_FIght_Zaniboni
+MMAUTO_STOP",,Wave_SY03Q10_C,40000,EV_WO_Wave_SY03Q10_C,Kill the Batiki reinforcements,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q10_C],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q11,SY03Q11_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_DE_EN-ZombieShip_02(3),Kill out-of-control E-Was Raiders,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Rottami-3],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q12,SY03Q12_A,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_IC_INT-Alkaionic_SY03Q12,Find and collect the Alkaionic in the branches leading to Equilibrium Station,[SYS_3 TS_SUB-Tree TS_INT-Alkaionic_SY03Q12],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q12,SY03Q12_B,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RE_SS-MiddleTemple,Deliver the Alkaionic in Middle Temple,[SYS_3 TS_SUB-Tree TS_SS-MiddleTemple],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q13,SY03Q13_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_INT-Inhebet_SY03Q13,Use the scanner to locate an Inhebet in Eerie Ruins,"[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-1]
+[SYS_3 TS_SUB-Tree TS_INT-Inhebet_SY03Q13]",,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q13,SY03Q13_B,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-Inhebet_SY03Q13,Establish a connection with the Inhebet,"[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Archeo-1]
+[SYS_3 TS_SUB-Tree TS_INT-Inhebet_SY03Q13]",,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q13,SY03Q13_C,CHECKPOINT_SAFE,TRUE,FALSE,"LD_01-SY03Q13_C
+MMAUTO_START
+MSAE_Fight-Neterunian
+MPAR_Intensity_2","ULD_01-SY03Q13_C
+MSOE_Fight-Neterunian
+MMAUTO_STOP",,Wave_SY03Q13_C,60000,EV_DE_EN-Ubique,Kill Ubique,[SYS_3 TS_SUB-Tree TS_EN-Ubique],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q14,SY03Q14_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_SY3_Ss1_MiniArcheo-1,Follow the signal in the help request,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_MiniArcheo-1],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q14,SY03Q14_A1,NO_CHECKPOINT,FALSE,FALSE,,,,Wave_SY03Q14_A1,35000,EV_WO_Wave_SY03Q14_A1,Defeat the cultists,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q14_A1],,,,,//,,,//,,,,,,,,,NONE
+SY03Q14,SY03Q14_B,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_IC_INT-DawnModule_SY03Q14,Use the scanner to locate and examine the source of the signal,"[SYS_3 TS_SUB-Tree TS_INT-DawnModule_SY03Q14]
+[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_MiniArcheo-1]",,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q15,SY03Q15_A,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q15_A,,,,,EV_RP_Zone_SY3_Ss1_MiniArcheo-2,Reach Beyond Relic,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_MiniArcheo-2],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q15,SY03Q15_B,CHECKPOINT_SAFE,TRUE,FALSE,"LD_01-SY03Q15_B
+MMAUTO_START
+MSAE_Fight_Carnemolla
+MPAR_intansity_2","ULD_01-SY03Q15_B
+MSOE_Fight_Carnemolla
+MMAUTO_STOP",,Wave_SY03Q15_B,35000,EV_WO_Wave_SY03Q15_B,Kill the Lexon,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q15_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q15,SY03Q15_C,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-CageControl_SY03Q15,Open the Inhibitory Cage,[SYS_3 TS_SUB-Tree TS_INT-CageControl_SY03Q15],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q15,SY03Q15_E,CHECKPOINT_SAFE,TRUE,FALSE,"LD_01-SY03Q15_E
+MMAUTO_START
+MSAE_Tension-Soft","ULD_01-SY03Q15_E
+MSOE_Tension-Soft
+MMAUTO_STOP",,INT-SetModule_SY03Q15,35000,EV_IC_INT-SetModule_SY03Q15,Get Set's Module,[SYS_3 TS_SUB-Tree TS_INT-SetModule_SY03Q15],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q16,SY03Q16_A,NO_CHECKPOINT,FALSE,FALSE,"LD_01-SY03Q16_A
+LD_01-SY03Q15_A",,,,,EV_RP_Zone_SY3_Ss1_MiniArcheo-3,Reach Dead Relic,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_MiniArcheo-3],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q16,SY03Q16_B,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY03Q16_B
+MMAUTO_START
+MSAE_LimboFight-NoLevel",ULD_01-SY03Q16_B,,Wave_SY03Q16_B,35000,EV_WO_Wave_SY03Q16_B,Kill the Lexon,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q16_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q16,SY03Q16_B1,NO_CHECKPOINT,FALSE,FALSE,,,,EN-Set,35000,EV_RP_EN-Set,Return the module to Set,[SYS_3 TS_SUB-Tree TS_EN-Set],,,,,//,,,//,,,,,,,,,NONE
+SY03Q16,SY03Q16_C,CHECKPOINT_SAFE,TRUE,FALSE,"LD_01-SY03Q16_C
+CS_CUT_SY03Q16_C
+MSAE_Tension-Horror","ULD_01-SY03Q16_C
+ULD_01-SY03Q16_A
+ULD_01-SY03Q15_A
+MSOE_Tension-Horror
+MMAUTO_STOP",,,,EV_CC_CUT_SY03Q16_C,[H] wait for cutscene,,,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q17,SY03Q17_A0,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q17_A,,,,,EV_RP_Wave_SY03Q17_A,Reach the location of the mercenaries,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q17_A],,,,,//,,,//,,,,,,,,,NONE
+SY03Q17,SY03Q17_A,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight-Neterunian
+MPAR_Intensity_1",,,Wave_SY03Q17_A,40000,EV_WO_Wave_SY03Q17_A,Kill the mercenary hunters,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q17_A],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q17,SY03Q17_B,CHECKPOINT_ALWAYS,TRUE,FALSE,MSAE_Tension-Soft,"ULD_01-SY03Q17_A
+MSOE_Tension-Soft
+MMAUTO_STOP",,Wave_SY03Q17_A,40000,EV_IC_INT-MemoryFragment_Haunter01,Examine the fragment,[SYS_3 TS_SUB-Tree TS_INT-MemoryFragment_Haunter01],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q17,SY03Q17_C0,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q17_C,,,,,EV_RP_Wave_SY03Q17_C,Flush out the second group of mercenary hunters,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q17_C],,,,,//,,,//,,,,,,,,,NONE
+SY03Q17,SY03Q17_C,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight-Neterunian
+MPAR_Intensity_2",,,Wave_SY03Q17_C,40000,EV_WO_Wave_SY03Q17_C,Kill the mercenary hunters,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q17_C],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q17,SY03Q17_D,CHECKPOINT_ALWAYS,TRUE,FALSE,MSAE_Tension-Soft,"ULD_01-SY03Q17_C
+MSOE_Tension-Soft
+MMAUTO_STOP",,Wave_SY03Q17_C,40000,EV_IC_INT-MemoryFragment_Haunter02,Examine the neural fragment,[SYS_3 TS_SUB-Tree TS_INT-MemoryFragment_Haunter02],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q18,SY03Q18_A,CHECKPOINT_SAFE,FALSE,FALSE,,,,INT-JammingSystem_SY03Q18,40000,EV_IC_INT-JammingSystem_SY03Q18,Examine the antenna,[SYS_3 TS_SUB-Tree TS_INT-JammingSystem_SY03Q18],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q18,SY03Q18_B,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_SY3_Ss1_Rottami-1,Follow J's trail,[SYS_3 TS_SUB-Tree TS_Zone_SY3_Ss1_Rottami-1],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q18,SY03Q18_C,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY03Q18_C
+CS_CUT_SY03Q18_C
+MMAUTO_START
+MSAE_Fight-Neterunian",,,,,EV_CC_CUT_SY03Q18_C,[H] wait for cutscene,,,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q18,SY03Q18_D,CHECKPOINT_SAFE,TRUE,FALSE,MPAR_Intensity_2,"ULD_01-SY03Q18_C
+CI_COL-StationSupply_A
+MSOE_Fight-Neterunian
+MMAUTO_STOP",,Zone_SY3_Ss1_Rottami-1,50000,EV_DE_EN-Ubique,Kill Ubique,[SYS_3 TS_SUB-Tree TS_EN-Ubique],,,,,//,,,//,,,//,,,,,,NONE
+SY03Q18,SY03Q18_D0,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q18_0D,,,,,EV_RP_Wave_SY03Q18_0D,Go back,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q18_0D],,,,,//,,,//,,,,,,,,,NONE
+SY03Q18,SY03Q18_0D,CHECKPOINT_ALWAYS,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight-Neterunian
+MPAR_Intensity_1",,,Wave_SY03Q18_0D,40000,EV_WO_Wave_SY03Q18_0D,Take down the bounty hunters,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q18_0D],,,,,//,,,//,,,,,,,,,NONE
+SY03Q18,SY03Q18_D1,NO_CHECKPOINT,FALSE,FALSE,,"ULD_01-SY03Q18_0D
+MSOE_Tension-Soft
+MMAUTO_STOP",,,,EV_IC_INT-MemoryRepair_SY03Q18,Reconstruct the mnemonic data that Ubique sent you,[SYS_3 TS_SUB-Tree TS_INT-MemoryRepair_SY03Q18],,,,,//,,,//,,,,,,,,,NONE
+SY03Q18,SY03Q18_E,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY03Q18_E
+MMAUTO_START
+MSAE_Tension_Horror","ULD_01-SY03Q18_E
+CIR_COL-StationSupply_A
+MSOE_Tension_Horror
+MMAUTO_STOP",,INT-MemoryFragment_Ubique02,10000,EV_IC_INT-MemoryFragment_Ubique02,Examine the neural fragment,[SYS_3 TS_SUB-Tree TS_INT-MemoryFragment_Ubique02],,,,,//,,,//,,,,,,,,,NONE
+SY03Q19,SY03Q19_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-NeterunianSanctuary_SY03Q19A,Use the scanner to locate and disable the Neterunian Sanctuary,[SYS_3 TS_SUB-Tree TS_INT-NeterunianSanctuary_SY03Q19A],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q19,SY03Q19_B,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_INT-NeterunianSanctuary_SY03Q19B,Disable the second Sanctuary,[SYS_3 TS_SUB-Tree TS_INT-NeterunianSanctuary_SY03Q19B],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q19,SY03Q19_C,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY03Q19_C
+MMAUTO_START
+MSAE_FightTurretsLimbo
+MPAR_Intensity_1","ULD_01-SY03Q19_C
+MSOE_FightTurretsLimbo
+MMAUTO_STOP",,Wave_SY03Q19_C,40000,EV_WO_Wave_SY03Q19_C,Kill Ubique,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q19_C],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q20,SY03Q20_A0,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_RP_Zone_Sy3_SS1_TaleClue-SY03Q20,Reach the area marked by Homerus,[SYS_3 TS_SUB-Tree TS_Zone_Sy3_SS1_TaleClue-SY03Q20],,,,,//,,,//,,,,,,,,,NONE
+SY03Q20,SY03Q20_A,CHECKPOINT_SAFE,FALSE,FALSE,LD_01-SY03Q20_A,ULD_01-SY03Q20_A,,,,EV_IC_INT-Memory_NewTaleSY03Q20,Use the scanner to locate the abandoned fragment,"[SYS_3 TS_SUB-Tree TS_Zone_Sy3_SS1_TaleClue-SY03Q20]
+[SYS_3 TS_SUB-Tree TS_INT-Memory_NewTaleSY03Q20]",,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q20,SY03Q20_B,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q20_B,,,,,EV_RP_Wave_SY03Q20_B,The sphere is unsealing,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q20_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q20,SY03Q20_C,CHECKPOINT_SAFE,TRUE,FALSE,,ULD_01-SY03Q20_B,,Wave_SY03Q20_B,40000,EV_WO_Wave_SY03Q20_B,Eliminate the backups,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q20_B],EV_DE_TM-TaleController_SY03Q20B,Use the scanner to locate the Inhibitor and make sure it never works again,[SYS_3 TS_SUB-Tree TS_TM-TaleController_SY03Q20B],,//,,,//,,,//,,,,,,NONE
+SY03Q20,SY03Q20_D,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q20_D,,,,,EV_RP_Wave_SY03Q20_D,Another sphere is activating,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q20_D],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q20,SY03Q20_E,CHECKPOINT_SAFE,TRUE,FALSE,,ULD_01-SY03Q20_D,,Wave_SY03Q20_D,40000,EV_WO_Wave_SY03Q20_D,Kill Tale Shoo again,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q20_D],EV_DE_TM-TaleController_SY03Q20D,Destroy the Inhibitor,[SYS_3 TS_SUB-Tree TS_TM-TaleController_SY03Q20D],,//,,,//,,,//,,,,,,NONE
+SY03Q20,SY03Q20_F,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q20_F,,,,,EV_RP_Wave_SY03Q20_F,Another sphere is powering up,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q20_F],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q20,SY03Q20_G,CHECKPOINT_SAFE,TRUE,FALSE,,ULD_01-SY03Q20_F,,Wave_SY03Q20_F,40000,EV_WO_Wave_SY03Q20_F,Kill Tale Shoo again,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q20_F],EV_DE_TM-TaleController_SY03Q20F,Destroy the Inhibitor,[SYS_3 TS_SUB-Tree TS_TM-TaleController_SY03Q20F],,//,,,//,,,//,,,,,,NONE
+SY03Q20,SY03Q20_H,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q20_H,,,,,EV_RP_Wave_SY03Q20_H,The last sphere is revealing itself,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q20_H],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q20,SY03Q20_I,CHECKPOINT_SAFE,TRUE,FALSE,,ULD_01-SY03Q20_H,,Wave_SY03Q20_H,40000,EV_WO_Wave_SY03Q20_H,Kill Tale Shoo again,[SYS_3 TS_SUB-Tree TS_Wave_SY03Q20_H],EV_DE_TM-TaleController_SY03Q20H,Destroy the Inhibitor,[SYS_3 TS_SUB-Tree TS_TM-TaleController_SY03Q20H],,//,,,//,,,,,,,,,NONE
+SY03Q21,SY03Q21_A,CHECKPOINT_SAFE,FALSE,TRUE,LD_01-SY03Q21_A,ULD_01-SY03Q21_A,,,,"EV_SE_COL-StationSupply_Y(5, SS-Macbeth)",Find and deliver five smuggled trackers to Stump Station,[SYS_3 TS_SUB-Tree],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q22,SY03Q22_A,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY03Q22_A0,,,,,EV_RP_EN-Kuzmina,Join Yalda at Equilibrium Station,[SYS_3 TS_SUB-Tree TS_EN-Kuzmina],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q23,SY03Q22_A1,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_DC_TST_SY03Q22_A1,[H] wait for dialogue,,,//,,,//,,,//,,,,,,,,,NONE
+SY03Q22,SY03Q22_B,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_SY3_Ss1_CreatureEvent,Reach the area indicated by Yalda,[SYS_3 TS_Zone_SY3_Ss1_CreatureEvent],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q22,SY03Q22_C,CHECKPOINT_ALWAYS,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight-Neterunian","MSOE_Fight-Neterunian
+MMAUTO_STOP",,Zone_SY3_Ss1_CreatureEvent,50000,EV_CQ_Battle_SY03Q22_A,Destroy Tale's legacy,,,//,,,//,,,//,,,//,,EV_FCQ_Battle_SY03Q22_A,,,,NONE
+SY03Q22,SY03Q22_D,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RP_SUB-Mosque,Back to the Sanctum,[SYS_3 TS_SUB-Mosque],,//,,,//,,,//,,,,,,,,,NONE
+SY03Q22,SY03Q22_E,NO_CHECKPOINT,TRUE,FALSE,LD_03-MedusaCombat,,,KO-JellyFish,135000,EV_DE_KO-JellyFish,Kill Ban Xerte,[SYS_3 TS_SUB-Mosque TS_KO-JellyFish],,//,,,//,,,//,,,//,,,,,,NONE
+SY03Q22,SY03Q22_F,CHECKPOINT_ALWAYS,TRUE,FALSE,,"ULD_03-MedusaCombat
+ULD_01-SY03Q22_A0",,,,EV_IC_INT-Armilla_BanXerte,Get Ban Xerte's Armilla,[SYS_3 TS_SUB-Mosque TS_INT-Armilla_BanXerte],,//,,,//,,,//,,,//,,,,,,NONE
+,,,FALSE,FALSE,,,,,,,//,,,//,,,//,,,//,,,,,,,,,//
+SY04Q00,SY04Q00_A0,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_DC_TST_SY04Q00_A0,Consult Homerus,,,,,,,,,,,,,,,,,,NONE
+SY04Q00,SY04Q00_A,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_RP_TM-NeterunianBattery_SY04Q00,Reach the Heka protector near the center of the Ruins,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q00],,,,,,,,,,,,,,,,,"Homerus has located a Heka, a massive energy source that generates an Alters-protected zone and powers the ruins' technology. Activate it."
+SY04Q00,SY04Q00_B,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_DE_TM-NeterunianBattery_SY04Q00,Shoot sonic matter at the Heka core to create an Alter-proof zone,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q00],,//,,,//,,,//,,,,,,,,,NONE
+SY04Q00,SY04Q00_C,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY04Q00_B
+MMAUTO_START
+MSAE_Fight-Neterunian",ULD_01-SY04Q02_B,,Wave_SY04Q00_B,60000,EV_WO_Wave_SY04Q00_B,Kill the locusts around the Heka,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q00_B],,,,,,,,,,,,,,,,,NONE
+SY04Q00,SY04Q00_C1,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY04Q00_C1
+MPAR_Intensity_2","ULD_01-SY04Q00_C1
+MSOE_Fight-Neterunian
+MMAUTO_STOP",,Wave_SY04Q00_C1,60000,EV_WO_Wave_SY04Q00_C1,Kill the gunlaxy around the Heka,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q00_C1],,,,,,,,,,,,,,,,,
+SY04Q00,SY04Q00_D,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_DC_TST_SY04Q00_D,Consult Homerus,,,//,,,//,,,//,,,,,,,,,NONE
+SY04Q00,SY04Q00_E,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY04Q00_E,,,,,EV_IC_INT-NeterunianTeleporter_Ruins00,Travel to the area station via Relay,[SYS_4 TS_SUB-Ruins TS_INT-NeterunianTeleporter_Ruins00],,//,,,//,,,//,,,,,,,,,"You have reactivated the Heka, which has also powered a local Neterunian teleporter. Use it to reach an old raider station that Homerus has located."
+SY04Q00,SY04Q00_F,CHECKPOINT_ALWAYS,FALSE,FALSE,,ULD_01-SY04Q00_E,,,,EV_IC_INT-StationRegister-MiningStation,Sync with the Raider Post hub to land,[SYS_4 TS_SUB-Ruins TS_INT-StationRegister-MiningStation],,//,,,//,,,//,,,,,,,,,NONE
+SY04Q01,SY04Q01_A,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_QE_SY04Q02,Reach and awaken Heka Tep,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q02],EV_QE_SY04Q03,Reach and awaken Heka Res,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q03],EV_QE_SY04Q04,Reach and awaken Heka Sha,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q04],EV_QE_SY04Q05,Reach and awaken Heka Ha,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q05],,,,,,,,NONE
+SY04Q02,SY04Q02_A0,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_TM-NeterunianBattery_SY04Q02,Reach Heka Tep,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q02],,,,,,,,,,,,,,,,,
+SY04Q02,SY04Q02_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_DE_TM-NeterunianBattery_SY04Q02,Awaken Heka Tep,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q02],,,,,//,,,//,,,,,,,,,NONE
+SY04Q02,SY04Q02_B,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY04Q02_B
+MMAUTO_START
+MSAE_Fight-Neterunian","ULD_01-SY04Q02_B
+MSOE_Fight-Neterunian
+MMAUTO_STOP",,Wave_SY04Q02_B,60000,EV_WO_Wave_SY04Q02_B,Kill the enemies around the Heka,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q02_B],,,,,//,,,//,,,,,,,,,NONE
+,,CHECKPOINT_SAFE,FALSE,FALSE,,,,,,EV_CC_CUT CAPITAL FANTASMA 1,//,,,,,,//,,,//,,,,,,,,,//
+SY04Q03,SY04Q03_A0,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_TM-NeterunianBattery_SY04Q03,Reach Heka Res,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q03],,,,,,,,,,,,,,,,,
+SY04Q03,SY04Q03_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_DE_TM-NeterunianBattery_SY04Q03,Awaken Heka Res,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q03],,,,,//,,,//,,,,,,,,,NONE
+SY04Q03,SY04Q03_B,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY04Q03_B
+MMAUTO_START
+MSAE_Fight-Neterunian","ULD_01-SY04Q03_B
+MSOE_Fight-Neterunian
+MMAUTO_STOP",,Wave_SY04Q03_B,60000,EV_WO_Wave_SY04Q03_B,Kill the enemies around the Heka,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q03_B],,,,,//,,,//,,,,,,,,,NONE
+SY04Q04,SY04Q04_A0,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_TM-NeterunianBattery_SY04Q04,Reach Heka Sha,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q04],,,,,,,,,,,,,,,,,
+SY04Q04,SY04Q04_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_DE_TM-NeterunianBattery_SY04Q04,Awaken Heka Sha,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q04],,,,,//,,,//,,,,,,,,,NONE
+SY04Q04,SY04Q04_B,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY04Q04_B
+MMAUTO_START
+MSAE_Fight-Neterunian","ULD_01-SY04Q04_B
+MSOE_Fight-Neterunian
+MMAUTO_STOP",,Wave_SY04Q04_B,60000,EV_WO_Wave_SY04Q04_B,Kill the enemies around the Heka,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q04_B],,,,,//,,,//,,,,,,,,,NONE
+,,,FALSE,FALSE,,,,,,EV_CC_CUT CAPITAL FANTASMA 2,//,,,,,,//,,,//,,,,,,,,,//
+SY04Q05,SY04Q05_A0,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_TM-NeterunianBattery_SY04Q05,Reach Heka Ha,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q05],,,,,,,,,,,,,,,,,
+SY04Q05,SY04Q05_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_DE_TM-NeterunianBattery_SY04Q05,Awaken Heka Ha,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianBattery_SY04Q05],,,,,//,,,//,,,,,,,,,NONE
+SY04Q05,SY04Q05_B,CHECKPOINT_ALWAYS,TRUE,FALSE,"LD_01-SY04Q05_B
+MMAUTO_START
+MSAE_Fight-Neterunian","ULD_01-SY04Q05_B
+MSOE_Fight-Neterunian
+MMAUTO_STOP",,Wave_SY04Q05_B,60000,EV_WO_Wave_SY04Q05_B,Kill the enemies around the Heka,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q05_B],,,,,//,,,//,,,,,,,,,NONE
+SY04Q06,SY04Q06_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_SS-MiningStation,Back to Raider Post,[SYS_4 TS_SUB-Ruins TS_SS-MiningStation],,,,,//,,,//,,,,,,,,,NONE
+,,CHECKPOINT_ALWAYS,TRUE,FALSE,,,,,,EV_DC_TST_SY04Q06_B,//,,,,,,//,,,//,,,,,,,,,//
+SY04Q06,SY04Q06_C,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_TM-NeterunianOracle_SY04Q06,Reach The Oracle,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianOracle_SY04Q06],,,,,//,,,//,,,,,,,,,NONE
+SY04Q06,SY04Q06_D,NO_CHECKPOINT,TRUE,FALSE,"LD_01-SY04Q06_D
+CS_CUT_SY04Q06_D
+MMAUTO_START
+MSAE_FightTurretsLimbo",,,,,EV_CC_CUT_SY04Q06_D,[H] wait for cutscene,,,,,,//,,,//,,,,,,,,,NONE
+SY04Q06,SY04Q06_E,CHECKPOINT_ALWAYS,TRUE,FALSE,MPAR_Intensity_1,"ULD_01-SY04Q06_D
+MSOE_FightTurretsLimbo
+MMAUTO_STOP",,EN-GhostCapital,60000,EV_DE_EN-GhostCapital,"Kill Cubit, Fading Capital",,,,,,//,,,//,,,,,,,,,"While searching for the Heka, you were hunted by a strange entity: a capital ship fused with the tormented consciousnesses of raiders who died attempting to flee the galaxy. You must defeat it."
+SY04Q06,SY04Q06_F,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_IC_TM-NeterunianOracle_SY04Q06,Awaken The Oracle,[SYS_4 TS_SUB-Ruins TS_TM-NeterunianOracle_SY04Q06],,,,,//,,,//,,,,,,,,,You have defeated the Fading Capital. Now you can awaken and consult the Oracle regarding the Rehun.
+SY04Q06,SY04Q06_G,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_DC_TST_SY04Q06_G,Consult the Oracle,,,,,,//,,,//,,,,,,,,,NONE
+SY04Q07,SY04Q07_A,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY04Q07_A,,,,,EV_RP_Wave_SY04Q07_B,Reach the energy fluctuation area,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q07_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY04Q07,SY04Q07_B,NO_CHECKPOINT,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight-Movement-Marianan",ULD_01-SY04Q07_A,,Wave_SY04Q07_B,60000,EV_WO_Wave_SY04Q07_B,Clear the area,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q07_B],,,,,,,,,,,,,,,,,NONE
+SY04Q07,SY04Q07_C,NO_CHECKPOINT,TRUE,FALSE,,,,,,EV_IC_INT-NeterunianBomb_SY04Q07,Locate and neutralize Akhaw I before detonation,"[SYS_4 TS_SUB-Ruins TS_INT-NeterunianBomb_SY04Q07]
+[SYS_4 TS_SUB-Ruins TS_Zone_QuestTriggerSY04Q07]",EV_IC_INT-NeterunianBomb_SY04Q07B,Locate and neutralize Akhaw II before detonation,[SYS_4 TS_SUB-Ruins TS_INT-NeterunianBomb_SY04Q07B],EV_IC_INT-NeterunianBomb_SY04Q07C,Locate and neutralize Akhaw III before detonation,[SYS_4 TS_SUB-Ruins TS_INT-NeterunianBomb_SY04Q07C],,//,,,,,,180.0,,,The energy fluctuation is caused by Neterunian defense explosives. Use your scanner to locate and disarm them before it's too late.
+SY04Q07,SY04Q07_D,CHECKPOINT_ALWAYS,TRUE,FALSE,LD_01-SY04Q07_D,"ULD_01-SY04Q07_D
+MSOE_Fight-Movement-Marianan
+MMAUTO_STOP",,Wave_SY04Q07_D,60000,EV_WO_Wave_SY04Q07_D,Eliminate remaining threats,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q07_D],,//,,,//,,,//,,,,,,,,,Kill the enemies drawn in by the activation of Neterunian technology.
+SY04Q07,SY04Q07_E,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_RP_INT-NeterunianLump_SY04Q07,Locate the nearby Ib Device,"[SYS_4 TS_SUB-Ruins TS_INT-NeterunianLump_SY04Q07]
+[SYS_4 TS_SUB-Ruins TS_Zone_QuestTriggerSY04Q07]",,,,,,,,,,,,,,,,,Use the scanner to locate and examine a nearby Neterunian mnemonic device.
+SY04Q07,SY04Q07_F,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-NeterunianLump_SY04Q07,Extract the Neterunian memory etching,[SYS_4 TS_SUB-Ruins TS_INT-NeterunianLump_SY04Q07],,,,,,,,,,,,,,,,,NONE
+SY04Q08,SY04Q08_A,NO_CHECKPOINT,FALSE,FALSE,,,,,,EV_RP_Zone_QuestTriggerSY04Q08,Reach the initiation trial area,[SYS_4 TS_SUB-Ruins TS_Zone_QuestTriggerSY04Q08],,//,,,//,,,//,,,//,,,,,,NONE
+SY04Q08,SY04Q08_B,CHECKPOINT_SAFE,FALSE,FALSE,"LD_01-SY04Q08_B
+MMAUTO_START
+MSAE_FightLimbo",ULD_01-SY04Q08_B,,,,EV_DE_TM-NeterunianFlower_A(4),Locate and collect all Trial Sigils,"[SYS_4 TS_SUB-Ruins TS_TM-NeterunianFlower_A]
+[SYS_4 TS_SUB-Ruins TS_Zone_QuestTriggerSY04Q08]",,//,,,//,,,//,,,//,,,,,,"Locate and retrieve the sacred sigilis scattered across the initiation area, avoiding the Neterunian turrets which cannot be destroyed, only temporarily suppressed by incoming fire."
+SY04Q08,SY04Q08_C,NO_CHECKPOINT,FALSE,FALSE,"LD_01-SY04Q08_D
+MPAR_Intensity_1",,,,,EV_RP_Wave_SY04Q08_D,Exit the structure,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q08_D],,//,,,//,,,//,,,//,,,,,,NONE
+SY04Q08,SY04Q08_D,CHECKPOINT_ALWAYS,TRUE,FALSE,MPAR_Intensity_2,"ULD_01-SY04Q08_D
+MSOE_FightLimbo
+MMAUTO_STOP",,Wave_SY04Q08_D,60000,EV_WO_Wave_SY04Q08_D,Eliminate hostiles to finalize the initiation,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q08_D],,,,,,,,,,,,,,,,,"Once the enemies are eliminated, the initiation will be complete."
+SY04Q09,SY04Q09_A,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY04Q09_A,,,,,EV_RP_Wave_SY04Q09_B,Reach the Neterunian archive remnants,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q09_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY04Q09,SY04Q09_B,CHECKPOINT_ALWAYS,TRUE,FALSE,"MMAUTO_START
+MSAE_Tensionbeat_LOW","ULD_01-SY04Q09_A
+MSOE_Tensionbeat_LOW
+MMAUTO_STOP",,Zone_QuestTriggerSY04Q09,100000,EV_WO_Wave_SY04Q09_B,Eliminate all hostiles,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q09_B],EV_GI_SY04Q09_B,Activate the Hol-feret in rapid succession,[SYS_4 TS_SUB-Ruins TS_INT-NeterunianBastion_SY04Q09],,//,,,//,,,//,,,,,,Protect the archive from incoming enemies and activate its three Hol-Ferets in rapid succession to download a powerful engine into memory.
+SY04Q10,SY04Q10_A,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY04Q10_A,,,,,EV_RP_Wave_SY04Q10_B,Reach the energy fluctuation area,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q10_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY04Q10,SY04Q10_B,CHECKPOINT_SAFE,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight-Movement_Hole","ULD_01-SY04Q10_A
+MSOE_Fight-Movement-Hole
+MMAUTO_STOP",,Wave_SY04Q10_B,60000,EV_WO_Wave_SY04Q10_B,Kill alterized raiders threatening the Ib Device,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q10_B],,//,,,//,,,//,,,//,,,,,,NONE
+SY04Q10,SY04Q10_C,CHECKPOINT_SAFE,FALSE,FALSE,,ULD_01-SY04Q10_Barrier,,,,EV_IC_INT-NeterunianMechanism_SY04Q10(3),Locate and disable all Barrier Anchors,"[SYS_4 TS_SUB-Ruins TS_INT-NeterunianMechanism_SY04Q10]
+[SYS_4 TS_SUB-Ruins TS_Zone_QuestTriggerSY04Q10]",,//,,,//,,,//,,,//,,,,,,"A Neterunian mnemonic device is located in the area, protected by an energy barrier. Use the scanner to find and disable the nearby Anchors to lower the barrier."
+SY04Q10,SY04Q10_D,NO_CHECKPOINT,FALSE,FALSE,LD_01-SY04Q10_D,,,,,EV_RP_Wave_SY04Q10_E,Secure the Ib position,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q10_E],,,,,,,,,,,,,,,,,NONE
+SY04Q10,SY04Q10_E,CHECKPOINT_SAFE,TRUE,FALSE,"MMAUTO_START
+MSAE_Fight-Movement_Hole","ULD_01-SY04Q10_D
+MSOE_Fight-Movement-Hole
+MMAUTO_STOP",,Wave_SY04Q10_D,60000,EV_WO_Wave_SY04Q10_E,Defend the Ib against creatures,[SYS_4 TS_SUB-Ruins TS_Wave_SY04Q10_E],,,,,,,,,,,,,,,,,"Protect the device from the creature assault, then examine the device."
+SY04Q10,SY04Q10_F,CHECKPOINT_ALWAYS,FALSE,FALSE,,,,,,EV_IC_INT-NeterunianLump_SY04Q10,Extract the Neterunian memory etching,[SYS_4 TS_SUB-Ruins TS_INT-NeterunianLump_SY04Q10],,//,,,//,,,//,,,//,,,,,,NONE
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,NO_CHECKPOINT,FALSE,FALSE,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,NO_CHECKPOINT,FALSE,FALSE,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,NO_CHECKPOINT,FALSE,FALSE,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,NO_CHECKPOINT,FALSE,FALSE,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,NO_CHECKPOINT,FALSE,FALSE,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,NO_CHECKPOINT,FALSE,FALSE,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,NO_CHECKPOINT,FALSE,FALSE,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,
+,,,,,,,,,,,//,,,//,,,//,,,//,,,//,,,,,,

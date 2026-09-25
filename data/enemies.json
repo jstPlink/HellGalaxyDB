@@ -1,0 +1,2100 @@
+{
+  "generatedAt": "2026-09-17T13:31:24.493Z",
+  "enemies": [
+    {
+      "id": "KO-Whale",
+      "ruleId": "Colossus",
+      "group": [
+        "KO-Whale"
+      ],
+      "tier": 0,
+      "integrity": 600000,
+      "shield": 0,
+      "damagePrimary": 1000,
+      "damageSecondary": 150,
+      "accuracy": 0.5,
+      "attackRate": 2,
+      "dps": 1000,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 600000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 24495
+    },
+    {
+      "id": "KO-Turtle",
+      "ruleId": "Colossus",
+      "group": [
+        "KO-Turtle"
+      ],
+      "tier": 0,
+      "integrity": 600000,
+      "shield": 0,
+      "damagePrimary": 1000,
+      "damageSecondary": 150,
+      "accuracy": 0.5,
+      "attackRate": 2,
+      "dps": 1000,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 600000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 24495
+    },
+    {
+      "id": "EN-EmpireCapitalShip",
+      "ruleId": "Capital",
+      "group": [
+        "EN-EmpireCapitalShip"
+      ],
+      "tier": 0,
+      "integrity": 420000,
+      "shield": 0,
+      "damagePrimary": 1000,
+      "damageSecondary": 150,
+      "accuracy": 0.3,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 420000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 15875
+    },
+    {
+      "id": "EN-Vassal",
+      "ruleId": "Capital",
+      "group": [
+        "EN-Vassal"
+      ],
+      "tier": 0,
+      "integrity": 420000,
+      "shield": 0,
+      "damagePrimary": 1000,
+      "damageSecondary": 150,
+      "accuracy": 0.3,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 420000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 15875
+    },
+    {
+      "id": "EN-GoldBishop",
+      "ruleId": "Capital",
+      "group": [
+        "EN-GoldBishop"
+      ],
+      "tier": 0,
+      "integrity": 420000,
+      "shield": 0,
+      "damagePrimary": 1000,
+      "damageSecondary": 150,
+      "accuracy": 0.3,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 420000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 15875
+    },
+    {
+      "id": "EN-Aurelia",
+      "ruleId": "Capital",
+      "group": [
+        "EN-Aurelia"
+      ],
+      "tier": 0,
+      "integrity": 420000,
+      "shield": 0,
+      "damagePrimary": 1000,
+      "damageSecondary": 150,
+      "accuracy": 0.3,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 420000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 15875
+    },
+    {
+      "id": "EN-Volcano",
+      "ruleId": "Capital",
+      "group": [
+        "EN-Volcano"
+      ],
+      "tier": 0,
+      "integrity": 420000,
+      "shield": 0,
+      "damagePrimary": 1000,
+      "damageSecondary": 150,
+      "accuracy": 0.3,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 420000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 15875
+    },
+    {
+      "id": "EN-RimDefender",
+      "ruleId": "Capital",
+      "group": [
+        "EN-RimDefender"
+      ],
+      "tier": 0,
+      "integrity": 420000,
+      "shield": 0,
+      "damagePrimary": 1000,
+      "damageSecondary": 150,
+      "accuracy": 0.3,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 420000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 15875
+    },
+    {
+      "id": "EN-IronCommander",
+      "ruleId": "Capital",
+      "group": [
+        "EN-IronCommander"
+      ],
+      "tier": 0,
+      "integrity": 420000,
+      "shield": 0,
+      "damagePrimary": 1000,
+      "damageSecondary": 150,
+      "accuracy": 0.3,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 420000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 15875
+    },
+    {
+      "id": "EN-Isotope",
+      "ruleId": "Capital",
+      "group": [
+        "EN-Isotope"
+      ],
+      "tier": 0,
+      "integrity": 420000,
+      "shield": 0,
+      "damagePrimary": 1000,
+      "damageSecondary": 150,
+      "accuracy": 0.3,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 420000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 15875
+    },
+    {
+      "id": "EN-Dyrcona",
+      "ruleId": "RaiderMDefensive",
+      "group": [
+        "EN-Dyrcona"
+      ],
+      "tier": 0,
+      "integrity": 18000,
+      "shield": 15000,
+      "damagePrimary": 930,
+      "damageSecondary": 150,
+      "accuracy": 0.85,
+      "attackRate": 7,
+      "dps": 5533,
+      "inGame": false,
+      "isBoss": true,
+      "ehp": 33000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 13513
+    },
+    {
+      "id": "EN-Ubique",
+      "ruleId": "RaiderMOffensive",
+      "group": [
+        "EN-Ubique"
+      ],
+      "tier": 0,
+      "integrity": 15000,
+      "shield": 10000,
+      "damagePrimary": 750,
+      "damageSecondary": 3000,
+      "accuracy": 0.85,
+      "attackRate": 10,
+      "dps": 6375,
+      "inGame": false,
+      "isBoss": true,
+      "ehp": 25000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 12624
+    },
+    {
+      "id": "EN-Faceless",
+      "ruleId": "RaiderMOffensive",
+      "group": [
+        "EN-Faceless"
+      ],
+      "tier": 0,
+      "integrity": 15000,
+      "shield": 10000,
+      "damagePrimary": 750,
+      "damageSecondary": 3000,
+      "accuracy": 0.85,
+      "attackRate": 10,
+      "dps": 6375,
+      "inGame": false,
+      "isBoss": true,
+      "ehp": 25000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 12624
+    },
+    {
+      "id": "EN-Reyton",
+      "ruleId": "RaiderMOffensive",
+      "group": [
+        "EN-Reyton"
+      ],
+      "tier": 0,
+      "integrity": 15000,
+      "shield": 10000,
+      "damagePrimary": 750,
+      "damageSecondary": 3000,
+      "accuracy": 0.85,
+      "attackRate": 10,
+      "dps": 6375,
+      "inGame": false,
+      "isBoss": true,
+      "ehp": 25000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 12624
+    },
+    {
+      "id": "EN-Semper",
+      "ruleId": "RaiderMOffensive",
+      "group": [
+        "EN-Semper"
+      ],
+      "tier": 0,
+      "integrity": 15000,
+      "shield": 10000,
+      "damagePrimary": 750,
+      "damageSecondary": 3000,
+      "accuracy": 0.85,
+      "attackRate": 10,
+      "dps": 6375,
+      "inGame": false,
+      "isBoss": true,
+      "ehp": 25000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 12624
+    },
+    {
+      "id": "EN-Tonath",
+      "ruleId": "RaiderMOffensive",
+      "group": [
+        "EN-Tonath"
+      ],
+      "tier": 0,
+      "integrity": 15000,
+      "shield": 10000,
+      "damagePrimary": 750,
+      "damageSecondary": 3000,
+      "accuracy": 0.85,
+      "attackRate": 10,
+      "dps": 6375,
+      "inGame": false,
+      "isBoss": true,
+      "ehp": 25000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 12624
+    },
+    {
+      "id": "EN-Haru",
+      "ruleId": "RaiderMOffensive",
+      "group": [
+        "EN-Haru"
+      ],
+      "tier": 0,
+      "integrity": 15000,
+      "shield": 10000,
+      "damagePrimary": 750,
+      "damageSecondary": 3000,
+      "accuracy": 0.85,
+      "attackRate": 10,
+      "dps": 6375,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 25000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 12624
+    },
+    {
+      "id": "EN-Tale",
+      "ruleId": "RaiderMOffensive",
+      "group": [
+        "EN-Tale",
+        "EN-Kuzmina"
+      ],
+      "tier": 0,
+      "integrity": 15000,
+      "shield": 10000,
+      "damagePrimary": 750,
+      "damageSecondary": 3000,
+      "accuracy": 0.85,
+      "attackRate": 10,
+      "dps": 6375,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 25000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 12624
+    },
+    {
+      "id": "EN-Kuzmina",
+      "ruleId": "RaiderMOffensive",
+      "group": [
+        "EN-Tale",
+        "EN-Kuzmina"
+      ],
+      "tier": 0,
+      "integrity": 15000,
+      "shield": 10000,
+      "damagePrimary": 750,
+      "damageSecondary": 3000,
+      "accuracy": 0.85,
+      "attackRate": 10,
+      "dps": 6375,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 25000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 12624
+    },
+    {
+      "id": "EN-Jammer",
+      "ruleId": "RaiderMBalanced",
+      "group": [
+        "EN-Jammer"
+      ],
+      "tier": 0,
+      "integrity": 19000,
+      "shield": 9000,
+      "damagePrimary": 675,
+      "damageSecondary": 3000,
+      "accuracy": 0.9,
+      "attackRate": 9,
+      "dps": 5467,
+      "inGame": true,
+      "isBoss": true,
+      "ehp": 28000,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling",
+        "Laser",
+        "Rocket"
+      ],
+      "weaponLoadout": [
+        "SML_NPC_MOD41-Gatling_S",
+        "SML_NPC_MOD30-RocketLauncher_S",
+        "SML_NPC_MOD11-Laser_L"
+      ],
+      "abilities": [
+        {
+          "name": "Jammer",
+          "priority": 4,
+          "cooldown": null,
+          "cooldownToAttack": null
+        },
+        {
+          "name": "BarrelRoll",
+          "priority": 1,
+          "cooldown": 12,
+          "cooldownToAttack": 2
+        },
+        {
+          "name": "LockOn",
+          "priority": 2,
+          "cooldown": 30,
+          "cooldownToAttack": 10
+        }
+      ],
+      "threatIndex": 12372
+    },
+    {
+      "id": "EN-Dawn",
+      "ruleId": "RaiderMBalanced",
+      "group": [
+        "EN-Dawn"
+      ],
+      "tier": 0,
+      "integrity": 19000,
+      "shield": 9000,
+      "damagePrimary": 675,
+      "damageSecondary": 3000,
+      "accuracy": 0.9,
+      "attackRate": 9,
+      "dps": 5467,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 28000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 12372
+    },
+    {
+      "id": "EN-Set",
+      "ruleId": "RaiderMBalanced",
+      "group": [
+        "EN-Set"
+      ],
+      "tier": 0,
+      "integrity": 19000,
+      "shield": 9000,
+      "damagePrimary": 675,
+      "damageSecondary": 3000,
+      "accuracy": 0.9,
+      "attackRate": 9,
+      "dps": 5467,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 28000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 12372
+    },
+    {
+      "id": "EN-Oran",
+      "ruleId": "RaiderBOffensive",
+      "group": [
+        "EN-Oran"
+      ],
+      "tier": 0,
+      "integrity": 12000,
+      "shield": 10000,
+      "damagePrimary": 1030,
+      "damageSecondary": 1500,
+      "accuracy": 0.85,
+      "attackRate": 5,
+      "dps": 4377,
+      "inGame": false,
+      "isBoss": true,
+      "ehp": 22000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 9813
+    },
+    {
+      "id": "EN-Enhanced Possessed",
+      "ruleId": "DroneMBalanced",
+      "group": [
+        "EN-Enhanced Possessed"
+      ],
+      "tier": 4,
+      "integrity": 9900,
+      "shield": 9000,
+      "damagePrimary": 1300,
+      "damageSecondary": 210,
+      "accuracy": 0.75,
+      "attackRate": 4,
+      "dps": 3900,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 18900,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 8585
+    },
+    {
+      "id": "EN-HatefulMagma",
+      "ruleId": "DroneMOffensive",
+      "group": [
+        "EN-HatefulMagma",
+        "EN-Hesperide",
+        "EN-EvilMagma"
+      ],
+      "tier": 0,
+      "integrity": 7500,
+      "shield": 5000,
+      "damagePrimary": 852.5,
+      "damageSecondary": 852.5,
+      "accuracy": 0.85,
+      "attackRate": 7,
+      "dps": 5072,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 12500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 7962
+    },
+    {
+      "id": "EN-Hesperide",
+      "ruleId": "DroneMOffensive",
+      "group": [
+        "EN-HatefulMagma",
+        "EN-Hesperide",
+        "EN-EvilMagma"
+      ],
+      "tier": 0,
+      "integrity": 7500,
+      "shield": 5000,
+      "damagePrimary": 852.5,
+      "damageSecondary": 852.5,
+      "accuracy": 0.85,
+      "attackRate": 7,
+      "dps": 5072,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 12500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 7962
+    },
+    {
+      "id": "EN-EvilMagma",
+      "ruleId": "DroneMOffensive",
+      "group": [
+        "EN-HatefulMagma",
+        "EN-Hesperide",
+        "EN-EvilMagma"
+      ],
+      "tier": 0,
+      "integrity": 7500,
+      "shield": 5000,
+      "damagePrimary": 852.5,
+      "damageSecondary": 852.5,
+      "accuracy": 0.85,
+      "attackRate": 7,
+      "dps": 5072,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 12500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 7962
+    },
+    {
+      "id": "EN-MutilatedGold",
+      "ruleId": "DroneMOffensive",
+      "group": [
+        "EN-MutilatedGold"
+      ],
+      "tier": 0,
+      "integrity": 7500,
+      "shield": 5000,
+      "damagePrimary": 852.5,
+      "damageSecondary": 852.5,
+      "accuracy": 0.85,
+      "attackRate": 7,
+      "dps": 5072,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 12500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 7962
+    },
+    {
+      "id": "EN-Maalaxmi02",
+      "ruleId": "DroneMDefensive",
+      "group": [
+        "EN-Maalaxmi02"
+      ],
+      "tier": 0,
+      "integrity": 7500,
+      "shield": 5000,
+      "damagePrimary": 852.5,
+      "damageSecondary": 150,
+      "accuracy": 0.85,
+      "attackRate": 7,
+      "dps": 5072,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 12500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 7962
+    },
+    {
+      "id": "EN-Lexon02",
+      "ruleId": "DroneMOffensive",
+      "group": [
+        "EN-Lexon02"
+      ],
+      "tier": 0,
+      "integrity": 7500,
+      "shield": 5000,
+      "damagePrimary": 852.5,
+      "damageSecondary": 852.5,
+      "accuracy": 0.85,
+      "attackRate": 7,
+      "dps": 5072,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 12500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 7962
+    },
+    {
+      "id": "EN-Rodolfo",
+      "ruleId": "RaiderDefensive",
+      "group": [
+        "EN-Rodolfo"
+      ],
+      "tier": 0,
+      "integrity": 18000,
+      "shield": 36000,
+      "damagePrimary": 800,
+      "damageSecondary": 150,
+      "accuracy": 0.4,
+      "attackRate": 2.5,
+      "dps": 800,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 54000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 6573
+    },
+    {
+      "id": "EN-BatikiGuard",
+      "ruleId": "DroneSBalanced",
+      "group": [
+        "EN-BatikiGuard"
+      ],
+      "tier": 1,
+      "integrity": 6000,
+      "shield": 2400,
+      "damagePrimary": 525,
+      "damageSecondary": 165,
+      "accuracy": 0.75,
+      "attackRate": 5,
+      "dps": 1968,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 8400,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling"
+      ],
+      "weaponLoadout": [
+        "SML_SMPW_TurretGatling"
+      ],
+      "abilities": [
+        {
+          "name": "BarrelRoll",
+          "priority": 1,
+          "cooldown": 12,
+          "cooldownToAttack": 2
+        },
+        {
+          "name": "StopAndSearch",
+          "priority": 0,
+          "cooldown": 20,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "Sprint",
+          "priority": 0,
+          "cooldown": 9,
+          "cooldownToAttack": 3
+        },
+        {
+          "name": "LockOn",
+          "priority": 2,
+          "cooldown": 30,
+          "cooldownToAttack": 10
+        }
+      ],
+      "threatIndex": 4066
+    },
+    {
+      "id": "EN-ArmedScalped",
+      "ruleId": "DroneMBalanced",
+      "group": [
+        "EN-ArmedScalped"
+      ],
+      "tier": 0,
+      "integrity": 5500,
+      "shield": 5000,
+      "damagePrimary": 500,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 4,
+      "dps": 1500,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 10500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [
+        {
+          "name": "BarrelRoll",
+          "priority": 1,
+          "cooldown": 12,
+          "cooldownToAttack": 2
+        },
+        {
+          "name": "StopAndSearch",
+          "priority": 0,
+          "cooldown": 20,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "Sprint",
+          "priority": 0,
+          "cooldown": 9,
+          "cooldownToAttack": 3
+        },
+        {
+          "name": "CoverFire",
+          "priority": 1,
+          "cooldown": 31,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "LastBreath",
+          "priority": 3,
+          "cooldown": null,
+          "cooldownToAttack": null
+        }
+      ],
+      "threatIndex": 3969
+    },
+    {
+      "id": "EN-SisterHoe",
+      "ruleId": "DroneMBalanced",
+      "group": [
+        "EN-SisterHoe",
+        "EN-Jewella"
+      ],
+      "tier": 0,
+      "integrity": 5500,
+      "shield": 5000,
+      "damagePrimary": 500,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 4,
+      "dps": 1500,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 10500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [
+        {
+          "name": "BarrelRoll",
+          "priority": 1,
+          "cooldown": 12,
+          "cooldownToAttack": 2
+        },
+        {
+          "name": "StopAndSearch",
+          "priority": 0,
+          "cooldown": 20,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "Sprint",
+          "priority": 0,
+          "cooldown": 9,
+          "cooldownToAttack": 3
+        },
+        {
+          "name": "CoverFire",
+          "priority": 1,
+          "cooldown": 31,
+          "cooldownToAttack": 10
+        }
+      ],
+      "threatIndex": 3969
+    },
+    {
+      "id": "EN-Jewella",
+      "ruleId": "DroneMBalanced",
+      "group": [
+        "EN-SisterHoe",
+        "EN-Jewella"
+      ],
+      "tier": 0,
+      "integrity": 5500,
+      "shield": 5000,
+      "damagePrimary": 500,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 4,
+      "dps": 1500,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 10500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 3969
+    },
+    {
+      "id": "EN-BrotherPickaxe",
+      "ruleId": "DroneMBalanced",
+      "group": [
+        "EN-BrotherPickaxe",
+        "EN-Orogenya"
+      ],
+      "tier": 0,
+      "integrity": 5500,
+      "shield": 5000,
+      "damagePrimary": 500,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 4,
+      "dps": 1500,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 10500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 3969
+    },
+    {
+      "id": "EN-Orogenya",
+      "ruleId": "DroneMBalanced",
+      "group": [
+        "EN-BrotherPickaxe",
+        "EN-Orogenya"
+      ],
+      "tier": 0,
+      "integrity": 5500,
+      "shield": 5000,
+      "damagePrimary": 500,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 4,
+      "dps": 1500,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 10500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 3969
+    },
+    {
+      "id": "EN-Maalaxmi01",
+      "ruleId": "DroneMBalanced",
+      "group": [
+        "EN-Maalaxmi01"
+      ],
+      "tier": 0,
+      "integrity": 5500,
+      "shield": 5000,
+      "damagePrimary": 500,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 4,
+      "dps": 1500,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 10500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 3969
+    },
+    {
+      "id": "EN-Lexon01",
+      "ruleId": "DroneMBalanced",
+      "group": [
+        "EN-Lexon01"
+      ],
+      "tier": 0,
+      "integrity": 5500,
+      "shield": 5000,
+      "damagePrimary": 500,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 4,
+      "dps": 1500,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 10500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 3969
+    },
+    {
+      "id": "EN-BatikiCargo",
+      "ruleId": "EliteSBalanced",
+      "group": [
+        "EN-BatikiCargo"
+      ],
+      "tier": 0,
+      "integrity": 5500,
+      "shield": 2500,
+      "damagePrimary": 450,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 5,
+      "dps": 1687,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 8000,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling",
+        "Rocket"
+      ],
+      "weaponLoadout": [
+        "SML_SMPW_TurretGatling",
+        "SML_SMPW_TurretRocketLauncher_Enemy"
+      ],
+      "abilities": [
+        {
+          "name": "BarrelRoll",
+          "priority": 1,
+          "cooldown": 12,
+          "cooldownToAttack": 2
+        },
+        {
+          "name": "StopAndSearch",
+          "priority": 0,
+          "cooldown": 20,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "Sprint",
+          "priority": 0,
+          "cooldown": 9,
+          "cooldownToAttack": 3
+        },
+        {
+          "name": "LockOn",
+          "priority": 2,
+          "cooldown": 30,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "CoverFire",
+          "priority": 1,
+          "cooldown": 31,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "LastBreath",
+          "priority": 3,
+          "cooldown": null,
+          "cooldownToAttack": null
+        }
+      ],
+      "threatIndex": 3674
+    },
+    {
+      "id": "EN-Drone_Support",
+      "ruleId": "DroneBalanced",
+      "group": [
+        "EN-Drone_Support"
+      ],
+      "tier": 0,
+      "integrity": 1200,
+      "shield": 5000,
+      "damagePrimary": 525,
+      "damageSecondary": 150,
+      "accuracy": 0.7,
+      "attackRate": 5,
+      "dps": 1837,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 6200,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [
+        "SML_SMPW_TurretGatling"
+      ],
+      "abilities": [
+        {
+          "name": "BarrelRoll",
+          "priority": 1,
+          "cooldown": 12,
+          "cooldownToAttack": 2
+        },
+        {
+          "name": "StopAndSearch",
+          "priority": 0,
+          "cooldown": 20,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "CoverFire",
+          "priority": 1,
+          "cooldown": 31,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "Sprint",
+          "priority": 0,
+          "cooldown": 9,
+          "cooldownToAttack": 3
+        }
+      ],
+      "threatIndex": 3375
+    },
+    {
+      "id": "EN-ZombieShip_02",
+      "ruleId": "DroneSBalanced",
+      "group": [
+        "EN-ZombieShip_02"
+      ],
+      "tier": 0,
+      "integrity": 5000,
+      "shield": 2000,
+      "damagePrimary": 375,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 5,
+      "dps": 1406,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 7000,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling"
+      ],
+      "weaponLoadout": [
+        "SML_SMPW_TurretGatling"
+      ],
+      "abilities": [],
+      "threatIndex": 3137
+    },
+    {
+      "id": "EN-Druimo",
+      "ruleId": "CreatureAmbush",
+      "group": [
+        "EN-Druimo"
+      ],
+      "tier": 3,
+      "integrity": 24000,
+      "shield": 0,
+      "damagePrimary": 1430,
+      "damageSecondary": 195,
+      "accuracy": 0.5,
+      "attackRate": 0.5,
+      "dps": 357,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 24000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 2927
+    },
+    {
+      "id": "EN-ScalpedRaider",
+      "ruleId": "DroneMWeak_Heavy",
+      "group": [
+        "EN-ScalpedRaider"
+      ],
+      "tier": 0,
+      "integrity": 6500,
+      "shield": 0,
+      "damagePrimary": 350,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 5,
+      "dps": 1312,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 6500,
+      "weaponClass": "Shotgun",
+      "weaponTags": [
+        "Shotgun"
+      ],
+      "weaponLoadout": [
+        "SML_SMPW_TurretShotgun"
+      ],
+      "abilities": [
+        {
+          "name": "BarrelRoll",
+          "priority": 1,
+          "cooldown": 12,
+          "cooldownToAttack": 2
+        },
+        {
+          "name": "StopAndSearch",
+          "priority": 0,
+          "cooldown": 20,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "Sprint",
+          "priority": 0,
+          "cooldown": 9,
+          "cooldownToAttack": 3
+        },
+        {
+          "name": "CoverFire",
+          "priority": 1,
+          "cooldown": 31,
+          "cooldownToAttack": 10
+        }
+      ],
+      "threatIndex": 2920
+    },
+    {
+      "id": "EN-GhostMaskKingdom",
+      "ruleId": "CreatureGhost",
+      "group": [
+        "EN-GhostMaskKingdom"
+      ],
+      "tier": 4,
+      "integrity": 5400,
+      "shield": 0,
+      "damagePrimary": 1950,
+      "damageSecondary": 210,
+      "accuracy": 0.4,
+      "attackRate": 2,
+      "dps": 1560,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 5400,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 2902
+    },
+    {
+      "id": "EN-FI_SH01",
+      "ruleId": "AllyBalanced",
+      "group": [
+        "EN-FI_SH01",
+        "EN-FI_SH02",
+        "EN-FI_SH03"
+      ],
+      "tier": 0,
+      "integrity": 10500,
+      "shield": 3000,
+      "damagePrimary": 200,
+      "damageSecondary": 250,
+      "accuracy": 0.4,
+      "attackRate": 7,
+      "dps": 560,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 13500,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling",
+        "Laser"
+      ],
+      "weaponLoadout": [
+        "SML_NPC_MOD41-Gatling_S",
+        "SML_NPC_MOD11-Laser_L"
+      ],
+      "abilities": [],
+      "threatIndex": 2750
+    },
+    {
+      "id": "EN-FI_SH02",
+      "ruleId": "AllyBalanced",
+      "group": [
+        "EN-FI_SH01",
+        "EN-FI_SH02",
+        "EN-FI_SH03"
+      ],
+      "tier": 0,
+      "integrity": 10500,
+      "shield": 3000,
+      "damagePrimary": 200,
+      "damageSecondary": 250,
+      "accuracy": 0.4,
+      "attackRate": 7,
+      "dps": 560,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 13500,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling",
+        "Laser"
+      ],
+      "weaponLoadout": [
+        "SML_NPC_MOD41-Gatling_S",
+        "SML_NPC_MOD11-Laser_L"
+      ],
+      "abilities": [],
+      "threatIndex": 2750
+    },
+    {
+      "id": "EN-FI_SH03",
+      "ruleId": "AllyBalanced",
+      "group": [
+        "EN-FI_SH01",
+        "EN-FI_SH02",
+        "EN-FI_SH03"
+      ],
+      "tier": 0,
+      "integrity": 10500,
+      "shield": 3000,
+      "damagePrimary": 200,
+      "damageSecondary": 250,
+      "accuracy": 0.4,
+      "attackRate": 7,
+      "dps": 560,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 13500,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling",
+        "Laser"
+      ],
+      "weaponLoadout": [
+        "SML_NPC_MOD41-Gatling_S",
+        "SML_NPC_MOD11-Laser_L"
+      ],
+      "abilities": [],
+      "threatIndex": 2750
+    },
+    {
+      "id": "EN-TR_SH01",
+      "ruleId": "DroneCargo",
+      "group": [
+        "EN-TR_SH01",
+        "EN-TR_SH02"
+      ],
+      "tier": 0,
+      "integrity": 20000,
+      "shield": 1000,
+      "damagePrimary": 300,
+      "damageSecondary": 150,
+      "accuracy": 0.5,
+      "attackRate": 2,
+      "dps": 300,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 21000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 2510
+    },
+    {
+      "id": "EN-TR_SH02",
+      "ruleId": "DroneCargo",
+      "group": [
+        "EN-TR_SH01",
+        "EN-TR_SH02"
+      ],
+      "tier": 0,
+      "integrity": 20000,
+      "shield": 1000,
+      "damagePrimary": 300,
+      "damageSecondary": 150,
+      "accuracy": 0.5,
+      "attackRate": 2,
+      "dps": 300,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 21000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 2510
+    },
+    {
+      "id": "EN-MamaDraga",
+      "ruleId": "DroneCargo",
+      "group": [
+        "EN-MamaDraga",
+        "EN-HeraldMiner"
+      ],
+      "tier": 0,
+      "integrity": 20000,
+      "shield": 1000,
+      "damagePrimary": 300,
+      "damageSecondary": 150,
+      "accuracy": 0.5,
+      "attackRate": 2,
+      "dps": 300,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 21000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 2510
+    },
+    {
+      "id": "EN-HeraldMiner",
+      "ruleId": "DroneCargo",
+      "group": [
+        "EN-MamaDraga",
+        "EN-HeraldMiner"
+      ],
+      "tier": 0,
+      "integrity": 20000,
+      "shield": 1000,
+      "damagePrimary": 300,
+      "damageSecondary": 150,
+      "accuracy": 0.5,
+      "attackRate": 2,
+      "dps": 300,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 21000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 2510
+    },
+    {
+      "id": "EN-BatikiMining",
+      "ruleId": "DroneSBalancedNoShield",
+      "group": [
+        "EN-BatikiMining"
+      ],
+      "tier": 0,
+      "integrity": 5500,
+      "shield": 0,
+      "damagePrimary": 300,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 5,
+      "dps": 1125,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 5500,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling"
+      ],
+      "weaponLoadout": [
+        "SML_SMPW_TurretGatling"
+      ],
+      "abilities": [
+        {
+          "name": "BarrelRoll",
+          "priority": 1,
+          "cooldown": 12,
+          "cooldownToAttack": 2
+        },
+        {
+          "name": "StopAndSearch",
+          "priority": 0,
+          "cooldown": 20,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "Sprint",
+          "priority": 0,
+          "cooldown": 9,
+          "cooldownToAttack": 3
+        },
+        {
+          "name": "CoverFire",
+          "priority": 1,
+          "cooldown": 31,
+          "cooldownToAttack": 10
+        }
+      ],
+      "threatIndex": 2487
+    },
+    {
+      "id": "EN-GM_SH02",
+      "ruleId": "DroneSBalancedNoShield",
+      "group": [
+        "EN-GM_SH02",
+        "EN-GM_SH03"
+      ],
+      "tier": 0,
+      "integrity": 5500,
+      "shield": 0,
+      "damagePrimary": 300,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 5,
+      "dps": 1125,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 5500,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling",
+        "Laser"
+      ],
+      "weaponLoadout": [
+        "SML_NPC_MOD41-Gatling_S",
+        "SML_NPC_MOD11-Laser_L"
+      ],
+      "abilities": [],
+      "threatIndex": 2487
+    },
+    {
+      "id": "EN-GM_SH03",
+      "ruleId": "DroneSBalancedNoShield",
+      "group": [
+        "EN-GM_SH02",
+        "EN-GM_SH03"
+      ],
+      "tier": 0,
+      "integrity": 5500,
+      "shield": 0,
+      "damagePrimary": 300,
+      "damageSecondary": 150,
+      "accuracy": 0.75,
+      "attackRate": 5,
+      "dps": 1125,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 5500,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling",
+        "Laser"
+      ],
+      "weaponLoadout": [
+        "SML_NPC_MOD41-Gatling_S",
+        "SML_NPC_MOD11-Laser_L"
+      ],
+      "abilities": [],
+      "threatIndex": 2487
+    },
+    {
+      "id": "EN-Drone_Cargo_01",
+      "ruleId": "DroneCargo_Escape",
+      "group": [
+        "EN-Drone_Cargo_01",
+        "EN-Drone_Cargo_02"
+      ],
+      "tier": 1,
+      "integrity": 12000,
+      "shield": 600,
+      "damagePrimary": 420,
+      "damageSecondary": 165,
+      "accuracy": 0.5,
+      "attackRate": 2,
+      "dps": 420,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 12600,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 2300
+    },
+    {
+      "id": "EN-Drone_Cargo_02",
+      "ruleId": "DroneCargo_Escape",
+      "group": [
+        "EN-Drone_Cargo_01",
+        "EN-Drone_Cargo_02"
+      ],
+      "tier": 1,
+      "integrity": 12000,
+      "shield": 600,
+      "damagePrimary": 420,
+      "damageSecondary": 165,
+      "accuracy": 0.5,
+      "attackRate": 2,
+      "dps": 420,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 12600,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 2300
+    },
+    {
+      "id": "EN-PossessedRaider",
+      "ruleId": "DronePossessed",
+      "group": [
+        "EN-PossessedRaider"
+      ],
+      "tier": 4,
+      "integrity": 5400,
+      "shield": 0,
+      "damagePrimary": 390,
+      "damageSecondary": 210,
+      "accuracy": 0.7,
+      "attackRate": 3,
+      "dps": 819,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 5400,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 2103
+    },
+    {
+      "id": "EN-AngryMiner",
+      "ruleId": "DroneMiner",
+      "group": [
+        "EN-AngryMiner",
+        "EN-Midas"
+      ],
+      "tier": 0,
+      "integrity": 9500,
+      "shield": 0,
+      "damagePrimary": 125,
+      "damageSecondary": 150,
+      "accuracy": 0.65,
+      "attackRate": 3,
+      "dps": 243,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 9500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 1519
+    },
+    {
+      "id": "EN-Midas",
+      "ruleId": "DroneMiner",
+      "group": [
+        "EN-AngryMiner",
+        "EN-Midas"
+      ],
+      "tier": 0,
+      "integrity": 9500,
+      "shield": 0,
+      "damagePrimary": 125,
+      "damageSecondary": 150,
+      "accuracy": 0.65,
+      "attackRate": 3,
+      "dps": 243,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 9500,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 1519
+    },
+    {
+      "id": "EN-ZombieShip_00",
+      "ruleId": "DroneMZombieNoShield",
+      "group": [
+        "EN-ZombieShip_00",
+        "EN-ZombieShip_01",
+        "EN-ZombieGold",
+        "EN-ZombieIron"
+      ],
+      "tier": 0,
+      "integrity": 4000,
+      "shield": 0,
+      "damagePrimary": 150,
+      "damageSecondary": 800,
+      "accuracy": 0.75,
+      "attackRate": 5,
+      "dps": 562,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 4000,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling"
+      ],
+      "weaponLoadout": [
+        "SML_SMPW_TurretGatling"
+      ],
+      "abilities": [
+        {
+          "name": "BarrelRoll",
+          "priority": 1,
+          "cooldown": 12,
+          "cooldownToAttack": 2
+        },
+        {
+          "name": "StopAndSearch",
+          "priority": 0,
+          "cooldown": 20,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "LockOn",
+          "priority": 2,
+          "cooldown": 30,
+          "cooldownToAttack": 10
+        }
+      ],
+      "threatIndex": 1499
+    },
+    {
+      "id": "EN-ZombieShip_01",
+      "ruleId": "DroneMZombieNoShield",
+      "group": [
+        "EN-ZombieShip_00",
+        "EN-ZombieShip_01",
+        "EN-ZombieGold",
+        "EN-ZombieIron"
+      ],
+      "tier": 0,
+      "integrity": 4000,
+      "shield": 0,
+      "damagePrimary": 150,
+      "damageSecondary": 800,
+      "accuracy": 0.75,
+      "attackRate": 5,
+      "dps": 562,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 4000,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling"
+      ],
+      "weaponLoadout": [
+        "SML_SMPW_TurretGatling"
+      ],
+      "abilities": [
+        {
+          "name": "BarrelRoll",
+          "priority": 1,
+          "cooldown": 12,
+          "cooldownToAttack": 2
+        },
+        {
+          "name": "StopAndSearch",
+          "priority": 0,
+          "cooldown": 20,
+          "cooldownToAttack": 10
+        },
+        {
+          "name": "LockOn",
+          "priority": 2,
+          "cooldown": 30,
+          "cooldownToAttack": 10
+        }
+      ],
+      "threatIndex": 1499
+    },
+    {
+      "id": "EN-ZombieGold",
+      "ruleId": "DroneMZombieNoShield",
+      "group": [
+        "EN-ZombieShip_00",
+        "EN-ZombieShip_01",
+        "EN-ZombieGold",
+        "EN-ZombieIron"
+      ],
+      "tier": 0,
+      "integrity": 4000,
+      "shield": 0,
+      "damagePrimary": 150,
+      "damageSecondary": 800,
+      "accuracy": 0.75,
+      "attackRate": 5,
+      "dps": 562,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 4000,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling"
+      ],
+      "weaponLoadout": [
+        "SML_SMPW_TurretGatling"
+      ],
+      "abilities": [],
+      "threatIndex": 1499
+    },
+    {
+      "id": "EN-ZombieIron",
+      "ruleId": "DroneMZombieNoShield",
+      "group": [
+        "EN-ZombieShip_00",
+        "EN-ZombieShip_01",
+        "EN-ZombieGold",
+        "EN-ZombieIron"
+      ],
+      "tier": 0,
+      "integrity": 4000,
+      "shield": 0,
+      "damagePrimary": 150,
+      "damageSecondary": 800,
+      "accuracy": 0.75,
+      "attackRate": 5,
+      "dps": 562,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 4000,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling"
+      ],
+      "weaponLoadout": [
+        "SML_SMPW_TurretGatling"
+      ],
+      "abilities": [],
+      "threatIndex": 1499
+    },
+    {
+      "id": "EN-GhostMask",
+      "ruleId": "CreatureGhost",
+      "group": [
+        "EN-GhostMask"
+      ],
+      "tier": 0,
+      "integrity": 3000,
+      "shield": 0,
+      "damagePrimary": 750,
+      "damageSecondary": 150,
+      "accuracy": 0.4,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 3000,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 1342
+    },
+    {
+      "id": "EN-Murena",
+      "ruleId": "CreatureFast",
+      "group": [
+        "EN-Murena"
+      ],
+      "tier": 0,
+      "integrity": 2680,
+      "shield": 0,
+      "damagePrimary": 750,
+      "damageSecondary": 150,
+      "accuracy": 0.4,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 2680,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 1268
+    },
+    {
+      "id": "EN-GhostSpider",
+      "ruleId": "CreatureFast",
+      "group": [
+        "EN-GhostSpider",
+        "EN-GhostOgre",
+        "EN-GhostOgre",
+        "EN-GhostPriest",
+        "EN-GhostMask"
+      ],
+      "tier": 0,
+      "integrity": 2680,
+      "shield": 0,
+      "damagePrimary": 750,
+      "damageSecondary": 150,
+      "accuracy": 0.4,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 2680,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 1268
+    },
+    {
+      "id": "EN-GhostOgre",
+      "ruleId": "CreatureFast",
+      "group": [
+        "EN-GhostSpider",
+        "EN-GhostOgre",
+        "EN-GhostOgre",
+        "EN-GhostPriest",
+        "EN-GhostMask"
+      ],
+      "tier": 0,
+      "integrity": 2680,
+      "shield": 0,
+      "damagePrimary": 750,
+      "damageSecondary": 150,
+      "accuracy": 0.4,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 2680,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 1268
+    },
+    {
+      "id": "EN-GhostPriest",
+      "ruleId": "CreatureFast",
+      "group": [
+        "EN-GhostSpider",
+        "EN-GhostOgre",
+        "EN-GhostOgre",
+        "EN-GhostPriest",
+        "EN-GhostMask"
+      ],
+      "tier": 0,
+      "integrity": 2680,
+      "shield": 0,
+      "damagePrimary": 750,
+      "damageSecondary": 150,
+      "accuracy": 0.4,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 2680,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 1268
+    },
+    {
+      "id": "EN-DronePirate",
+      "ruleId": "TutorialDrone",
+      "group": [
+        "EN-DronePirate"
+      ],
+      "tier": 0,
+      "integrity": 1100,
+      "shield": 0,
+      "damagePrimary": 425,
+      "damageSecondary": 150,
+      "accuracy": 0.7,
+      "attackRate": 4,
+      "dps": 1190,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 1100,
+      "weaponClass": "Gatling",
+      "weaponTags": [
+        "Gatling"
+      ],
+      "weaponLoadout": [
+        "SML_SMPW_TurretGatling"
+      ],
+      "abilities": [
+        {
+          "name": "BarrelRoll",
+          "priority": 1,
+          "cooldown": 12,
+          "cooldownToAttack": 2
+        }
+      ],
+      "threatIndex": 1144
+    },
+    {
+      "id": "EN-Zanion",
+      "ruleId": "TutorialCreature",
+      "group": [
+        "EN-Zanion",
+        "EN-SuperZanion"
+      ],
+      "tier": 0,
+      "integrity": 1200,
+      "shield": 0,
+      "damagePrimary": 300,
+      "damageSecondary": 150,
+      "accuracy": 0.5,
+      "attackRate": 0.5,
+      "dps": 75,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 1200,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 300
+    },
+    {
+      "id": "EN-SuperZanion",
+      "ruleId": "TutorialCreature",
+      "group": [
+        "EN-Zanion",
+        "EN-SuperZanion"
+      ],
+      "tier": 0,
+      "integrity": 1200,
+      "shield": 0,
+      "damagePrimary": 300,
+      "damageSecondary": 150,
+      "accuracy": 0.5,
+      "attackRate": 0.5,
+      "dps": 75,
+      "inGame": true,
+      "isBoss": false,
+      "ehp": 1200,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 300
+    },
+    {
+      "id": "EN-Lepisma",
+      "ruleId": "TutorialCreature",
+      "group": [
+        "EN-Lepisma"
+      ],
+      "tier": 0,
+      "integrity": 1200,
+      "shield": 0,
+      "damagePrimary": 300,
+      "damageSecondary": 150,
+      "accuracy": 0.5,
+      "attackRate": 0.5,
+      "dps": 75,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 1200,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 300
+    },
+    {
+      "id": "EN-Locust",
+      "ruleId": "CreatureKamikaze",
+      "group": [
+        "EN-Locust"
+      ],
+      "tier": 0,
+      "integrity": 100,
+      "shield": 0,
+      "damagePrimary": 750,
+      "damageSecondary": 150,
+      "accuracy": 0.4,
+      "attackRate": 2,
+      "dps": 600,
+      "inGame": false,
+      "isBoss": false,
+      "ehp": 100,
+      "weaponClass": "N/D",
+      "weaponTags": [],
+      "weaponLoadout": [],
+      "abilities": [],
+      "threatIndex": 245
+    }
+  ]
+}

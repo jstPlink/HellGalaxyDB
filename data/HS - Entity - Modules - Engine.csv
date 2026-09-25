@@ -1,0 +1,42 @@
+,,Max power per socket,,,,,,,Max speed per socket e power,,Socket,,,,Max Speed,,,,,
+,,2,,,,,,,266,,P1,,,,4250,,,,,
+,,4,,,,,,,531,,P2,,,,,,,,,
+,,8,,,,,,,1063,,P3,,,,,,,,,
+MainEngine (ID),ItemType,PowerConsumption,Incorporated,Quality,Price,Rarity,StaticMesh,ModuleType,SpeedIncrement,BoostChargeConsumption,Socket,Incorporated,AdditionalSocket,,MaxSpeedCheck,,NeededCost,,Backup 25 maggio,Backup x2
+MOD00-StartingShipEngine,Radar,0.00,FALSE,0,0,Salvage,,MainEngine,840,2,0,TRUE,0,,840,,0,,420,840
+MOD00-PrincipalShipEngine,Radar,0.00,FALSE,0,0,Salvage,,MainEngine,920,2,0,FALSE,0,,920,,0,,420,
+MOD00-DragonShipEngine,Radar,0.00,FALSE,0,0,Salvage,,MainEngine,880,2,0,FALSE,0,,880,,0,,420,
+MOD00-SpartanShipEngine,Radar,0.00,FALSE,0,0,Salvage,,MainEngine,920,2,0,FALSE,0,,920,,0,,420,
+MOD01-Engine_XS,Radar,1.00,FALSE,380,300,Common,,MainEngine,100,10,1,FALSE,0,,1600,,2400,,100,200
+MOD01-Engine_S,Radar,1.00,FALSE,610,800,Epic,,MainEngine,160,15,1,FALSE,0,,2560,,6400,,160,160
+MOD01-EngineLevel_S,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,1,0,TRUE,0,,0,,0,,10,10
+MOD01-EngineLevel1_S,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,1,0,FALSE,0,,0,,0,,10,10
+MOD01-EngineLevel2_S,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,1,0,FALSE,0,,0,,0,,10,10
+MOD01-EngineLevel3_S,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,1,0,FALSE,0,,0,,0,,10,10
+MOD01-EngineLevel4_S,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,1,0,FALSE,0,,0,,0,,10,10
+MOD01a-Engine_Iron_S,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,15,0,FALSE,0,,0,,0,,10,10
+MOD01b-Engine_S_Premium,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,15,0,FALSE,1,,0,,0,,10,10
+MOD01c-Engine_S_Outpost,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,15,0,FALSE,0,,0,,0,,10,10
+MOD02-Engine_M,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,20,0,FALSE,0,,0,,0,,10,10
+MOD02b-Engine_M_Poor,Radar,1.00,FALSE,460,400,Uncommon,,MainEngine,240,20,2,FALSE,0,,1920,,1600,,240,480
+MOD02c-Engine_M_Premium,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,20,0,FALSE,0,,0,,0,,10,10
+MOD02d-EngineGold_M,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,20,0,FALSE,0,,0,,0,,10,10
+MOD02e-EngineLevel_M,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,20,0,FALSE,0,,0,,0,,10,10
+MOD03-Engine_L,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,30,0,FALSE,0,,0,,0,,10,10
+MOD03b-Engine_L_Poor,Radar,8.00,FALSE,520,600,Rare,,MainEngine,550,30,3,FALSE,0,,2200,,1200,,550,1100
+MOD03c-Engine_L_Premium,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,30,0,FALSE,0,,0,,0,,10,10
+MOD32-WormEngine,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,1,0,FALSE,0,,0,,0,,10,10
+MOD62-AlienEngine_S,Radar,1.00,FALSE,0,0,Salvage,,MainEngine,10,1,0,FALSE,0,,0,,0,,10,10
+MOD63-EWasEngine,Radar,5.00,FALSE,430,400,Uncommon,,MainEngine,300,20,1,FALSE,0,,1800,,3200,,300,600
+MOD64-BladeEngine,Radar,2.00,FALSE,680,1000,Mythic,,MainEngine,180,25,1,FALSE,0,,2880,,8000,,250,500
+MOD68-HeliconEngine,Radar,2.00,FALSE,0,0,Salvage,,MainEngine,10,1,0,FALSE,0,,0,,0,,10,10
+MOD70-HeliconEngine_Premium,Radar,4.00,FALSE,620,800,Epic,,MainEngine,650,35,3,FALSE,0,,2600,,1600,,900,1800
+MOD75-DragonThrust_M,Radar,2.00,FALSE,570,700,Rare,,MainEngine,300,30,2,FALSE,0,,2400,,2800,,350,700
+MOD00-EagleShipEngine,Radar,0.00,FALSE,260,200,Salvage,,MainEngine,1100,2,0,TRUE,0,,1100,,0,,420,840
+MOD00-FlyShipEngine,Radar,0.00,FALSE,240,100,Salvage,,MainEngine,1000,2,0,TRUE,0,,1000,,0,,420,840
+MOD00-HeliconShipEngine,Radar,0.00,FALSE,230,100,Salvage,,MainEngine,950,2,0,TRUE,0,,950,,0,,420,840
+MOD00-BladeShipEngine,,0.00,FALSE,290,200,Salvage,,MainEngine,1200,2,0,TRUE,0,,1200,,0,,420,840
+MOD00-IronScaleShipEngine,,0.00,FALSE,220,100,Salvage,,MainEngine,930,2,0,TRUE,0,,930,,0,,420,840
+MOD00-GoldWingsShipEngine,,0.00,FALSE,220,100,Salvage,,MainEngine,930,2,0,TRUE,0,,930,,0,,420,840
+,,,,,,,,,,,,,,,,,,,,
+,,,,,Qui puoi modificare i price,,,,,,,,,,,,,,,

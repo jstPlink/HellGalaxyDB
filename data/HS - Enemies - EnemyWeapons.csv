@@ -1,0 +1,56 @@
+AssociatedNPC,RuleId,P Weapon,P Projectile,P FireRate,S Weapon,S Projectile,P Flavor,,Turrets,Rate,Projectile,Note,Note audio,,WaponList,Behaviour DA (assegnato ad arma a SX),Projectile List
+EN-DronePirate,TutorialDrone,SML_SMPW_TurretGatling,BP_GutlingAmmo_EnemyGeneric,4,,,Gatling,,,,,,,,//,//,//
+"EN-Zanion, EN-SuperZanion",TutorialCreature,//,//,0.5,,,,,,,,,,,SML_SMPW_TurretGatling,WeaponBehaviour_Primary_Gatling_Enemy,BP_GutlingAmmo
+"EN-ZombieShip_00, EN-ZombieShip_01, EN-ZombieGold, EN-ZombieIron",DroneMZombieNoShield,SML_SMPW_TurretGatling,BP_GutlingAmmo_EnemyGeneric,2,,,Gatling,,,,,,,,SML_SMPW_TurretShotgun,WeaponBehaviour_Primary_Shotgun_Enemy,BP_GutlingAmmo_Capital_Empire
+EN-Drone_Support,DroneBalanced,SML_SMPW_TurretGatling,BP_GutlingAmmo_EnemyGeneric,5,,,,,,,,,,,SML_SMPW_TurretBlaster,,BP_GutlingAmmo_Capital_Gold
+EN-Jammer,RaiderMBalanced,SML_NPC_MOD41-Gatling_S,BP_GutlingAmmo_EnemyGeneric,9,SML_NPC_MOD30-RocketLauncher_S,BP_PillowRocket_Enemy,"Gatling, laser pesanti e razzi",,,,,,Da fare primary? Gatling laser pesante?,,SML_SMPW_TurretDoubleBarrells,,BP_GutlingAmmo_Capital_Iron
+,,SML_NPC_MOD11-Laser_L,BP_ShotGunBlue_Enemy,,,,,,,,,,,,SML_NPC_MOD11-Laser_L,WeaponBehaviour_Primary_LaserHeavy_Enemy,BP_PillowRocket_Enemy
+EN-Dyrcona,RaiderMDefensive,,,7,,,,,,,,,,,SML_SMW_PrimaryWeapon,,BP_GutlingAmmo_EnemyGeneric
+EN-Oran,RaiderBOffensive,,,5,,,,,,,,,,,SML_NPC_MOD41-Gatling_S,WeaponBehaviour_Primary_Gatling_Enemy2,BP_GutlingAmmo_Gold
+EN-Ubique,RaiderMOffensive,,,10,,,,,,,,,,,SML_NPC_MOD30-RocketLauncher_S,WeaponBehaviour_Secondary_Rocket_Enemy,BP_GutlingAmmo_Iron
+EN-Dawn,RaiderMBalanced,,,9,,,,,,,,,,,SML_SMPW_TurretRocketLauncher_Enemy,WeaponBehaviour_Secondary_Rocket_Enemy,BP_GutlingAmmo_Turrets_Generic
+EN-Set,RaiderMBalanced,,,9,,,,,,,,,,,SML_SMW_PrimaryWeapon_Enemy,,BP_GutlingAmmo_Turrets_Gold
+EN-ScalpedRaider,DroneMWeak_Heavy,SML_SMPW_TurretShotgun,BP_GutlingAmmo_Iron,5,,,"Colpi pesanti, come shotgun",,,,,,,,,,BP_GutlingAmmo_Turrets_Iron
+EN-BatikiMining,DroneSBalancedNoShield,SML_SMPW_TurretGatling,BP_GutlingAmmo_EnemyGeneric,5,,,Gatling,,,,,,,,,,BP_OrganicWeaponProjectile
+EN-BatikiGuard,DroneSBalanced,SML_SMPW_TurretGatling,BP_GutlingAmmo_EnemyGeneric,5,,,Gatling,,,,,,,,,,BP_StandardAmmo
+EN-BatikiCargo,EliteSBalanced,SML_SMPW_TurretGatling,BP_GutlingAmmo_EnemyGeneric,5,SML_SMPW_TurretRocketLauncher_Enemy,BP_PillowRocket_Enemy,Gatling e razzi,,,,,,,,,,BP_StdLaserProjectile
+EN-Murena,CreatureFast,,,2,,,,,,,,,,,,,BP_ShotGunBlue_Enemy
+KO-Whale,Colossus,,,2,,,,,,,,,,,,,
+EN-Rodolfo,RaiderDefensive,,,2.5,,,,,,,,,,,,,
+"EN-TR_SH01, EN-TR_SH02",DroneCargo,,,2,,,,,,,,,,,,,
+"EN-Drone_Cargo_01, EN-Drone_Cargo_02",DroneCargo_Escape,,,2,,,,,,,,,,,,,
+"EN-FI_SH01, EN-FI_SH02, EN-FI_SH03",AllyBalanced,SML_NPC_MOD41-Gatling_S,BP_GutlingAmmo_EnemyGeneric,7,,,Gatling e laser pesanti,,,,,,,,,,
+,,SML_NPC_MOD11-Laser_L,BP_ShotGunBlue_Enemy,,,,,,,,,,,,,,
+"EN-GM_SH02, EN-GM_SH03",DroneSBalancedNoShield,SML_NPC_MOD41-Gatling_S,BP_GutlingAmmo_EnemyGeneric,5,,,Gatling e laser pesanti,,,,,,,,,,
+,,SML_NPC_MOD11-Laser_L,BP_ShotGunBlue_Enemy,,,,,,,,,,,,,,
+EN-EmpireCapitalShip,Capital,,,2,,,,,,,,,,,,,
+"EN-GhostSpider, EN-GhostOgre, EN-GhostOgre, EN-GhostPriest, EN-GhostMask",CreatureFast,,,2,,,,,,,,,,,,,
+"EN-MamaDraga, EN-HeraldMiner",DroneCargo,,,2,,,,,,,,,,,,,
+"EN-SisterHoe, EN-Jewella",DroneMBalanced,,,4,,,,,,,,,,,,,
+"EN-BrotherPickaxe, EN-Orogenya",DroneMBalanced,,,4,,,,,,,,,,,,,
+"EN-HatefulMagma, EN-Hesperide, EN-EvilMagma",DroneMOffensive,,,7,,,,,,,,,,,,,
+"EN-AngryMiner, EN-Midas",DroneMiner,,,3,,,,,,,,,,,,,
+EN-Haru,RaiderMOffensive,,,10,,,,,,,,,,,,,
+#REF!,#REF!,,,#REF!,,,,,,,,,,,,,
+EN-Vassal,Capital,,,2,,,,,,,,,,,,,
+EN-GoldBishop,Capital,,,2,,,,,,,,,,,,,
+EN-Aurelia,Capital,,,2,,,,,,,,,,,,,
+EN-Volcano,Capital,,,2,,,,,,,,,,,,,
+EN-RimDefender,Capital,,,2,,,,,,,,,,,,,
+EN-IronCommander,Capital,,,2,,,,,,,,,,,,,
+KO-Turtle,Colossus,,,2,,,,,,,,,,,,,
+EN-Isotope,Capital,,,2,,,,,,,,,,,,,
+EN-Locust,CreatureKamikaze,,,2,,,,,,,,,,,,,
+EN-Lepisma,TutorialCreature,,,0.5,,,,,,,,,,,,,
+EN-ZombieShip_02,DroneSBalanced,SML_SMPW_TurretGatling,BP_GutlingAmmo_EnemyGeneric,5,,,Gatling,,,,,,,,,,
+EN-Druimo,CreatureAmbush,,,0.5,,,,,,,,,,,,,
+EN-MutilatedGold,DroneMOffensive,,,7,,,,,,,,,,,,,
+EN-Maalaxmi01,DroneMBalanced,,,4,,,,,,,,,,,,,
+EN-Maalaxmi02,DroneMDefensive,,,7,,,,,,,,,,,,,
+#REF!,#REF!,,,#REF!,,,,,,,,,,,,,
+EN-Lexon01,DroneMBalanced,,,4,,,,,,,,,,,,,
+EN-Lexon02,DroneMOffensive,,,7,,,,,,,,,,,,,
+"EN-Tale, EN-Kuzmina",RaiderMOffensive,,,10,,,,,,,,,,,,,
+EN-GhostMask,CreatureGhost,,,2,,,,,,,,,,,,,
+EN-PossessedRaider,DronePossessed,,,,,,,,,,,,,,,,
+EN-GhostMaskKingdom,CreatureGhost,,,,,,,,,,,,,,,,
