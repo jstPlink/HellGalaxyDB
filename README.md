@@ -49,6 +49,45 @@ poi apri `http://localhost:8936` nel browser. Alla primissima esecuzione, se
 node scripts/migrate_to_db.js
 ```
 
+## Docker (NAS)
+
+`Dockerfile` + `docker-compose.yml` fanno girare il server in un container.
+Database e immagini stanno in due cartelle sul NAS (`storage/data` e
+`storage/images`, montate come volumi): l'immagine contiene solo il codice.
+
+1. Copia il progetto sul NAS (senza `DA CARICARE Modules`, non serve).
+2. Crea le cartelle `storage/data` e `storage/images` **prima** di avviare, e
+   assicurati che appartengano all'utente con cui gira il container. Nel file
+   `.env` accanto al compose scrivi il suo uid:gid (`id nomeutente` da SSH):
+   ```
+   PUID=1026
+   PGID=100
+   ```
+   Se non lo imposti si usa 1000:1000; se le cartelle non sono scrivibili il
+   container si ferma con un messaggio che lo spiega.
+3. `docker compose up -d --build` (su Synology: Container Manager → Progetto).
+   Il tool risponde su `http://IP-NAS:8936`.
+
+Al primo avvio, con `storage/data` vuota, il database viene creato dai
+`data_*.json` e vengono copiate le immagini iniziali. Per **portare sul NAS lo
+stato attuale**, prima del primo avvio copia `data/hellgalaxy.db` in
+`storage/data/` e la cartella `images/` in `storage/images/` (con il server
+locale spento). A ogni riavvio i JSON/CSV sorgente vengono riallineati a quelli
+dell'immagine e gli "originali" nel database aggiornati con `--update`, senza
+toccare i valori modificati dal tool. Per aggiornare il codice: copia i file
+nuovi e rilancia `docker compose up -d --build`. Il backup è la cartella `storage/`.
+
+### Cloudflare Tunnel
+
+Nel `docker-compose.yml` c'è un servizio `cloudflared` commentato: decommentalo
+e metti il token del tunnel in `CLOUDFLARE_TUNNEL_TOKEN` (nel `.env`). Nel
+dashboard Zero Trust il Public Hostname deve puntare a `http://hellgalaxy:8936`.
+
+**Attenzione: il tool non ha nessuna autenticazione.** Chi conosce l'URL
+pubblico può leggere e modificare tutto (le API `PUT`/`DELETE`, il ripristino
+globale) e scaricare anche `data/hellgalaxy.db`. Metti una policy Cloudflare
+Access (login via email) davanti all'hostname prima di renderlo pubblico.
+
 ## Continuare su un altro computer
 
 Il progetto usa Seafile per sincronizzare l'intera cartella (incluso

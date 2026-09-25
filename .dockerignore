@@ -1,0 +1,12 @@
+.git
+.claude
+storage
+node_modules
+*.log
+*.bat
+DA CARICARE Modules
+data/hellgalaxy.db*
+scripts/*.ps1
+scripts/*.py
+scripts/*.gs
+.env

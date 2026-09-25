@@ -1,0 +1,25 @@
+services:
+  hellgalaxy:
+    build: .
+    image: hellgalaxydb:latest
+    container_name: hellgalaxydb
+    restart: unless-stopped
+    # uid:gid proprietario delle cartelle sul NAS (vedi README, sezione Docker).
+    user: "${PUID:-1000}:${PGID:-1000}"
+    ports:
+      - "8936:8936"
+    volumes:
+      - ./storage/data:/app/data
+      - ./storage/images:/app/images
+
+  # Cloudflare Tunnel (opzionale): decommenta e imposta CLOUDFLARE_TUNNEL_TOKEN.
+  # Nel dashboard Zero Trust il "Public hostname" deve puntare a http://hellgalaxy:8936
+  # cloudflared:
+  #   image: cloudflare/cloudflared:latest
+  #   container_name: hellgalaxy-tunnel
+  #   restart: unless-stopped
+  #   command: tunnel --no-autoupdate run
+  #   environment:
+  #     - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+  #   depends_on:
+  #     - hellgalaxy
