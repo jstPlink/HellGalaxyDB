@@ -1,0 +1,49 @@
+name: Immagine Docker
+
+# Costruisce l'immagine e la pubblica su GitHub Container Registry
+# (ghcr.io/<utente>/<repo>:latest), da cui il NAS la scarica.
+# Parte solo se cambia qualcosa che finisce nell'immagine (non a ogni
+# modifica di hellgalaxy.db o delle immagini caricate dal tool).
+on:
+  push:
+    branches: [main]
+    paths:
+      - Dockerfile
+      - docker-entrypoint.sh
+      - server.js
+      - hellgalaxy.html
+      - scripts/migrate_to_db.js
+      - scripts/migrate_enemies_to_db.js
+      - data/*.json
+      - data/*.csv
+      - .github/workflows/docker-image.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: type=raw,value=latest
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

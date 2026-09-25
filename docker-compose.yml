@@ -1,25 +1,30 @@
 services:
   hellgalaxy:
-    build: .
-    image: hellgalaxydb:latest
+    image: ghcr.io/jstplink/hellgalaxydb:latest
     container_name: hellgalaxydb
     restart: unless-stopped
-    # uid:gid proprietario delle cartelle sul NAS (vedi README, sezione Docker).
-    user: "${PUID:-1000}:${PGID:-1000}"
     ports:
       - "8936:8936"
+    # Volumi gestiti da Docker: sono creati con i permessi giusti, quindi non
+    # serve preparare cartelle. Per avere invece i file in una cartella del NAS
+    # sostituisci con percorsi tipo /volume1/docker/hellgalaxy/data:/app/data
+    # (la cartella deve essere scrivibile dall'utente 1000, o aggiungi 'user:').
     volumes:
-      - ./storage/data:/app/data
-      - ./storage/images:/app/images
+      - hellgalaxy-data:/app/data
+      - hellgalaxy-images:/app/images
 
-  # Cloudflare Tunnel (opzionale): decommenta e imposta CLOUDFLARE_TUNNEL_TOKEN.
-  # Nel dashboard Zero Trust il "Public hostname" deve puntare a http://hellgalaxy:8936
+  # Cloudflare Tunnel (opzionale): decommenta e incolla qui il token del tunnel.
+  # Nel dashboard Zero Trust il Public Hostname deve puntare a http://hellgalaxy:8936
   # cloudflared:
   #   image: cloudflare/cloudflared:latest
   #   container_name: hellgalaxy-tunnel
   #   restart: unless-stopped
   #   command: tunnel --no-autoupdate run
   #   environment:
-  #     - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+  #     - TUNNEL_TOKEN=INCOLLA_QUI_IL_TOKEN
   #   depends_on:
   #     - hellgalaxy
+
+volumes:
+  hellgalaxy-data:
+  hellgalaxy-images:

@@ -51,36 +51,39 @@ node scripts/migrate_to_db.js
 
 ## Docker (NAS)
 
-`Dockerfile` + `docker-compose.yml` fanno girare il server in un container.
-Database e immagini stanno in due cartelle sul NAS (`storage/data` e
-`storage/images`, montate come volumi): l'immagine contiene solo il codice.
+Sul NAS serve **solo** `docker-compose.yml`: l'immagine non si costruisce lì
+ma viene scaricata da GitHub Container Registry
+(`ghcr.io/jstplink/hellgalaxydb:latest`). La costruisce GitHub Actions
+(`.github/workflows/docker-image.yml`) a ogni push su `main` che cambia codice
+o dati sorgente (o a mano da Actions → Immagine Docker → Run workflow).
+Database e immagini caricate stanno in due volumi Docker (`hellgalaxy-data`,
+`hellgalaxy-images`), quindi l'immagine contiene solo il codice.
 
-1. Copia il progetto sul NAS (senza `DA CARICARE Modules`, non serve).
-2. Crea le cartelle `storage/data` e `storage/images` **prima** di avviare, e
-   assicurati che appartengano all'utente con cui gira il container. Nel file
-   `.env` accanto al compose scrivi il suo uid:gid (`id nomeutente` da SSH):
-   ```
-   PUID=1026
-   PGID=100
-   ```
-   Se non lo imposti si usa 1000:1000; se le cartelle non sono scrivibili il
-   container si ferma con un messaggio che lo spiega.
-3. `docker compose up -d --build` (su Synology: Container Manager → Progetto).
+1. Fai il push su GitHub e aspetta che l'Action finisca (tab Actions).
+2. In GitHub → Packages controlla la visibilità del pacchetto: l'immagine
+   contiene i dati sorgente del gioco, tienila privata. Se è privata, sul NAS
+   fai il login una volta (password = token GitHub con permesso `read:packages`):
+   `docker login ghcr.io -u jstPlink`
+3. Carica sul NAS il solo `docker-compose.yml` e lancia
+   `docker compose up -d` (su Synology: Container Manager → Progetto).
    Il tool risponde su `http://IP-NAS:8936`.
 
-Al primo avvio, con `storage/data` vuota, il database viene creato dai
-`data_*.json` e vengono copiate le immagini iniziali. Per **portare sul NAS lo
-stato attuale**, prima del primo avvio copia `data/hellgalaxy.db` in
-`storage/data/` e la cartella `images/` in `storage/images/` (con il server
-locale spento). A ogni riavvio i JSON/CSV sorgente vengono riallineati a quelli
-dell'immagine e gli "originali" nel database aggiornati con `--update`, senza
-toccare i valori modificati dal tool. Per aggiornare il codice: copia i file
-nuovi e rilancia `docker compose up -d --build`. Il backup è la cartella `storage/`.
+Al primo avvio il database viene creato dai `data_*.json` contenuti
+nell'immagine (non dal tuo `data/hellgalaxy.db` locale) e vengono copiate le
+immagini iniziali. A ogni riavvio i JSON/CSV sorgente vengono riallineati a
+quelli dell'immagine e gli "originali" nel database aggiornati con `--update`,
+senza toccare i valori modificati dal tool. Per aggiornare il codice sul NAS,
+dopo il push e la build: `docker compose pull && docker compose up -d`. Per il
+backup copia i volumi (o usa cartelle del NAS al loro posto, vedi commento nel
+compose).
+
+Se vuoi costruire l'immagine a mano (serve il progetto intero sul NAS):
+`docker build -t ghcr.io/jstplink/hellgalaxydb:latest .`
 
 ### Cloudflare Tunnel
 
 Nel `docker-compose.yml` c'è un servizio `cloudflared` commentato: decommentalo
-e metti il token del tunnel in `CLOUDFLARE_TUNNEL_TOKEN` (nel `.env`). Nel
+e incolla il token del tunnel al posto di `INCOLLA_QUI_IL_TOKEN`. Nel
 dashboard Zero Trust il Public Hostname deve puntare a `http://hellgalaxy:8936`.
 
 **Attenzione: il tool non ha nessuna autenticazione.** Chi conosce l'URL

@@ -12,7 +12,7 @@ for d in data images; do
   mkdir -p "$d" 2>/dev/null || true
   if ! touch "$d/.write-test" 2>/dev/null; then
     echo "ERRORE: $APP_DIR/$d non e' scrivibile dall'utente $(id -u):$(id -g)." >&2
-    echo "Imposta 'user:' nel docker-compose.yml con uid:gid proprietario della cartella sul NAS (PUID/PGID), oppure correggi i permessi della cartella." >&2
+    echo "Imposta 'user:' nel docker-compose.yml con uid:gid proprietario della cartella sul NAS, oppure correggi i permessi della cartella." >&2
     exit 1
   fi
   rm -f "$d/.write-test"
