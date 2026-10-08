@@ -5,6 +5,11 @@ services:
     restart: unless-stopped
     ports:
       - "8936:8936"
+    # Token condiviso con l'agente Unreal (sul PC dell'Editor). Scegli una stringa lunga e casuale e
+    # mettila anche nel .env dell'agente (HG_AGENT_TOKEN). Senza, nessun agente può collegarsi.
+    # environment:
+    #   - HG_AGENT_TOKEN=INCOLLA_QUI_UN_TOKEN_LUNGO
+    #   - HG_API_TOKEN=OPZIONALE_TOKEN_UTENTI
     # Volumi gestiti da Docker: sono creati con i permessi giusti, quindi non
     # serve preparare cartelle. Per avere invece i file in una cartella del NAS
     # sostituisci con percorsi tipo /volume1/docker/hellgalaxy/data:/app/data

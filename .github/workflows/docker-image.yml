@@ -24,9 +24,20 @@ on:
       - scripts/tabs_sheet.js
       - scripts/tabs_server.js
       - scripts/grid_tabs.js
+      - scripts/unreal_links.js
+      - scripts/unreal_datatables.js
+      - scripts/unreal_entities.js
+      - scripts/project_update.js
+      - scripts/agent_hub.js
+      - scripts/unreal_agent.js
+      - scripts/server_sync.js
+      - scripts/unreal_sync.js
       - scripts/unreal/tabs_read.py
       - scripts/unreal/entities_read.py
       - scripts/unreal/modules_read.py
+      - scripts/unreal/links_read.py
+      - scripts/unreal/datatables_io.py
+      - scripts/unreal/entities_push.py
       - data/*.json
       - data/*.csv
       - .github/workflows/docker-image.yml

@@ -37,6 +37,12 @@
 26. **Nomenclature errate** (es. `SMDAMOD07-Gun_S_00`, `DA_Entity_Gold`) e altri EDA/CIDA/LDA/SMDA con errori simili: cancellare **se non collegati ad altri asset** (verificato: 127 sicuri, vedi `docs/INTERVENTI_UNREAL.md`). `DA_Entity_Gold/Iron/Rock` NON sono liberi: sono usati da `CI_*`/`BP_ACS_Loot_*` referenziati da una tabella `DEP_DT_CargoItemTranslation`.
 27. **Cancellazioni (2026-10-08)**: si cancellano i Data Asset **e** i Blueprint che non sono usati da nulla (gruppi A e B di `docs/INTERVENTI_UNREAL.md`); **non** si cancellano i Data Asset referenziati (gruppo C). La torretta `SMDA_MOD08-Gun_M` è già stato cancellato dall'utente.
 28. **Formato delle domande**: i punti a cui l'utente deve rispondere vanno numerati con lettere/numeri; le domande in sospeso stanno in `docs/DOCUMENTAZIONE.md` §0b.
+29. **Commit/push (2026-10-08)**: solo quando lo dice l'utente; prima aggiornare la documentazione; ogni commit+push incrementa `VERSION` (mostrata sotto il titolo).
+30. **Station supply e piloni `PY-*`**: il cargo vale Unreal (stack/attractable/force to inspect). I piloni hanno stack elevato per permettere di montare molti moduli gratuitamente.
+31. **Asset di test**: rimuoverli da Unreal per pulizia, **lasciarli nei fogli**; in seguito saranno creati dall'app con un solo collegamento proveniente dall'app. **Marcatura dei collegamenti**: le righe vanno trascritte tutte e marcate (in uso / 0 utilizzi / senza BP / non in Unreal…): futuri tag del database.
+32. **Processo "Aggiorna il progetto"**: ordine Data Asset → DataTable → Blueprint → server; se già sul server aggiorna direttamente Unreal (da definire); stato di ogni passo sempre visibile.
+34. **Agente (2026-10-08)**: l'app non parla mai direttamente con l'Editor, nemmeno in locale (il localhost si comporta come il server); più utenti ⇒ niente blocchi sulle modifiche, solo notifica "X ha modificato Y" con refresh. Implementato (§9 realizzato).
+33. **Interfaccia**: finché l'app non funziona come i fogli Google, non si cambia l'organizzazione (le vecchie pagine moduli restano ferme).
 9. L'assistente deve **ricordare sempre lo stato funzionale attuale dell'app**: tenuto in `docs/DOCUMENTAZIONE.md` §0.
 
 ### 0.1 Stato reale di Unreal letto dall'Editor (2026-10-07, sola lettura, nessun asset toccato né salvato)

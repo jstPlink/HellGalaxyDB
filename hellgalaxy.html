@@ -506,8 +506,34 @@
   .rownum{ color: var(--text-faint); font-size:11px; text-align:right; background: var(--surface-2); min-width:44px; }
   .theme-opt{ appearance:none; border:1px solid var(--border); background: var(--surface-2); color: var(--text); padding:12px 16px; border-radius:10px; font-size:13px; cursor:pointer; text-align:left; min-width:210px; }
   .theme-opt.active{ border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+
+  /* ---------- 2026-10-08: pulsanti grandi, schede con contorno, provvisori in giallo, modifica cella ---------- */
+  /* Stile unico per schede e pulsanti principali: stessa altezza, bordo 2px, raggio 8px, testo 14px */
+  .btn.xl, .section-tab{ box-sizing:border-box; min-height:44px; padding:0 22px; font-size:14px; font-weight:600; letter-spacing:.01em; border-width:2px; border-style:solid; border-radius:8px; line-height:1; display:inline-flex; align-items:center; justify-content:center; }
+  .btn.xl{ border-color: var(--border); background: var(--surface-2); box-shadow:0 1px 3px rgba(0,0,0,.25); }
+  .btn.xl.primary{ background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  html[data-theme="sheets"] .btn.xl{ background:#fff; border-color:#9aa0a6; color:#202124; border-radius:8px; box-shadow:0 1px 2px rgba(60,64,67,.35); }
+  html[data-theme="sheets"] .btn.xl:hover{ background:#f1f3f4; border-color:#5f6368; }
+  html[data-theme="sheets"] .btn.xl.primary{ background:#188038; border-color:#188038; color:#fff; }
+  html[data-theme="sheets"] .btn.xl.primary:hover{ background:#137333; border-color:#137333; }
+  .btn.temp, .chip.temp{ background:#fff3b0 !important; border-color:#e0b400 !important; color:#5c4a00 !important; }
+  .btn.temp:hover, .chip.temp:hover{ background:#ffe97a !important; }
+  .section-tab{ border:2px solid var(--border); background: var(--surface-2); box-shadow:0 1px 3px rgba(0,0,0,.25); }
+  .tab{ border:1px solid var(--border); background: var(--surface-2); border-radius:8px; top:0; }
+  .tab.active{ border:2px solid var(--accent); background: var(--surface); }
+  html[data-theme="sheets"] .section-tab{ background:#fff; border:2px solid #9aa0a6; border-radius:8px; padding:0 22px; color:#202124; box-shadow:0 1px 2px rgba(60,64,67,.35); }
+  html[data-theme="sheets"] .section-tab:hover{ background:#f1f3f4; border-color:#5f6368; }
+  html[data-theme="sheets"] .section-tab.active{ background:#188038; color:#fff; border:2px solid #188038; }
+  html[data-theme="sheets"] .tab{ background:#fff; border:1px solid #9aa0a6; border-radius:6px; color:#3c4043; }
+  html[data-theme="sheets"] .tab:hover{ background:#f1f3f4; border-color:#5f6368; }
+  html[data-theme="sheets"] .tab.active{ background:#e6f4ea; color:#137333; border:2px solid #188038; }
+  td.editing{ outline:2px solid var(--accent); outline-offset:-2px; box-shadow:none !important; }
+  td.editable-cell.editing{ padding:3px 8px; }
+  .cell-input{ border:none !important; background:transparent !important; box-shadow:none !important; border-radius:0 !important; padding:2px 0 !important; }
+  #agentPill{ cursor:pointer; }
+  #agentPill:hover{ border-color: var(--accent); }
 </style>
-<script>try{ const t = localStorage.getItem('hellgalaxy_theme'); if(t) document.documentElement.dataset.theme = t; }catch(e){}</script>
+<script>try{ const t = localStorage.getItem('hellgalaxy_theme'); if(t !== 'dark') document.documentElement.dataset.theme = 'sheets'; }catch(e){ document.documentElement.dataset.theme = 'sheets'; }</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 
 <div class="wrap">
@@ -535,11 +561,17 @@
       </div>
     </div>
     <div class="top-actions">
+      <button class="btn ghost small" id="userBtn" onclick="hgSwitchUser()" title="Utente attuale: clic per cambiare utente">Utente: <span id="userLabel"></span></button>
+      <span class="dirty-pill" id="agentPill"title="Agente Unreal: il ponte tra l'app e l'Editor (si avvia sul PC dove è aperto l'Editor)"><span class="dot"></span><span id="agentLabel">Agente: &hellip;</span></span>
       <span class="dirty-pill" id="dirtyPill"><span class="dot"></span><span id="dirtyLabel">Nessuna modifica</span></span>
-      <button class="btn ghost small" id="resetAllBtn">Ripristina tutto</button>
+      <button class="btn xl" id="syncUnrealBtn" title="Legge Unreal (sola lettura) e mostra le discrepanze tra l'app e il progetto. Parte da solo dopo l'accesso.">Sincronizza Unreal</button>
+      <button class="btn primary xl" id="projUpdBtn" title="Aggiorna Unreal con i soli dati cambiati nell'app: Data Asset, DataTable, Blueprint, poi server (con stato di ogni passo)">Aggiorna Unreal</button>
+      <button class="btn ghost xl" id="resetAllBtn">Ripristina tutto</button>
     </div>
   </header>
 
+  <div class="chart-card" id="changeBanner" hidden style="margin:10px 16px;border-color:var(--accent)"></div>
+  <div class="chart-card" id="projUpdBox" hidden style="margin:10px 16px"></div>
   <nav class="sectionbar" id="sectionbar"></nav>
   <nav class="tabbar" id="subbar"></nav>
 
@@ -702,12 +734,12 @@
       </div>
       <select class="selbox" id="entTypeFilter"></select>
       <select class="selbox" id="entRarityFilter"></select>
-      <button class="chip" id="entUnrealOnly" title="Mostra solo le colonne A:G, quelle lette oggi da Unreal">Solo colonne Unreal</button>
+      <select class="selbox" id="entLinkFilter" title="Collegamenti degli asset in Unreal (letti in sola lettura)"></select>
+      <button class="chip temp" id="entUnrealOnly" title="Mostra solo le colonne A:G, quelle lette oggi da Unreal">Solo colonne Unreal</button>
       <button class="btn primary small" id="entPullBtn">Scarica dal foglio (anteprima)</button>
-      <button class="btn ghost small" id="entCsvBtn" title="Esporta la scheda ENTITIES da Google Sheets (File → Scarica → CSV) e caricala qui">Importa CSV (anteprima)</button>
+      <button class="btn ghost small temp" id="entCsvBtn" title="Esporta la scheda ENTITIES da Google Sheets (File → Scarica → CSV) e caricala qui">Importa CSV (anteprima)</button>
       <input type="file" id="entCsvFile" accept=".csv,text/csv" hidden>
-      <button class="btn ghost small" id="entUeReadBtn" title="Legge dagli EDA_ di Unreal i dati che il foglio non ha o non compila bene (sola lettura su Unreal)">Leggi da Unreal (anteprima)</button>
-      <button class="btn ghost small" id="entUeBtn" title="Controlla che l'Editor Unreal sia aperto e raggiungibile (sola lettura, non modifica nessun asset)">Test collegamento Unreal</button>
+      <button class="btn ghost small temp" id="entUeReadBtn" title="Legge dagli EDA_ di Unreal i dati che il foglio non ha o non compila bene (sola lettura su Unreal)">Leggi da Unreal (anteprima)</button>
     </div>
     <div class="chart-card" id="entPullReport" hidden></div>
     <div class="table-shell">
@@ -730,9 +762,9 @@
       <select class="selbox" id="modSectionFilter"></select>
       <button class="chip" id="modTechToggle" title="Mostra anche le colonne senza nome o con intestazione numerica (dati tecnici presenti nel foglio)">Colonne tecniche</button>
       <button class="btn primary small" id="modPullBtn">Scarica dal foglio (anteprima)</button>
-      <button class="btn ghost small" id="modCsvBtn" title="Esporta il tab Modules (File → Scarica → CSV, con il tab Modules attivo) e caricalo qui">Importa CSV (anteprima)</button>
+      <button class="btn ghost small temp" id="modCsvBtn" title="Esporta il tab Modules (File → Scarica → CSV, con il tab Modules attivo) e caricalo qui">Importa CSV (anteprima)</button>
       <input type="file" id="modCsvFile" accept=".csv,text/csv" hidden>
-      <button class="btn ghost small" id="modUeReadBtn" title="Legge dagli SMDA_ di Unreal mesh, shield mesh e quality (sola lettura su Unreal)">Leggi da Unreal (anteprima)</button>
+      <button class="btn ghost small temp" id="modUeReadBtn" title="Legge dagli SMDA_ di Unreal mesh, shield mesh e quality (sola lettura su Unreal)">Leggi da Unreal (anteprima)</button>
     </div>
     <div class="chart-card" id="modReport" hidden></div>
     <div class="table-shell">
@@ -983,6 +1015,51 @@ function persistOauth(){ try{ localStorage.setItem('hellgalaxy_oauth_client_id',
 /* ============================== API CLIENT (server.js + SQLite) ============================== */
 // Se il server ha HG_API_TOKEN risponde 401: il token viene chiesto una volta e
 // tenuto in localStorage (solo in questo browser).
+const HG_CLIENT_ID = Math.random().toString(36).slice(2, 10);
+function hgUserName(){ try{ return localStorage.getItem('hellgalaxy_user') || ''; }catch(e){ return ''; } }
+function hgSetUser(n){ try{ localStorage.setItem('hellgalaxy_user', n); }catch(e){} }
+// Schermata di accesso (senza password): scegli un utente esistente o creane uno nuovo. Risolve quando l'utente è scelto.
+async function hgLogin(forceChoose){
+  let users = [];
+  try{ users = (await apiGet('/api/users')).users || []; }catch(e){ /* server non raggiungibile: si continua col nome salvato */ }
+  const cur = hgUserName();
+  if(!forceChoose && cur && users.some(u => u.name.toLowerCase() === cur.toLowerCase())){ apiSend('/api/users', 'POST', {name: cur}).catch(() => {}); return cur; }
+  return new Promise(resolve => {
+    const ov = document.createElement('div');
+    ov.id = 'loginOverlay';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:10000;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto';
+    ov.innerHTML = '<div style="background:var(--surface,var(--bg));border:1px solid var(--border);border-radius:10px;padding:24px;width:100%;max-width:420px;color:var(--text)">'
+      + '<h2 style="margin:0 0 4px">Hell Galaxy Database</h2><p style="margin:0 0 16px;color:var(--text-dim)">Chi sei? Scegli il tuo utente o creane uno nuovo (nessuna password).</p>'
+      + '<div id="loginList" style="display:flex;flex-direction:column;gap:6px;max-height:40vh;overflow:auto;margin-bottom:16px"></div>'
+      + '<div style="border-top:1px solid var(--border-soft);padding-top:14px"><label for="loginNew" style="display:block;margin-bottom:6px;color:var(--text-dim)">Nuovo utente</label>'
+      + '<div style="display:flex;gap:8px"><input type="text" id="loginNew" maxlength="40" placeholder="Il tuo nome" style="flex:1"><button class="btn primary small" id="loginCreate">Crea ed entra</button></div>'
+      + '<p id="loginErr" style="color:#d9534f;margin:8px 0 0;min-height:1em;font-size:13px"></p></div></div>';
+    document.body.appendChild(ov);
+    const done = n => { hgSetUser(n); ov.remove(); resolve(n); };
+    const list = ov.querySelector('#loginList');
+    if(!users.length) list.innerHTML = '<p style="color:var(--text-dim);margin:0">Nessun utente ancora: creane uno qui sotto.</p>';
+    users.forEach(u => {
+      const b = document.createElement('button');
+      b.className = 'btn ghost'; b.style.textAlign = 'left'; b.textContent = u.name;
+      b.onclick = async () => { try{ const r = await apiSend('/api/users', 'POST', {name: u.name}); done(r.name); }catch(e){ ov.querySelector('#loginErr').textContent = 'Server non raggiungibile.'; } };
+      list.appendChild(b);
+    });
+    const create = async () => {
+      const name = ov.querySelector('#loginNew').value.trim(); const err = ov.querySelector('#loginErr'); err.textContent = '';
+      if(!name){ err.textContent = 'Inserisci un nome.'; return; }
+      try{
+        const res = await apiFetch('/api/users', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, create: true})});
+        const j = await res.json();
+        if(!res.ok){ err.textContent = j.error || 'Errore.'; return; }
+        done(j.name);
+      }catch(e){ err.textContent = 'Server non raggiungibile.'; }
+    };
+    ov.querySelector('#loginCreate').onclick = create;
+    ov.querySelector('#loginNew').addEventListener('keydown', e => { if(e.key === 'Enter') create(); });
+    ov.querySelector('#loginNew').focus();
+  });
+}
+async function hgSwitchUser(){ await hgLogin(true); const l = document.getElementById('userLabel'); if(l) l.textContent = hgUserName(); }
 function apiToken(){ try{ return localStorage.getItem('hellgalaxy_api_token') || ''; }catch(e){ return ''; } }
 async function apiFetch(url, opts){
   opts = opts || {};
@@ -990,6 +1067,7 @@ async function apiFetch(url, opts){
     const headers = Object.assign({}, opts.headers);
     const t = apiToken();
     if(t) headers['Authorization'] = 'Bearer ' + t;
+    headers['X-HG-User'] = encodeURIComponent(hgUserName()); headers['X-HG-Client'] = HG_CLIENT_ID;
     return fetch(url, Object.assign({}, opts, {headers}));
   };
   let res = await doFetch();
@@ -2067,7 +2145,7 @@ async function exportImagesZip(){
 /* ============================== SETTINGS ============================== */
 function setTheme(t){
   if(t === 'sheets') document.documentElement.dataset.theme = 'sheets'; else delete document.documentElement.dataset.theme;
-  try{ if(t === 'sheets') localStorage.setItem('hellgalaxy_theme', 'sheets'); else localStorage.removeItem('hellgalaxy_theme'); }catch(e){}
+  try{ localStorage.setItem('hellgalaxy_theme', t === 'sheets' ? 'sheets' : 'dark'); }catch(e){}
   renderAll();
 }
 function renderSettings(){
@@ -2082,6 +2160,12 @@ function renderSettings(){
           <button class="theme-opt ${document.documentElement.dataset.theme !== 'sheets' ? 'active' : ''}" onclick="setTheme('dark')"><strong>Scuro</strong><br><span style="color:var(--text-dim);font-size:12px">Tema originale dell'app</span></button>
           <button class="theme-opt ${document.documentElement.dataset.theme === 'sheets' ? 'active' : ''}" onclick="setTheme('sheets')"><strong>Fogli Google</strong><br><span style="color:var(--text-dim);font-size:12px">Chiaro, griglia, Arial</span></button>
         </div>
+      </div>
+
+      <div class="card">
+        <h3>Utente</h3>
+        <p class="sub">Compare agli altri utenti quando modifichi un dato ("Mario ha modificato ENTITIES…"). Sei: <strong>${escapeHtml(hgUserName())}</strong>.</p>
+        <button class="btn ghost small" onclick="hgSwitchUser()">Cambia utente</button>
       </div>
 
       <div class="card">
@@ -2642,7 +2726,9 @@ let ENTITY_ORIGINALS = {};
 let ENT_EFF = {};          // valore effettivo (foglio / Unreal / modifica app) per Label, BriefDescription, Icon, ProducerIcon
 let ENT_UE_READ_AT = null; // ultima lettura da Unreal salvata nell'app
 let entUeReport = null;
-let entUi = { search:'', type:'Tutti', rarity:'Tutte', unrealOnly:false };
+let entUi = { search:'', type:'Tutti', rarity:'Tutte', unrealOnly:false, link:'Tutti' };
+let ENT_LINKS = {}, ENT_LINKS_AT = null;
+const LINK_TAGS = {'in-uso':{t:'in uso', c:'var(--good)', d:'Almeno un asset (Blueprint o Data Asset) è usato da qualcosa'}, 'zero-usi':{t:'0 utilizzi', c:'var(--danger)', d:'Gli asset esistono ma nessun altro asset li referenzia (Blueprint orfani)'}, 'senza-bp':{t:'senza BP', c:'var(--text-dim)', d:'Esistono solo i Data Asset, nessun Blueprint'}, 'non-in-unreal':{t:'non in Unreal', c:'var(--text-faint)', d:'Nessun asset con questo ID nel progetto'}};
 let entPullReport = null;
 let entCsvText = ''; // CSV caricato a mano; se vuoto il pull legge il foglio dal server
 
@@ -2652,6 +2738,7 @@ async function loadEntities(){
   ENTITY_ORIGINALS = data.originals || {};
   ENT_EFF = data.effective || {};
   ENT_UE_READ_AT = data.ueReadAt || null;
+  ENT_LINKS = data.links || {}; ENT_LINKS_AT = data.linksReadAt || null;
 }
 // Dopo una modifica in ENTITIES la copia del Localization Master (stessa chiave) cambia sul server: ricarico la vista.
 function reloadLocEntities(){ const v = typeof GRID_VIEWS !== 'undefined' && GRID_VIEWS['loc_entities']; if(v) v.load().then(() => v.render()).catch(() => {}); }
@@ -2688,6 +2775,7 @@ function entFilteredList(){
   if(entUi.type !== 'Tutti') rows = rows.filter(e => e.EntityType === entUi.type);
   if(entUi.rarity !== 'Tutte') rows = rows.filter(e => e.BaseRarity === entUi.rarity);
   const q = entUi.search.trim().toLowerCase();
+  if(entUi.link !== 'Tutti') rows = rows.filter(e => (ENT_LINKS[e['(ID)']] ? ENT_LINKS[e['(ID)']].tag : 'non-letto') === entUi.link);
   if(q) rows = rows.filter(e => [e['(ID)'], e.Label, e.LabelKey, e.DescriptionKey, e.Icon].some(v => String(v||'').toLowerCase().includes(q)));
   return rows;
 }
@@ -2707,13 +2795,22 @@ function renderEntityStats(){
 function renderEntityFilters(){
   const typeSel = document.getElementById('entTypeFilter');
   typeSel.innerHTML = ['Tutti', ...ENT_TYPES].map(t => `<option value="${t}" ${entUi.type===t?'selected':''}>${t==='Tutti'?'Tutti i tipi':t}</option>`).join('');
+  const linkSel = document.getElementById('entLinkFilter');
+  const lc = {}; ENTITIES.forEach(e => { const t = ENT_LINKS[e['(ID)']] ? ENT_LINKS[e['(ID)']].tag : 'non-letto'; lc[t] = (lc[t] || 0) + 1; });
+  linkSel.innerHTML = '<option value="Tutti">Tutti i collegamenti</option>' + Object.keys(LINK_TAGS).map(k => `<option value="${k}" ${entUi.link===k?'selected':''}>${LINK_TAGS[k].t} (${lc[k]||0})</option>`).join('') + (lc['non-letto'] ? `<option value="non-letto" ${entUi.link==='non-letto'?'selected':''}>non letto (${lc['non-letto']})</option>` : '');
   const raritySel = document.getElementById('entRarityFilter');
   raritySel.innerHTML = ['Tutte', ...RARITY_ORDER].map(r => `<option value="${r}" ${entUi.rarity===r?'selected':''}>${r==='Tutte'?'Tutte le rarità':r}</option>`).join('');
 }
 
+// Cella "Unreal" (tag di collegamento) condivisa da ENTITIES, Modules, Cargo/Loot e Items (stesso ID dell'entità).
+function linkCellHtml(id){
+  const lk = ENT_LINKS[id], lt = lk && LINK_TAGS[lk.tag];
+  const lkTitle = lk ? [lt.d].concat(lk.notes || [], (lk.usedBy || []).map(u => u.asset + ': ' + u.refs + ' riferimenti (es. ' + ((u.sample || [])[0] || '') + ')')).join(' | ') : 'Premi "Sincronizza Unreal"';
+  return `<td title="${escapeHtml(lkTitle)}">${lk ? `<span class="badge-type" style="color:${lt.c}">${lt.t}</span>` + (lk.inTranslations ? ' <span class="badge-type" style="font-size:9px;padding:1px 5px">DT</span>' : '') : '<span style="color:var(--text-faint)">&ndash;</span>'}</td>`;
+}
 function renderEntityTable(){
   const cols = entCols();
-  document.getElementById('entThead').innerHTML = '<th></th>' + cols.map(c => `<th>${escapeHtml(c)}</th>`).join('');
+  document.getElementById('entThead').innerHTML = '<th></th>' + cols.map(c => `<th>${escapeHtml(c)}</th>`).join('') + '<th title="Collegamenti degli asset in Unreal">Unreal</th>';
   const rows = entFilteredList();
   const tbody = document.getElementById('entTbody');
   if(!rows.length){
@@ -2732,7 +2829,8 @@ function renderEntityTable(){
       const shown = c === 'BriefDescription' ? escapeHtml(truncate(v, 70)) : escapeHtml(v);
       return `<td class="editable-cell${isNum?' num-cell':''}" data-key="${c}" title="${c === 'BriefDescription' ? escapeHtml(v) : 'Clicca per modificare'}"${color?` style="color:${color}"`:''}>${shown}${ueBadge}</td>`;
     }).join('');
-    return `<tr data-id="${escapeHtml(id)}"><td><span class="dot-edit ${dirty?'':'hidden-dot'}" title="Modificato"></span></td>${cells}</tr>`;
+    const linkCell = linkCellHtml(id);
+    return `<tr data-id="${escapeHtml(id)}"><td><span class="dot-edit ${dirty?'':'hidden-dot'}" title="Modificato"></span></td>${cells}${linkCell}</tr>`;
   }).join('');
   tbody.querySelectorAll('td.editable-cell').forEach(td => td.addEventListener('click', () => startEntityCellEdit(td, td.closest('tr').dataset.id, td.dataset.key)));
   tbody.querySelectorAll('.revert-ent-btn').forEach(el => el.addEventListener('click', async e => {
@@ -2904,7 +3002,7 @@ function renderModFilters(){
 function renderModTable(){
   const cols = modColsFor();
   const label = c => c === '__section' ? 'Sezione' : (c === 'ShieldStaticMesh' ? 'ShieldStaticMesh (UE)' : (c === 'Icon' ? 'Icona (entità)' : c));
-  document.getElementById('modThead').innerHTML = '<th></th>' + cols.map(c => `<th>${escapeHtml(label(c))}</th>`).join('');
+  document.getElementById('modThead').innerHTML = '<th></th>' + cols.map(c => `<th>${escapeHtml(label(c))}</th>`).join('') + '<th title="Collegamenti degli asset in Unreal">Unreal</th>';
   const rows = modFiltered();
   const tbody = document.getElementById('modTbody');
   if(!rows.length){
@@ -2922,7 +3020,7 @@ function renderModTable(){
       const num = /^-?[\d.]+$/.test(String(v)) && v !== '' ? ' num-cell' : '';
       return `<td class="${editable?'editable-cell':''}${num}" data-key="${escapeHtml(c)}" title="${editable ? 'Clicca per modificare' : ''}"${color?` style="color:${color}"`:''}>${escapeHtml(truncate(v, 60))}${badge}</td>`;
     }).join('');
-    return `<tr data-id="${escapeHtml(id)}"><td><span class="dot-edit ${dirty?'':'hidden-dot'}" title="Modificato"></span></td>${cells}</tr>`;
+    return `<tr data-id="${escapeHtml(id)}"><td><span class="dot-edit ${dirty?'':'hidden-dot'}" title="Modificato"></span></td>${cells}${linkCellHtml(id)}</tr>`;
   }).join('');
   tbody.querySelectorAll('td.editable-cell').forEach(td => td.addEventListener('click', () => startModCellEdit(td, td.closest('tr').dataset.id, td.dataset.key)));
   tbody.querySelectorAll('.revert-mod-btn').forEach(el => el.addEventListener('click', async e => {
@@ -3044,7 +3142,7 @@ function makeTabView(tab, sectionId, title, sheetName, effCols){
   };
   V.renderTable = () => {
     const cols = V.cols();
-    el('thead').innerHTML = '<th></th>' + cols.map(c => '<th>' + escapeHtml(c === '__section' ? 'Sezione' : c) + '</th>').join('');
+    el('thead').innerHTML = '<th></th>' + cols.map(c => '<th>' + escapeHtml(c === '__section' ? 'Sezione' : c) + '</th>').join('') + '<th title="Collegamenti degli asset in Unreal">Unreal</th>';
     const rows = V.filtered(), tbody = el('tbody');
     if(!rows.length){ tbody.innerHTML = '<tr class="empty-row"><td colspan="' + (cols.length + 1) + '">' + (V.rows.length ? 'Nessuna riga corrisponde ai filtri.' : 'Nessuna riga nel database: premi "Scarica dal foglio" o "Importa CSV" per importare il tab ' + escapeHtml(sheetName) + '.') + '</td></tr>'; return; }
     tbody.innerHTML = rows.map(r => {
@@ -3057,7 +3155,7 @@ function makeTabView(tab, sectionId, title, sheetName, effCols){
         const num = v !== '' && /^-?[\d.]+$/.test(String(v)) ? ' num-cell' : '';
         return '<td class="' + (editable ? 'editable-cell' : '') + num + '" data-key="' + escapeHtml(c) + '">' + escapeHtml(truncate(v, 60)) + badge + '</td>';
       }).join('');
-      return '<tr data-id="' + escapeHtml(id) + '"><td><span class="dot-edit ' + (dirty ? '' : 'hidden-dot') + '"></span></td>' + cells + '</tr>';
+      return '<tr data-id="' + escapeHtml(id) + '"><td><span class="dot-edit ' + (dirty ? '' : 'hidden-dot') + '"></span></td>' + cells + linkCellHtml(id) + '</tr>';
     }).join('');
     tbody.querySelectorAll('td.editable-cell').forEach(td => td.addEventListener('click', () => V.edit(td, td.closest('tr').dataset.id, td.dataset.key)));
     tbody.querySelectorAll('.tv-revert').forEach(b => b.addEventListener('click', async e => { e.stopPropagation(); try{ await apiSend('/api/tabs/' + tab + '/' + encodeURIComponent(b.dataset.id) + '/revert', 'POST'); await V.load(); V.render(); showToast('Riga ripristinata'); }catch(err){ showToast('Impossibile ripristinare'); } }));
@@ -3131,8 +3229,8 @@ function makeTabView(tab, sectionId, title, sheetName, effCols){
   panel.className = 'panel'; panel.id = 'panel-' + sectionId; panel.hidden = true;
   panel.innerHTML = '<div class="stats" id="' + tab + '-stats"></div><div class="toolbar"><div class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" class="searchInput" id="' + tab + '-search" placeholder="Cerca&hellip;"></div>' +
     '<select class="selbox" id="' + tab + '-section"></select><button class="chip" id="' + tab + '-tech" title="Mostra anche le colonne senza nome o con intestazione numerica">Colonne tecniche</button>' +
-    '<button class="btn primary small" id="' + tab + '-pull">Scarica dal foglio (anteprima)</button><button class="btn ghost small" id="' + tab + '-csvbtn" title="Esporta il tab ' + escapeHtml(sheetName) + ' (File → Scarica → CSV) e caricalo qui">Importa CSV (anteprima)</button><input type="file" id="' + tab + '-csvfile" accept=".csv,text/csv" hidden>' +
-    '<button class="btn ghost small" id="' + tab + '-ueread" title="Legge gli asset corrispondenti da Unreal (sola lettura)">Leggi da Unreal (anteprima)</button></div>' +
+    '<button class="btn primary small" id="' + tab + '-pull">Scarica dal foglio (anteprima)</button><button class="btn ghost small temp" id="' + tab + '-csvbtn" title="Esporta il tab ' + escapeHtml(sheetName) + ' (File → Scarica → CSV) e caricalo qui">Importa CSV (anteprima)</button><input type="file" id="' + tab + '-csvfile" accept=".csv,text/csv" hidden>' +
+    '<button class="btn ghost small temp" id="' + tab + '-ueread" title="Legge gli asset corrispondenti da Unreal (sola lettura)">Leggi da Unreal (anteprima)</button></div>' +
     '<div class="chart-card" id="' + tab + '-report" hidden></div><div class="table-shell"><div class="table-scroll"><table><thead><tr id="' + tab + '-thead"></tr></thead><tbody id="' + tab + '-tbody"></tbody></table></div></div>';
   document.getElementById('panel-settings').before(panel);
   el('search').addEventListener('input', e => { V.ui.search = e.target.value; V.renderTable(); });
@@ -3213,7 +3311,7 @@ function makeGridView(tab, pageId, sheetName){
   const panel = document.createElement('section');
   panel.className = 'panel'; panel.id = 'panel-' + pageId; panel.hidden = true;
   panel.innerHTML = '<div class="toolbar"><div class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" class="searchInput" id="g-' + tab + '-search" placeholder="Cerca in tutte le colonne&hellip;"></div>' +
-    '<button class="btn primary small" id="g-' + tab + '-pull">Scarica dal foglio (anteprima)</button><button class="btn ghost small" id="g-' + tab + '-csvbtn" title="Esporta il tab ' + escapeHtml(sheetName) + ' (File → Scarica → CSV) e caricalo qui">Importa CSV (anteprima)</button><input type="file" id="g-' + tab + '-csvfile" accept=".csv,text/csv" hidden></div>' +
+    '<button class="btn primary small" id="g-' + tab + '-pull">Scarica dal foglio (anteprima)</button><button class="btn ghost small temp" id="g-' + tab + '-csvbtn" title="Esporta il tab ' + escapeHtml(sheetName) + ' (File → Scarica → CSV) e caricalo qui">Importa CSV (anteprima)</button><input type="file" id="g-' + tab + '-csvfile" accept=".csv,text/csv" hidden></div>' +
     '<div id="g-' + tab + '-info" style="font-size:12.5px;padding:0 2px"></div><div class="chart-card" id="g-' + tab + '-report" hidden></div>' +
     '<div class="table-shell"><div class="table-scroll"><table><thead><tr id="g-' + tab + '-thead"></tr></thead><tbody id="g-' + tab + '-tbody"></tbody></table></div></div>';
   document.getElementById('panel-settings').before(panel);
@@ -3884,6 +3982,189 @@ document.getElementById('modUeReadBtn').addEventListener('click', () => modUeRea
 document.getElementById('entSearch').addEventListener('input', e => { entUi.search = e.target.value; renderEntityTable(); });
 document.getElementById('entTypeFilter').addEventListener('change', e => { entUi.type = e.target.value; renderEntityTable(); });
 document.getElementById('entRarityFilter').addEventListener('change', e => { entUi.rarity = e.target.value; renderEntityTable(); });
+/* ---- Stato dell'agente Unreal e notifiche di modifica degli altri utenti ---- */
+async function refreshAgentPill(){
+  const pill = document.getElementById('agentPill'), lab = document.getElementById('agentLabel');
+  try{
+    const d = await apiGet('/api/agent/status');
+    const on = d.agents.filter(a => a.online);
+    lab.textContent = on.length ? 'Agente: ' + on.map(a => a.name).join(', ') : (d.mode === 'direct' ? 'Agente: modalità diretta' : 'Agente: non connesso (clicca)');
+    pill.classList.toggle('on', !on.length && d.mode !== 'direct');
+    window.__agentState = {on, d};
+    pill.title = on.length ? 'Agente Unreal connesso (' + on.map(a => a.name + (a.ueOk === false ? ' - Editor non raggiungibile' : '')).join('; ') + ')' : 'Nessun agente connesso: per leggere/aggiornare Unreal avvia "Avvia agente Unreal.bat" sul PC dove è aperto l\'Editor' + (d.tokenConfigured ? '' : ' (manca HG_AGENT_TOKEN sull\'app)');
+  }catch(err){ lab.textContent = 'Agente: ?'; }
+}
+function showAgentHelp(){
+  const st = window.__agentState || {on: [], d: {}};
+  let o = document.getElementById('agentOverlay'); if(o) o.remove();
+  o = document.createElement('div'); o.id = 'agentOverlay';
+  o.style.cssText = 'position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px';
+  const connected = st.on.length;
+  const noToken = st.d && st.d.tokenConfigured === false;
+  o.innerHTML = '<div style="background:var(--surface,var(--bg));border:1px solid var(--border);border-radius:10px;padding:22px;width:100%;max-width:620px;max-height:90vh;overflow:auto;color:var(--text);line-height:1.55">'
+    + '<h3 style="margin:0 0 8px">Agente Unreal</h3>'
+    + '<p style="margin:0 0 10px">L\'agente è un piccolo programma che gira <strong>sul PC dove è aperto l\'Editor Unreal</strong> e fa da ponte tra questa app e il progetto. Senza agente l\'app non può leggere né aggiornare Unreal (il resto funziona).</p>'
+    + (connected ? '<p style="color:var(--good)"><strong>Connesso:</strong> ' + st.on.map(a => escapeHtml(a.name) + (a.ueOk === false ? ' (Editor non raggiungibile: apri il progetto HellGalaxy)' : ' (Editor raggiungibile)')).join('; ') + '</p>'
+      : '<p style="color:var(--danger)"><strong>Al momento nessun agente è connesso.</strong></p>'
+        + (noToken ? '<p style="color:var(--danger)">Sul <strong>server</strong> manca <code>HG_AGENT_TOKEN</code> (variabile d\'ambiente o .env): senza, nessun agente può collegarsi.</p>' : '')
+        + '<ol style="padding-left:20px;margin:0 0 10px"><li>Apri il progetto <strong>HellGalaxy</strong> nell\'Editor Unreal, su questo PC o su quello dove lavori.</li>'
+        + '<li>Nella cartella dell\'app (HellGalaxyDB) fai doppio clic su <strong>&laquo;Avvia agente Unreal.bat&raquo;</strong> e lascia la finestra aperta.</li>'
+        + '<li>Il file <code>.env</code> accanto al .bat deve contenere:<br><code>HG_SERVER_URL=' + escapeHtml(location.origin) + '</code><br><code>HG_AGENT_TOKEN=</code> (lo stesso valore del server)<br><code>HG_AGENT_NAME=</code> (un nome per il PC, es. il tuo)</li>'
+        + '<li>Dopo qualche secondo qui in alto comparirà <em>&laquo;Agente: nome&raquo;</em>. Se la finestra dell\'agente mostra un errore, leggilo: dice cosa manca.</li></ol>')
+    + '<div style="display:flex;gap:8px;margin-top:12px"><button class="btn primary small" id="agentRecheck">Ricontrolla ora</button><button class="btn ghost small" id="agentClose">Chiudi</button></div></div>';
+  document.body.appendChild(o);
+  document.getElementById('agentClose').onclick = () => o.remove();
+  document.getElementById('agentRecheck').onclick = async () => { await refreshAgentPill(); showAgentHelp(); };
+}
+document.getElementById('agentPill').addEventListener('click', showAgentHelp);
+let chgRev = null;
+async function pollChanges(){
+  try{
+    const d = await apiGet('/api/changes?since=' + (chgRev === null ? 1e12 : chgRev));
+    if(chgRev === null){ chgRev = d.rev; return; }
+    const others = (d.changes || []).filter(c => c.client !== HG_CLIENT_ID);
+    chgRev = d.rev;
+    if(others.length){
+      const box = document.getElementById('changeBanner'); box.hidden = false;
+      const last = others.slice(-3).map(c => '<strong>' + escapeHtml(c.user) + '</strong> ha modificato ' + escapeHtml(c.what) + (c.id ? ' (' + escapeHtml(c.id) + (c.fields.length ? ': ' + escapeHtml(c.fields.join(', ')) : '') + ')' : '')).join(' &middot; ');
+      box.innerHTML = '<div style="padding:10px 16px;font-size:12.5px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">' + last + (others.length > 3 ? ' &middot; +' + (others.length - 3) + ' altre' : '') + '<button class="btn primary small" id="chgRefresh">Aggiorna i dati</button><button class="btn ghost small" id="chgClose">Ignora</button></div>';
+      document.getElementById('chgRefresh').addEventListener('click', () => location.reload());
+      document.getElementById('chgClose').addEventListener('click', () => { box.hidden = true; });
+    }
+  }catch(err){ /* offline: riprova al prossimo giro */ }
+}
+refreshAgentPill(); setInterval(refreshAgentPill, 10000);
+pollChanges(); setInterval(pollChanges, 5000);
+
+/* ---- "Aggiorna il progetto": Data Asset -> DataTable -> Blueprint -> server, con stato di ogni passo ---- */
+const PU_STATUS = {pending:['in attesa','var(--text-faint)'], running:['in corso…','var(--accent)'], ok:['ok','var(--good)'], error:['ERRORE','var(--danger)'], blocked:['BLOCCATO','var(--danger)'], todo:['non implementato','var(--text-dim)'], skipped:['saltato','var(--text-faint)']};
+let puTimer = null, puWrite = false;
+function renderProjUpd(job){
+  const box = document.getElementById('projUpdBox'); box.hidden = false;
+  const steps = job ? job.steps.map(s => { const st = PU_STATUS[s.status] || [s.status, '']; return '<tr><td style="padding:4px 10px 4px 0;white-space:nowrap"><strong>' + escapeHtml(s.title) + '</strong></td><td style="padding:4px 10px;color:' + st[1] + ';white-space:nowrap">' + st[0] + '</td><td style="padding:4px 0;font-size:12px;color:var(--text-dim)">' + escapeHtml(s.detail || '') + (s.ms ? ' <span style="color:var(--text-faint)">(' + s.ms + ' ms)</span>' : '') + '</td></tr>'; }).join('') : '<tr><td style="color:var(--text-dim)">Nessun aggiornamento eseguito in questa sessione.</td></tr>';
+  box.innerHTML = '<div class="chart-head"><div class="chart-title">Aggiorna Unreal<span class="sub">&nbsp;&middot; ordine: Data Asset &rarr; DataTable &rarr; Blueprint &rarr; server' + (job ? ' &middot; ' + (job.mode === 'apply' ? 'APPLICA' : 'anteprima') + (job.running ? ' (in corso)' : '') : '') + '</span></div></div>' +
+    '<div style="padding:0 16px 14px;font-size:12.5px"><table style="border-collapse:collapse">' + steps + '</table>' +
+    '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn primary small" id="puDry"' + (job && job.running ? ' disabled' : '') + '>Anteprima (sola lettura su Unreal)</button>' +
+    '<button class="btn ghost small" id="puApply"' + (job && job.running ? ' disabled' : '') + ' title="' + (puWrite ? 'Scrive su Unreal' : 'Scrittura su Unreal disabilitata (HG_UE_ALLOW_WRITE)') + '">Applica su Unreal' + (puWrite ? '' : ' (bloccato)') + '</button>' +
+    '<button class="btn ghost small" id="puClose">Chiudi</button><span style="color:var(--text-dim)">Se un passo fallisce o è bloccato, i successivi non partono: lo stato mostra dove si è fermato.</span></div></div>';
+  document.getElementById('puClose').addEventListener('click', () => { box.hidden = true; });
+  document.getElementById('puDry').addEventListener('click', () => startProjUpd('dry'));
+  document.getElementById('puApply').addEventListener('click', () => { if(confirm('Aggiornare Unreal? Scrive solo i dati cambiati nell\'app (Data Asset e DataTable) e li salva (nessun check-in).')) startProjUpd('apply'); });
+}
+async function pollProjUpd(){
+  clearTimeout(puTimer);
+  let d; try{ d = await apiGet('/api/project-update'); }catch(err){ return; }
+  puWrite = d.writeEnabled; renderProjUpd(d.job);
+  if(d.job && d.job.running) puTimer = setTimeout(pollProjUpd, 1000);
+}
+async function startProjUpd(mode){
+  try{ const res = await apiFetch('/api/project-update', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({mode, confirm: mode === 'apply'})}); const r = await res.json(); if(r.error){ showToast(r.error); return; } }
+  catch(err){ showToast('Impossibile avviare: ' + err.message); return; }
+  pollProjUpd();
+}
+document.getElementById('projUpdBtn').addEventListener('click', pollProjUpd);
+
+/* ---- Elenco delle modifiche fatte in locale (clic su "N modifiche in sospeso") ---- */
+function collectLocalChanges(){
+  const out = [];
+  const diff = (cur, orig, keys) => keys.map(k => ({f: k, from: String(orig[k] ?? ''), to: String(cur[k] ?? '')})).filter(x => x.from !== x.to);
+  const add = (area, id, fields, revert) => { if(fields.length) out.push({area, id, fields, revert}); };
+  CATS.forEach(c => c.items.forEach(i => { const o = ORIGINALS[c.id] && ORIGINALS[c.id][i.ID]; if(o) add('DATABASE › ' + c.label, i.ID, diff(i, o, Object.keys(o)), '/api/modules/' + encodeURIComponent(i.ID) + '/revert'); }));
+  ENEMIES.forEach(e => { const o = ENEMY_ORIGINALS[e.id]; if(o) add('DATABASE › Enemies', e.id, diff(e, o, Object.keys(o)), '/api/enemies/' + encodeURIComponent(e.id) + '/revert'); });
+  ENTITIES.forEach(e => { const o = ENTITY_ORIGINALS[e['(ID)']]; if(o) add('ENTITIES › Entities', e['(ID)'], diff(e, o, ENT_COLS), '/api/entities/' + encodeURIComponent(e['(ID)']) + '/revert'); });
+  MODS.forEach(m => { const o = MOD_ORIG[m['(ID)']]; if(o) add('ENTITIES › Modules', m['(ID)'], diff(m, o, [...new Set([...Object.keys(m), ...Object.keys(o)])].filter(k => k !== '__ord')), '/api/modules-sheet/' + encodeURIComponent(m['(ID)']) + '/revert'); });
+  const TAB_LABEL = {cargo: 'Cargo/Loot', items: 'Items'};
+  Object.values(TAB_VIEWS).forEach(v => v.rows.forEach(r => { const o = v.orig[r['(ID)']]; if(o) add('ENTITIES › ' + (TAB_LABEL[v.tab] || v.tab), r['(ID)'], diff(r, o, [...new Set([...Object.keys(r), ...Object.keys(o)])].filter(k => k !== '__ord')), '/api/tabs/' + v.tab + '/' + encodeURIComponent(r['(ID)']) + '/revert'); }));
+  return out;
+}
+function openLocalChanges(){
+  let o = document.getElementById('lcOverlay'); if(o) o.remove();
+  const list = collectLocalChanges();
+  o = document.createElement('div'); o.id = 'lcOverlay';
+  o.style.cssText = 'position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px';
+  const areas = [...new Set(list.map(x => x.area))];
+  const body = list.length ? areas.map(a => {
+    const items = list.filter(x => x.area === a);
+    return '<details open style="margin:10px 0"><summary><strong>' + escapeHtml(a) + '</strong> (' + items.length + ')</summary><div style="font-size:12.5px;line-height:1.5;padding:6px 0 0 14px">'
+      + items.map(x => '<div style="padding:3px 0;border-bottom:1px solid var(--border-soft)"><span class="mono"><strong>' + escapeHtml(x.id) + '</strong></span> <button type="button" class="btn ghost small lc-revert" data-i="' + list.indexOf(x) + '" style="padding:1px 8px;font-size:11px;margin-left:8px" title="Ripristina questa riga al valore originale del foglio">&#8634; Ripristina</button>' + x.fields.map(f => '<div style="padding-left:12px">' + escapeHtml(f.f) + ': <span style="color:var(--text-dim);text-decoration:line-through">' + escapeHtml(truncate(f.from || '—', 80)) + '</span> &rarr; <strong>' + escapeHtml(truncate(f.to || '—', 80)) + '</strong></div>').join('') + '</div>').join('')
+      + '</div></details>';
+  }).join('') : '<p style="color:var(--text-dim)">Nessuna modifica locale: tutti i dati coincidono con l\'originale importato dal foglio.</p>';
+  o.innerHTML = '<div style="background:var(--surface,var(--bg));border:1px solid var(--border);border-radius:10px;padding:20px;width:100%;max-width:760px;max-height:90vh;overflow:auto;color:var(--text)">'
+    + '<h3 style="margin:0 0 4px">Modifiche fatte in locale (' + list.length + ')</h3><p style="margin:0 0 8px;color:var(--text-dim);font-size:12.5px">Valore originale del foglio &rarr; valore attuale nell\'app. Con &laquo;Ripristina&raquo; riporti la singola riga al valore originale.</p>'
+    + body + '<div style="margin-top:14px;display:flex;gap:8px"><button class="btn ghost small" id="lcClose">Chiudi</button></div></div>';
+  document.body.appendChild(o);
+  document.getElementById('lcClose').onclick = () => o.remove();
+  o.querySelectorAll('.lc-revert').forEach(b => b.addEventListener('click', async () => {
+    const x = list[Number(b.dataset.i)]; b.disabled = true;
+    try{
+      await apiSend(x.revert, 'POST');
+      await loadDataFromServer().catch(() => {}); await loadEnemies().catch(() => {}); await loadEntities().catch(() => {}); await loadModulesSheet().catch(() => {});
+      for(const v of Object.values(TAB_VIEWS)){ await v.load().catch(() => {}); }
+      for(const v of Object.values(GRID_VIEWS)){ if(v.tab === 'entities') await v.load().catch(() => {}); }
+      renderAll(); renderDirtyPill(); showToast('Riga ripristinata: ' + x.id); openLocalChanges();
+    }catch(err){ b.disabled = false; showToast('Impossibile ripristinare ' + x.id); }
+  }));
+  o.addEventListener('click', e => { if(e.target === o) o.remove(); });
+}
+document.getElementById('dirtyPill').addEventListener('click', openLocalChanges);
+document.getElementById('dirtyPill').style.cursor = 'pointer';
+document.getElementById('dirtyPill').title = 'Clicca per vedere l\'elenco delle modifiche fatte in locale';
+
+
+/* ---- "Sincronizza Unreal": lettura (solo lettura) e finestra delle discrepanze; parte da sola dopo l'accesso ---- */
+let usTimer = null;
+function usClose(){ const o = document.getElementById('usOverlay'); if(o) o.remove(); }
+function usShow(job){
+  let o = document.getElementById('usOverlay');
+  if(!o){ o = document.createElement('div'); o.id = 'usOverlay'; o.style.cssText = 'position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px'; document.body.appendChild(o); }
+  const d = job.discrepancies;
+  const steps = job.steps.map(s => { const st = PU_STATUS[s.status] || [s.status, '']; return '<div style="padding:2px 0"><strong>' + escapeHtml(s.title) + '</strong> <span style="color:' + st[1] + '">' + st[0] + '</span> <span style="color:var(--text-dim);font-size:12px">' + escapeHtml(s.detail || '') + '</span></div>'; }).join('');
+  let body = '';
+  if(d){
+    const list = (title, arr, fmt) => arr.length ? '<details style="margin:8px 0"><summary><strong>' + title + ' (' + arr.length + ')</strong></summary><div style="max-height:220px;overflow:auto;font-size:12px;line-height:1.5;padding:6px 0 0 14px">' + arr.map(fmt).join('') + '</div></details>' : '';
+    const da = d.dataassets;
+    body += list('Data Asset da creare in Unreal', da.creates, x => '<div class="mono">' + escapeHtml(x.id) + '</div>');
+    body += list('Data Asset diversi tra app e Unreal', da.updates, x => '<div><span class="mono">' + escapeHtml(x.id) + '</span>: ' + x.fields.map(f => escapeHtml(f.f) + ' (app "' + escapeHtml(f.app) + '" · Unreal "' + escapeHtml(f.unreal == null ? '' : f.unreal) + '")').join(', ') + '</div>');
+    body += list('Data Asset in Unreal non presenti nell\'app', da.orphans, x => '<div class="mono">' + escapeHtml(x) + '</div>');
+    d.datatables.forEach(t => { body += '<div style="margin:8px 0"><strong>' + escapeHtml(t.asset) + '</strong>: ' + (t.error ? '<span style="color:var(--danger)">' + escapeHtml(t.error) + '</span>' : (t.added + t.changed + t.removed === 0 ? 'identica' : t.added + ' da aggiungere, ' + t.changed + ' diverse, ' + t.removed + ' solo in Unreal') + ' (' + t.unchanged + ' uguali)') + (t.sample && t.sample.length ? '<div style="font-size:12px;color:var(--text-dim);padding-left:14px">' + t.sample.map(escapeHtml).join('<br>') + '</div>' : '') + '</div>'; });
+    body += list('Blueprint attesi che mancano in Unreal (su ' + d.blueprints.expected + ')', d.blueprints.missing, x => '<div><span class="mono">' + escapeHtml(x.asset) + '</span></div>');
+    if(d.truncated) body += '<div style="font-size:12px;color:var(--text-dim)">Elenchi limitati ai primi 300 elementi.</div>';
+    if(!d.error && d.total === 0) body += '<p style="color:var(--good)"><strong>Nessuna discrepanza: app e Unreal coincidono.</strong></p>';
+  }
+  o.innerHTML = '<div style="background:var(--surface,var(--bg));border:1px solid var(--border);border-radius:10px;padding:20px;width:100%;max-width:760px;max-height:90vh;overflow:auto;color:var(--text)">'
+    + '<h3 style="margin:0 0 4px">Sincronizza Unreal' + (job.running ? ' &middot; in corso&hellip;' : '') + '</h3><p style="margin:0 0 10px;color:var(--text-dim);font-size:12.5px">Solo lettura su Unreal: nulla viene scritto nel progetto. I tag di collegamento si salvano solo nell\'app.</p>'
+    + steps + (d && d.error ? '<p style="color:var(--danger)">' + escapeHtml(d.error) + '</p>' : '') + body
+    + '<div style="margin-top:14px;display:flex;gap:8px"><button class="btn ghost small" id="usAgain"' + (job.running ? ' disabled' : '') + '>Sincronizza di nuovo</button>' + (d && d.error && /agente/i.test(d.error) ? '<button class="btn primary small" id="usHelp">Come collegare l\'agente</button>' : '') + '<button class="btn ghost small" id="usClose">Chiudi</button></div></div>';
+  const uh = document.getElementById('usHelp'); if(uh) uh.onclick = () => { usClose(); showAgentHelp(); };
+  document.getElementById('usClose').onclick = usClose;
+  document.getElementById('usAgain').onclick = () => runUnrealSync(false);
+}
+async function runUnrealSync(auto){
+  clearTimeout(usTimer);
+  try{
+    const res = await apiFetch('/api/unreal-sync', {method:'POST', headers:{'Content-Type':'application/json'}, body:'{}'});
+    const r = await res.json();
+    if(!res.ok && r.code !== 'busy'){
+      if(auto){ showToast(r.code === 'agent_offline' ? 'Sincronizzazione Unreal non eseguita: agente non connesso' : 'Sincronizzazione Unreal non riuscita: ' + (r.error || res.status)); }
+      else { usShow({running:false, steps:[], discrepancies:{error: r.error || 'errore', datatables:[], dataassets:{creates:[],updates:[],orphans:[]}, blueprints:{expected:0,missing:[]}, total:1}}); }
+      return;
+    }
+  }catch(err){ if(!auto) showToast('Sincronizzazione non avviata: ' + err.message); return; }
+  const poll = async () => {
+    let d; try{ d = await apiGet('/api/unreal-sync'); }catch(err){ return; }
+    const job = d.job; if(!job) return;
+    if(job.running){ if(!auto) usShow(job); usTimer = setTimeout(poll, 1000); return; }
+    try{ await loadEntities(); renderEntities(); for(const v of Object.values(TAB_VIEWS)){ if(v.render) v.render(); } renderModSheet(); }catch(e){ /* aggiornamento tag non essenziale */ }
+    const dd = job.discrepancies;
+    if(auto && dd && !dd.error && dd.total === 0){ showToast('Unreal sincronizzato: nessuna discrepanza'); return; }
+    if(auto && dd && dd.error){ showToast('Sincronizzazione Unreal non riuscita: ' + dd.error); return; }
+    usShow(job);
+  };
+  poll();
+}
+document.getElementById('syncUnrealBtn').addEventListener('click', () => runUnrealSync(false));
+
+document.getElementById('entLinkFilter').addEventListener('change', e => { entUi.link = e.target.value; renderEntityTable(); });
 document.getElementById('entUnrealOnly').addEventListener('click', e => { entUi.unrealOnly = !entUi.unrealOnly; e.currentTarget.classList.toggle('active', entUi.unrealOnly); renderEntityTable(); });
 document.getElementById('entPullBtn').addEventListener('click', () => { entCsvText = ''; entPull(false, false); });
 document.getElementById('entCsvBtn').addEventListener('click', () => document.getElementById('entCsvFile').click());
@@ -3932,29 +4213,6 @@ function renderEntUeReport(){
   document.getElementById('entUeRClose').addEventListener('click', () => { box.hidden = true; });
 }
 document.getElementById('entUeReadBtn').addEventListener('click', () => entUeRead(false));
-document.getElementById('entUeBtn').addEventListener('click', async () => {
-  const box = document.getElementById('entPullReport');
-  box.hidden = false;
-  box.innerHTML = '<div class="chart-head"><div class="chart-title">Test collegamento Unreal&hellip;</div></div>';
-  let res, data;
-  try{ res = await apiFetch('/api/unreal/ping'); data = await res.json(); }
-  catch(err){ data = {ok:false, error: err.message}; }
-  const close = '<button class="btn ghost small" id="entUeCloseBtn" style="margin-top:10px">Chiudi</button>';
-  if(data.ok){
-    box.innerHTML = `<div class="chart-head"><div class="chart-title" style="color:var(--accent)">Editor Unreal raggiungibile<span class="sub">&nbsp;&middot; sola lettura, nessun asset modificato</span></div></div>
-      <div style="padding:0 16px 14px; font-size:12.5px; line-height:1.6">
-        <div><strong>Engine</strong>: ${escapeHtml(data.engine)}</div>
-        <div><strong>Progetto</strong>: ${escapeHtml(data.project)} <span style="color:var(--text-dim)">(${escapeHtml(data.projectDir)})</span></div>
-        <div><strong>Asset sporchi nell'Editor</strong>: ${data.dirtyContent} contenuti, ${data.dirtyMaps} mappe</div>
-        <div><strong>Pacchetti salvati dal test</strong>: ${data.savedPackages.length} (deve essere 0) &middot; <strong>Tempo</strong>: ${data.ms} ms</div>
-        <div style="color:var(--text-dim)">${escapeHtml(data.url)}</div>${close}
-      </div>`;
-  } else {
-    box.innerHTML = `<div class="chart-head"><div class="chart-title" style="color:var(--danger)">Editor Unreal non raggiungibile</div></div>
-      <div style="padding:0 16px 14px; font-size:12.5px; line-height:1.6"><div>${escapeHtml(data.error || 'errore sconosciuto')}</div>${close}</div>`;
-  }
-  document.getElementById('entUeCloseBtn').addEventListener('click', () => { box.hidden = true; });
-});
 document.getElementById('entCsvFile').addEventListener('change', async e => {
   const f = e.target.files[0];
   e.target.value = '';
@@ -3983,6 +4241,9 @@ document.getElementById('questPlaceholderToggle').addEventListener('click', e =>
 document.getElementById('questSyncBtn').addEventListener('click', openQuestsSyncModal);
 
 async function init(){
+  await hgLogin(false);
+  const ul = document.getElementById('userLabel'); if(ul) ul.textContent = hgUserName();
+  setTimeout(() => runUnrealSync(true), 1500); // dopo l'accesso: lettura da Unreal e finestra con le eventuali discrepanze
   fetch('/api/health').then(r => r.json()).then(h => { const v = document.getElementById('appVersion'); if(v && h.version) v.textContent = 'v' + h.version; }).catch(() => {});
   buildPanels();
   renderAll();

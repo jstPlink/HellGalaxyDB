@@ -148,3 +148,15 @@ Il tool richiedeva in passato un server esterno per essere ripubblicato come
 Claude Artifact statico. Da quando i dati vivono nel database, `hellgalaxy.html`
 non funziona più da solo (serve `server.js` per rispondere a `/api/*`): il
 vecchio link pubblicato non è più aggiornato.
+
+## Aggiornamento 2026-10-08 (v0.2.2)
+- Tema chiaro "Fogli Google" predefinito; la versione dell'app è sotto il titolo (file `VERSION`).
+- **Leggi collegamenti Unreal** (sezione ENTITIES): etichette in uso / 0 utilizzi / senza BP / non in Unreal (sola lettura).
+- **Aggiorna il progetto** (barra in alto): Data Asset → DataTable → Blueprint → server, con lo stato di ogni passo; oggi solo anteprima (la scrittura su Unreal è bloccata).
+- Localization Master › Entities: la colonna ENGLISH è modificabile (doppio clic) e cambia anche Label/BriefDescription in ENTITIES.
+- **Accesso senza password**: all'apertura si sceglie un utente esistente o se ne crea uno nuovo (nessuna password); il nome compare agli altri ("Mario ha modificato ENTITIES"). Il pulsante "Utente: …" nella barra in alto (o Impostazioni → Cambia utente) cambia utente.
+- **Passo 4 "server"** di "Aggiorna il progetto": l'app locale invia i dati dei fogli al server (NAS). Si configura nel `.env` locale con `HG_REMOTE_URL` (es. `http://nas:8936`) e `HG_REMOTE_TOKEN` (= `HG_API_TOKEN` del server). Anteprima = solo controllo del collegamento; applica = invio. Non tocca Unreal.
+- **Due pulsanti Unreal** (barra in alto): **Sincronizza Unreal** (sola lettura: mostra le discrepanze tra app e progetto; parte da solo dopo l'accesso) e **Aggiorna Unreal** (invia solo i dati cambiati nell'app; la scrittura resta bloccata finché non viene sbloccata). La colonna "Unreal" (tag) è ora anche su Modules, Cargo/Loot e Items.
+- Interfaccia: pulsanti principali ingranditi, schede con contorno, pulsanti provvisori in **giallo**; cliccando "Agente: non connesso" si apre la guida per collegare l'agente.
+- Clic su "N modifiche in sospeso": elenco delle modifiche fatte in locale (originale → attuale).
+- Nell'elenco delle modifiche locali ogni riga ha "Ripristina" (solo quella riga).

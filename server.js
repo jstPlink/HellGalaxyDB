@@ -9,6 +9,13 @@ const { DatabaseSync } = require('node:sqlite');
 const sheet = require('./scripts/sheet_mappings');
 const unreal = require('./scripts/unreal_bridge');
 const unrealRead = require('./scripts/unreal_read');
+const unrealLinks = require('./scripts/unreal_links');
+const unrealTables = require('./scripts/unreal_datatables');
+const projectUpdate = require('./scripts/project_update');
+const serverSync = require('./scripts/server_sync');
+const unrealSync = require('./scripts/unreal_sync');
+const agentHub = require('./scripts/agent_hub');
+
 const eff = require('./scripts/entity_effective');
 const msheet = require('./scripts/modules_sheet');
 
@@ -20,6 +27,11 @@ try {
     if (m && !(m[1] in process.env)) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
   }
 } catch (e) { /* nessun .env */ }
+
+// L'app non parla mai direttamente con l'Editor Unreal: passa dall'agente locale (scripts/unreal_agent.js), anche in locale.
+// HG_UE_MODE=direct (solo test/prove) mantiene la chiamata diretta all'MCP.
+if ((process.env.HG_UE_MODE || 'agent') !== 'direct') unreal.useRemote(agentHub.submit);
+const AGENT_TOKEN = process.env.HG_AGENT_TOKEN || '';
 
 const ROOT = __dirname;
 // HG_DB_PATH e HG_PORT servono solo ai test (database temporaneo, porta libera).
@@ -70,12 +82,22 @@ db.exec(`CREATE TABLE IF NOT EXISTS entities_ue (
   data_json TEXT NOT NULL,
   read_at TEXT NOT NULL
 )`);
+// Collegamenti degli asset di ogni entità in Unreal (letti in sola lettura): etichette in-uso / zero-usi / senza-bp / non-in-unreal.
+db.exec(`CREATE TABLE IF NOT EXISTS entity_links (
+  id TEXT PRIMARY KEY, data_json TEXT NOT NULL, read_at TEXT NOT NULL
+)`);
 db.exec(`CREATE TABLE IF NOT EXISTS entities (
   id TEXT PRIMARY KEY,
   current_json TEXT NOT NULL,
   original_json TEXT NOT NULL,
   updated_at TEXT NOT NULL
 )`);
+
+// Utenti dell'app (schermata di accesso, senza password: serve solo a sapere "chi ha modificato cosa").
+db.exec(`CREATE TABLE IF NOT EXISTS users (
+  name TEXT PRIMARY KEY COLLATE NOCASE, created_at TEXT NOT NULL, last_seen TEXT NOT NULL
+)`);
+const cleanUserName = s => String(s || '').replace(/\s+/g, ' ').trim().slice(0, 40);
 
 // Autenticazione opzionale: se HG_API_TOKEN è impostato, ogni /api/* (tranne
 // /api/health) richiede 'Authorization: Bearer <token>'. Se non è impostato il
@@ -270,7 +292,9 @@ function getAllEntities() {
   let readAt = null;
   for (const u of stmts.allEntitiesUe.all()) { ue[u.id] = JSON.parse(u.data_json); readAt = u.read_at; }
   for (const it of items) effective[it['(ID)']] = eff.effectiveEntity(it, originals[it['(ID)']], ue[it['(ID)']] || null);
-  return { items, originals, effective, ueReadAt: readAt, ueCount: Object.keys(ue).length };
+  const links = {}; let linksReadAt = null;
+  for (const l of db.prepare('SELECT * FROM entity_links').all()) { links[l.id] = JSON.parse(l.data_json); linksReadAt = l.read_at; }
+  return { items, originals, effective, ueReadAt: readAt, ueCount: Object.keys(ue).length, links, linksReadAt };
 }
 
 function updateEntity(id, fields) {
@@ -543,7 +567,7 @@ function readJsonBody(req) {
     });
     req.on('end', () => {
       if (!data) return resolve({});
-      try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
+      try { req._body = JSON.parse(data); resolve(req._body); } catch (e) { reject(e); }
     });
     req.on('error', reject);
   });
@@ -583,13 +607,38 @@ const tabsHandler = require('./scripts/tabs_server')({ db, sendJson, readJsonBod
 // Fogli "Localization Master" (Identities, Entities, Quest, EventsAudio): copia fedele di sola lettura.
 const gridHandler = require('./scripts/grid_tabs')({ db, sendJson, readJsonBody, SheetError, fs, onEntityText: mirrorLocTextToEntity });
 
+// Sorgente dei dati per le DataTable: copie fedeli di MainEvents/EventTexts nel database.
+const gridSrc = {
+  rows: tab => db.prepare('SELECT cells_json FROM grid_rows WHERE tab = ? ORDER BY row_no').all(tab).map(r => JSON.parse(r.cells_json)),
+  headers: tab => { const m = db.prepare('SELECT headers_json FROM grid_tabs WHERE tab = ?').get(tab); return m ? JSON.parse(m.headers_json) : []; },
+};
+
 // Versione dell'app (file VERSION, da incrementare a ogni commit/push).
 let APP_VERSION = '';
 try { APP_VERSION = fs.readFileSync(path.join(__dirname, 'VERSION'), 'utf8').trim(); } catch (e) { APP_VERSION = ''; }
 
+// Registro delle modifiche (solo in memoria): serve a avvisare gli altri utenti "X ha modificato Y" e a proporre il refresh.
+// Nessun blocco: chi modifica non viene mai fermato (decisione dell'utente, 2026-10-08).
+const changeLog = []; let changeRev = 0;
+const CHANGE_LABELS = [[/^\/api\/import\/bundle/, 'tutti i fogli (dati inviati dall\'app locale)'], [/^\/api\/entities/, 'ENTITIES'], [/^\/api\/modules-sheet/, 'MODULES'], [/^\/api\/tabs\/cargo/, 'CARGO/LOOT'], [/^\/api\/tabs\/items/, 'ITEMS'],
+  [/^\/api\/grid\/entities/, 'Localization Master › Entities'], [/^\/api\/grid\/([a-z]+)/, 'Localization/Events'], [/^\/api\/(modules|enemies|producers)/, 'DATABASE'], [/^\/api\/sync\/pull\/(entities|modules|tab|grid)/, 'importazione dal foglio']];
+function recordChange(req, urlPath, queryString, status) {
+  if (status >= 400 || req.method === 'GET') return;
+  if (/^\/api\/(agent|project-update|unreal|users|remote)\b/.test(urlPath) || /^\/api\/sync\/unreal/.test(urlPath)) return;
+  if (/^\/api\/sync\/pull/.test(urlPath) && !/(^|&)apply=1/.test(queryString || '')) return; // anteprima: nessuna modifica
+  const lab = CHANGE_LABELS.find(([re]) => re.test(urlPath));
+  const idMatch = urlPath.match(/^\/api\/[a-z-]+(?:\/[a-z]+)?\/([^/]+)/);
+  const body = req._body || {};
+  const user = String(req.headers['x-hg-user'] ? decodeURIComponent(String(req.headers['x-hg-user'])) : 'un altro utente').slice(0, 60);
+  changeLog.push({ rev: ++changeRev, at: new Date().toISOString(), user, client: String(req.headers['x-hg-client'] || '').slice(0, 40),
+    what: lab ? lab[1] : urlPath, id: idMatch && !/^(reset-all|revert)$/.test(idMatch[1]) ? decodeURIComponent(idMatch[1]) : '', fields: Object.keys(body.fields || (body.value !== undefined ? { testo: 1 } : {})) });
+  if (changeLog.length > 300) changeLog.shift();
+}
+
 const server = http.createServer(async (req, res) => {
   const [urlPath, queryString] = req.url.split('?');
   const query = new URLSearchParams(queryString || '');
+  res.on('finish', () => { try { recordChange(req, urlPath, queryString, res.statusCode); } catch (e) { /* il registro non deve mai rompere una richiesta */ } });
 
   try {
     if (urlPath === '/api/data' && req.method === 'GET') {
@@ -600,10 +649,23 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, {
         ok: true,
         version: APP_VERSION,
+        agentConnected: agentHub.status().connected,
         authRequired: !!API_TOKEN,
         entities: stmts.allEntities.all().length,
         sheetConfigured: !!(SHEET_MOCK_CSV || SHEET_CSV_URL || (SHEET_EXEC_URL && SHEET_SECRET)),
       });
+    }
+    // ---- Agente Unreal (autenticato con HG_AGENT_TOKEN, non con il token degli utenti) ----
+    if ((urlPath === '/api/agent/poll' || urlPath === '/api/agent/result') && req.method === 'POST') {
+      const given = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+      if (!AGENT_TOKEN || given !== AGENT_TOKEN) return sendJson(res, 401, { error: 'token agente mancante o errato (HG_AGENT_TOKEN)' });
+      const body = await readJsonBody(req);
+      const agentId = String(body.agentId || 'agente').slice(0, 80);
+      if (urlPath === '/api/agent/result') return sendJson(res, 200, { ok: agentHub.result(String(body.id || ''), body, agentId) });
+      let closeFn = null;
+      res.on('close', () => { if (closeFn) closeFn(); });
+      const job = await agentHub.poll(agentId, { name: body.name, version: body.version, ueOk: body.ueOk }, f => { closeFn = f; });
+      return sendJson(res, 200, { job });
     }
     if (API_TOKEN && urlPath.startsWith('/api/')) {
       const given = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
@@ -611,6 +673,37 @@ const server = http.createServer(async (req, res) => {
     }
 
     let m;
+    if (urlPath === '/api/agent/status' && req.method === 'GET') return sendJson(res, 200, { ...agentHub.status(), mode: (process.env.HG_UE_MODE || 'agent'), tokenConfigured: !!AGENT_TOKEN });
+    // ---- Utenti (accesso senza password) ----
+    if (urlPath === '/api/users' && req.method === 'GET') {
+      return sendJson(res, 200, { users: db.prepare('SELECT name, created_at, last_seen FROM users ORDER BY last_seen DESC').all() });
+    }
+    if (urlPath === '/api/users' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      const name = cleanUserName(body.name);
+      if (!name) return sendJson(res, 400, { error: 'inserisci un nome' });
+      const now = new Date().toISOString();
+      const ex = db.prepare('SELECT name FROM users WHERE name = ?').get(name);
+      if (ex && body.create === true) return sendJson(res, 409, { error: 'esiste già un utente con questo nome: sceglilo dall\'elenco', name: ex.name });
+      if (ex) db.prepare('UPDATE users SET last_seen = ? WHERE name = ?').run(now, ex.name);
+      else db.prepare('INSERT INTO users (name, created_at, last_seen) VALUES (?, ?, ?)').run(name, now, now);
+      return sendJson(res, 200, { name: ex ? ex.name : name, created: !ex });
+    }
+    // ---- Server remoto (passo 4): non tocca Unreal ----
+    if (urlPath === '/api/import/bundle' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      try { return sendJson(res, 200, { ok: true, imported: serverSync.importBundle(db, body) }); }
+      catch (e) { return sendJson(res, 400, { ok: false, error: e.message }); }
+    }
+    if (urlPath === '/api/remote/push' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      try { return sendJson(res, 200, { ok: true, ...(await serverSync.pushToRemote(db, { apply: body.apply === true })) }); }
+      catch (e) { return sendJson(res, 502, { ok: false, error: e.message }); }
+    }
+    if (urlPath === '/api/changes' && req.method === 'GET') {
+      const since = Number(query.get('since') || 0);
+      return sendJson(res, 200, { rev: changeRev, changes: since >= changeRev ? [] : changeLog.filter(c => c.rev > since).slice(-50) });
+    }
     if ((m = urlPath.match(/^\/api\/modules\/([^/]+)$/)) && req.method === 'PUT') {
       const body = await readJsonBody(req);
       const result = updateModule(decodeURIComponent(m[1]), body.fields || {});
@@ -673,6 +766,63 @@ const server = http.createServer(async (req, res) => {
       const result = revertEntity(decodeURIComponent(m[1]));
       if (!result) return sendJson(res, 404, { error: 'entità non trovata' });
       return sendJson(res, 200, result);
+    }
+    // ---- DataTable degli eventi e "Aggiorna il progetto" ----
+    // Anteprima: SOLA LETTURA su Unreal. Apply: bloccato da HG_UE_ALLOW_WRITE e da confirm:true.
+    if (urlPath === '/api/unreal/datatables/preview' && req.method === 'POST') {
+      try { return sendJson(res, 200, await unrealTables.preview(gridSrc)); }
+      catch (e) { if (e instanceof unreal.UnrealError) return sendJson(res, e.status, { ok: false, error: e.message, code: e.code }); throw e; }
+    }
+    if (urlPath === '/api/unreal/datatables/apply' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      try { return sendJson(res, 200, await unrealTables.apply(gridSrc, String(body.table || ''), { confirm: body.confirm === true })); }
+      catch (e) { if (e instanceof unreal.UnrealError) return sendJson(res, e.status, { ok: false, error: e.message, code: e.code }); throw e; }
+    }
+    if (urlPath === '/api/project-update' && req.method === 'GET') {
+      return sendJson(res, 200, { job: projectUpdate.status(), writeEnabled: process.env.HG_UE_ALLOW_WRITE === '1' });
+    }
+    if (urlPath === '/api/project-update' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      try {
+        const job = await projectUpdate.run(body.mode === 'apply' ? 'apply' : 'dry', {
+          entityRows: () => stmts.allEntities.all().map(r => JSON.parse(r.current_json)), src: gridSrc, confirm: body.confirm === true, db });
+        return sendJson(res, 202, { job });
+      } catch (e) { if (e instanceof unreal.UnrealError) return sendJson(res, e.status, { ok: false, error: e.message, code: e.code }); throw e; }
+    }
+    // "Sincronizza Unreal": sola lettura su Unreal; salva nell'app solo i collegamenti (tag).
+    if (urlPath === '/api/unreal-sync' && req.method === 'GET') return sendJson(res, 200, { job: unrealSync.status() });
+    if (urlPath === '/api/unreal-sync' && req.method === 'POST') {
+      try {
+        const job = unrealSync.run({ db, src: gridSrc, entityRows: () => stmts.allEntities.all().map(r => JSON.parse(r.current_json)) },
+          req.headers['x-hg-user'] ? decodeURIComponent(String(req.headers['x-hg-user'])) : '');
+        return sendJson(res, 202, { job });
+      } catch (e) { if (e instanceof unreal.UnrealError) return sendJson(res, e.status, { ok: false, error: e.message, code: e.code }); throw e; }
+    }
+    // Collegamenti degli asset in Unreal (SOLA LETTURA su Unreal): chi usa i Data Asset e i Blueprint di ogni entità.
+    // Con ?apply=1 salva le etichette nel DB dell'app (tabella entity_links), mai su Unreal.
+    if (urlPath === '/api/sync/unreal/links' && req.method === 'POST') {
+      try {
+        const ids = stmts.allEntities.all().map(r => r.id);
+        const { links, ms } = await unrealLinks.readLinks(ids);
+        const counts = {};
+        for (const v of Object.values(links)) counts[v.tag] = (counts[v.tag] || 0) + 1;
+        let applied = false;
+        if (query.get('apply') === '1') {
+          const now = new Date().toISOString();
+          db.exec('BEGIN');
+          try {
+            db.exec('DELETE FROM entity_links');
+            const ins = db.prepare('INSERT INTO entity_links (id, data_json, read_at) VALUES (?, ?, ?)');
+            for (const [id, v] of Object.entries(links)) ins.run(id, JSON.stringify(v), now);
+            db.exec('COMMIT');
+          } catch (e) { db.exec('ROLLBACK'); throw e; }
+          applied = true;
+        }
+        return sendJson(res, 200, { read: ids.length, counts, ms, applied });
+      } catch (e) {
+        if (e instanceof unreal.UnrealError) return sendJson(res, e.status, { ok: false, error: e.message, code: e.code });
+        throw e;
+      }
     }
     // Lettura da Unreal (SOLA LETTURA su Unreal): confronta gli EDA_ con le entità dell'app;
     // con ?apply=1 salva i dati letti nel DB dell'app (tabella entities_ue), mai su Unreal.

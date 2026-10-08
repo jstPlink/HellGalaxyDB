@@ -82,7 +82,18 @@ async function callTool(name, args, opts = {}) {
 
 // Esegue Python nell'Editor. Ritorna { success, output, stderr, ms, saved_packages, raw }.
 // auto_save e' sempre "false" (non e' configurabile da qui di proposito).
+// Modalità "agente" (predefinita nell'app, anche in locale): execPython non parla con l'Editor ma accoda un lavoro
+// all'agente (scripts/agent_hub.js). L'agente stesso, e la modalità "diretta" (HG_UE_MODE=direct, test), usano il percorso diretto.
+let remote = null;
+function useRemote(fn) { remote = fn; }
+
 async function execPython(code, opts = {}) {
+  if (!/^\s*import unreal/.test(code)) throw new UnrealError('Il codice Python deve iniziare con "import unreal".', 400, 'bad_code');
+  if (remote && !opts.direct) return remote(code, opts);
+  return directExecPython(code, opts);
+}
+
+async function directExecPython(code, opts = {}) {
   if (!/^\s*import unreal/.test(code)) throw new UnrealError('Il codice Python deve iniziare con "import unreal".', 400, 'bad_code');
   const t0 = Date.now();
   const result = await callTool('execute_python_code', { code, auto_save: 'false' }, opts);
@@ -128,4 +139,4 @@ async function ping(opts = {}) {
 
 function resetSession() { sessionId = null; }
 
-module.exports = { UnrealError, execPython, callTool, ping, lastJsonLine, resetSession, MCP_URL };
+module.exports = { UnrealError, execPython, directExecPython, useRemote, PING_CODE, callTool, ping, lastJsonLine, resetSession, MCP_URL };

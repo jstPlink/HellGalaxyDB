@@ -96,7 +96,7 @@ function csvLines() { return fs.readFileSync(path.join(ROOT, 'data', 'HS - Entit
 
 async function startServer(extraEnv) {
   proc = spawn(process.execPath, [path.join(ROOT, 'server.js')], {
-    env: { ...process.env, HG_DB_PATH: path.join(tmp, 'test.db'), HG_PORT: String(PORT), HG_SHEET_MOCK_CSV: mockCsv, HG_UE_MCP_URL: `http://127.0.0.1:${MCP_PORT}/mcp`, HG_SHEET_MOCK_MODULES_CSV: modulesCsv, HG_SHEET_MOCK_CARGO_CSV: cargoCsv, HG_LOC_MOCK_IDENTITIES: locCsv, HG_SHEET_MOCK_ITEMS_CSV: itemsCsv, ...extraEnv },
+    env: { ...process.env, HG_DB_PATH: path.join(tmp, 'test.db'), HG_PORT: String(PORT), HG_SHEET_MOCK_CSV: mockCsv, HG_UE_MODE: 'direct', HG_UE_MCP_URL: `http://127.0.0.1:${MCP_PORT}/mcp`, HG_SHEET_MOCK_MODULES_CSV: modulesCsv, HG_SHEET_MOCK_CARGO_CSV: cargoCsv, HG_LOC_MOCK_IDENTITIES: locCsv, HG_SHEET_MOCK_ITEMS_CSV: itemsCsv, ...extraEnv },
     stdio: 'ignore',
   });
   for (let i = 0; i < 50; i++) {
@@ -543,4 +543,159 @@ test('T22 collegamento ENTITIES <-> Localization Master › Entities (modifica i
   g = (await api('GET', '/api/grid/entities', null, AUTH)).json;
   const orig = (await api('GET', '/api/entities', null, AUTH)).json.originals['MOD02-Engine_M'];
   assert.equal(g.rows[0][2], orig.Label, "dopo il ripristino la riga mostra il testo originale dell'entità");
+});
+
+test('T23 DataTable eventi: generazione dal database, confronto con l\'export di Unreal, scrittura bloccata', async () => {
+  const dt = require('../scripts/unreal_datatables');
+  const rows = dt.buildRows(
+    { mainevents: [['EV_A', 'EV', 'A', 'SINGLE_TRIGGER', 'X', '0', '1', '', '2'], ['', 'EV', 'B', '', '', '', '', '', '']], eventtexts: [['EV_A', "L'uomo \"x\"", 'EV_A_A']] },
+    { mainevents: ['RowName', 'Prefix', 'EventId', 'MultiplicityType', 'EventType', 'System', 'Multiplicity', 'Speaker', 'Priority'], eventtexts: ['id', 'Text', 'FMOD ID'] });
+  assert.equal(rows.signature.length, 1, 'le righe senza RowName si saltano');
+  assert.deepEqual(rows.signature[0].cols, ['EV', 'A', '0', '1']);
+  assert.deepEqual(rows.rules[0].cols, ['A', 'SINGLE_TRIGGER', '1', '2']);
+  assert.equal(rows.texts[0].row, 'EV_A_A');
+  assert.equal(dt.toCsv('texts', rows.texts), '---,Id,Text,FmodId\nEV_A_A,"EV_A","L\'uomo ""x""","EV_A_A"\n');
+  // testo FText esportato da Unreal
+  assert.equal(dt.ftextToString('NSLOCTEXT("DT_EventsText [AB]", "K_Text", "might\\\'ve")'), "might've");
+  // confronto
+  const unrealCsv = '---,Id,Text,FmodId\nEV_A_A,"EV_A","NSLOCTEXT(""ns"", ""EV_A_A_Text"", ""vecchio"")","EV_A_A"\nEV_OLD,"X","t","EV_OLD"\n';
+  const d = dt.diffTable('texts', rows.texts, dt.parseUnrealCsv('texts', unrealCsv));
+  assert.equal(d.changed.length, 1);
+  assert.equal(d.changed[0].diffs[0].col, 'Text');
+  assert.deepEqual(d.removed, ['EV_OLD']);
+  // la scrittura è bloccata senza HG_UE_ALLOW_WRITE (e il test non deve nemmeno raggiungere l'Editor)
+  const saved = process.env.HG_UE_ALLOW_WRITE; delete process.env.HG_UE_ALLOW_WRITE;
+  await assert.rejects(() => dt.apply({ rows: () => [], headers: () => [] }, 'texts', { confirm: true }), /disabilitata/);
+  if (saved !== undefined) process.env.HG_UE_ALLOW_WRITE = saved;
+});
+
+test('T24 agente Unreal: validazione dei lavori (solo script noti + chiamata letterale), scritture segnalate', async () => {
+  const agent = require('../scripts/unreal_agent');
+  const bridge = require('../scripts/unreal_bridge');
+  const scripts = agent.loadScripts();
+  const refs = scripts.find(s => s.file === 'refs_check.py').text;
+  const ok = agent.validateJob(refs + '\n\ncheck("YWJj")\n', { pingCode: bridge.PING_CODE, scripts });
+  assert.equal(ok.ok, true); assert.equal(ok.write, false);
+  assert.equal(agent.validateJob(refs.replace(/\n/g, '\r\n') + '\r\n\r\ncheck("YWJj")\r\n', { pingCode: bridge.PING_CODE, scripts }).ok, true, 'tollera i fine riga CRLF');
+  assert.equal(agent.validateJob(bridge.PING_CODE, { pingCode: bridge.PING_CODE, scripts }).what, 'ping');
+  const del = agent.validateJob(scripts.find(s => s.file === 'delete_assets.py').text + '\n\ndelete("YWJj")\n', { pingCode: bridge.PING_CODE, scripts });
+  assert.equal(del.write, true, 'delete scrive');
+  const push = scripts.find(s => s.file === 'entities_push.py').text;
+  assert.equal(agent.validateJob(push + '\n\nrun("YQ==", apply=False, folder="/Game/X")\n', { scripts }).write, false);
+  assert.equal(agent.validateJob(push + '\n\nrun("YQ==", apply=True, folder="/Game/X")\n', { scripts }).write, true, 'apply=True scrive');
+  // codice non consentito o iniettato
+  for (const bad of ['import unreal\nprint(1)', refs + '\n\ncheck("a"); import os\n', refs + '\n\ncheck(os.getcwd())\n', refs + '\n\nexec("x")\n', refs + '\n\ncheck("a")\ncheck("b")\n'])
+    assert.equal(agent.validateJob(bad, { pingCode: bridge.PING_CODE, scripts }).ok, false, bad.slice(-30));
+});
+
+test('T25 modalità agente: senza agente errore chiaro; con l\'agente il lavoro arriva all\'Editor (finto) e torna il risultato', async () => {
+  const P2 = 18940, B2 = `http://127.0.0.1:${P2}`;
+  try { await startMockMcp(); } catch (e) { /* già acceso */ }
+  const env = { ...process.env, HG_DB_PATH: path.join(tmp, 'agent.db'), HG_PORT: String(P2), HG_AGENT_TOKEN: 'tok-agente', HG_AGENT_CONNECT_WAIT_MS: '800', HG_UE_MODE: 'agent' };
+  fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'agent.db'));
+  const srv = spawn(process.execPath, [path.join(ROOT, 'server.js')], { env, stdio: 'ignore' });
+  let ag;
+  try {
+    for (let i = 0; i < 50; i++) { try { if ((await fetch(B2 + '/api/health')).ok) break; } catch (e) { /* non ancora su */ } await new Promise(r => setTimeout(r, 100)); }
+    const off = await fetch(B2 + '/api/unreal/ping'); const offJ = await off.json();
+    assert.equal(off.status, 503); assert.equal(offJ.code, 'agent_offline');
+    assert.equal((await fetch(B2 + '/api/agent/poll', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })).status, 401, 'senza token agente: 401');
+    const before = mcpCalls.length;
+    ag = spawn(process.execPath, [path.join(ROOT, 'scripts', 'unreal_agent.js')], { env: { ...process.env, HG_SERVER_URL: B2, HG_AGENT_TOKEN: 'tok-agente', HG_AGENT_NAME: 'PC-test', HG_UE_MCP_URL: `http://127.0.0.1:${MCP_PORT}/mcp`, HG_UE_ALLOW_WRITE: '' }, stdio: 'ignore', cwd: os.tmpdir() });
+    let res, json;
+    for (let i = 0; i < 40; i++) { res = await fetch(B2 + '/api/unreal/ping'); json = await res.json(); if (res.status === 200) break; await new Promise(r => setTimeout(r, 300)); }
+    assert.equal(res.status, 200, JSON.stringify(json));
+    assert.equal(json.ok, true); assert.equal(json.project, 'HellGalaxy');
+    assert.ok(mcpCalls.length > before && mcpCalls[mcpCalls.length - 1].args.auto_save === 'false', 'ha raggiunto l\'Editor finto con auto_save false');
+    const st = await (await fetch(B2 + '/api/agent/status')).json();
+    assert.equal(st.connected, true); assert.equal(st.agents[0].name, 'PC-test');
+    // cancellazione richiesta dall'app: l'agente (senza HG_UE_ALLOW_WRITE) la blocca
+    const blocked = await fetch(B2 + '/api/unreal/datatables/apply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ table: 'texts', confirm: true }) });
+    assert.equal(blocked.status, 403);
+  } finally { if (ag) ag.kill(); srv.kill(); }
+});
+
+test('T26 notifiche di modifica: registro con utente, nessun blocco', async () => {
+  const before = (await api('GET', '/api/changes?since=0', null, AUTH)).json.rev;
+  const r = await fetch(BASE + '/api/entities/MOD02-Engine_M', { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN, 'X-HG-User': encodeURIComponent('Mario'), 'X-HG-Client': 'abc' }, body: JSON.stringify({ fields: { BasePrice: '5' } }) });
+  assert.equal(r.status, 200);
+  const c = (await api('GET', `/api/changes?since=${before}`, null, AUTH)).json;
+  assert.equal(c.changes.length, 1);
+  assert.equal(c.changes[0].user, 'Mario'); assert.equal(c.changes[0].what, 'ENTITIES'); assert.equal(c.changes[0].id, 'MOD02-Engine_M'); assert.deepEqual(c.changes[0].fields, ['BasePrice']);
+  // una seconda modifica da un altro utente non viene respinta (nessun blocco)
+  const r2 = await fetch(BASE + '/api/entities/MOD02-Engine_M', { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN, 'X-HG-User': 'Anna' }, body: JSON.stringify({ fields: { BasePrice: '6' } }) });
+  assert.equal(r2.status, 200);
+  await api('POST', '/api/entities/MOD02-Engine_M/revert', null, AUTH);
+});
+
+test('T27 utenti: creazione, duplicato rifiutato (senza distinzione maiuscole), selezione di un utente esistente', async () => {
+  assert.deepEqual((await api('GET', '/api/users', null, AUTH)).json.users.filter(u => /^Test /.test(u.name)), []);
+  const c = await api('POST', '/api/users', { name: '  Test   Anna ', create: true }, AUTH);
+  assert.equal(c.status, 200); assert.equal(c.json.name, 'Test Anna'); assert.equal(c.json.created, true);
+  const dup = await api('POST', '/api/users', { name: 'test anna', create: true }, AUTH);
+  assert.equal(dup.status, 409); assert.equal(dup.json.name, 'Test Anna');
+  const sel = await api('POST', '/api/users', { name: 'test anna' }, AUTH);
+  assert.equal(sel.status, 200); assert.equal(sel.json.created, false); assert.equal(sel.json.name, 'Test Anna');
+  assert.equal((await api('POST', '/api/users', { name: '   ' }, AUTH)).status, 400);
+  assert.equal((await api('GET', '/api/users', null, AUTH)).json.users.filter(u => u.name === 'Test Anna').length, 1);
+  assert.equal((await fetch(BASE + '/api/users')).status, 401, 'senza token API: 401');
+});
+
+test('T28 passo 4: invio dei dati al server remoto con token (anteprima senza scrivere, apply, token errato)', async () => {
+  const PT = 18942, PS = 18944;
+  const mk = (port, db, extra) => spawn(process.execPath, [path.join(ROOT, 'server.js')], { env: { ...process.env, HG_DB_PATH: path.join(tmp, db), HG_PORT: String(port), ...extra }, stdio: 'ignore' });
+  fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'tgt.db')); fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'src.db'));
+  const wait = async p => { for (let i = 0; i < 50; i++) { try { if ((await fetch(`http://127.0.0.1:${p}/api/health`)).ok) return; } catch (e) { /* non ancora su */ } await new Promise(r => setTimeout(r, 100)); } };
+  const tgt = mk(PT, 'tgt.db', { HG_API_TOKEN: 'tok-remoto' });
+  const src = mk(PS, 'src.db', { HG_REMOTE_URL: `http://127.0.0.1:${PT}`, HG_REMOTE_TOKEN: 'tok-remoto' });
+  const bad = mk(18946, 'src.db', { HG_REMOTE_URL: `http://127.0.0.1:${PT}`, HG_REMOTE_TOKEN: 'sbagliato' });
+  const S = `http://127.0.0.1:${PS}`, T = `http://127.0.0.1:${PT}`, TA = { Authorization: 'Bearer tok-remoto' };
+  try {
+    await wait(PT); await wait(PS); await wait(18946);
+    const put = await fetch(S + '/api/entities/MOD02-Engine_M', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: { BasePrice: 777 } }) });
+    assert.equal(put.status, 200);
+    const price = async base => (await (await fetch(base + '/api/entities', { headers: TA })).json()).items.find(e => e['(ID)'] === 'MOD02-Engine_M').BasePrice;
+    // anteprima: collegamento riuscito, nulla cambia sul server remoto
+    const dry = await (await fetch(S + '/api/remote/push', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })).json();
+    assert.equal(dry.ok, true); assert.equal(dry.applied, false); assert.ok(dry.local.entities > 100);
+    assert.notEqual(String(await price(T)), '777');
+    // apply: il server remoto riceve le modifiche
+    const ap = await (await fetch(S + '/api/remote/push', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apply: true }) })).json();
+    assert.equal(ap.applied, true); assert.equal(ap.received.entities, dry.local.entities);
+    assert.equal(String(await price(T)), '777');
+    // token errato: errore chiaro, nessun invio
+    const ko = await fetch(`http://127.0.0.1:18946/api/remote/push`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apply: true }) });
+    assert.equal(ko.status, 502); assert.match((await ko.json()).error, /token/);
+    // il server remoto senza token non accetta l'import
+    assert.equal((await fetch(T + '/api/import/bundle', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })).status, 401);
+  } finally { tgt.kill(); src.kill(); bad.kill(); }
+});
+
+test('T29 Sincronizza Unreal: Blueprint attesi (CI_/BP_ACS_Loot_/SML_*) e job in sola lettura; senza agente errore chiaro', async () => {
+  const { DatabaseSync } = require('node:sqlite');
+  const sync = require('../scripts/unreal_sync');
+  const mem = new DatabaseSync(':memory:');
+  mem.exec('CREATE TABLE sheet_rows (tab TEXT, id TEXT); CREATE TABLE modules_sheet (id TEXT)');
+  mem.exec("INSERT INTO sheet_rows VALUES ('cargo','A'),('cargo','B'),('items','B'); INSERT INTO modules_sheet VALUES ('A')");
+  const exp = sync.expectedBlueprints(mem, ['A', 'B', 'C']);
+  assert.deepEqual(exp.A, ['CI_A', 'BP_ACS_Loot_A', 'SML_SM_A']);
+  assert.deepEqual(exp.B, ['CI_B', 'BP_ACS_Loot_B', 'SML_SI_B']);
+  assert.equal(exp.C, undefined);
+  const plan = sync.blueprintPlan(mem, ['A', 'B', 'C'], { A: { assets: ['CI_A', 'BP_ACS_Loot_A', 'SML_SM_A'] }, B: { assets: ['CI_B'] } });
+  assert.equal(plan.expected, 6);
+  assert.deepEqual(plan.missing.map(m => m.asset), ['BP_ACS_Loot_B', 'SML_SI_B']);
+  // job reale in modalità agente senza agente: parte, fallisce al primo passo con messaggio chiaro, nessuna scrittura
+  const P = 18948, B = `http://127.0.0.1:${P}`;
+  fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'sync.db'));
+  const srv = spawn(process.execPath, [path.join(ROOT, 'server.js')], { env: { ...process.env, HG_DB_PATH: path.join(tmp, 'sync.db'), HG_PORT: String(P), HG_AGENT_TOKEN: 'x', HG_AGENT_CONNECT_WAIT_MS: '300', HG_UE_MODE: 'agent' }, stdio: 'ignore' });
+  try {
+    for (let i = 0; i < 50; i++) { try { if ((await fetch(B + '/api/health')).ok) break; } catch (e) { /* non ancora su */ } await new Promise(r => setTimeout(r, 100)); }
+    const r = await fetch(B + '/api/unreal-sync', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    assert.equal(r.status, 202);
+    let job;
+    for (let i = 0; i < 40; i++) { job = (await (await fetch(B + '/api/unreal-sync')).json()).job; if (!job.running) break; await new Promise(r => setTimeout(r, 150)); }
+    assert.equal(job.running, false);
+    assert.equal(job.steps[0].status, 'error'); assert.equal(job.steps[1].status, 'skipped');
+    assert.match(job.discrepancies.error, /agente/i);
+  } finally { srv.kill(); }
 });
