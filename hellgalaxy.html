@@ -85,6 +85,8 @@
   }
   .top-actions{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
 
+  td.loc-edit{ cursor:text; }
+  td.loc-mod{ box-shadow: inset 3px 0 0 var(--danger); }
   .dirty-pill{
     display:flex; align-items:center; gap:7px;
     font-size:12.5px; color: var(--text-dim);
@@ -529,7 +531,7 @@
       </div>
       <div>
         <h1>Hell Galaxy Database</h1>
-        <p>HS &middot; MODULES DATABASE</p>
+        <p id="appVersion"></p>
       </div>
     </div>
     <div class="top-actions">
@@ -2651,17 +2653,21 @@ async function loadEntities(){
   ENT_EFF = data.effective || {};
   ENT_UE_READ_AT = data.ueReadAt || null;
 }
+// Dopo una modifica in ENTITIES la copia del Localization Master (stessa chiave) cambia sul server: ricarico la vista.
+function reloadLocEntities(){ const v = typeof GRID_VIEWS !== 'undefined' && GRID_VIEWS['loc_entities']; if(v) v.load().then(() => v.render()).catch(() => {}); }
 async function apiSaveEntity(id, fields){
   const {current} = await apiSend('/api/entities/' + encodeURIComponent(id), 'PUT', {fields});
   const idx = ENTITIES.findIndex(e => e['(ID)'] === id);
   if(idx >= 0) ENTITIES[idx] = current;
   await loadEntities();
+  reloadLocEntities();
 }
 async function apiRevertEntity(id){
   const {current} = await apiSend('/api/entities/' + encodeURIComponent(id) + '/revert', 'POST');
   const idx = ENTITIES.findIndex(e => e['(ID)'] === id);
   if(idx >= 0) ENTITIES[idx] = current;
   await loadEntities();
+  reloadLocEntities();
 }
 async function apiResetAllEntities(){
   const data = await apiSend('/api/entities/reset-all', 'POST');
@@ -3146,15 +3152,16 @@ makeTabView('items', 'itemssheet', 'ITEMS', 'Items');
 const GRID_VIEWS = {};
 function colName(i){ let n = i + 1, t = ''; while(n > 0){ t = String.fromCharCode(65 + ((n - 1) % 26)) + t; n = Math.floor((n - 1) / 26); } return t; }
 function makeGridView(tab, pageId, sheetName){
-  const V = { tab, pageId, headers: [], rows: [], count: 0, importedAt: null, search: '', csv: '' };
+  const V = { tab, pageId, headers: [], rows: [], count: 0, importedAt: null, search: '', csv: '', edits: [] };
   const el = id => document.getElementById('g-' + tab + '-' + id);
-  V.load = async () => { const d = await apiGet('/api/grid/' + tab); V.headers = d.headers || []; V.rows = d.rows || []; V.count = d.count || 0; V.importedAt = d.importedAt || null; };
+  V.load = async () => { const d = await apiGet('/api/grid/' + tab); V.headers = d.headers || []; V.rows = d.rows || []; V.count = d.count || 0; V.importedAt = d.importedAt || null; V.edits = d.edits || []; };
   V.render = () => {
     const q = V.search.trim().toLowerCase();
     const idx = [];
     V.rows.forEach((r, i) => { if(!q || r.some(c => String(c).toLowerCase().includes(q))) idx.push(i); });
     const LIMIT = 1000, shown = idx.slice(0, LIMIT);
-    el('info').innerHTML = V.count ? ('<strong>' + V.count + '</strong> righe &middot; <strong>' + V.headers.length + '</strong> colonne &middot; importato il ' + escapeHtml(new Date(V.importedAt).toLocaleString('it-IT')) + ' &middot; <span style="color:var(--text-dim)">copia fedele del tab ' + escapeHtml(sheetName) + ' del foglio (sola lettura: si modifica sul foglio)</span>' + (idx.length !== V.rows.length ? ' &middot; ' + idx.length + ' corrispondenti' : '') + (idx.length > LIMIT ? ' &middot; mostrate le prime ' + LIMIT : '')) : 'Nessun dato: premi "Scarica dal foglio" o "Importa CSV" per copiare il tab ' + escapeHtml(sheetName) + '.';
+    const engCol = tab === 'entities' ? V.headers.indexOf('ENGLISH') : -1;
+    el('info').innerHTML = V.count ? ('<strong>' + V.count + '</strong> righe &middot; <strong>' + V.headers.length + '</strong> colonne &middot; importato il ' + escapeHtml(new Date(V.importedAt).toLocaleString('it-IT')) + ' &middot; <span style="color:var(--text-dim)">copia fedele del tab ' + escapeHtml(sheetName) + ' del foglio (' + (tab === 'entities' ? 'colonna ENGLISH modificabile con doppio clic: collegata a Label/BriefDescription di ENTITIES; ' + V.edits.length + ' modificate' : 'sola lettura: si modifica sul foglio') + ')</span>' + (idx.length !== V.rows.length ? ' &middot; ' + idx.length + ' corrispondenti' : '') + (idx.length > LIMIT ? ' &middot; mostrate le prime ' + LIMIT : '')) : 'Nessun dato: premi "Scarica dal foglio" o "Importa CSV" per copiare il tab ' + escapeHtml(sheetName) + '.';
     // EventsAudio: le righe con la stessa chiave di EventTexts (HS - Events) sono "in gioco" (DT_EventsText);
     // le altre sono backup per il futuro, non presenti in gioco (decisione dell'utente, 2026-10-08).
     let gameKeys = null;
@@ -3165,8 +3172,28 @@ function makeGridView(tab, pageId, sheetName){
     const stato = r => gameKeys && r[0] ? (gameKeys.has(r[0]) ? '<td><span class="badge-type" style="color:var(--good)">in gioco</span></td>' : '<td><span class="badge-type" style="color:var(--text-faint)" title="Non presente in HS - Events: backup per il futuro, non in gioco">backup</span></td>') : (gameKeys ? '<td></td>' : '');
     if(gameKeys){ const k = V.rows.filter(r => r[0]); const nb = k.filter(r => !gameKeys.has(r[0])).length; el('info').innerHTML += ' &middot; <strong>' + (k.length - nb) + '</strong> in gioco, <strong>' + nb + '</strong> backup (non in gioco)'; }
     el('thead').innerHTML = '<th class="rownum">#</th>' + (gameKeys ? '<th>Stato</th>' : '') + V.headers.map((h, i) => '<th>' + escapeHtml(h || colName(i)) + '</th>').join('');
-    el('tbody').innerHTML = shown.map(i => '<tr' + (gameKeys && V.rows[i][0] && !gameKeys.has(V.rows[i][0]) ? ' style="opacity:.6"' : '') + '><td class="rownum">' + (i + 2) + '</td>' + stato(V.rows[i]) + V.rows[i].map(c => '<td title="' + escapeHtml(c) + '">' + escapeHtml(truncate(c, 110)) + '</td>').join('') + '</tr>').join('') || '<tr class="empty-row"><td colspan="' + (V.headers.length + 2) + '">Nessuna riga.</td></tr>';
+    el('tbody').innerHTML = shown.map(i => '<tr' + (gameKeys && V.rows[i][0] && !gameKeys.has(V.rows[i][0]) ? ' style="opacity:.6"' : '') + '><td class="rownum">' + (i + 2) + '</td>' + stato(V.rows[i]) + V.rows[i].map((c, ci) => { const ed = tab === 'entities' && ci === engCol; const mod = ed && V.edits.some(e => e.row === i + 2 && e.col === ci); return '<td' + (ed ? ' class="loc-edit' + (mod ? ' loc-mod' : '') + '" data-row="' + (i + 2) + '" data-ri="' + i + '"' : '') + ' title="' + escapeHtml(ed ? 'Doppio clic per modificare (cambia anche Label/BriefDescription in ENTITIES)' + (mod ? ' - modificato rispetto al foglio' : '') : c) + '">' + escapeHtml(truncate(c, 110)) + '</td>'; }).join('') + '</tr>').join('') || '<tr class="empty-row"><td colspan="' + (V.headers.length + 2) + '">Nessuna riga.</td></tr>';
+    if(engCol >= 0) el('tbody').querySelectorAll('td.loc-edit').forEach(td => td.addEventListener('dblclick', () => V.editCell(td, engCol)));
     renderDirtyPill();
+  };
+  // Modifica del testo inglese (solo tab Entities): salva sul server, che aggiorna anche ENTITIES.
+  V.editCell = (td, col) => {
+    if(td.classList.contains('editing')) return;
+    const ri = Number(td.dataset.ri), row = Number(td.dataset.row), cur = V.rows[ri][col];
+    td.classList.add('editing');
+    td.innerHTML = '<textarea class="cell-input" rows="3" style="width:100%;min-width:260px"></textarea>';
+    const ta = td.firstChild; ta.value = cur; ta.focus();
+    let done = false;
+    const commit = async save => {
+      if(done) return; done = true;
+      if(save && ta.value !== cur){
+        try{ const d = await apiSend('/api/grid/entities/' + row, 'PUT', {value: ta.value}); V.rows = d.rows; V.edits = d.edits || []; await loadEntities(); if(typeof renderEntities === 'function') renderEntities(); showToast('Testo salvato (anche in ENTITIES)'); }
+        catch(err){ showToast('Impossibile salvare la modifica'); }
+      }
+      V.render();
+    };
+    ta.addEventListener('blur', () => commit(true));
+    ta.addEventListener('keydown', e => { if(e.key === 'Escape'){ commit(false); } else if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); commit(true); } });
   };
   V.pull = async apply => {
     const box = el('report'); box.hidden = false;
@@ -3956,6 +3983,7 @@ document.getElementById('questPlaceholderToggle').addEventListener('click', e =>
 document.getElementById('questSyncBtn').addEventListener('click', openQuestsSyncModal);
 
 async function init(){
+  fetch('/api/health').then(r => r.json()).then(h => { const v = document.getElementById('appVersion'); if(v && h.version) v.textContent = 'v' + h.version; }).catch(() => {});
   buildPanels();
   renderAll();
   try{

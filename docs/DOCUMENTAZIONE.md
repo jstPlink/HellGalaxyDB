@@ -1,6 +1,6 @@
 # Hell Galaxy Database — documentazione tecnica
 
-Ultimo aggiornamento: 2026-10-08, primo commit/push di tutto il lavoro locale (Fase 0, lettura da Unreal, tab Modules/Cargo/Items, Localization Master, Events, tema); scrittura su Unreal DISABILITATA; commit precedente `c2475be`; NAS aggiornato dall'immagine GHCR dopo il push.
+Ultimo aggiornamento: 2026-10-08, **versione 0.2.0** (file `VERSION`, mostrata sotto il titolo e in `/api/health`; da incrementare a ogni commit/push). Primo commit/push di tutto il lavoro locale (Fase 0, lettura da Unreal, tab Modules/Cargo/Items, Localization Master, Events, tema); scrittura su Unreal DISABILITATA; commit precedente `c2475be`; NAS aggiornato dall'immagine GHCR dopo il push.
 
 > **Regola di manutenzione**: questo file va aggiornato a ogni richiesta, commit e push che
 > cambia comportamento, API, schema dati, script o deploy, e tiene traccia dello stato
@@ -43,6 +43,9 @@ Obiettivo dell'utente: **rimpiazzare l'uso dei fogli** in modo completamente fun
 | Pagine moduli vecchie (Corpo/Motori/Armi, tabella `modules`, 116 righe) | ℹ️ ancora presenti e invariate; diventeranno filtri della nuova tabella (decisione dell'utente) — non ancora fatto, nessun dato perso (le 116 righe non avevano immagini né modifiche) |
 | Confronto foglio ↔ Unreal per tipo, rarità, prezzo, descrizione (solo segnalazione, vale il foglio) | ✅ (audit §J) |
 | Invio dati a Unreal (push `EDA_`, Fase 1) | ⏸️ **IN PAUSA**: codice scritto (`scripts/unreal_entities.js`, `scripts/unreal/entities_push.py`) ma **non collegato a nessuna rotta/pulsante** e con scrittura bloccata; l'anteprima (dry run) è stata provata una volta sull'Editor (lettura): 1 da creare, 219 da aggiornare (188 per il produttore mai scritto + tipo/rarità/prezzo), 159 orfani |
+| **Versione dell'app (2026-10-08)**: file `VERSION` (0.2.0), letto da `server.js`, esposto in `GET /api/health` e mostrato sotto il titolo (sostituisce la scritta "HS MODULES DATABASE"). Regola: incrementarla a ogni commit+push | ✅ |
+| **Collegamento ENTITIES ↔ Localization Master › Entities (2026-10-08)**: la colonna ENGLISH del tab Entities è modificabile (doppio clic) e cambia anche `Label`/`BriefDescription` dell'entità con quella chiave (`LabelKey`/`DescriptionKey`), e viceversa; ripristino incluso. Tabella `grid_edits` conserva l'originale del foglio; un nuovo pull del tab mantiene le modifiche locali. `PUT /api/grid/entities/:riga` `{value}` | ✅ test T22 |
+| **Dati letti da Unreal salvati nell'app (2026-10-08)**: entities_ue 429, cargo 425, items 34. Station supply: cargo = Unreal (stack 100, attractable vero, force to inspect falso) | ✅ |
 | Foglio **HS - Events** (MainEvents, EventTexts → DataTable di Unreal) e collegamento nome/descrizione entità alle chiavi di localizzazione | ⏳ da fare (analisi in `docs/LOCALIZZAZIONE.md`) |
 | NAS/Docker aggiornato | ❌ non aggiornato (si lavora solo in locale; nessun commit/push fatto) |
 

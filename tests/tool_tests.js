@@ -519,3 +519,28 @@ test('T21 Localization Master: copia fedele di sola lettura (colonne/righe vuote
   assert.equal(changed.json.identical, false);
   assert.equal((await api('GET', '/api/grid/nonesiste', null, AUTH)).status, 404);
 });
+
+test('T22 collegamento ENTITIES <-> Localization Master › Entities (modifica in un punto = modifica anche nell\'altro)', async () => {
+  const csv = ['KEY,ID,ENGLISH', 'MOD02-Engine_M-Name,,Nome foglio', 'MOD02-Engine_M-Description,,Descr foglio', 'ALTRO-Name,,Altro', ''].join('\n');
+  assert.equal((await api('POST', '/api/sync/pull/grid/entities?apply=1', { csv }, AUTH)).json.applied, true);
+  // ENTITIES -> Localization Master
+  assert.equal((await api('PUT', '/api/entities/MOD02-Engine_M', { fields: { Label: 'Nome app' } }, AUTH)).status, 200);
+  let g = (await api('GET', '/api/grid/entities', null, AUTH)).json;
+  assert.equal(g.rows[0][2], 'Nome app');
+  assert.deepEqual(g.edits.map(e => [e.row, e.col, e.original]), [[2, 2, 'Nome foglio']]);
+  // Localization Master -> ENTITIES (descrizione)
+  const r = await api('PUT', '/api/grid/entities/3', { value: 'Descr nuova' }, AUTH);
+  assert.equal(r.status, 200);
+  const ents = (await api('GET', '/api/entities', null, AUTH)).json.items;
+  assert.equal(ents.find(e => e['(ID)'] === 'MOD02-Engine_M').BriefDescription, 'Descr nuova');
+  // un nuovo pull dal foglio conserva le modifiche fatte nell'app
+  const p = await api('POST', '/api/sync/pull/grid/entities?apply=1', { csv }, AUTH);
+  assert.equal(p.json.keptEdits, 2);
+  g = (await api('GET', '/api/grid/entities', null, AUTH)).json;
+  assert.equal(g.rows[0][2], 'Nome app');
+  // ripristino dell'entità -> torna anche la riga e sparisce la modifica
+  await api('POST', '/api/entities/MOD02-Engine_M/revert', null, AUTH);
+  g = (await api('GET', '/api/grid/entities', null, AUTH)).json;
+  const orig = (await api('GET', '/api/entities', null, AUTH)).json.originals['MOD02-Engine_M'];
+  assert.equal(g.rows[0][2], orig.Label, "dopo il ripristino la riga mostra il testo originale dell'entità");
+});

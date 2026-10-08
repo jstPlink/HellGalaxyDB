@@ -283,6 +283,7 @@ function updateEntity(id, fields) {
     current[k] = v === null || v === undefined ? '' : String(v);
   }
   stmts.updateEntity.run(JSON.stringify(current), new Date().toISOString(), id);
+  mirrorEntityTextToLoc(current, fields);
   return rowToPayload(stmts.getEntity.get(id));
 }
 
@@ -290,7 +291,26 @@ function revertEntity(id) {
   const row = stmts.getEntity.get(id);
   if (!row) return null;
   stmts.updateEntity.run(row.original_json, new Date().toISOString(), id);
+  mirrorEntityTextToLoc(JSON.parse(row.original_json), { Label: 1, BriefDescription: 1 });
   return rowToPayload(stmts.getEntity.get(id));
+}
+
+// Collegamento ENTITIES <-> Localization Master > Entities (decisione dell'utente 2026-10-08, per ora solo per tenere
+// la stessa interfaccia di Google): modificare Label/BriefDescription cambia anche la riga ENGLISH con la stessa chiave.
+function mirrorEntityTextToLoc(entity, fields) {
+  if (typeof gridHandler === 'undefined') return;
+  if ('Label' in fields) gridHandler.setEnglishByKey('entities', entity.LabelKey, entity.Label);
+  if ('BriefDescription' in fields) gridHandler.setEnglishByKey('entities', entity.DescriptionKey, entity.BriefDescription);
+}
+// Verso opposto: modifica del testo nel Localization Master -> Label/BriefDescription dell'entità con quella chiave.
+function mirrorLocTextToEntity(key, value) {
+  for (const row of stmts.allEntities.all()) {
+    const cur = JSON.parse(row.current_json);
+    const field = cur.LabelKey === key ? 'Label' : cur.DescriptionKey === key ? 'BriefDescription' : null;
+    if (!field) continue;
+    cur[field] = value;
+    stmts.updateEntity.run(JSON.stringify(cur), new Date().toISOString(), row.id);
+  }
 }
 
 class SheetError extends Error {
@@ -555,7 +575,11 @@ function serveStatic(req, res, urlPath) {
 const tabsHandler = require('./scripts/tabs_server')({ db, sendJson, readJsonBody, SheetError, UnrealError: unreal.UnrealError, unrealRead, fs });
 
 // Fogli "Localization Master" (Identities, Entities, Quest, EventsAudio): copia fedele di sola lettura.
-const gridHandler = require('./scripts/grid_tabs')({ db, sendJson, readJsonBody, SheetError, fs });
+const gridHandler = require('./scripts/grid_tabs')({ db, sendJson, readJsonBody, SheetError, fs, onEntityText: mirrorLocTextToEntity });
+
+// Versione dell'app (file VERSION, da incrementare a ogni commit/push).
+let APP_VERSION = '';
+try { APP_VERSION = fs.readFileSync(path.join(__dirname, 'VERSION'), 'utf8').trim(); } catch (e) { APP_VERSION = ''; }
 
 const server = http.createServer(async (req, res) => {
   const [urlPath, queryString] = req.url.split('?');
@@ -569,6 +593,7 @@ const server = http.createServer(async (req, res) => {
     if (urlPath === '/api/health' && req.method === 'GET') {
       return sendJson(res, 200, {
         ok: true,
+        version: APP_VERSION,
         authRequired: !!API_TOKEN,
         entities: stmts.allEntities.all().length,
         sheetConfigured: !!(SHEET_MOCK_CSV || SHEET_CSV_URL || (SHEET_EXEC_URL && SHEET_SECRET)),
@@ -629,6 +654,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (urlPath === '/api/entities/reset-all' && req.method === 'POST') {
       stmts.resetAllEntities.run(new Date().toISOString());
+      for (const r of stmts.allEntities.all()) mirrorEntityTextToLoc(JSON.parse(r.current_json), { Label: 1, BriefDescription: 1 });
       return sendJson(res, 200, getAllEntities());
     }
     if ((m = urlPath.match(/^\/api\/entities\/([^/]+)$/)) && req.method === 'PUT') {

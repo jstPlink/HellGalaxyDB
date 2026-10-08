@@ -12,6 +12,7 @@ on:
       - docker-entrypoint.sh
       - server.js
       - hellgalaxy.html
+      - VERSION
       - scripts/migrate_to_db.js
       - scripts/migrate_enemies_to_db.js
       - scripts/migrate_entities_to_db.js
