@@ -566,7 +566,13 @@ function serveStatic(req, res, urlPath) {
   fs.readFile(file, (err, data) => {
     if (err) { res.writeHead(404); res.end('not found'); return; }
     const ext = path.extname(file).toLowerCase();
-    res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+    const headers = { 'Content-Type': MIME[ext] || 'application/octet-stream' };
+    if (ext === '.html') {
+      // la versione dell'app viene scritta direttamente nell'HTML; niente cache, per vedere subito gli aggiornamenti
+      headers['Cache-Control'] = 'no-cache';
+      data = Buffer.from(data.toString('utf8').replace('<p id="appVersion"></p>', '<p id="appVersion">' + (APP_VERSION ? 'v' + APP_VERSION : '') + '</p>'), 'utf8');
+    }
+    res.writeHead(200, headers);
     res.end(data);
   });
 }
