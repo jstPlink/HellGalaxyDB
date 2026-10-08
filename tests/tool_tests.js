@@ -724,3 +724,54 @@ test('T30 agente scaricabile: .bat già configurato + pacchetto unico che si avv
     assert.ok(fs.existsSync(path.join(dir, 'app', 'scripts', 'unreal_agent.js')), 'ha estratto i file accanto a sé');
   } finally { if (ag) ag.kill(); srv.kill(); }
 });
+
+test('T31 token dell\'agente generato dal server al primo avvio (nessuna configurazione) e conservato', async () => {
+  const P4 = 18942, B4 = `http://127.0.0.1:${P4}`;
+  const dbf = path.join(tmp, 'auto.db'); fs.copyFileSync(path.join(tmp, 'test.db'), dbf);
+  const run = () => spawn(process.execPath, [path.join(ROOT, 'server.js')], { env: { ...process.env, HG_DB_PATH: dbf, HG_PORT: String(P4), HG_AGENT_TOKEN: '', HG_UE_MODE: 'agent' }, stdio: 'ignore' });
+  const up = async () => { for (let i = 0; i < 50; i++) { try { if ((await fetch(B4 + '/api/health')).ok) return; } catch (e) { /* non ancora su */ } await new Promise(r => setTimeout(r, 100)); } };
+  const tokenOf = async () => /set "HG_AGENT_TOKEN=([0-9a-f]{48})"/.exec(await (await fetch(B4 + '/api/agent/bat')).text())[1];
+  let srv = run(); let t1;
+  try { await up(); t1 = await tokenOf(); assert.equal(fs.readFileSync(path.join(tmp, 'agent_token.txt'), 'utf8').trim(), t1); } finally { srv.kill(); }
+  await new Promise(r => setTimeout(r, 300));
+  srv = run();
+  try { await up(); assert.equal(await tokenOf(), t1, 'dopo il riavvio il token è lo stesso (il .bat già scaricato resta valido)'); } finally { srv.kill(); }
+});
+
+test('T32 utenti: colore scelto alla creazione, predefinito se manca o non valido, modificabile', async () => {
+  const mk = (body) => api('POST', '/api/users', body, AUTH);
+  const a = await mk({ name: 'ColoreA', create: true, color: '#ff0000' });
+  assert.equal(a.json.color, '#ff0000');
+  const b = await mk({ name: 'ColoreB', create: true, color: 'rosso' });
+  assert.match(b.json.color, /^#[0-9a-f]{6}$/, 'colore non valido -> uno predefinito');
+  const c = await mk({ name: 'ColoreC', create: true });
+  assert.match(c.json.color, /^#[0-9a-f]{6}$/);
+  const upd = await mk({ name: 'ColoreA', color: '#00ff00' });
+  assert.equal(upd.json.color, '#00ff00');
+  const list = (await api('GET', '/api/users', null, AUTH)).json.users;
+  assert.equal(list.find(u => u.name === 'ColoreA').color, '#00ff00');
+  assert.ok(list.every(u => /^#[0-9a-f]{6}$/.test(u.color)), 'ogni utente ha un colore');
+});
+
+test('T33 cronologia: ogni modifica registra utente, area, campo, valore prima e dopo; anche ripristino e filtri', async () => {
+  const H = { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN, 'X-HG-User': encodeURIComponent('Mario') };
+  const get = async q => (await api('GET', '/api/history' + q, null, AUTH)).json;
+  const before = (await get('?limit=500')).items.length;
+  const orig = (await api('GET', '/api/entities', null, AUTH)).json.originals['MOD02-Engine_M'].BasePrice;
+  const r = await fetch(BASE + '/api/entities/MOD02-Engine_M', { method: 'PUT', headers: H, body: JSON.stringify({ fields: { BasePrice: '777' } }) });
+  assert.equal(r.status, 200);
+  let h = await get('?user=Mario&q=MOD02-Engine_M');
+  const e = h.items.find(i => i.field === 'BasePrice' && i.new === '777');
+  assert.ok(e, 'registrata la modifica'); assert.equal(e.old, orig); assert.equal(e.area, 'ENTITIES'); assert.equal(e.user, 'Mario'); assert.equal(e.source, 'modifica');
+  assert.ok(h.users.includes('Mario') && h.areas.includes('ENTITIES'));
+  await fetch(BASE + '/api/entities/MOD02-Engine_M/revert', { method: 'POST', headers: H });
+  h = await get('?user=Mario&q=MOD02-Engine_M');
+  const rv = h.items.find(i => i.field === 'BasePrice' && i.old === '777');
+  assert.ok(rv && rv.new === orig && rv.source === 'ripristino', 'registrato anche il ripristino');
+  // nessuna modifica = nessuna riga; le richieste in sola lettura non registrano nulla
+  const n1 = (await get('?limit=500')).items.length;
+  await api('GET', '/api/entities', null, AUTH);
+  assert.equal((await get('?limit=500')).items.length, n1);
+  assert.ok(n1 >= before + 2);
+  assert.equal((await get('?area=NONESISTE')).items.length, 0, 'filtro per area');
+});

@@ -32,7 +32,16 @@ try {
 // L'app non parla mai direttamente con l'Editor Unreal: passa dall'agente locale (scripts/unreal_agent.js), anche in locale.
 // HG_UE_MODE=direct (solo test/prove) mantiene la chiamata diretta all'MCP.
 if ((process.env.HG_UE_MODE || 'agent') !== 'direct') unreal.useRemote(agentHub.submit);
-const AGENT_TOKEN = process.env.HG_AGENT_TOKEN || '';
+// Token dell'agente: se non è impostato (HG_AGENT_TOKEN) il server ne genera uno al primo avvio e lo conserva
+// nel volume dei dati (data/agent_token.txt, non servito via web). Il .bat dell'agente lo contiene già: nessuna configurazione.
+const AGENT_TOKEN = (() => {
+  if (process.env.HG_AGENT_TOKEN) return process.env.HG_AGENT_TOKEN;
+  const f = path.join(path.dirname(process.env.HG_DB_PATH || path.join(__dirname, 'data', 'hellgalaxy.db')), 'agent_token.txt');
+  try { const t = fs.readFileSync(f, 'utf8').trim(); if (t) return t; } catch (e) { /* non esiste ancora */ }
+  const t = require('crypto').randomBytes(24).toString('hex');
+  try { fs.writeFileSync(f, t + '\n'); } catch (e) { console.warn('Impossibile salvare il token dell\'agente in ' + f + ': verrà rigenerato a ogni avvio (imposta HG_AGENT_TOKEN).'); }
+  return t;
+})();
 
 const ROOT = __dirname;
 // HG_DB_PATH e HG_PORT servono solo ai test (database temporaneo, porta libera).
@@ -99,6 +108,11 @@ db.exec(`CREATE TABLE IF NOT EXISTS users (
   name TEXT PRIMARY KEY COLLATE NOCASE, created_at TEXT NOT NULL, last_seen TEXT NOT NULL
 )`);
 const cleanUserName = s => String(s || '').replace(/\s+/g, ' ').trim().slice(0, 40);
+// Colore dell'utente (targhetta e icona profilo): scelto alla creazione, modificabile; se manca ne viene proposto uno dal nome.
+try { db.exec('ALTER TABLE users ADD COLUMN color TEXT'); } catch (e) { /* colonna già presente */ }
+const USER_PALETTE = ['#e53935', '#f4511e', '#fb8c00', '#fdd835', '#7cb342', '#00897b', '#00acc1', '#1e88e5', '#3949ab', '#8e24aa', '#d81b60', '#6d4c41'];
+const defaultUserColor = name => { let h = 0; for (const ch of String(name).toLowerCase()) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return USER_PALETTE[h % USER_PALETTE.length]; };
+const cleanColor = v => (/^#[0-9a-f]{6}$/i.test(String(v || '')) ? String(v).toLowerCase() : '');
 
 // Autenticazione opzionale: se HG_API_TOKEN è impostato, ogni /api/* (tranne
 // /api/health) richiede 'Authorization: Bearer <token>'. Se non è impostato il
@@ -585,7 +599,7 @@ function serveStatic(req, res, urlPath) {
   // immagini e i JSON usati dalla UI (data/*.json, data/*.csv).
   const relPosix = path.relative(ROOT, file).split(path.sep).join('/');
   if (/\.(db|gs|sh|env)$/i.test(relPosix) || /^(scripts|tests|docs|\.git|\.github|\.claude)\//.test(relPosix) ||
-      ['server.js', 'Dockerfile', 'docker-compose.yml', 'CLAUDE.md'].includes(relPosix)) {
+      ['server.js', 'Dockerfile', 'docker-compose.yml', 'CLAUDE.md'].includes(relPosix) || /(^|\/)agent_token\.txt$/i.test(relPosix)) {
     res.writeHead(404); res.end('not found'); return;
   }
   fs.readFile(file, (err, data) => {
@@ -636,9 +650,64 @@ function recordChange(req, urlPath, queryString, status) {
   if (changeLog.length > 300) changeLog.shift();
 }
 
+// ---- Cronologia delle modifiche (persistente): chi ha cambiato cosa, quando, valore prima e dopo ----
+// Si confronta una fotografia delle tabelle di dati prima e dopo ogni richiesta che scrive (modifica, ripristino,
+// importazione dal foglio, invio dal server locale). Nessuna modifica ai punti in cui i dati vengono scritti.
+db.exec(`CREATE TABLE IF NOT EXISTS history (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, at TEXT NOT NULL, user TEXT NOT NULL, area TEXT NOT NULL,
+  row_id TEXT NOT NULL, field TEXT NOT NULL, old TEXT, new TEXT, source TEXT NOT NULL
+)`);
+db.exec('CREATE INDEX IF NOT EXISTS history_at ON history (id DESC)');
+const HISTORY_SNAP = [
+  ['ENTITIES', 'SELECT id, current_json AS j FROM entities'],
+  ['MODULES', 'SELECT id, current_json AS j FROM modules_sheet'],
+  ['CARGO/LOOT', "SELECT id, current_json AS j FROM sheet_rows WHERE tab = 'cargo'"],
+  ['ITEMS', "SELECT id, current_json AS j FROM sheet_rows WHERE tab = 'items'"],
+  ['DATABASE › moduli', 'SELECT id, current_json AS j FROM modules'],
+  ['DATABASE › enemies', 'SELECT id, current_json AS j FROM enemies'],
+];
+const HISTORY_MAX_DETAIL = 500; // oltre, una sola riga di riepilogo (es. importazioni complete)
+function takeHistorySnapshot() {
+  const snap = {};
+  for (const [area, sql] of HISTORY_SNAP) { const m = new Map(); for (const r of db.prepare(sql).all()) m.set(r.id, r.j); snap[area] = m; }
+  return snap;
+}
+const hv = v => (v === undefined || v === null ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v));
+function recordHistory(before, req, urlPath, queryString) {
+  const after = takeHistorySnapshot();
+  const user = String(req.headers['x-hg-user'] ? decodeURIComponent(String(req.headers['x-hg-user'])) : 'sistema').slice(0, 60);
+  const source = /\/(revert|reset-all)$/.test(urlPath) ? 'ripristino' : /^\/api\/(sync\/pull|import\/bundle)/.test(urlPath) ? 'importazione' : 'modifica';
+  const now = new Date().toISOString();
+  const rows = [];
+  for (const [area] of HISTORY_SNAP) {
+    const b = before[area], a = after[area];
+    for (const [id, aj] of a) {
+      const bj = b.get(id);
+      if (bj === aj) continue;
+      if (bj === undefined) { rows.push([area, id, '(riga)', '', 'aggiunta']); continue; }
+      let bo, ao; try { bo = JSON.parse(bj); ao = JSON.parse(aj); } catch (e) { rows.push([area, id, '(riga)', '', 'modificata']); continue; }
+      for (const k of new Set([...Object.keys(bo), ...Object.keys(ao)])) if (hv(bo[k]) !== hv(ao[k])) rows.push([area, id, k, hv(bo[k]), hv(ao[k])]);
+    }
+    for (const id of b.keys()) if (!a.has(id)) rows.push([area, id, '(riga)', 'presente', 'rimossa']);
+  }
+  if (!rows.length) return;
+  const ins = db.prepare('INSERT INTO history (at, user, area, row_id, field, old, new, source) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+  db.exec('BEGIN');
+  try {
+    for (const r of rows.slice(0, HISTORY_MAX_DETAIL)) ins.run(now, user, r[0], r[1], r[2], r[3].slice(0, 2000), r[4].slice(0, 2000), source);
+    if (rows.length > HISTORY_MAX_DETAIL) ins.run(now, user, 'vari', '(riepilogo)', 'campi', '', (rows.length - HISTORY_MAX_DETAIL) + ' altre modifiche non elencate (totale ' + rows.length + ')', source);
+    db.exec('COMMIT');
+  } catch (e) { db.exec('ROLLBACK'); }
+}
+const HISTORY_SKIP = /^\/api\/(agent|project-update|unreal|users|remote|changes|history)\b|^\/api\/sync\/unreal/;
+
 const server = http.createServer(async (req, res) => {
   const [urlPath, queryString] = req.url.split('?');
   const query = new URLSearchParams(queryString || '');
+  if (req.method !== 'GET' && urlPath.startsWith('/api/') && !HISTORY_SKIP.test(urlPath)) {
+    let snap = null; try { snap = takeHistorySnapshot(); } catch (e) { /* senza fotografia niente cronologia, ma la richiesta prosegue */ }
+    if (snap) res.on('finish', () => { try { if (res.statusCode < 400) recordHistory(snap, req, urlPath, queryString); } catch (e) { /* la cronologia non deve mai rompere una richiesta */ } });
+  }
   res.on('finish', () => { try { recordChange(req, urlPath, queryString, res.statusCode); } catch (e) { /* il registro non deve mai rompere una richiesta */ } });
 
   try {
@@ -691,20 +760,39 @@ const server = http.createServer(async (req, res) => {
       return res.end(agentBundle.buildBat({ serverUrl, token: AGENT_TOKEN }));
     }
     if (urlPath === '/api/agent/status' && req.method === 'GET') return sendJson(res, 200, { ...agentHub.status(), mode: (process.env.HG_UE_MODE || 'agent'), tokenConfigured: !!AGENT_TOKEN });
+    // ---- Cronologia delle modifiche ----
+    if (urlPath === '/api/history' && req.method === 'GET') {
+      const where = [], args = [];
+      const area = query.get('area'), user = query.get('user'), q = (query.get('q') || '').trim(), before = Number(query.get('before') || 0);
+      if (area) { where.push('area = ?'); args.push(area); }
+      if (user) { where.push('user = ? COLLATE NOCASE'); args.push(user); }
+      if (q) { where.push('(row_id LIKE ? OR field LIKE ? OR old LIKE ? OR new LIKE ?)'); args.push(...Array(4).fill('%' + q + '%')); }
+      if (before) { where.push('id < ?'); args.push(before); }
+      const limit = Math.min(Number(query.get('limit')) || 100, 500);
+      const items = db.prepare('SELECT id, at, user, area, row_id, field, old, new, source FROM history' + (where.length ? ' WHERE ' + where.join(' AND ') : '') + ' ORDER BY id DESC LIMIT ?').all(...args, limit);
+      const colors = {}; for (const u of db.prepare('SELECT name, color FROM users').all()) colors[u.name.toLowerCase()] = cleanColor(u.color) || defaultUserColor(u.name);
+      return sendJson(res, 200, {
+        items: items.map(i => ({ ...i, color: colors[i.user.toLowerCase()] || '' })), hasMore: items.length === limit,
+        areas: db.prepare('SELECT DISTINCT area FROM history ORDER BY area').all().map(r => r.area),
+        users: db.prepare('SELECT DISTINCT user FROM history ORDER BY user').all().map(r => r.user),
+      });
+    }
     // ---- Utenti (accesso senza password) ----
     if (urlPath === '/api/users' && req.method === 'GET') {
-      return sendJson(res, 200, { users: db.prepare('SELECT name, created_at, last_seen FROM users ORDER BY last_seen DESC').all() });
+      return sendJson(res, 200, { users: db.prepare('SELECT name, created_at, last_seen, color FROM users ORDER BY last_seen DESC').all().map(u => ({ ...u, color: cleanColor(u.color) || defaultUserColor(u.name) })) });
     }
     if (urlPath === '/api/users' && req.method === 'POST') {
       const body = await readJsonBody(req);
       const name = cleanUserName(body.name);
       if (!name) return sendJson(res, 400, { error: 'inserisci un nome' });
       const now = new Date().toISOString();
-      const ex = db.prepare('SELECT name FROM users WHERE name = ?').get(name);
+      const ex = db.prepare('SELECT name, color FROM users WHERE name = ?').get(name);
+      const wanted = cleanColor(body.color);
       if (ex && body.create === true) return sendJson(res, 409, { error: 'esiste già un utente con questo nome: sceglilo dall\'elenco', name: ex.name });
-      if (ex) db.prepare('UPDATE users SET last_seen = ? WHERE name = ?').run(now, ex.name);
-      else db.prepare('INSERT INTO users (name, created_at, last_seen) VALUES (?, ?, ?)').run(name, now, now);
-      return sendJson(res, 200, { name: ex ? ex.name : name, created: !ex });
+      if (ex) db.prepare('UPDATE users SET last_seen = ?, color = ? WHERE name = ?').run(now, wanted || cleanColor(ex.color) || defaultUserColor(ex.name), ex.name);
+      else db.prepare('INSERT INTO users (name, created_at, last_seen, color) VALUES (?, ?, ?, ?)').run(name, now, now, wanted || defaultUserColor(name));
+      const row = db.prepare('SELECT name, color FROM users WHERE name = ?').get(name);
+      return sendJson(res, 200, { name: row.name, color: row.color, created: !ex });
     }
     // ---- Server remoto (passo 4): non tocca Unreal ----
     if (urlPath === '/api/import/bundle' && req.method === 'POST') {

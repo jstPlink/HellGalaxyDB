@@ -87,6 +87,11 @@
 
   td.loc-edit{ cursor:text; }
   td.loc-mod{ box-shadow: inset 3px 0 0 var(--danger); }
+  /* targhetta e icona profilo dell'utente */
+  #userBtn{ display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px; padding:4px 14px 4px 5px; border-radius:999px; border:2px solid var(--text); color:var(--text); }
+  .hg-av{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; font-weight:800; font-size:14px; flex:none; box-sizing:border-box; border:2px solid var(--hg-ring,#111); }
+  .hg-sw{ width:26px; height:26px; border-radius:50%; border:3px solid transparent; cursor:pointer; padding:0; }
+  .hg-sw.sel{ border-color:var(--text); }
   .dirty-pill{
     display:flex; align-items:center; gap:7px;
     font-size:12.5px; color: var(--text-dim);
@@ -386,12 +391,14 @@
   .modal-foot{ padding:14px 20px; border-top:1px solid var(--border-soft); display:flex; justify-content:flex-end; gap:8px; }
 
   .toast{
-    position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(20px);
-    background: var(--surface-3); border:1px solid var(--border); color:var(--text);
-    padding:10px 16px; border-radius:8px; font-size:13px; opacity:0; pointer-events:none;
-    transition: opacity .18s, transform .18s; z-index:40; display:flex; align-items:center; gap:8px;
+    position:fixed; top:18px; left:50%; transform:translateX(-50%) translateY(-30px);
+    background:#202124; border:2px solid var(--accent); color:#fff;
+    padding:14px 22px; border-radius:10px; font-size:15px; font-weight:600; line-height:1.4; max-width:min(720px, 92vw); text-align:center;
+    box-shadow:0 8px 30px rgba(0,0,0,.45); opacity:0; pointer-events:none; cursor:pointer;
+    transition: opacity .18s, transform .18s; z-index:100000; display:flex; align-items:center; gap:8px;
   }
-  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto; }
+  .toast.error{ background:#b3261e; border-color:#ff8a80; }
 
   /* ---------- settings ---------- */
   .settings-grid{ display:flex; flex-direction:column; gap:16px; max-width:760px; }
@@ -561,8 +568,9 @@
       </div>
     </div>
     <div class="top-actions">
-      <button class="btn ghost small" id="userBtn" onclick="hgSwitchUser()" title="Utente attuale: clic per cambiare utente">Utente: <span id="userLabel"></span></button>
+      <button class="btn small" id="userBtn" onclick="hgSwitchUser()" title="Utente attuale: clic per cambiare utente"><span id="userLabel"></span></button>
       <span class="dirty-pill" id="agentPill"title="Agente Unreal: il ponte tra l'app e l'Editor (si avvia sul PC dove è aperto l'Editor)"><span class="dot"></span><span id="agentLabel">Agente: &hellip;</span></span>
+      <button class="btn ghost small" id="historyBtn" title="Cronologia delle modifiche: chi ha cambiato cosa e quando, con il valore prima e dopo">Cronologia</button>
       <span class="dirty-pill" id="dirtyPill"><span class="dot"></span><span id="dirtyLabel">Nessuna modifica</span></span>
       <button class="btn xl" id="syncUnrealBtn" title="Legge Unreal (sola lettura) e mostra le discrepanze tra l'app e il progetto. Parte da solo dopo l'accesso.">Sincronizza Unreal</button>
       <button class="btn primary xl" id="projUpdBtn" title="Aggiorna Unreal con i soli dati cambiati nell'app: Data Asset, DataTable, Blueprint, poi server (con stato di ogni passo)">Aggiorna Unreal</button>
@@ -570,7 +578,7 @@
     </div>
   </header>
 
-  <div class="chart-card" id="changeBanner" hidden style="margin:10px 16px;border-color:var(--accent)"></div>
+  <div class="chart-card" id="changeBanner" hidden style="position:fixed;top:12px;right:12px;z-index:99999;max-width:min(560px,94vw);margin:0;border:2px solid var(--accent);box-shadow:0 8px 30px rgba(0,0,0,.4);background:var(--surface,var(--bg))"></div>
   <div class="chart-card" id="projUpdBox" hidden style="margin:10px 16px"></div>
   <nav class="sectionbar" id="sectionbar"></nav>
   <nav class="tabbar" id="subbar"></nav>
@@ -1017,13 +1025,29 @@ function persistOauth(){ try{ localStorage.setItem('hellgalaxy_oauth_client_id',
 // tenuto in localStorage (solo in questo browser).
 const HG_CLIENT_ID = Math.random().toString(36).slice(2, 10);
 function hgUserName(){ try{ return localStorage.getItem('hellgalaxy_user') || ''; }catch(e){ return ''; } }
-function hgSetUser(n){ try{ localStorage.setItem('hellgalaxy_user', n); }catch(e){} }
+function hgSetUser(n, color){ try{ localStorage.setItem('hellgalaxy_user', n); if(color) localStorage.setItem('hellgalaxy_user_color', color); }catch(e){} }
+const HG_PALETTE = ['#e53935','#f4511e','#fb8c00','#fdd835','#7cb342','#00897b','#00acc1','#1e88e5','#3949ab','#8e24aa','#d81b60','#6d4c41'];
+function hgUserColor(){ try{ return localStorage.getItem('hellgalaxy_user_color') || HG_PALETTE[7]; }catch(e){ return HG_PALETTE[7]; } }
+// testo bianco o nero, a seconda della luminosità del colore (contrasto)
+function hgContrast(hex){ const n = parseInt(String(hex).slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255; return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? '#111' : '#fff'; }
+// icona profilo: pallino del colore dell'utente con l'iniziale del nome inscritta (anello a contrasto, visibile anche sulla targhetta dello stesso colore)
+function hgAvatar(name, color){ const fg = hgContrast(color); return '<span class="hg-av" style="background:' + color + ';color:' + fg + ';--hg-ring:' + fg + '">' + escapeHtml((String(name).trim()[0] || '?').toUpperCase()) + '</span>'; }
+function hgRenderUserBtn(){
+  const b = document.getElementById('userBtn'); if(!b) return;
+  const name = hgUserName(), col = hgUserColor();
+  b.removeAttribute('style'); // targhetta neutra: solo il pallino ha il colore dell'utente
+  b.innerHTML = hgAvatar(name, col) + '<span id="userLabel">' + escapeHtml(name) + '</span>';
+}
+async function hgSetColor(color){
+  try{ const r = await apiSend('/api/users', 'POST', {name: hgUserName(), color}); hgSetUser(r.name, r.color); hgRenderUserBtn(); if(typeof renderSettings === 'function') renderSettings(); }
+  catch(e){ showToast('Impossibile salvare il colore'); }
+}
 // Schermata di accesso (senza password): scegli un utente esistente o creane uno nuovo. Risolve quando l'utente è scelto.
 async function hgLogin(forceChoose){
   let users = [];
   try{ users = (await apiGet('/api/users')).users || []; }catch(e){ /* server non raggiungibile: si continua col nome salvato */ }
   const cur = hgUserName();
-  if(!forceChoose && cur && users.some(u => u.name.toLowerCase() === cur.toLowerCase())){ apiSend('/api/users', 'POST', {name: cur}).catch(() => {}); return cur; }
+  if(!forceChoose && cur && users.some(u => u.name.toLowerCase() === cur.toLowerCase())){ const me = users.find(u => u.name.toLowerCase() === cur.toLowerCase()); hgSetUser(me.name, me.color); apiSend('/api/users', 'POST', {name: cur}).catch(() => {}); return cur; }
   return new Promise(resolve => {
     const ov = document.createElement('div');
     ov.id = 'loginOverlay';
@@ -1033,25 +1057,32 @@ async function hgLogin(forceChoose){
       + '<div id="loginList" style="display:flex;flex-direction:column;gap:6px;max-height:40vh;overflow:auto;margin-bottom:16px"></div>'
       + '<div style="border-top:1px solid var(--border-soft);padding-top:14px"><label for="loginNew" style="display:block;margin-bottom:6px;color:var(--text-dim)">Nuovo utente</label>'
       + '<div style="display:flex;gap:8px"><input type="text" id="loginNew" maxlength="40" placeholder="Il tuo nome" style="flex:1"><button class="btn primary small" id="loginCreate">Crea ed entra</button></div>'
+      + '<label style="display:block;margin:12px 0 6px;color:var(--text-dim)">Il tuo colore</label><div id="loginColors" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>'
       + '<p id="loginErr" style="color:#d9534f;margin:8px 0 0;min-height:1em;font-size:13px"></p></div></div>';
     document.body.appendChild(ov);
-    const done = n => { hgSetUser(n); ov.remove(); resolve(n); };
+    let chosen = HG_PALETTE[Math.floor(Math.random() * HG_PALETTE.length)];
+    const sw = ov.querySelector('#loginColors');
+    const drawSw = () => { sw.innerHTML = HG_PALETTE.map(c => '<button type="button" class="hg-sw' + (c === chosen ? ' sel' : '') + '" data-c="' + c + '" style="background:' + c + '" title="' + c + '"></button>').join('') + '<input type="color" id="loginColorPick" value="' + chosen + '" title="Altro colore" style="width:34px;height:30px;padding:0;border:none;background:none;cursor:pointer">';
+      sw.querySelectorAll('.hg-sw').forEach(b => b.onclick = () => { chosen = b.dataset.c; drawSw(); });
+      sw.querySelector('#loginColorPick').oninput = e => { chosen = e.target.value; sw.querySelectorAll('.hg-sw').forEach(b => b.classList.toggle('sel', b.dataset.c === chosen)); }; };
+    drawSw();
+    const done = (n, col) => { hgSetUser(n, col); ov.remove(); resolve(n); };
     const list = ov.querySelector('#loginList');
     if(!users.length) list.innerHTML = '<p style="color:var(--text-dim);margin:0">Nessun utente ancora: creane uno qui sotto.</p>';
     users.forEach(u => {
       const b = document.createElement('button');
-      b.className = 'btn ghost'; b.style.textAlign = 'left'; b.textContent = u.name;
-      b.onclick = async () => { try{ const r = await apiSend('/api/users', 'POST', {name: u.name}); done(r.name); }catch(e){ ov.querySelector('#loginErr').textContent = 'Server non raggiungibile.'; } };
+      b.className = 'btn ghost'; b.style.cssText = 'text-align:left;display:flex;align-items:center;gap:10px'; b.innerHTML = hgAvatar(u.name, u.color || HG_PALETTE[7]) + '<span>' + escapeHtml(u.name) + '</span>';
+      b.onclick = async () => { try{ const r = await apiSend('/api/users', 'POST', {name: u.name}); done(r.name, r.color); }catch(e){ ov.querySelector('#loginErr').textContent = 'Server non raggiungibile.'; } };
       list.appendChild(b);
     });
     const create = async () => {
       const name = ov.querySelector('#loginNew').value.trim(); const err = ov.querySelector('#loginErr'); err.textContent = '';
       if(!name){ err.textContent = 'Inserisci un nome.'; return; }
       try{
-        const res = await apiFetch('/api/users', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, create: true})});
+        const res = await apiFetch('/api/users', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, create: true, color: chosen})});
         const j = await res.json();
         if(!res.ok){ err.textContent = j.error || 'Errore.'; return; }
-        done(j.name);
+        done(j.name, j.color);
       }catch(e){ err.textContent = 'Server non raggiungibile.'; }
     };
     ov.querySelector('#loginCreate').onclick = create;
@@ -1059,7 +1090,7 @@ async function hgLogin(forceChoose){
     ov.querySelector('#loginNew').focus();
   });
 }
-async function hgSwitchUser(){ await hgLogin(true); const l = document.getElementById('userLabel'); if(l) l.textContent = hgUserName(); }
+async function hgSwitchUser(){ await hgLogin(true); hgRenderUserBtn(); if(typeof renderSettings === 'function') renderSettings(); }
 function apiToken(){ try{ return localStorage.getItem('hellgalaxy_api_token') || ''; }catch(e){ return ''; } }
 async function apiFetch(url, opts){
   opts = opts || {};
@@ -1849,10 +1880,13 @@ async function resetAllGlobal(){
 let toastTimer = null;
 function showToast(msg){
   const t = document.getElementById('toast');
+  const isError = /impossibile|errore|manca|non (riuscit|raggiungibil|connesso|è)|fallit|rifiutat|bloccat/i.test(String(msg));
   t.textContent = msg;
+  t.classList.toggle('error', isError);
   t.classList.add('show');
+  t.onclick = () => t.classList.remove('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  toastTimer = setTimeout(() => t.classList.remove('show'), isError ? 9000 : 4000);
 }
 
 /* ============================== SYNC MODAL ============================== */
@@ -2165,7 +2199,7 @@ function renderSettings(){
       <div class="card">
         <h3>Utente</h3>
         <p class="sub">Compare agli altri utenti quando modifichi un dato ("Mario ha modificato ENTITIES…"). Sei: <strong>${escapeHtml(hgUserName())}</strong>.</p>
-        <button class="btn ghost small" onclick="hgSwitchUser()">Cambia utente</button>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">${hgAvatar(hgUserName(), hgUserColor())}<label style="color:var(--text-dim)">Colore <input type="color" value="${hgUserColor()}" onchange="hgSetColor(this.value)" style="vertical-align:middle;width:38px;height:28px;padding:0;border:none;background:none;cursor:pointer"></label><button class="btn ghost small" onclick="hgSwitchUser()">Cambia utente</button></div>
       </div>
 
       <div class="card">
@@ -4037,8 +4071,9 @@ async function pollChanges(){
       const box = document.getElementById('changeBanner'); box.hidden = false;
       const last = others.slice(-3).map(c => '<strong>' + escapeHtml(c.user) + '</strong> ha modificato ' + escapeHtml(c.what) + (c.id ? ' (' + escapeHtml(c.id) + (c.fields.length ? ': ' + escapeHtml(c.fields.join(', ')) : '') + ')' : '')).join(' &middot; ');
       box.innerHTML = '<div style="padding:10px 16px;font-size:12.5px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">' + last + (others.length > 3 ? ' &middot; +' + (others.length - 3) + ' altre' : '') + '<button class="btn primary small" id="chgRefresh">Aggiorna i dati</button><button class="btn ghost small" id="chgClose">Ignora</button></div>';
+      if(!document.title.startsWith('\u25cf ')) document.title = '\u25cf ' + document.title; // visibile anche da un'altra finestra
       document.getElementById('chgRefresh').addEventListener('click', () => location.reload());
-      document.getElementById('chgClose').addEventListener('click', () => { box.hidden = true; });
+      document.getElementById('chgClose').addEventListener('click', () => { box.hidden = true; document.title = document.title.replace(/^\u25cf /, ''); });
     }
   }catch(err){ /* offline: riprova al prossimo giro */ }
 }
@@ -4116,6 +4151,43 @@ function openLocalChanges(){
   o.addEventListener('click', e => { if(e.target === o) o.remove(); });
 }
 document.getElementById('dirtyPill').addEventListener('click', openLocalChanges);
+
+/* ---- Cronologia delle modifiche (persistente, sul server) ---- */
+const hUi = {area: '', user: '', q: '', items: [], hasMore: false, areas: [], users: []};
+async function loadHistory(more){
+  const p = new URLSearchParams({limit: '100'});
+  if(hUi.area) p.set('area', hUi.area); if(hUi.user) p.set('user', hUi.user); if(hUi.q) p.set('q', hUi.q);
+  if(more && hUi.items.length) p.set('before', hUi.items[hUi.items.length - 1].id);
+  const d = await apiGet('/api/history?' + p.toString());
+  hUi.items = more ? hUi.items.concat(d.items) : d.items; hUi.hasMore = d.hasMore; hUi.areas = d.areas; hUi.users = d.users;
+}
+function renderHistory(){
+  const body = document.getElementById('histBody'); if(!body) return;
+  const fmt = iso => new Date(iso).toLocaleString('it-IT', {day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit'});
+  const sel = (id, list, cur, all) => '<select id="' + id + '" class="selbox"><option value="">' + all + '</option>' + list.map(x => '<option value="' + escapeHtml(x) + '"' + (x === cur ? ' selected' : '') + '>' + escapeHtml(x) + '</option>').join('') + '</select>';
+  const SRC = {modifica: '', ripristino: ' <span class="badge-type">ripristino</span>', importazione: ' <span class="badge-type">importazione</span>'};
+  body.innerHTML = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">' + sel('histArea', hUi.areas, hUi.area, 'Tutte le aree') + sel('histUser', hUi.users, hUi.user, 'Tutti gli utenti') + '<input type="text" id="histQ" class="searchInput" placeholder="Cerca ID, campo o valore&hellip;" value="' + escapeHtml(hUi.q) + '" style="flex:1;min-width:180px"></div>'
+    + (hUi.items.length ? '<table style="width:100%;border-collapse:collapse;font-size:12.5px"><thead><tr><th style="text-align:left;padding:4px 8px">Quando</th><th style="text-align:left;padding:4px 8px">Utente</th><th style="text-align:left;padding:4px 8px">Dove</th><th style="text-align:left;padding:4px 8px">Campo</th><th style="text-align:left;padding:4px 8px">Prima &rarr; Dopo</th></tr></thead><tbody>'
+      + hUi.items.map(i => '<tr style="border-top:1px solid var(--border-soft)"><td style="padding:4px 8px;white-space:nowrap">' + fmt(i.at) + '</td><td style="padding:4px 8px;white-space:nowrap">' + (i.color ? hgAvatar(i.user, i.color) + ' ' : '') + escapeHtml(i.user) + '</td><td style="padding:4px 8px">' + escapeHtml(i.area) + ' &rsaquo; <strong>' + escapeHtml(i.row_id) + '</strong>' + (SRC[i.source] || '') + '</td><td style="padding:4px 8px">' + escapeHtml(i.field) + '</td><td style="padding:4px 8px"><span style="color:var(--text-dim)">' + escapeHtml(truncate(i.old || '', 70)) + '</span> &rarr; <strong>' + escapeHtml(truncate(i.new || '', 70)) + '</strong></td></tr>').join('')
+      + '</tbody></table>' + (hUi.hasMore ? '<div style="margin-top:10px"><button class="btn ghost small" id="histMore">Carica altre</button></div>' : '')
+      : '<p style="color:var(--text-dim)">Nessuna modifica registrata' + ((hUi.area || hUi.user || hUi.q) ? ' con questi filtri' : ' finora') + '. Da ora ogni modifica, ripristino e importazione viene registrata qui.</p>');
+  const reload = () => loadHistory(false).then(renderHistory).catch(() => showToast('Impossibile leggere la cronologia'));
+  document.getElementById('histArea').onchange = e => { hUi.area = e.target.value; reload(); };
+  document.getElementById('histUser').onchange = e => { hUi.user = e.target.value; reload(); };
+  let t; document.getElementById('histQ').oninput = e => { hUi.q = e.target.value; clearTimeout(t); t = setTimeout(() => { loadHistory(false).then(() => { renderHistory(); const q = document.getElementById('histQ'); q.focus(); q.setSelectionRange(q.value.length, q.value.length); }); }, 350); };
+  const more = document.getElementById('histMore'); if(more) more.onclick = () => loadHistory(true).then(renderHistory);
+}
+async function openHistory(){
+  let o = document.getElementById('histOverlay'); if(o) o.remove();
+  o = document.createElement('div'); o.id = 'histOverlay';
+  o.style.cssText = 'position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px';
+  o.innerHTML = '<div style="background:var(--surface,var(--bg));border:1px solid var(--border);border-radius:10px;padding:20px;width:100%;max-width:1000px;max-height:90vh;overflow:auto;color:var(--text)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h3 style="margin:0">Cronologia delle modifiche</h3><button class="btn ghost small" id="histClose">Chiudi</button></div><div id="histBody">Caricamento&hellip;</div></div>';
+  document.body.appendChild(o);
+  document.getElementById('histClose').onclick = () => o.remove();
+  o.addEventListener('click', e => { if(e.target === o) o.remove(); });
+  try{ await loadHistory(false); renderHistory(); }catch(err){ document.getElementById('histBody').textContent = 'Impossibile leggere la cronologia.'; }
+}
+document.getElementById('historyBtn').addEventListener('click', openHistory);
 document.getElementById('dirtyPill').style.cursor = 'pointer';
 document.getElementById('dirtyPill').title = 'Clicca per vedere l\'elenco delle modifiche fatte in locale';
 
@@ -4251,7 +4323,7 @@ document.getElementById('questSyncBtn').addEventListener('click', openQuestsSync
 
 async function init(){
   await hgLogin(false);
-  const ul = document.getElementById('userLabel'); if(ul) ul.textContent = hgUserName();
+  hgRenderUserBtn();
   setTimeout(() => runUnrealSync(true), 1500); // dopo l'accesso: lettura da Unreal e finestra con le eventuali discrepanze
   fetch('/api/health').then(r => r.json()).then(h => { const v = document.getElementById('appVersion'); if(v && h.version) v.textContent = 'v' + h.version; }).catch(() => {});
   buildPanels();
