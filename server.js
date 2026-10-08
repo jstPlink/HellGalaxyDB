@@ -9,6 +9,7 @@ const { DatabaseSync } = require('node:sqlite');
 const sheet = require('./scripts/sheet_mappings');
 const unreal = require('./scripts/unreal_bridge');
 const unrealRead = require('./scripts/unreal_read');
+const unrealDrift = require('./scripts/unreal_drift');
 const unrealLinks = require('./scripts/unreal_links');
 const unrealTables = require('./scripts/unreal_datatables');
 const projectUpdate = require('./scripts/project_update');
@@ -607,7 +608,7 @@ function serveStatic(req, res, urlPath) {
   // da /api/* (protetta dal token, se impostato). Restano pubblici l'HTML, le
   // immagini e i JSON usati dalla UI (data/*.json, data/*.csv).
   const relPosix = path.relative(ROOT, file).split(path.sep).join('/');
-  if (/\.(db|gs|sh|env)$/i.test(relPosix) || /^(scripts|tests|docs|\.git|\.github|\.claude)\//.test(relPosix) ||
+  if (/\.(db|gs|sh|env)$/i.test(relPosix) || /^(scripts|tests|docs|\.git|\.github|\.claude|data\/media)\//.test(relPosix) ||
       ['server.js', 'Dockerfile', 'docker-compose.yml', 'CLAUDE.md'].includes(relPosix) || /(^|\/)agent_token\.txt$/i.test(relPosix)) {
     res.writeHead(404); res.end('not found'); return;
   }
@@ -629,6 +630,8 @@ function serveStatic(req, res, urlPath) {
 const tabsHandler = require('./scripts/tabs_server')({ db, sendJson, readJsonBody, SheetError, UnrealError: unreal.UnrealError, unrealRead, fs, purgeTombstones: () => rowsAdmin.purgeTombstones() });
 // Righe nuove/eliminate dall'app (ENTITIES, MODULES, CARGO/LOOT, ITEMS)
 const rowsAdmin = require('./scripts/rows_admin')({ db, sendJson, readJsonBody, sheet, msheet });
+// Texture/mesh esportate da Unreal (via agente), anteprime, contatore dello spazio occupato.
+const media = require('./scripts/media')({ db, sendJson, readJsonBody, dbPath: DB_PATH, imagesDir: IMAGES_DIR, agentToken: AGENT_TOKEN, bridge: unreal, getAgentStatus: () => agentHub.status() });
 
 // Fogli "Localization Master" (Identities, Entities, Quest, EventsAudio): copia fedele di sola lettura.
 const gridHandler = require('./scripts/grid_tabs')({ db, sendJson, readJsonBody, SheetError, fs, onEntityText: mirrorLocTextToEntity });
@@ -755,6 +758,7 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'no-store' });
       return res.end(agentBundle.buildScript(ROOT));
     }
+    if (urlPath === '/api/media/upload' && req.method === 'POST') return media.upload(req, res, Object.fromEntries(query));
     if (API_TOKEN && urlPath.startsWith('/api/')) {
       const given = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
       if (given !== API_TOKEN) return sendJson(res, 401, { error: 'token mancante o errato' });
@@ -833,7 +837,9 @@ const server = http.createServer(async (req, res) => {
     }
     if (urlPath === '/api/changes' && req.method === 'GET') {
       const since = Number(query.get('since') || 0);
-      return sendJson(res, 200, { rev: changeRev, changes: since >= changeRev ? [] : changeLog.filter(c => c.rev > since).slice(-50) });
+      // il colore del profilo di chi ha modificato (per il pallino con l'iniziale accanto al nome)
+      const colors = {}; for (const u of db.prepare('SELECT name, color FROM users').all()) colors[u.name.toLowerCase()] = cleanColor(u.color) || defaultUserColor(u.name);
+      return sendJson(res, 200, { rev: changeRev, changes: (since >= changeRev ? [] : changeLog.filter(c => c.rev > since).slice(-50)).map(c => ({ ...c, color: colors[String(c.user).toLowerCase()] || defaultUserColor(c.user) })) });
     }
     if ((m = urlPath.match(/^\/api\/modules\/([^/]+)$/)) && req.method === 'PUT') {
       const body = await readJsonBody(req);
@@ -984,6 +990,7 @@ const server = http.createServer(async (req, res) => {
         throw e;
       }
     }
+    if (await media(req, res, urlPath, Object.fromEntries(query))) return;
     if (await rowsAdmin(req, res, urlPath)) return;
     if (await tabsHandler(req, res, urlPath, query)) return;
     if (await gridHandler(req, res, urlPath, query)) return;
@@ -1053,6 +1060,11 @@ const server = http.createServer(async (req, res) => {
     }
 
     // Test di collegamento con l'Editor Unreal (sola lettura: nessun asset toccato).
+    // Prima di aggiornare Unreal: l'app era sincronizzata con Unreal? (SOLA LETTURA; confronta Unreal con l'ultima lettura salvata)
+    if (urlPath === '/api/unreal/drift' && req.method === 'POST') {
+      try { return sendJson(res, 200, await unrealDrift.check(db)); }
+      catch (e) { if (e instanceof unreal.UnrealError) return sendJson(res, e.status, { ok: false, error: e.message, code: e.code }); throw e; }
+    }
     if (urlPath === '/api/unreal/ping' && req.method === 'GET') {
       try {
         return sendJson(res, 200, await unreal.ping({ timeoutMs: 30000 }));

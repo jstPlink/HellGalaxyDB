@@ -21,7 +21,7 @@ const os = require('os');
 const path = require('path');
 
 const SCRIPT_DIR = path.join(__dirname, 'unreal');
-const AGENT_VERSION = '1';
+const AGENT_VERSION = '2';
 
 // ---------- validazione dei lavori (esportata per i test) ----------
 const norm = s => String(s).replace(/\r\n/g, '\n').replace(/\s+$/, '');
@@ -29,7 +29,7 @@ const STR = '"(?:[^"\\\\\\n]|\\\\.)*"';
 const LIT = `(?:${STR}|-?\\d+(?:\\.\\d+)?|True|False|None)`;
 const ITEM = `(?:[A-Za-z_]\\w*\\s*=\\s*)?${LIT}`;
 const CALL_RE = new RegExp(`^([a-z_]+)\\(\\s*(?:${ITEM}(?:\\s*,\\s*${ITEM})*)?\\s*\\)$`);
-const ALLOWED_FUNCS = new Set(['read', 'inventory', 'run', 'check', 'delete', 'export_all', 'import_one']);
+const ALLOWED_FUNCS = new Set(['read', 'inventory', 'run', 'check', 'delete', 'export_all', 'import_one', 'export_batch']);
 const WRITE_FUNCS = new Set(['delete', 'import_one']);
 
 function loadScripts() {
@@ -50,6 +50,27 @@ function validateJob(code, { pingCode, scripts = loadScripts() } = {}) {
     return { ok: true, code: s.text + '\n\n' + call + '\n', write, what: s.file + ':' + m[1] };
   }
   return { ok: false, error: 'script non riconosciuto: l\'agente e l\'app hanno versioni diverse oppure il codice non è consentito' };
+}
+
+// ---------- caricamento dei file esportati (texture/mesh) sull'app ----------
+// Solo i file elencati da media_export.py E dentro la cartella temporanea HGExport: mai altri percorsi.
+async function uploadExported(output, server, token) {
+  const line = String(output).split(/\r?\n/).filter(l => /^\s*\{/.test(l)).pop();
+  const info = JSON.parse(line || '{}');
+  const root = path.resolve(os.tmpdir(), 'HGExport') + path.sep;
+  const uploaded = [], errors = (info.errors || []).slice();
+  for (const f of info.files || []) {
+    const file = path.resolve(String(f.file || ''));
+    if (!file.startsWith(root) || !/^[A-Za-z0-9_.\-]+$/.test(path.basename(file)) || !['texture', 'mesh', 'obj'].includes(f.kind)) { errors.push({ path: f.file, error: 'file fuori dalla cartella di esportazione: non caricato' }); continue; }
+    try {
+      const body = fs.readFileSync(file);
+      const r = await fetch(server + '/api/media/upload?kind=' + f.kind + '&name=' + encodeURIComponent(path.basename(file)), { method: 'POST', headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/octet-stream' }, body });
+      if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + (await r.text()).slice(0, 120));
+      uploaded.push({ kind: f.kind, name: f.name, size: body.length });
+    } catch (e) { errors.push({ path: f.file, error: 'caricamento non riuscito: ' + e.message }); }
+    finally { try { fs.unlinkSync(file); } catch (e) { /* già rimosso */ } }
+  }
+  return JSON.stringify({ uploaded, errors });
 }
 
 // ---------- esecuzione ----------
@@ -96,7 +117,7 @@ async function main() {
       else if (v.write && process.env.HG_UE_ALLOW_WRITE !== '1') { log('BLOCCATO (scrittura): ' + v.what); payload = { error: 'Scrittura su Unreal disabilitata sul PC dell\'agente (HG_UE_ALLOW_WRITE non impostato).', status: 403, code: 'write_disabled' }; }
       else {
         log('esecuzione: ' + v.what);
-        try { const r = await bridge.directExecPython(v.code, { timeoutMs: job.timeoutMs }); payload = { result: r }; ueOk = true; log('  ok in ' + r.ms + ' ms'); }
+        try { const r = await bridge.directExecPython(v.code, { timeoutMs: job.timeoutMs }); if (v.what === 'media_export.py:export_batch' && r.success) r.output = await uploadExported(r.output, server, token); payload = { result: r }; ueOk = true; log('  ok in ' + r.ms + ' ms'); }
         catch (e) { ueOk = !(e.code === 'unreachable'); log('  ERRORE: ' + e.message); payload = { error: e.message, status: e.status || 502, code: e.code || 'unreal_error' }; }
       }
       await call('/api/agent/result', { agentId, id: job.id, ...payload }, 60000);
@@ -108,4 +129,4 @@ async function main() {
 }
 
 if (require.main === module) main();
-module.exports = { validateJob, loadScripts, CALL_RE, AGENT_VERSION, main };
+module.exports = { uploadExported, validateJob, loadScripts, CALL_RE, AGENT_VERSION, main };

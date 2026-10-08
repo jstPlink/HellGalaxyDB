@@ -585,6 +585,7 @@
   <div class="chart-card" id="projUpdBox" hidden style="margin:10px 16px"></div>
   <nav class="sectionbar" id="sectionbar"></nav>
   <nav class="tabbar" id="subbar"></nav>
+  <nav class="tabbar" id="subbar2" style="display:none"></nav>
 
   <div id="entitiesSection">
     <nav class="tabbar" id="tabbar"></nav>
@@ -758,6 +759,86 @@
         <table>
           <thead><tr id="entThead"></tr></thead>
           <tbody id="entTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-dbmsec" hidden>
+    <div class="stats" id="dbsStats"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="dbsSearch" placeholder="Cerca per nome o ID&hellip;">
+      </div>
+      <select class="selbox" id="dbsRarity"></select>
+      <span class="hint" style="font-size:12px;color:var(--text-dim)">Dati da MODULES (foglio) + ENTITIES (foglio): ogni modifica l&igrave; compare qui.</span>
+    </div>
+    <div class="chart-card">
+      <div class="chart-head">
+        <div class="chart-title">Confronto moduli<span class="sub" id="dbsChartSub"></span></div>
+        <div class="chart-controls">
+          <label for="dbsMetric">Metrica</label>
+          <select class="selbox" id="dbsMetric"></select>
+          <label for="dbsMax">Scala max</label>
+          <input type="number" class="chart-maxinput" id="dbsMax">
+          <button class="btn ghost small" id="dbsMaxReset">Reset</button>
+          <label>Etichette</label>
+          <div class="chips" id="dbsAngles">
+            <button class="chip" data-angle="0">Orizzontale</button>
+            <button class="chip" data-angle="45">45&deg;</button>
+            <button class="chip" data-angle="90">90&deg;</button>
+          </div>
+        </div>
+      </div>
+      <div class="chart-legend" id="dbsLegend"></div>
+      <div class="chart-scroll"><svg id="dbsSvg"></svg></div>
+    </div>
+    <div class="table-shell">
+      <div class="table-scroll">
+        <table>
+          <thead><tr id="dbsThead"></tr></thead>
+          <tbody id="dbsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-dbcol" hidden>
+    <div class="stats" id="dbcStats"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="dbcSearch" placeholder="Cerca per ID, nome o rarit&agrave;&hellip;">
+      </div>
+      <select class="selbox" id="dbcSubFilter"></select>
+      <span class="hint" id="dbcHint" style="font-size:12px;color:var(--text-dim)"></span>
+    </div>
+    <div class="table-shell">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Immagine</th><th>Mesh</th><th>ID</th><th>Nome</th><th>Rarit&agrave;</th><th>Prezzo</th><th id="dbcSubTh">Tipo</th><th></th></tr></thead>
+          <tbody id="dbcTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-dbmodules" hidden>
+    <div class="stats" id="dbmStats"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="dbmSearch" placeholder="Cerca per ID, nome o tipo&hellip;">
+      </div>
+      <select class="selbox" id="dbmTypeFilter"></select>
+      <span class="hint" style="font-size:12px;color:var(--text-dim)">Collection <b>Moduli</b>: i dati arrivano da MODULES (foglio) e ENTITIES (foglio); ogni modifica fatta lì si vede qui.</span>
+    </div>
+    <div class="table-shell">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Immagine</th><th>Mesh</th><th>ID</th><th>Nome</th><th>Tipo di modulo</th><th></th></tr></thead>
+          <tbody id="dbmTbody"></tbody>
         </table>
       </div>
     </div>
@@ -1008,13 +1089,26 @@ const SECTIONS = [
 ];
 let activeSection = 'entitysheet';
 const GROUPS = [
-  {id:'g_entities', label:'ENTITIES (foglio)', pages:[{id:'entitysheet',label:'Entities'},{id:'modsheet',label:'Modules'},{id:'cargosheet',label:'Cargo/Loot'},{id:'itemssheet',label:'Items'}]},
-  {id:'g_loc', label:'LOCALIZATION MASTER (foglio)', pages:[{id:'loc_identities',label:'Identities'},{id:'loc_entities',label:'Entities'},{id:'loc_quest',label:'Quest'},{id:'loc_eventsaudio',label:'EventsAudio'}]},
-  {id:'g_events', label:'EVENTS (foglio)', pages:[{id:'evt_mainevents',label:'MainEvents'},{id:'evt_eventtexts',label:'EventTexts'}]},
-  {id:'g_db', label:'DATABASE', pages:[{id:'entities',label:'Moduli'},{id:'quest',label:'Quest'},{id:'stations',label:'Stations'},{id:'enemies',label:'Enemies'}]},
+  {id:'g_sheets', label:'FOGLI GOOGLE', children:[
+    {id:'s_entities', label:'ENTITIES', pages:[{id:'entitysheet',label:'Entities'},{id:'modsheet',label:'Modules'},{id:'cargosheet',label:'Cargo/Loot'},{id:'itemssheet',label:'Items'}]},
+    {id:'s_loc', label:'LOCALIZATION MASTER', pages:[{id:'loc_identities',label:'Identities'},{id:'loc_entities',label:'Entities'},{id:'loc_quest',label:'Quest'},{id:'loc_eventsaudio',label:'EventsAudio'}]},
+    {id:'s_events', label:'EVENTS', pages:[{id:'evt_mainevents',label:'MainEvents'},{id:'evt_eventtexts',label:'EventTexts'}]},
+  ]},
+  {id:'g_db', label:'DATABASE', children:[
+    {id:'d_modules', label:'Moduli', pages:[{id:'dbmodules',label:'Tutti i moduli'},{id:'dbmod_body',label:'Main Body'},{id:'dbmod_engine',label:'Engine'},{id:'dbmod_primary',label:'Primary'},{id:'dbmod_secondary',label:'Secondary'},{id:'dbmod_pylon',label:'Pylons'}]},
+    {id:'d_consumable', label:'Consumable', pages:[{id:'dbconsumable',label:'Consumable'}]},
+    {id:'d_item', label:'Item', pages:[{id:'dbitem',label:'Item'}]},
+    {id:'d_collectable', label:'Collectable', pages:[{id:'dbcollectable',label:'Collectable'}]},
+    {id:'d_old', label:'Moduli (vecchie pagine)', pages:[{id:'entities',label:'Moduli (vecchie pagine)'}]},
+    {id:'d_quest', label:'Quest', pages:[{id:'quest',label:'Quest'}]},
+    {id:'d_stations', label:'Stations', pages:[{id:'stations',label:'Stations'}]},
+    {id:'d_enemies', label:'Enemies', pages:[{id:'enemies',label:'Enemies'}]},
+  ]},
 ];
-const PANEL_IDS = ['quest','stations','enemies','entitysheet','modsheet','cargosheet','itemssheet','loc_identities','loc_entities','loc_quest','loc_eventsaudio','evt_mainevents','evt_eventtexts','settings'];
+const PANEL_IDS = ['dbmodules','quest','stations','enemies','entitysheet','modsheet','cargosheet','itemssheet','loc_identities','loc_entities','loc_quest','loc_eventsaudio','evt_mainevents','evt_eventtexts','settings'];
 const lastPage = {};
+GROUPS.forEach(g => { if(g.children) g.pages = g.children.flatMap(c => c.pages); });
+function childOf(g, pageId){ return g && g.children && g.children.find(c => c.pages.some(p => p.id === pageId)); }
 function groupOf(pageId){ return GROUPS.find(g => g.pages.some(p => p.id === pageId)); }
 let activeTab = 'body';
 let drawerCtx = null; // {catId, id}
@@ -1051,6 +1145,7 @@ async function hgLogin(forceChoose){
   try{ users = (await apiGet('/api/users')).users || []; }catch(e){ /* server non raggiungibile: si continua col nome salvato */ }
   const cur = hgUserName();
   if(!forceChoose && cur && users.some(u => u.name.toLowerCase() === cur.toLowerCase())){ const me = users.find(u => u.name.toLowerCase() === cur.toLowerCase()); hgSetUser(me.name, me.color); apiSend('/api/users', 'POST', {name: cur}).catch(() => {}); return cur; }
+  window.__hgLoginShown = true;
   return new Promise(resolve => {
     const ov = document.createElement('div');
     ov.id = 'loginOverlay';
@@ -1093,7 +1188,7 @@ async function hgLogin(forceChoose){
     ov.querySelector('#loginNew').focus();
   });
 }
-async function hgSwitchUser(){ await hgLogin(true); hgRenderUserBtn(); if(typeof renderSettings === 'function') renderSettings(); }
+async function hgSwitchUser(){ await hgLogin(true); hgRenderUserBtn(); if(typeof renderSettings === 'function') renderSettings(); if(typeof runUnrealSync === 'function') setTimeout(() => runUnrealSync(true), 500); }
 function apiToken(){ try{ return localStorage.getItem('hellgalaxy_api_token') || ''; }catch(e){ return ''; } }
 async function apiFetch(url, opts){
   opts = opts || {};
@@ -1263,8 +1358,19 @@ function buildSectionbar(){
     activeSection = gid === 'settings' ? 'settings' : (lastPage[gid] || GROUPS.find(g => g.id === gid).pages[0].id);
     renderAll();
   }));
-  const sub = document.getElementById('subbar');
-  if(cur){
+  const sub = document.getElementById('subbar'), sub2 = document.getElementById('subbar2');
+  sub2.style.display = 'none'; sub2.innerHTML = '';
+  if(cur && cur.children){
+    // secondo livello: ENTITIES / LOCALIZATION MASTER / EVENTS; terzo livello: le loro pagine
+    const ch = childOf(cur, activeSection) || cur.children[0];
+    sub.style.display = '';
+    sub.innerHTML = '<div class="tabgroup">' + cur.children.map(c => '<button class="tab ' + (c === ch ? 'active' : '') + '" data-child="' + c.id + '">' + escapeHtml(c.label) + '</button>').join('') + '</div>';
+    sub.querySelectorAll('.tab').forEach(el => el.addEventListener('click', () => { const c = cur.children.find(x => x.id === el.dataset.child); activeSection = lastPage[c.id] || c.pages[0].id; renderAll(); }));
+    lastPage[ch.id] = activeSection;
+    if(ch.pages.length > 1) sub2.style.display = '';
+    sub2.innerHTML = ch.pages.length < 2 ? '' : '<div class="tabgroup">' + ch.pages.map(p => '<button class="tab ' + (activeSection === p.id ? 'active' : '') + '" data-page="' + p.id + '">' + escapeHtml(p.label) + '</button>').join('') + '</div>';
+    sub2.querySelectorAll('.tab').forEach(el => el.addEventListener('click', () => { activeSection = el.dataset.page; renderAll(); }));
+  } else if(cur){
     sub.style.display = '';
     sub.innerHTML = '<div class="tabgroup">' + cur.pages.map(p => '<button class="tab ' + (activeSection === p.id ? 'active' : '') + '" data-page="' + p.id + '">' + escapeHtml(p.label) + '</button>').join('') + '</div>';
     sub.querySelectorAll('.tab').forEach(el => el.addEventListener('click', () => { activeSection = el.dataset.page; renderAll(); }));
@@ -2185,6 +2291,29 @@ function setTheme(t){
   try{ localStorage.setItem('hellgalaxy_theme', t === 'sheets' ? 'sheets' : 'dark'); }catch(e){}
   renderAll();
 }
+let mediaTimer = null;
+async function refreshStorageBox(){
+  const box = document.getElementById('storageBox'); if(!box) return;
+  try{
+    const s = await apiGet('/api/storage'), max = Math.max(...s.items.map(i => i.bytes), 1);
+    box.innerHTML = '<div style="font-size:22px;font-weight:600" class="mono">' + fmtBytes(s.total) + '</div><div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">totale occupato dall\'app' + (s.disk ? ' &middot; disco: ' + fmtBytes(s.disk.free) + ' liberi su ' + fmtBytes(s.disk.total) : '') + ' &middot; ' + s.counts.textures + ' texture, ' + s.counts.meshes + ' mesh</div>' +
+      s.items.map(i => '<div style="display:flex;align-items:center;gap:8px;font-size:12.5px;margin:3px 0"><span style="width:170px">' + escapeHtml(i.label) + '</span><span style="flex:1;background:rgba(128,128,128,.18);border-radius:4px;height:8px"><span style="display:block;height:8px;border-radius:4px;background:var(--accent);width:' + Math.max(i.bytes ? 1 : 0, Math.round(i.bytes / max * 100)) + '%"></span></span><span class="mono" style="width:80px;text-align:right">' + fmtBytes(i.bytes) + '</span></div>').join('');
+  }catch(e){ box.textContent = 'Impossibile leggere lo spazio occupato.'; }
+}
+async function pollMediaSync(){
+  const el = document.getElementById('mediaSyncState');
+  let j; try{ j = await apiGet('/api/media/sync'); }catch(e){ return; }
+  if(el && j.phase){ el.innerHTML = escapeHtml(j.phase) + (j.total ? ' &middot; ' + j.done + '/' + j.total : '') + ' &middot; scaricate ' + (j.textures || 0) + ' texture e ' + (j.meshes || 0) + ' mesh' + ((j.errors || []).length ? '<br><span style="color:var(--danger)">' + j.errors.slice(0, 5).map(escapeHtml).join('<br>') + ((j.errors.length > 5) ? '<br>… altri ' + (j.errors.length - 5) : '') + '</span>' : ''); }
+  refreshStorageBox();
+  if(j.running){ mediaTimer = setTimeout(pollMediaSync, 3000); }
+  else { mediaTimer = null; if(j.phase === 'Completato'){ await loadMedia(); showToast('Texture e mesh aggiornate'); } }
+}
+async function startMediaSync(force){
+  try{ await apiSend('/api/media/sync', 'POST', {force}); }
+  catch(e){ showToast('Impossibile avviare: agente non connesso o sincronizzazione già in corso'); }
+  if(mediaTimer) clearTimeout(mediaTimer);
+  pollMediaSync();
+}
 function renderSettings(){
   const panel = document.getElementById('panel-settings');
   const catOptions = [{id:'all', label:'Tutte le categorie'}, ...CATS.map(c => ({id:c.id, label:c.label}))];
@@ -2212,6 +2341,17 @@ function renderSettings(){
           <label for="oauthInput">Client ID OAuth Google</label>
           <input type="text" id="oauthInput" placeholder="xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com" value="${escapeHtml(oauthClientId)}">
         </div>
+      </div>
+
+      <div class="card">
+        <h3>Spazio occupato sul server</h3>
+        <p class="sub">Quanto pesa l'app (database, immagini, texture e file FBX esportati da Unreal). Le anteprime delle mesh sono piccole e si caricano subito; gli FBX si scaricano solo a richiesta.</p>
+        <div id="storageBox">Calcolo&hellip;</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+          <button class="btn ghost small temp" id="mediaSyncBtn" title="Esporta da Unreal (sola lettura sul progetto) le texture degli EDA_ e le mesh degli SMDA_ mancanti e le carica nell'app">Scarica texture e mesh da Unreal</button>
+          <button class="btn ghost small temp" id="mediaSyncForceBtn" title="Riesporta anche i file già presenti">Riesporta tutto</button>
+        </div>
+        <div id="mediaSyncState" class="sub" style="margin-top:8px"></div>
       </div>
 
       <div class="card">
@@ -2275,6 +2415,9 @@ function renderSettings(){
     showToast('Link salvato');
   }));
   document.getElementById('exportZipBtn').addEventListener('click', exportImagesZip);
+  refreshStorageBox();
+  document.getElementById('mediaSyncBtn').addEventListener('click', () => startMediaSync(false));
+  document.getElementById('mediaSyncForceBtn').addEventListener('click', () => { if(confirm('Riesportare da Unreal tutte le texture e le mesh (può richiedere parecchi minuti)?')) startMediaSync(true); });
   document.getElementById('addConnBtn').addEventListener('click', () => document.getElementById('addForm').classList.add('show'));
   document.getElementById('cancelConnBtn').addEventListener('click', () => document.getElementById('addForm').classList.remove('show'));
   document.getElementById('saveConnBtn').addEventListener('click', () => {
@@ -3089,6 +3232,274 @@ function startModCellEdit(td, id, key){
 }
 function renderModSheet(){ renderModStats(); renderModFilters(); renderModTable(); renderDirtyPill(); }
 
+/* ---- DATABASE › Moduli › Main Body / Engine / Primary / Secondary / Pylons: tabella + grafico di confronto (come le vecchie pagine) ---- */
+const DBMSEC = {
+  dbmod_body: {section:'MainBody', label:'Main Body', metric:'HullIntegrity'},
+  dbmod_engine: {section:'MainEngine', label:'Engine', metric:'SpeedIncrement'},
+  dbmod_primary: {section:'PrimaryWeapon', label:'Primary', metric:'DPS'},
+  dbmod_secondary: {section:'SecondaryWeapon', label:'Secondary', metric:'BaseDamageMax'},
+  dbmod_pylon: {section:'Pylon', label:'Pylons', metric:'Price'},
+};
+let dbsUi = {};
+function dbsState(){ const k = activeSection; return dbsUi[k] || (dbsUi[k] = {search:'', rarity:'Tutte', metric:null, max:null, angle:null, sortKey:'Name', sortDir:1}); }
+const dbsNum = v => { const n = parseFloat(String(v == null ? '' : v).replace(',', '.')); return isFinite(n) && /^-?[\d.,]+$/.test(String(v).trim()) ? n : NaN; };
+const dbsFmt = v => (Math.round(v * 100) / 100).toLocaleString('it-IT');
+function dbsAllRows(){
+  const cfg = DBMSEC[activeSection]; if(!cfg) return [];
+  const ents = {}; ENTITIES.forEach(e => { ents[e['(ID)']] = e; });
+  return MODS.filter(m => m.__section === cfg.section).map(m => {
+    const id = m['(ID)'], e = ents[id] || {}, eff = ENT_EFF[id] || {};
+    const row = {ID: id, Name: (eff.Label && eff.Label.v) || e.Label || id, Rarity: modCellValue(m, 'Rarity').v || e.BaseRarity || '', __m: m};
+    return row;
+  });
+}
+// colonne numeriche della sezione (metriche del grafico e colonne della tabella)
+function dbsNumCols(){
+  const cfg = DBMSEC[activeSection], sec = MOD_SECTIONS.find(x => x.name === cfg.section), rows = MODS.filter(m => m.__section === cfg.section);
+  const heads = (sec ? sec.headers : []).filter(h => h && !/^\d+(#\d+)?$|^0#/.test(h) && !['(ID)','ItemType','StaticMesh','ModuleType','Rarity'].includes(h));
+  return heads.filter(h => { const vals = rows.map(m => dbsNum(modCellValue(m, h).v)); return vals.filter(n => !isNaN(n)).length >= Math.max(1, rows.length / 2); });
+}
+function dbsFiltered(){
+  const st = dbsState(); let rows = dbsAllRows();
+  if(st.rarity !== 'Tutte') rows = rows.filter(r => r.Rarity === st.rarity);
+  const q = st.search.trim().toLowerCase();
+  if(q) rows = rows.filter(r => r.Name.toLowerCase().includes(q) || r.ID.toLowerCase().includes(q));
+  const key = st.sortKey, num = key !== 'Name' && key !== 'ID' && key !== 'Rarity';
+  const val = r => key === 'Rarity' ? RARITY_ORDER.indexOf(r.Rarity) : (num ? (dbsNum(modCellValue(r.__m, key).v) || 0) : String(r[key] || '').toLowerCase());
+  rows.sort((a, b) => { const x = val(a), y = val(b); return (x < y ? -1 : x > y ? 1 : 0) * st.sortDir; });
+  return rows;
+}
+function dbsOpenStats(id){
+  const cfg = DBMSEC[activeSection];
+  modUi.section = cfg.section; modUi.search = id; activeSection = 'modsheet'; renderAll();
+  document.getElementById('modSearch').value = id;
+}
+function dbsDrawChart(rows, cols){
+  const st = dbsState(), cfg = DBMSEC[activeSection];
+  const metric = cols.includes(st.metric) ? st.metric : (cols.includes(cfg.metric) ? cfg.metric : cols[0]);
+  st.metric = metric;
+  const sel = document.getElementById('dbsMetric'); sel.innerHTML = cols.map(c => '<option value="' + escapeHtml(c) + '"' + (c === metric ? ' selected' : '') + '>' + escapeHtml(c) + '</option>').join('');
+  const svg = document.getElementById('dbsSvg'), legend = document.getElementById('dbsLegend');
+  const data = rows.map(r => ({r, v: dbsNum(modCellValue(r.__m, metric).v) || 0})).sort((a, b) => b.v - a.v);
+  const allMax = Math.max(0, ...dbsAllRows().map(r => dbsNum(modCellValue(r.__m, metric).v) || 0));
+  document.getElementById('dbsChartSub').textContent = ' · max reale tra tutti i moduli: ' + dbsFmt(allMax);
+  const chartMax = st.max === null ? (allMax > 0 ? allMax : 1) : (st.max > 0 ? st.max : 1);
+  document.getElementById('dbsMax').value = Math.round(chartMax * 100) / 100;
+  if(!data.length){ svg.style.display = 'none'; legend.innerHTML = ''; return; }
+  svg.style.display = '';
+  const autoAngle = data.length > 20 ? 90 : (data.length > 9 ? 45 : 0), angle = st.angle === null ? autoAngle : st.angle;
+  document.querySelectorAll('#dbsAngles .chip').forEach(ch => ch.classList.toggle('active', Number(ch.dataset.angle) === angle));
+  const SPEC = {0:{pad:34, len:9}, 45:{pad:92, len:17}, 90:{pad:146, len:24}}[angle];
+  const barW = 22, gap = 12, plotH = 190, axisW = 52, topPad = 26, width = axisW + data.length * (barW + gap) + gap, height = topPad + plotH + SPEC.pad;
+  svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height); svg.setAttribute('width', width); svg.setAttribute('height', height);
+  const used = new Set(data.map(d => d.r.Rarity));
+  legend.innerHTML = RARITY_ORDER.filter(r => used.has(r)).map(r => '<div class="lg-item"><span class="lg-sw" style="background:' + RARITY_COLOR[r] + '"></span>' + escapeHtml(r) + '</div>').join('');
+  const step = niceStep(chartMax), ticks = []; for(let v = 0; v <= chartMax + 1e-9; v += step) ticks.push(v); if(ticks.length < 2) ticks.push(chartMax);
+  const P = [];
+  ticks.forEach(tk => { const y = topPad + plotH - (Math.min(tk, chartMax) / chartMax) * plotH; P.push('<line x1="' + axisW + '" y1="' + y + '" x2="' + width + '" y2="' + y + '" stroke="var(--border-soft)" stroke-width="1"/><text x="' + (axisW - 8) + '" y="' + (y + 3) + '" text-anchor="end" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Mono, monospace">' + dbsFmt(tk) + '</text>'); });
+  P.push('<line x1="' + axisW + '" y1="' + (topPad + plotH) + '" x2="' + width + '" y2="' + (topPad + plotH) + '" stroke="var(--border)" stroke-width="1"/>');
+  data.forEach((d, idx) => {
+    const h = chartMax > 0 ? (Math.min(d.v, chartMax) / chartMax) * plotH : 0, x = axisW + gap + idx * (barW + gap), y = topPad + plotH - h, cx = x + barW / 2, baseY = topPad + plotH, over = d.v > chartMax;
+    P.push('<path class="chart-bar dbs-bar" data-idx="' + idx + '" d="' + roundedTopBarPath(x, y, barW, h, 4) + '" fill="' + (RARITY_COLOR[d.r.Rarity] || 'var(--text-faint)') + '"></path>');
+    if(over) P.push('<path d="M' + (cx - 4) + ',' + (y + 6) + ' L' + (cx + 4) + ',' + (y + 6) + ' L' + cx + ',' + (y - 2) + ' Z" fill="var(--danger)"></path>');
+    if(idx === 0) P.push('<text x="' + cx + '" y="' + (over ? y - 8 : Math.max(topPad - 8, y - 8)) + '" text-anchor="middle" font-size="10" fill="var(--text-dim)" font-family="IBM Plex Sans, sans-serif">' + escapeHtml(truncate(d.r.Name, 14)) + ' · ' + dbsFmt(d.v) + '</text>');
+    const nm = escapeHtml(truncate(d.r.Name, SPEC.len));
+    P.push(angle === 0 ? '<text x="' + cx + '" y="' + (baseY + 13) + '" text-anchor="middle" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Sans, sans-serif">' + nm + '</text>'
+      : '<text x="' + cx + '" y="' + (baseY + 9) + '" text-anchor="end" font-size="9.5" fill="var(--text-faint)" font-family="IBM Plex Sans, sans-serif" transform="rotate(-' + angle + ' ' + cx + ' ' + (baseY + 9) + ')">' + nm + '</text>');
+  });
+  svg.innerHTML = P.join('');
+  const tip = document.getElementById('chartTooltip');
+  svg.querySelectorAll('.dbs-bar').forEach(el => {
+    const d = data[Number(el.dataset.idx)];
+    const show = (x, y) => { tip.innerHTML = '<div class="tt-val">' + dbsFmt(d.v) + (d.v > chartMax ? ' ⚠' : '') + '</div><div class="tt-name">' + escapeHtml(d.r.Name) + '</div><div class="tt-rarity">' + escapeHtml(d.r.Rarity) + ' · ' + escapeHtml(d.r.ID) + '</div>'; tip.style.left = x + 'px'; tip.style.top = (y - 12) + 'px'; tip.classList.add('show'); };
+    el.addEventListener('pointerenter', e => show(e.clientX, e.clientY)); el.addEventListener('pointermove', e => show(e.clientX, e.clientY)); el.addEventListener('pointerleave', () => tip.classList.remove('show'));
+    el.addEventListener('click', () => dbsOpenStats(d.r.ID));
+  });
+}
+function renderDbSectionTable(){
+  const st = dbsState(), cols = dbsNumCols(), rows = dbsFiltered();
+  const arrow = k => st.sortKey === k ? (st.sortDir > 0 ? ' ▲' : ' ▼') : '';
+  const th = (k, label) => '<th class="dbs-sort" data-key="' + escapeHtml(k) + '" style="cursor:pointer">' + escapeHtml(label) + arrow(k) + '</th>';
+  document.getElementById('dbsThead').innerHTML = '<th>Immagine</th><th>Mesh</th>' + th('ID', 'ID') + th('Name', 'Nome') + th('Rarity', 'Rarità') + cols.map(c => th(c, c)).join('') + '<th></th>';
+  document.getElementById('dbsThead').querySelectorAll('.dbs-sort').forEach(h => h.addEventListener('click', () => { const s = dbsState(); if(s.sortKey === h.dataset.key) s.sortDir = -s.sortDir; else { s.sortKey = h.dataset.key; s.sortDir = 1; } renderDbSectionTable(); }));
+  const tbody = document.getElementById('dbsTbody');
+  if(!rows.length){ tbody.innerHTML = '<tr class="empty-row"><td colspan="' + (cols.length + 6) + '">Nessun modulo corrisponde ai filtri.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(r => {
+    const lk = MEDIA.links[r.ID] || {}, mesh = lk.static_mesh && MEDIA.assets.mesh[lk.static_mesh];
+    const img = lk.icon ? '<img src="media/textures/' + encodeURIComponent(lk.icon) + '.png" loading="lazy" alt="" title="' + escapeHtml(lk.icon) + '" style="width:44px;height:44px;object-fit:contain;border-radius:6px;display:block">' : '<span class="mono" style="color:var(--text-faint)">&ndash;</span>';
+    const mc = mesh ? '<button type="button" class="dbm-mesh" data-id="' + escapeHtml(r.ID) + '" title="Apri anteprima e scarica FBX" style="background:none;border:0;padding:0;cursor:pointer">' + (mesh.preview ? '<img src="media/previews/' + encodeURIComponent(lk.static_mesh) + '.png" loading="lazy" alt="" style="width:44px;height:44px;object-fit:contain;display:block">' : '<span class="badge-type">FBX</span>') + '</button>' : '<span style="color:var(--text-faint)">&ndash;</span>';
+    return '<tr data-id="' + escapeHtml(r.ID) + '"><td>' + img + '</td><td>' + mc + '</td><td class="mono">' + escapeHtml(r.ID) + '</td><td>' + escapeHtml(r.Name) + '</td><td style="color:' + (RARITY_COLOR[r.Rarity] || '') + '">' + escapeHtml(r.Rarity) + '</td>' + cols.map(c => { const v = modCellValue(r.__m, c).v; return '<td class="num-cell">' + escapeHtml(v === '' ? '' : (isNaN(dbsNum(v)) ? v : dbsFmt(dbsNum(v)))) + '</td>'; }).join('') + '<td><button type="button" class="btn ghost small dbs-open" data-id="' + escapeHtml(r.ID) + '">Statistiche &rarr;</button></td></tr>';
+  }).join('');
+  tbody.querySelectorAll('.dbm-mesh').forEach(b => b.addEventListener('click', () => openMeshDialog(b.dataset.id)));
+  tbody.querySelectorAll('.dbs-open').forEach(b => b.addEventListener('click', () => dbsOpenStats(b.dataset.id)));
+}
+let dbsLoading = false;
+function renderDbModSection(){
+  const cfg = DBMSEC[activeSection], st = dbsState(), all = dbsAllRows(), cols = dbsNumCols();
+  const rar = RARITY_ORDER.filter(r => all.some(x => x.Rarity === r));
+  document.getElementById('dbsRarity').innerHTML = ['Tutte', ...rar].map(r => '<option value="' + r + '"' + (st.rarity === r ? ' selected' : '') + '>' + (r === 'Tutte' ? 'Tutte le rarità' : r + ' (' + all.filter(x => x.Rarity === r).length + ')') + '</option>').join('');
+  document.getElementById('dbsSearch').value = st.search;
+  const withImg = all.filter(r => (MEDIA.links[r.ID] || {}).icon).length, withMesh = all.filter(r => { const l = MEDIA.links[r.ID] || {}; return l.static_mesh && MEDIA.assets.mesh[l.static_mesh]; }).length;
+  document.getElementById('dbsStats').innerHTML = [{l:'Totale', n: all.length, accent:true}, {l:'Con immagine', n: withImg}, {l:'Con mesh', n: withMesh}].concat(rar.map(r => ({l:r, n: all.filter(x => x.Rarity === r).length})))
+    .map(it => '<div class="stat' + (it.accent ? ' accent' : '') + '"><div class="n mono">' + it.n + '</div><div class="l">' + escapeHtml(it.l) + '</div></div>').join('');
+  dbsDrawChart(dbsFiltered(), cols.length ? cols : ['Price']);
+  renderDbSectionTable();
+  if(!dbsLoading){
+    dbsLoading = true;
+    Promise.all([loadModulesSheet(), loadEntities(), loadMedia()]).then(() => { if(DBMSEC[activeSection]){ dbsDrawChart(dbsFiltered(), dbsNumCols().length ? dbsNumCols() : ['Price']); renderDbSectionTable(); } }).catch(() => {}).finally(() => { dbsLoading = false; });
+  }
+}
+document.getElementById('dbsSearch').addEventListener('input', e => { dbsState().search = e.target.value; dbsDrawChart(dbsFiltered(), dbsNumCols()); renderDbSectionTable(); });
+document.getElementById('dbsRarity').addEventListener('change', e => { dbsState().rarity = e.target.value; dbsDrawChart(dbsFiltered(), dbsNumCols()); renderDbSectionTable(); });
+document.getElementById('dbsMetric').addEventListener('change', e => { const s = dbsState(); s.metric = e.target.value; s.max = null; dbsDrawChart(dbsFiltered(), dbsNumCols()); });
+document.getElementById('dbsMax').addEventListener('change', e => { const v = Number(e.target.value); dbsState().max = v > 0 ? v : null; dbsDrawChart(dbsFiltered(), dbsNumCols()); });
+document.getElementById('dbsMaxReset').addEventListener('click', () => { dbsState().max = null; dbsDrawChart(dbsFiltered(), dbsNumCols()); });
+document.querySelectorAll('#dbsAngles .chip').forEach(ch => ch.addEventListener('click', () => { dbsState().angle = Number(ch.dataset.angle); dbsDrawChart(dbsFiltered(), dbsNumCols()); }));
+
+/* ---- DATABASE › Consumable / Item / Collectable: collection costruite da ENTITIES (per EntityType) + Cargo/Loot o Items ---- */
+const DBCOL = {
+  dbconsumable: {type:'Consumable', detail:'cargosheet', detailLabel:'Cargo/Loot', hint:'Collection Consumable: entit&agrave; di ENTITIES con EntityType = Consumable; statistiche in Cargo/Loot.'},
+  dbitem: {type:'Item', detail:'itemssheet', detailLabel:'Items', hint:'Collection Item: entit&agrave; di ENTITIES con EntityType = Item; statistiche in Items.'},
+  dbcollectable: {type:'Collectable', detail:'cargosheet', detailLabel:'Cargo/Loot', hint:'Collection Collectable: entit&agrave; di ENTITIES con EntityType = Collectable; statistiche in Cargo/Loot.'},
+};
+let dbcUi = {};
+function dbcState(){ const k = activeSection; return dbcUi[k] || (dbcUi[k] = {search:'', sub:'Tutti'}); }
+function dbcRows(){
+  const cfg = DBCOL[activeSection]; if(!cfg) return [];
+  const view = TAB_VIEWS[cfg.detail];
+  const sec = {}; if(cfg.type === 'Item' && view) view.rows.forEach(r => { sec[r['(ID)']] = r.__section || ''; });
+  return ENTITIES.filter(e => e.EntityType === cfg.type).map(e => {
+    const id = e['(ID)'], eff = ENT_EFF[id] || {};
+    return {id, name: (eff.Label && eff.Label.v) || e.Label || '', rarity: e.BaseRarity || '', price: e.BasePrice || '', sub: cfg.type === 'Item' ? (sec[id] || '') : (e.BaseRarity || '')};
+  });
+}
+function dbcFiltered(){
+  const st = dbcState(); let rows = dbcRows();
+  if(st.sub !== 'Tutti') rows = rows.filter(r => r.sub === st.sub);
+  const q = st.search.trim().toLowerCase();
+  if(q) rows = rows.filter(r => [r.id, r.name, r.rarity, r.sub].some(v => String(v || '').toLowerCase().includes(q)));
+  return rows;
+}
+function dbcOpenDetail(id, page){
+  activeSection = page;
+  if(page === 'entitysheet'){ entUi.search = id; entUi.type = 'Tutti'; }
+  else if(TAB_VIEWS[page]){ TAB_VIEWS[page].ui.search = id; TAB_VIEWS[page].ui.section = 'Tutte'; }
+  renderAll();
+  const inp = document.getElementById(page === 'entitysheet' ? 'entSearch' : (page === 'cargosheet' ? 'cargo-search' : 'items-search')); if(inp) inp.value = id;
+}
+function renderDbCollectionTable(){
+  const cfg = DBCOL[activeSection], rows = dbcFiltered(), tbody = document.getElementById('dbcTbody');
+  if(!rows.length){ tbody.innerHTML = '<tr class="empty-row"><td colspan="8">Nessuna entit&agrave; corrisponde ai filtri.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(r => {
+    const lk = MEDIA.links[r.id] || {};
+    const img = lk.icon ? '<img src="media/textures/' + encodeURIComponent(lk.icon) + '.png" loading="lazy" alt="" title="' + escapeHtml(lk.icon) + '" style="width:44px;height:44px;object-fit:contain;border-radius:6px;display:block">' : '<span class="mono" style="color:var(--text-faint)" title="Nessuna immagine nell\'app">&ndash;</span>';
+    const mk = ['static_mesh','loot_mesh_0','loot_mesh_1','loot_mesh_2','loot_mesh_3','loot_mesh_4','loot_mesh_5','loot_mesh_6'].find(k => lk[k] && MEDIA.assets.mesh[lk[k]]);
+    const mesh = mk && MEDIA.assets.mesh[lk[mk]];
+    const meshCell = mesh ? '<button type="button" class="dbm-mesh" data-id="' + escapeHtml(r.id) + '" title="Apri anteprima e scarica FBX" style="background:none;border:0;padding:0;cursor:pointer">' + (mesh.preview ? '<img src="media/previews/' + encodeURIComponent(lk[mk]) + '.png" loading="lazy" alt="" style="width:44px;height:44px;object-fit:contain;display:block">' : '<span class="badge-type">FBX</span>') + '</button>' : '<span style="color:var(--text-faint)">&ndash;</span>';
+    return '<tr data-id="' + escapeHtml(r.id) + '"><td>' + img + '</td><td>' + meshCell + '</td><td class="mono">' + escapeHtml(r.id) + '</td><td>' + (escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>') + '</td><td style="color:' + (RARITY_COLOR[r.rarity] || '') + '">' + escapeHtml(r.rarity) + '</td><td class="num-cell">' + escapeHtml(r.price) + '</td><td>' + escapeHtml(cfg.type === 'Item' ? r.sub : '') + '</td><td style="white-space:nowrap"><button type="button" class="btn ghost small dbc-open" data-id="' + escapeHtml(r.id) + '" data-page="' + cfg.detail + '">' + escapeHtml(cfg.detailLabel) + ' &rarr;</button> <button type="button" class="btn ghost small dbc-open" data-id="' + escapeHtml(r.id) + '" data-page="entitysheet">Entit&agrave; &rarr;</button></td></tr>';
+  }).join('');
+  tbody.querySelectorAll('.dbm-mesh').forEach(b => b.addEventListener('click', () => openMeshDialog(b.dataset.id)));
+  tbody.querySelectorAll('.dbc-open').forEach(b => b.addEventListener('click', () => dbcOpenDetail(b.dataset.id, b.dataset.page)));
+}
+let dbcLoading = false;
+function renderDbCollection(){
+  const cfg = DBCOL[activeSection], st = dbcState(), all = dbcRows();
+  document.getElementById('dbcHint').innerHTML = cfg.hint;
+  document.getElementById('dbcSubTh').textContent = cfg.type === 'Item' ? 'Tipo di item' : '';
+  const subs = cfg.type === 'Item' ? [...new Set(all.map(r => r.sub).filter(Boolean))] : [];
+  const sel = document.getElementById('dbcSubFilter'); sel.style.display = subs.length ? '' : 'none';
+  sel.innerHTML = ['Tutti', ...subs].map(s => '<option value="' + escapeHtml(s) + '" ' + (st.sub === s ? 'selected' : '') + '>' + (s === 'Tutti' ? 'Tutti i tipi' : escapeHtml(s) + ' (' + all.filter(r => r.sub === s).length + ')') + '</option>').join('');
+  document.getElementById('dbcSearch').value = st.search;
+  const withImg = all.filter(r => (MEDIA.links[r.id] || {}).icon).length;
+  document.getElementById('dbcStats').innerHTML = [{l:cfg.type, n: all.length, accent:true}, {l:'Con immagine', n: withImg}, {l:'Senza immagine', n: all.length - withImg}, {l:'Senza nome', n: all.filter(r => !r.name).length}]
+    .map(it => '<div class="stat' + (it.accent ? ' accent' : '') + '"><div class="n mono">' + it.n + '</div><div class="l">' + escapeHtml(it.l) + '</div></div>').join('');
+  renderDbCollectionTable();
+  // ricarica ENTITIES, il tab di dettaglio e i media: le modifiche fatte altrove compaiono subito
+  if(!dbcLoading){
+    dbcLoading = true;
+    const v = TAB_VIEWS[cfg.detail];
+    Promise.all([loadEntities(), loadMedia(), v && v.load ? v.load() : null]).then(() => { if(DBCOL[activeSection]) renderDbCollectionTable(); }).catch(() => {}).finally(() => { dbcLoading = false; });
+  }
+}
+/* ---- DATABASE › Moduli: collection costruita dalle tab foglio MODULES + ENTITIES ---- */
+let dbmUi = { search:'', type:'Tutti' };
+/* ---- media esportati da Unreal (texture, mesh, anteprime) ---- */
+let MEDIA = { links:{}, assets:{texture:{}, mesh:{}} };
+async function loadMedia(){ try{ MEDIA = await apiGet('/api/media'); }catch(e){ /* nessun media: la vista funziona comunque */ } }
+function fmtBytes(n){ if(n < 1024) return n + ' B'; const u = ['KB','MB','GB','TB']; let i = -1; do{ n /= 1024; i++; }while(n >= 1024 && i < 3); return n.toFixed(n < 10 ? 2 : 1) + ' ' + u[i]; }
+async function downloadMesh(name){
+  try{
+    const res = await apiFetch('/api/media/mesh/' + encodeURIComponent(name) + '.fbx');
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const blob = await res.blob(), a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name + '.fbx'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  }catch(e){ showToast('Download FBX non riuscito'); }
+}
+// Il file FBX viene richiesto al server solo quando premi "Scarica": aprire la finestra carica soltanto le anteprime.
+function openMeshDialog(id){
+  const lk = MEDIA.links[id] || {}, parts = [['static_mesh', 'Mesh'], ['shield_static_mesh', 'Shield mesh']].concat([0,1,2,3,4,5,6].map(i => ['loot_mesh_' + i, 'Mesh del loot ' + (i + 1)])).filter(([k]) => lk[k] && MEDIA.assets.mesh[lk[k]]);
+  if(!parts.length) return;
+  const old = document.getElementById('meshDlg'); if(old) old.remove();
+  const ov = document.createElement('div'); ov.id = 'meshDlg';
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;display:flex;align-items:center;justify-content:center';
+  ov.innerHTML = '<div style="background:var(--bg-elev,#fff);color:var(--text);border:1px solid var(--border,#ccc);border-radius:10px;padding:18px;max-width:92vw;max-height:90vh;overflow:auto"><div style="display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:10px"><b class="mono">' + escapeHtml(id) + '</b><button class="btn ghost small" id="meshDlgX">Chiudi</button></div><div style="display:flex;gap:18px;flex-wrap:wrap">' +
+    parts.map(([k, label]) => { const n = lk[k], a = MEDIA.assets.mesh[n];
+      return '<div style="text-align:center"><div style="font-size:12px;color:var(--text-dim)">' + label + '</div>' + (a.preview ? '<img src="media/previews/' + encodeURIComponent(n) + '.png" alt="" style="width:300px;height:300px;object-fit:contain;background:rgba(128,128,128,.12);border-radius:8px">' : '<div style="width:300px;height:300px;display:flex;align-items:center;justify-content:center;background:rgba(128,128,128,.12);border-radius:8px">nessuna anteprima</div>') +
+        '<div class="mono" style="font-size:12px;margin:6px 0">' + escapeHtml(n) + '.fbx &middot; ' + fmtBytes(a.size) + '</div><button class="btn primary small" data-dl="' + escapeHtml(n) + '">Scarica FBX</button></div>'; }).join('') + '</div></div>';
+  document.body.appendChild(ov);
+  ov.addEventListener('click', e => { if(e.target === ov || e.target.id === 'meshDlgX') ov.remove(); const dl = e.target.dataset && e.target.dataset.dl; if(dl) downloadMesh(dl); });
+}
+let dbmLoading = false;
+const DBM_IMG_DIR = {MainBody:'body'}; // le uniche immagini caricate a mano nell'app (images/body/); le altre arrivano dalle texture di Unreal
+function dbmRows(){
+  const ents = {}; ENTITIES.forEach(e => { ents[e['(ID)']] = e; });
+  return MODS.map(m => {
+    const id = m['(ID)'], eff = ENT_EFF[id] || {}, e = ents[id] || {};
+    const name = (eff.Label && eff.Label.v) || e.Label || '';
+    const sec = m.__section || '', mt = (MOD_EFF[id] && MOD_EFF[id].ModuleType && MOD_EFF[id].ModuleType.v) || m.ModuleType || '';
+    return {id, name, section: sec, moduleType: mt, icon: (eff.Icon && eff.Icon.v) || e.Icon || ''};
+  });
+}
+function dbmFiltered(){
+  let rows = dbmRows();
+  if(dbmUi.type !== 'Tutti') rows = rows.filter(r => r.section === dbmUi.type);
+  const q = dbmUi.search.trim().toLowerCase();
+  if(q) rows = rows.filter(r => [r.id, r.name, r.section, r.moduleType].some(v => String(v || '').toLowerCase().includes(q)));
+  return rows;
+}
+function renderDbModuleTable(){
+  const rows = dbmFiltered(), tbody = document.getElementById('dbmTbody');
+  if(!rows.length){ tbody.innerHTML = `<tr class="empty-row"><td colspan="6">${MODS.length ? 'Nessun modulo corrisponde ai filtri.' : 'Nessun modulo: importa il tab Modules da ENTITIES (foglio) › Modules.'}</td></tr>`; return; }
+  tbody.innerHTML = rows.map(r => {
+    const dir = DBM_IMG_DIR[r.section], lk = MEDIA.links[r.id] || {};
+    const img = lk.icon ? `<img src="media/textures/${encodeURIComponent(lk.icon)}.png" loading="lazy" alt="" title="${escapeHtml(lk.icon)}" style="width:44px;height:44px;object-fit:contain;border-radius:6px;display:block">` : dir ? `<img src="images/${dir}/${encodeURIComponent(r.id)}.jpg" alt="" style="width:44px;height:44px;object-fit:cover;border-radius:6px;display:block" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mono',textContent:'–',title:'Nessuna immagine nell\\'app'}))">` : `<span class="mono" style="color:var(--text-faint)" title="Nessuna immagine nell'app${r.icon ? ' (icona in Unreal: ' + escapeHtml(r.icon) + ')' : ''}">–</span>`;
+    const mesh = lk.static_mesh && MEDIA.assets.mesh[lk.static_mesh];
+    const meshCell = mesh ? `<button type="button" class="dbm-mesh" data-id="${escapeHtml(r.id)}" title="Apri anteprima e scarica FBX" style="background:none;border:0;padding:0;cursor:pointer">${mesh.preview ? `<img src="media/previews/${encodeURIComponent(lk.static_mesh)}.png" loading="lazy" alt="" style="width:44px;height:44px;object-fit:contain;display:block">` : '<span class="badge-type">FBX</span>'}</button>` : '<span style="color:var(--text-faint)">&ndash;</span>';
+    return `<tr data-id="${escapeHtml(r.id)}"><td>${img}</td><td>${meshCell}</td><td class="mono">${escapeHtml(r.id)}</td><td>${escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>'}</td><td>${escapeHtml(r.section)}${r.moduleType && r.moduleType !== r.section ? ' <span class="badge-type">' + escapeHtml(r.moduleType) + '</span>' : ''}</td><td><button type="button" class="btn ghost small dbm-open" data-id="${escapeHtml(r.id)}" data-section="${escapeHtml(r.section)}">Statistiche &rarr;</button></td></tr>`;
+  }).join('');
+  tbody.querySelectorAll('.dbm-mesh').forEach(b => b.addEventListener('click', () => openMeshDialog(b.dataset.id)));
+  tbody.querySelectorAll('.dbm-open').forEach(b => b.addEventListener('click', () => {
+    modUi.section = b.dataset.section || 'Tutte'; modUi.search = b.dataset.id;
+    activeSection = 'modsheet'; renderAll();
+    document.getElementById('modSearch').value = b.dataset.id;
+  }));
+}
+function renderDbModules(){
+  const types = [...new Set(MODS.map(m => m.__section).filter(Boolean))];
+  const sel = document.getElementById('dbmTypeFilter');
+  sel.innerHTML = ['Tutti', ...types].map(t => `<option value="${escapeHtml(t)}" ${dbmUi.type===t?'selected':''}>${t==='Tutti' ? 'Tutti i tipi' : escapeHtml(t) + ' (' + MODS.filter(m => m.__section === t).length + ')'}</option>`).join('');
+  document.getElementById('dbmSearch').value = dbmUi.search;
+  const rows = dbmRows();
+  document.getElementById('dbmStats').innerHTML = [{l:'Moduli', n: rows.length, accent:true}, {l:'Tipi', n: types.length}, {l:'Senza nome', n: rows.filter(r => !r.name).length}]
+    .map(it => `<div class="stat${it.accent?' accent':''}"><div class="n mono">${it.n}</div><div class="l">${escapeHtml(it.l)}</div></div>`).join('');
+  renderDbModuleTable();
+  // ricarica i dati dei fogli così le modifiche fatte altrove compaiono subito nella collection
+  if(!dbmLoading){
+    dbmLoading = true;
+    Promise.all([loadModulesSheet(), loadEntities(), loadMedia()]).then(() => { if(activeSection === 'dbmodules') renderDbModuleTable(); }).catch(() => {}).finally(() => { dbmLoading = false; });
+  }
+}
 async function modPull(apply, skip){
   const box = document.getElementById('modReport'); box.hidden = false;
   box.innerHTML = '<div class="chart-head"><div class="chart-title">Lettura del tab Modules&hellip;</div></div>';
@@ -3962,6 +4373,8 @@ function renderAll(){
   PANEL_IDS.forEach(id => {
     document.getElementById('panel-'+id).hidden = activeSection !== id;
   });
+  document.getElementById('panel-dbcol').hidden = !DBCOL[activeSection];
+  document.getElementById('panel-dbmsec').hidden = !DBMSEC[activeSection];
 
   if(activeSection === 'entities'){
     buildTabbar();
@@ -3979,6 +4392,12 @@ function renderAll(){
     renderEnemies();
   } else if(activeSection === 'entitysheet'){
     renderEntities();
+  } else if(DBMSEC[activeSection]){
+    renderDbModSection();
+  } else if(DBCOL[activeSection]){
+    renderDbCollection();
+  } else if(activeSection === 'dbmodules'){
+    renderDbModules();
   } else if(activeSection === 'modsheet'){
     renderModSheet();
   } else if(TAB_VIEWS[activeSection]){
@@ -4008,6 +4427,10 @@ document.getElementById('enemyBossToggle').addEventListener('click', e => { enem
 document.getElementById('enemyInGameToggle').addEventListener('click', e => { enemyUi.inGameOnly = !enemyUi.inGameOnly; e.currentTarget.classList.toggle('active', enemyUi.inGameOnly); renderEnemies(); });
 document.getElementById('enemySyncBtn').addEventListener('click', openEnemiesSyncModal);
 
+document.getElementById('dbcSearch').addEventListener('input', e => { dbcState().search = e.target.value; renderDbCollectionTable(); });
+document.getElementById('dbcSubFilter').addEventListener('change', e => { dbcState().sub = e.target.value; renderDbCollectionTable(); });
+document.getElementById('dbmSearch').addEventListener('input', e => { dbmUi.search = e.target.value; renderDbModuleTable(); });
+document.getElementById('dbmTypeFilter').addEventListener('change', e => { dbmUi.type = e.target.value; renderDbModuleTable(); });
 document.getElementById('modSearch').addEventListener('input', e => { modUi.search = e.target.value; renderModTable(); });
 document.getElementById('modSectionFilter').addEventListener('change', e => { modUi.section = e.target.value; renderModTable(); });
 document.getElementById('modTechToggle').addEventListener('click', e => { modUi.tech = !modUi.tech; e.currentTarget.classList.toggle('active', modUi.tech); renderModTable(); });
@@ -4072,7 +4495,7 @@ async function pollChanges(){
     chgRev = d.rev;
     if(others.length){
       const box = document.getElementById('changeBanner'); box.hidden = false;
-      const last = others.slice(-3).map(c => '<strong>' + escapeHtml(c.user) + '</strong> ha modificato ' + escapeHtml(c.what) + (c.id ? ' (' + escapeHtml(c.id) + (c.fields.length ? ': ' + escapeHtml(c.fields.join(', ')) : '') + ')' : '')).join(' &middot; ');
+      const last = others.slice(-3).map(c => '<span style="display:inline-flex;align-items:center;gap:6px">' + hgAvatar(c.user, c.color || HG_PALETTE[7]) + '<strong>' + escapeHtml(c.user) + '</strong></span> ha modificato ' + escapeHtml(c.what) + (c.id ? ' (' + escapeHtml(c.id) + (c.fields.length ? ': ' + escapeHtml(c.fields.join(', ')) : '') + ')' : '')).join(' &middot; ');
       box.innerHTML = '<div style="padding:10px 16px;font-size:12.5px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">' + last + (others.length > 3 ? ' &middot; +' + (others.length - 3) + ' altre' : '') + '<button class="btn primary small" id="chgRefresh">Aggiorna i dati</button><button class="btn ghost small" id="chgClose">Ignora</button></div>';
       if(!document.title.startsWith('\u25cf ')) document.title = '\u25cf ' + document.title; // visibile anche da un'altra finestra
       document.getElementById('chgRefresh').addEventListener('click', () => location.reload());
@@ -4096,13 +4519,43 @@ function renderProjUpd(job){
     '<button class="btn ghost small" id="puClose">Chiudi</button><span style="color:var(--text-dim)">Se un passo fallisce o è bloccato, i successivi non partono: lo stato mostra dove si è fermato.</span></div></div>';
   document.getElementById('puClose').addEventListener('click', () => { box.hidden = true; });
   document.getElementById('puDry').addEventListener('click', () => startProjUpd('dry'));
-  document.getElementById('puApply').addEventListener('click', () => { if(confirm('Aggiornare Unreal? Scrive solo i dati cambiati nell\'app (Data Asset e DataTable) e li salva (nessun check-in).')) startProjUpd('apply'); });
+  document.getElementById('puApply').addEventListener('click', () => checkDriftThenApply());
 }
 async function pollProjUpd(){
   clearTimeout(puTimer);
   let d; try{ d = await apiGet('/api/project-update'); }catch(err){ return; }
   puWrite = d.writeEnabled; renderProjUpd(d.job);
   if(d.job && d.job.running) puTimer = setTimeout(pollProjUpd, 1000);
+}
+// Prima di scrivere su Unreal: verifica in sottofondo (sola lettura) che Unreal non sia cambiato dall'ultima lettura salvata dall'app.
+function driftList(title, o){
+  if(!o || !(o.changed.length + o.added.length + o.removed.length)) return '';
+  const rows = [].concat(o.changed.slice(0, 40).map(c => escapeHtml(c.asset) + ': ' + c.fields.map(f => escapeHtml(f.f) + ' (app "' + escapeHtml(String(f.app)) + '" → Unreal "' + escapeHtml(String(f.unreal)) + '")').join(', ')), o.added.slice(0, 20).map(a => escapeHtml(a) + ': nuovo in Unreal'), o.removed.slice(0, 20).map(a => escapeHtml(a) + ': non più in Unreal'));
+  return '<details open style="margin-top:6px"><summary><strong>' + escapeHtml(title) + '</strong> (' + (o.counts.changed + o.counts.added + o.counts.removed) + ')</summary><div style="padding:4px 0 0 14px;font-size:12px;color:var(--text-dim)">' + rows.join('<br>') + '</div></details>';
+}
+async function checkDriftThenApply(){
+  const btn = document.getElementById('puApply'), old = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Verifica sincronizzazione con Unreal…';
+  let d;
+  try{ const res = await apiFetch('/api/unreal/drift', {method:'POST'}); d = await res.json(); if(!res.ok && !d.error) d = {error: 'errore ' + res.status}; }
+  catch(err){ d = {error: err.message}; }
+  btn.disabled = false; btn.textContent = old;
+  if(d.ok){ if(confirm('L\'app è sincronizzata con Unreal (nessuna modifica esterna dall\'ultima lettura).\n\nAggiornare Unreal? Scrive solo i dati cambiati nell\'app (Data Asset e DataTable) e li salva (nessun check-in).')) startProjUpd('apply'); return; }
+  const ov = document.createElement('div');
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9500;display:flex;align-items:center;justify-content:center;padding:16px';
+  const body = d.error
+    ? '<p style="color:var(--danger)">Non riesco a verificare la sincronizzazione: ' + escapeHtml(d.error) + '</p>'
+    : (!d.baseline ? '<p>L\'app non ha ancora una lettura salvata di Unreal: non posso sapere se Unreal è stato modificato da altri.</p>' : '<p><strong>' + d.total + '</strong> modifiche fatte in Unreal dopo l\'ultima lettura salvata dall\'app. Aggiornare Unreal ora potrebbe sovrascriverle.</p>' + driftList('Data Asset delle entità (EDA_)', d.entities) + driftList('Data Asset dei moduli (SMDA_)', d.modules));
+  ov.innerHTML = '<div style="background:var(--surface,var(--bg));color:var(--text);border:1px solid var(--border);border-radius:10px;padding:20px;max-width:760px;max-height:85vh;overflow:auto"><h3 style="margin:0 0 6px;color:var(--danger)">⚠ L\'app non era sincronizzata con Unreal</h3>' + body +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn primary small" id="driftReread"' + (d.error ? ' disabled' : '') + ' title="Rilegge Unreal e salva la lettura nell\'app (sola lettura su Unreal): poi puoi ripetere l\'aggiornamento">Rileggi Unreal e salva</button><button class="btn ghost small" id="driftForce">Applica comunque</button><button class="btn ghost small" id="driftCancel">Annulla</button></div></div>';
+  document.body.appendChild(ov);
+  ov.querySelector('#driftCancel').onclick = () => ov.remove();
+  ov.querySelector('#driftForce').onclick = () => { ov.remove(); if(confirm('Applicare comunque? Le modifiche fatte in Unreal da altri potrebbero essere sovrascritte.')) startProjUpd('apply'); };
+  ov.querySelector('#driftReread').onclick = async () => {
+    const b = ov.querySelector('#driftReread'); b.disabled = true; b.textContent = 'Rilettura…';
+    try{ await apiFetch('/api/sync/unreal/entities?apply=1', {method:'POST'}); await apiFetch('/api/sync/unreal/modules?apply=1', {method:'POST'}); await loadEntities(); await loadModulesSheet(); ov.remove(); showToast('Lettura di Unreal salvata: ora l\'app è sincronizzata. Ripremi "Applica su Unreal".'); }
+    catch(err){ b.textContent = 'Rilettura non riuscita'; }
+  };
 }
 async function startProjUpd(mode){
   try{ const res = await apiFetch('/api/project-update', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({mode, confirm: mode === 'apply'})}); const r = await res.json(); if(r.error){ showToast(r.error); return; } }
@@ -4390,9 +4843,12 @@ document.getElementById('questSyncBtn').addEventListener('click', openQuestsSync
 
 async function init(){
   await hgLogin(false);
+  const shown = !!window.__hgLoginShown; // true se è comparsa la schermata di accesso
   hgRenderUserBtn();
   addNewRowButtons();
-  setTimeout(() => runUnrealSync(true), 1500); // dopo l'accesso: lettura da Unreal e finestra con le eventuali discrepanze
+  // solo al login (schermata di accesso) o all'apertura di una nuova sessione del browser: non a ogni ricarica della pagina
+  let firstOfSession = true; try{ firstOfSession = !sessionStorage.getItem('hg_sync_done'); sessionStorage.setItem('hg_sync_done', '1'); }catch(e){}
+  if(shown || firstOfSession) setTimeout(() => runUnrealSync(true), 1500);
   fetch('/api/health').then(r => r.json()).then(h => { const v = document.getElementById('appVersion'); if(v && h.version) v.textContent = 'v' + h.version; }).catch(() => {});
   buildPanels();
   renderAll();

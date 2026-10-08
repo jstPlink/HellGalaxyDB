@@ -10,3 +10,4 @@ scripts/*.ps1
 scripts/*.py
 scripts/*.gs
 .env
+data/media

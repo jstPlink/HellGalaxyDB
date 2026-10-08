@@ -132,7 +132,7 @@ before(async () => {
     const sheet = require('../scripts/sheet_mappings');
     const tdb = new DatabaseSync(path.join(tmp, 'test.db'));
     tdb.exec('DELETE FROM entities');
-    for (const tbl of ['entities_ue', 'modules_sheet', 'modules_sections', 'modules_ue', 'sheet_rows', 'sheet_sections', 'sheet_ue', 'grid_rows', 'grid_tabs']) { try { tdb.exec('DELETE FROM ' + tbl); } catch (e) { /* tabella non ancora creata */ } }
+    for (const tbl of ['entities_ue', 'modules_sheet', 'modules_sections', 'modules_ue', 'sheet_rows', 'sheet_sections', 'sheet_ue', 'grid_rows', 'grid_tabs', 'grid_edits', 'media_assets', 'media_links']) { try { tdb.exec('DELETE FROM ' + tbl); } catch (e) { /* tabella non ancora creata */ } }
     const { headers, rows } = sheet.csvToTable(csvLines());
     const ins = tdb.prepare('INSERT INTO entities (id, current_json, original_json, updated_at) VALUES (?, ?, ?, ?)');
     for (const raw of rows) { const e = sheet.normalizeEntityRow(raw, headers); if (e) { const j = JSON.stringify(e); ins.run(e['(ID)'], j, j, new Date().toISOString()); } }
@@ -832,4 +832,31 @@ test('T35 controlli di qualità: segnalano valori fuori elenco e righe orfane (s
   const r = await api('GET', '/api/quality', null, AUTH);
   assert.equal(r.status, 200); assert.ok(Array.isArray(r.json.checks));
   assert.equal((await api('GET', '/api/history?limit=500', null, AUTH)).json.items.length, before);
+});
+
+test('T36 media: caricamento dall\'agente (token), anteprima della mesh da OBJ, FBX a richiesta, contatore dello spazio', async () => {
+  const P4 = 18942, B4 = `http://127.0.0.1:${P4}`;
+  fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'media.db'));
+  const srv = spawn(process.execPath, [path.join(ROOT, 'server.js')], { env: { ...process.env, HG_DB_PATH: path.join(tmp, 'media.db'), HG_PORT: String(P4), HG_AGENT_TOKEN: 'tok-media' }, stdio: 'ignore' });
+  const up = (kind, name, body, tok = 'tok-media') => fetch(`${B4}/api/media/upload?kind=${kind}&name=${name}`, { method: 'POST', headers: { Authorization: 'Bearer ' + tok }, body });
+  try {
+    for (let i = 0; i < 50; i++) { try { if ((await fetch(B4 + '/api/health')).ok) break; } catch (e) { /* non ancora su */ } await new Promise(r => setTimeout(r, 100)); }
+    assert.equal((await up('texture', 'T_x.png', Buffer.from('png'), 'sbagliato')).status, 401, 'serve il token agente');
+    assert.equal((await up('texture', '..%2Fevil.png', Buffer.from('x'))).status, 400, 'nome non valido');
+    assert.equal((await up('texture', 'T_x.png', Buffer.from([137, 80, 78, 71]))).status, 200);
+    assert.equal((await up('mesh', 'SM_x.fbx', Buffer.alloc(5000, 1))).status, 200);
+    const obj = 'v 0 0 0\nv 100 0 0\nv 0 100 0\nv 0 0 100\nf 1 2 3\nf 1 2 4\nf 1 3 4\nf 2 3 4\n';
+    assert.equal((await up('obj', 'SM_x.obj', Buffer.from(obj))).status, 200);
+    const idx = await (await fetch(B4 + '/api/media')).json();
+    assert.equal(idx.assets.mesh.SM_x.preview, true); assert.equal(idx.assets.mesh.SM_x.size, 5000); assert.ok(idx.assets.texture.T_x);
+    const png = Buffer.from(await (await fetch(B4 + '/media/previews/SM_x.png')).arrayBuffer());
+    assert.equal(png.subarray(1, 4).toString(), 'PNG', 'anteprima PNG valida');
+    assert.equal((await fetch(B4 + '/media/textures/T_x.png')).status, 200);
+    const fbx = await fetch(B4 + '/api/media/mesh/SM_x.fbx');
+    assert.equal(fbx.status, 200); assert.equal((await fbx.arrayBuffer()).byteLength, 5000);
+    assert.equal((await fetch(B4 + '/data/media/meshes/SM_x.fbx')).status, 404, 'i file non sono serviti come statici');
+    const st = await (await fetch(B4 + '/api/storage')).json();
+    assert.ok(st.total > 0 && st.items.find(i => i.id === 'meshes').bytes === 5000 && st.counts.meshes === 1);
+    assert.equal((await fetch(B4 + '/api/media/sync', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })).status, 503, 'senza agente errore chiaro');
+  } finally { srv.kill(); fs.rmSync(path.join(path.dirname(path.join(tmp, 'media.db')), 'media'), { recursive: true, force: true }); }
 });

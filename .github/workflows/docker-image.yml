@@ -33,15 +33,18 @@ on:
       - scripts/sheets_defaults.json
       - scripts/rows_admin.js
       - scripts/quality_checks.js
+      - scripts/media.js
       - scripts/unreal/refs_check.py
       - scripts/unreal/delete_assets.py
       - scripts/unreal_agent.js
       - scripts/server_sync.js
       - scripts/unreal_sync.js
+      - scripts/unreal_drift.js
       - scripts/unreal/tabs_read.py
       - scripts/unreal/entities_read.py
       - scripts/unreal/modules_read.py
       - scripts/unreal/links_read.py
+      - scripts/unreal/media_export.py
       - scripts/unreal/datatables_io.py
       - scripts/unreal/entities_push.py
       - data/*.json
