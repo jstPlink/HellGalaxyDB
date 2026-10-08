@@ -29,6 +29,9 @@ on:
       - scripts/unreal_entities.js
       - scripts/project_update.js
       - scripts/agent_hub.js
+      - scripts/agent_bundle.js
+      - scripts/unreal/refs_check.py
+      - scripts/unreal/delete_assets.py
       - scripts/unreal_agent.js
       - scripts/server_sync.js
       - scripts/unreal_sync.js

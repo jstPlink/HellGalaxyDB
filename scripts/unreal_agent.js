@@ -83,10 +83,12 @@ async function main() {
     } finally { clearTimeout(t); }
   };
   log(`Agente "${agentId}" -> ${server}  (MCP ${bridge.MCP_URL()}; scrittura ${process.env.HG_UE_ALLOW_WRITE === '1' ? 'ABILITATA' : 'disabilitata'})`);
-  let ueOk;
+  let ueOk, appVersion;
   for (;;) {
     try {
-      const { job } = await call('/api/agent/poll', { agentId, name, version: AGENT_VERSION, ueOk });
+      const { job, appVersion: av } = await call('/api/agent/poll', { agentId, name, version: AGENT_VERSION, ueOk });
+      // l'app è stata aggiornata: esco con codice 42, il .bat riscarica l'agente nuovo e lo riavvia
+      if (av) { if (appVersion && av !== appVersion && !job) { log('App aggiornata (' + appVersion + ' -> ' + av + '): riavvio l\'agente'); process.exit(42); } appVersion = appVersion || av; }
       if (!job) continue;
       const v = validateJob(job.code, { pingCode: bridge.PING_CODE });
       let payload;
@@ -106,4 +108,4 @@ async function main() {
 }
 
 if (require.main === module) main();
-module.exports = { validateJob, loadScripts, CALL_RE, AGENT_VERSION };
+module.exports = { validateJob, loadScripts, CALL_RE, AGENT_VERSION, main };

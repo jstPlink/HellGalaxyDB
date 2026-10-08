@@ -4007,13 +4007,22 @@ function showAgentHelp(){
     + (connected ? '<p style="color:var(--good)"><strong>Connesso:</strong> ' + st.on.map(a => escapeHtml(a.name) + (a.ueOk === false ? ' (Editor non raggiungibile: apri il progetto HellGalaxy)' : ' (Editor raggiungibile)')).join('; ') + '</p>'
       : '<p style="color:var(--danger)"><strong>Al momento nessun agente è connesso.</strong></p>'
         + (noToken ? '<p style="color:var(--danger)">Sul <strong>server</strong> manca <code>HG_AGENT_TOKEN</code> (variabile d\'ambiente o .env): senza, nessun agente può collegarsi.</p>' : '')
-        + '<ol style="padding-left:20px;margin:0 0 10px"><li>Apri il progetto <strong>HellGalaxy</strong> nell\'Editor Unreal, su questo PC o su quello dove lavori.</li>'
-        + '<li>Nella cartella dell\'app (HellGalaxyDB) fai doppio clic su <strong>&laquo;Avvia agente Unreal.bat&raquo;</strong> e lascia la finestra aperta.</li>'
-        + '<li>Il file <code>.env</code> accanto al .bat deve contenere:<br><code>HG_SERVER_URL=' + escapeHtml(location.origin) + '</code><br><code>HG_AGENT_TOKEN=</code> (lo stesso valore del server)<br><code>HG_AGENT_NAME=</code> (un nome per il PC, es. il tuo)</li>'
-        + '<li>Dopo qualche secondo qui in alto comparirà <em>&laquo;Agente: nome&raquo;</em>. Se la finestra dell\'agente mostra un errore, leggilo: dice cosa manca.</li></ol>')
-    + '<div style="display:flex;gap:8px;margin-top:12px"><button class="btn primary small" id="agentRecheck">Ricontrolla ora</button><button class="btn ghost small" id="agentClose">Chiudi</button></div></div>';
+        + '<ol style="padding-left:20px;margin:0 0 10px"><li>Sul <strong>PC dove lavori con l\'Editor Unreal</strong> premi <strong>&laquo;Scarica agente (.bat)&raquo;</strong> qui sotto: il file è già configurato per questa app (<code>' + escapeHtml(location.origin) + '</code>).</li>'
+        + '<li>Mettilo sul desktop (o in <code>shell:startup</code> per l\'avvio con Windows) e fai doppio clic: <strong>lascia la finestra aperta</strong>. Serve Node.js (il file ti avvisa se manca).</li>'
+        + '<li>Apri il progetto <strong>HellGalaxy</strong> nell\'Editor Unreal.</li>'
+        + '<li>Dopo qualche secondo qui in alto comparirà <em>&laquo;Agente: nome&raquo;</em>. Il file si aggiorna da solo quando l\'app viene aggiornata.</li></ol>')
+    + '<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn primary small" id="agentDownload">Scarica agente (.bat)</button><button class="btn ghost small" id="agentRecheck">Ricontrolla ora</button><button class="btn ghost small" id="agentClose">Chiudi</button></div></div>';
   document.body.appendChild(o);
   document.getElementById('agentClose').onclick = () => o.remove();
+  document.getElementById('agentDownload').onclick = async () => {
+    try{
+      const res = await apiFetch('/api/agent/bat');
+      if(!res.ok){ const e = await res.json().catch(() => ({})); showToast(e.error || 'Impossibile scaricare l\'agente'); return; }
+      const blob = await res.blob(), a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'Agente Unreal - Hell Galaxy.bat'; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    }catch(err){ showToast('Impossibile scaricare l\'agente: ' + err.message); }
+  };
   document.getElementById('agentRecheck').onclick = async () => { await refreshAgentPill(); showAgentHelp(); };
 }
 document.getElementById('agentPill').addEventListener('click', showAgentHelp);

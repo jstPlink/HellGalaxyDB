@@ -590,7 +590,7 @@ test('T24 agente Unreal: validazione dei lavori (solo script noti + chiamata let
 
 test('T25 modalità agente: senza agente errore chiaro; con l\'agente il lavoro arriva all\'Editor (finto) e torna il risultato', async () => {
   const P2 = 18940, B2 = `http://127.0.0.1:${P2}`;
-  try { await startMockMcp(); } catch (e) { /* già acceso */ }
+  if (!mcp || !mcp.listening) await startMockMcp();
   const env = { ...process.env, HG_DB_PATH: path.join(tmp, 'agent.db'), HG_PORT: String(P2), HG_AGENT_TOKEN: 'tok-agente', HG_AGENT_CONNECT_WAIT_MS: '800', HG_UE_MODE: 'agent' };
   fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'agent.db'));
   const srv = spawn(process.execPath, [path.join(ROOT, 'server.js')], { env, stdio: 'ignore' });
@@ -698,4 +698,29 @@ test('T29 Sincronizza Unreal: Blueprint attesi (CI_/BP_ACS_Loot_/SML_*) e job in
     assert.equal(job.steps[0].status, 'error'); assert.equal(job.steps[1].status, 'skipped');
     assert.match(job.discrepancies.error, /agente/i);
   } finally { srv.kill(); }
+});
+
+
+test('T30 agente scaricabile: .bat già configurato + pacchetto unico che si avvia da solo e collega l\'Editor (finto)', async () => {
+  const P3 = 18941, B3 = `http://127.0.0.1:${P3}`;
+  if (!mcp || !mcp.listening) await startMockMcp();
+  fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'bundle.db'));
+  const srv = spawn(process.execPath, [path.join(ROOT, 'server.js')], { env: { ...process.env, HG_DB_PATH: path.join(tmp, 'bundle.db'), HG_PORT: String(P3), HG_AGENT_TOKEN: 'tok-bundle', HG_UE_MODE: 'agent' }, stdio: 'ignore' });
+  let ag;
+  try {
+    for (let i = 0; i < 50; i++) { try { if ((await fetch(B3 + '/api/health')).ok) break; } catch (e) { /* non ancora su */ } await new Promise(r => setTimeout(r, 100)); }
+    assert.equal((await fetch(B3 + '/api/agent/script')).status, 401, 'il pacchetto richiede il token agente');
+    const bat = await (await fetch(B3 + '/api/agent/bat')).text();
+    assert.ok(bat.includes(`set "HG_SERVER_URL=${B3}"`) && bat.includes('set "HG_AGENT_TOKEN=tok-bundle"'), 'il .bat contiene indirizzo e token');
+    assert.ok(bat.includes('\r\n') && bat.includes('/api/agent/script') && bat.includes('where node'));
+    const js = await (await fetch(B3 + '/api/agent/script', { headers: { Authorization: 'Bearer tok-bundle' } })).text();
+    assert.ok(js.includes('scripts/unreal_agent.js') && js.includes('scripts/unreal/links_read.py'));
+    const dir = path.join(tmp, 'agentdir'); fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, 'agent.js'), js);
+    ag = spawn(process.execPath, [path.join(dir, 'agent.js')], { env: { ...process.env, HG_SERVER_URL: B3, HG_AGENT_TOKEN: 'tok-bundle', HG_AGENT_NAME: 'PC-bundle', HG_UE_MCP_URL: `http://127.0.0.1:${MCP_PORT}/mcp`, HG_UE_ALLOW_WRITE: '' }, stdio: 'ignore', cwd: dir });
+    let res, json;
+    for (let i = 0; i < 40; i++) { res = await fetch(B3 + '/api/unreal/ping'); json = await res.json(); if (res.status === 200) break; await new Promise(r => setTimeout(r, 300)); }
+    assert.equal(res.status, 200, JSON.stringify(json)); assert.equal(json.project, 'HellGalaxy');
+    assert.ok(fs.existsSync(path.join(dir, 'app', 'scripts', 'unreal_agent.js')), 'ha estratto i file accanto a sé');
+  } finally { if (ag) ag.kill(); srv.kill(); }
 });

@@ -160,3 +160,6 @@ vecchio link pubblicato non è più aggiornato.
 - Interfaccia: pulsanti principali ingranditi, schede con contorno, pulsanti provvisori in **giallo**; cliccando "Agente: non connesso" si apre la guida per collegare l'agente.
 - Clic su "N modifiche in sospeso": elenco delle modifiche fatte in locale (originale → attuale).
 - Nell'elenco delle modifiche locali ogni riga ha "Ripristina" (solo quella riga).
+
+## Agente Unreal scaricabile (2026-10-08)
+Sul PC dove lavori con l'Editor Unreal: nell'app clic su **"Agente: non connesso" → "Scarica agente (.bat)"**, metti il file sul desktop e fai doppio clic (serve Node.js). Funziona uguale con l'app in locale e sul server (sul server servono `HG_AGENT_TOKEN` e `HG_API_TOKEN`).

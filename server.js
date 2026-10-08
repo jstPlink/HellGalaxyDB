@@ -15,6 +15,7 @@ const projectUpdate = require('./scripts/project_update');
 const serverSync = require('./scripts/server_sync');
 const unrealSync = require('./scripts/unreal_sync');
 const agentHub = require('./scripts/agent_hub');
+const agentBundle = require('./scripts/agent_bundle');
 
 const eff = require('./scripts/entity_effective');
 const msheet = require('./scripts/modules_sheet');
@@ -665,7 +666,14 @@ const server = http.createServer(async (req, res) => {
       let closeFn = null;
       res.on('close', () => { if (closeFn) closeFn(); });
       const job = await agentHub.poll(agentId, { name: body.name, version: body.version, ueOk: body.ueOk }, f => { closeFn = f; });
-      return sendJson(res, 200, { job });
+      return sendJson(res, 200, { job, appVersion: APP_VERSION });
+    }
+    // Pacchetto dell'agente (un solo file JS): lo scarica il .bat con il token dell'agente.
+    if (urlPath === '/api/agent/script' && req.method === 'GET') {
+      const given = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+      if (!AGENT_TOKEN || given !== AGENT_TOKEN) return sendJson(res, 401, { error: 'token agente mancante o errato (HG_AGENT_TOKEN)' });
+      res.writeHead(200, { 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'no-store' });
+      return res.end(agentBundle.buildScript(ROOT));
     }
     if (API_TOKEN && urlPath.startsWith('/api/')) {
       const given = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
@@ -673,6 +681,15 @@ const server = http.createServer(async (req, res) => {
     }
 
     let m;
+    // File .bat già configurato (indirizzo dell'app + token dell'agente) da scaricare sul PC dell'Editor.
+    if (urlPath === '/api/agent/bat' && req.method === 'GET') {
+      if (!AGENT_TOKEN) return sendJson(res, 503, { error: 'Sul server manca HG_AGENT_TOKEN: impostalo (variabile d\'ambiente o .env) e riavvia.' });
+      const host = String(req.headers['x-forwarded-host'] || req.headers.host || ('localhost:' + PORT)).split(',')[0].trim();
+      const proto = String(req.headers['x-forwarded-proto'] || (req.socket.encrypted ? 'https' : 'http')).split(',')[0].trim();
+      const serverUrl = (process.env.HG_PUBLIC_URL || (proto + '://' + host)).replace(/\/+$/, '');
+      res.writeHead(200, { 'Content-Type': 'application/octet-stream', 'Content-Disposition': 'attachment; filename="Agente Unreal - Hell Galaxy.bat"', 'Cache-Control': 'no-store' });
+      return res.end(agentBundle.buildBat({ serverUrl, token: AGENT_TOKEN }));
+    }
     if (urlPath === '/api/agent/status' && req.method === 'GET') return sendJson(res, 200, { ...agentHub.status(), mode: (process.env.HG_UE_MODE || 'agent'), tokenConfigured: !!AGENT_TOKEN });
     // ---- Utenti (accesso senza password) ----
     if (urlPath === '/api/users' && req.method === 'GET') {
