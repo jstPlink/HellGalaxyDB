@@ -42,4 +42,7 @@ fi
 node scripts/migrate_enemies_to_db.js \
   || echo "ATTENZIONE: migrazione nemici non riuscita (il server si fermera' se la tabella manca)." >&2
 
+node scripts/migrate_entities_to_db.js \
+  || echo "ATTENZIONE: seed delle entita' non riuscito (la tabella restera' vuota fino al pull dal foglio)." >&2
+
 exec node server.js

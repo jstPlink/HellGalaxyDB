@@ -14,6 +14,18 @@ on:
       - hellgalaxy.html
       - scripts/migrate_to_db.js
       - scripts/migrate_enemies_to_db.js
+      - scripts/migrate_entities_to_db.js
+      - scripts/sheet_mappings.js
+      - scripts/unreal_bridge.js
+      - scripts/unreal_read.js
+      - scripts/entity_effective.js
+      - scripts/modules_sheet.js
+      - scripts/tabs_sheet.js
+      - scripts/tabs_server.js
+      - scripts/grid_tabs.js
+      - scripts/unreal/tabs_read.py
+      - scripts/unreal/entities_read.py
+      - scripts/unreal/modules_read.py
       - data/*.json
       - data/*.csv
       - .github/workflows/docker-image.yml

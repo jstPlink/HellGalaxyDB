@@ -78,6 +78,12 @@ function doPost(e) {
     if (!savedSecret) return jsonError('Nessuna chiave segreta impostata su questo foglio: esegui "impostaChiaveSegreta" da Apps Script.');
     if (payload.secret !== savedSecret) return jsonError('Chiave segreta errata.', 401);
 
+    if (payload.action === 'read') {
+      return ContentService
+        .createTextOutput(JSON.stringify(readTab(String(payload.tab || '').trim())))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     const tabName = String(payload.tab || '').trim();
     const idColumn = String(payload.idColumn || 'ID').trim();
     const rows = Array.isArray(payload.rows) ? payload.rows : [];
@@ -91,6 +97,32 @@ function doPost(e) {
   } catch (err) {
     return jsonError('Errore: ' + err.message);
   }
+}
+
+/**
+ * Lettura di una scheda (solo lettura, non modifica il foglio).
+ * Payload: { "secret": "...", "action": "read", "tab": "ENTITIES" }
+ * Risposta: { ok, tab, headers: [...], rows: [ {intestazione: valore}, ... ] }
+ * Le intestazioni sono quelle esatte della riga 1 (nessun trim né rinomina).
+ * Le righe senza valore in tutte le colonne vengono saltate; il tool scarta
+ * quelle senza ID. Un solo getValues() per tutta la scheda.
+ */
+function readTab(tabName) {
+  if (!tabName) return { ok: false, error: 'Campo "tab" mancante.', code: 400 };
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(tabName);
+  if (!sheet) return { ok: false, error: 'Scheda "' + tabName + '" non trovata.', code: 404 };
+  const lastRow = sheet.getLastRow(), lastCol = sheet.getLastColumn();
+  if (lastRow < 1 || lastCol < 1) return { ok: true, tab: tabName, headers: [], rows: [] };
+  const values = sheet.getRange(1, 1, lastRow, lastCol).getValues();
+  const headers = values[0].map(h => String(h));
+  const rows = [];
+  for (let r = 1; r < values.length; r++) {
+    if (values[r].every(v => v === '')) continue;
+    const obj = {};
+    headers.forEach((h, c) => { if (h !== '') obj[h] = values[r][c]; });
+    rows.push(obj);
+  }
+  return { ok: true, tab: tabName, headers: headers.filter(h => h !== ''), rows: rows };
 }
 
 function jsonError(message, code) {

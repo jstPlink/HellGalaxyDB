@@ -469,7 +469,43 @@
     .conn-row{ grid-template-columns:1fr; gap:4px; }
     .conn-row .actions{ justify-self:start; }
   }
+
+  .chart-card[hidden]{ display:none !important; }
+
+  /* ---------- tema "Fogli Google" (chiaro, griglia, Arial) ---------- */
+  html[data-theme="sheets"]{
+    color-scheme: light;
+    --bg:#f9fbfd; --surface:#ffffff; --surface-2:#f8f9fa; --surface-3:#e8eaed;
+    --border:#c7c7c7; --border-soft:#e2e3e3;
+    --text:#202124; --text-dim:#5f6368; --text-faint:#80868b;
+    --accent:#1a73e8; --accent-dim:#a8c7fa; --accent-ink:#ffffff;
+    --danger:#d93025; --good:#188038;
+    --r-salvage:#80868b; --r-common:#5f6368; --r-uncommon:#188038; --r-rare:#1a73e8; --r-epic:#8430ce; --r-legendary:#e37400; --r-mythic:#d01884;
+  }
+  html[data-theme="sheets"] body{ font-family: Arial, 'Google Sans', Roboto, sans-serif; font-size:13px; }
+  html[data-theme="sheets"] ::-webkit-scrollbar-thumb{ background:#c7c7c7; border-color:#f8f9fa; }
+  html[data-theme="sheets"] ::-webkit-scrollbar-track{ background:#f8f9fa; }
+  html[data-theme="sheets"] .table-shell{ border-radius:0; border:1px solid #c7c7c7; background:#fff; }
+  html[data-theme="sheets"] table{ border-collapse:collapse; }
+  html[data-theme="sheets"] thead th{ text-transform:none; letter-spacing:0; font-size:12px; font-weight:500; color:#5f6368; background:#f8f9fa; border:1px solid #c7c7c7; border-top:none; padding:5px 8px; }
+  html[data-theme="sheets"] tbody td{ border:1px solid #e2e3e3; padding:3px 8px; font-size:13px; color:#202124; }
+  html[data-theme="sheets"] tbody tr:hover{ background:#f1f3f4; }
+  html[data-theme="sheets"] tbody tr:last-child td{ border-bottom:1px solid #e2e3e3; }
+  html[data-theme="sheets"] .editable-cell:hover{ outline:2px solid #1a73e8; outline-offset:-2px; background:#fff; }
+  html[data-theme="sheets"] td.editing{ outline:2px solid #1a73e8; outline-offset:-2px; }
+  html[data-theme="sheets"] .section-tab{ background:transparent; border-color:transparent; border-radius:4px 4px 0 0; color:#5f6368; padding:8px 16px; }
+  html[data-theme="sheets"] .section-tab:hover{ background:#f1f3f4; color:#202124; }
+  html[data-theme="sheets"] .section-tab.active{ background:#e6f4ea; color:#137333; border-color:transparent; border-bottom:3px solid #188038; }
+  html[data-theme="sheets"] .tab{ border-radius:4px 4px 0 0; }
+  html[data-theme="sheets"] .tab.active{ color:#137333; background:#fff; border-color:#e2e3e3; border-bottom:3px solid #188038; }
+  html[data-theme="sheets"] .card, html[data-theme="sheets"] .chart-card, html[data-theme="sheets"] .stat{ box-shadow:none; border-radius:8px; }
+  html[data-theme="sheets"] .btn, html[data-theme="sheets"] .chip, html[data-theme="sheets"] .selbox, html[data-theme="sheets"] .search{ border-radius:18px; }
+  html[data-theme="sheets"] .stat.accent .n{ color:#1a73e8; }
+  .rownum{ color: var(--text-faint); font-size:11px; text-align:right; background: var(--surface-2); min-width:44px; }
+  .theme-opt{ appearance:none; border:1px solid var(--border); background: var(--surface-2); color: var(--text); padding:12px 16px; border-radius:10px; font-size:13px; cursor:pointer; text-align:left; min-width:210px; }
+  .theme-opt.active{ border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 </style>
+<script>try{ const t = localStorage.getItem('hellgalaxy_theme'); if(t) document.documentElement.dataset.theme = t; }catch(e){}</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 
 <div class="wrap">
@@ -503,6 +539,7 @@
   </header>
 
   <nav class="sectionbar" id="sectionbar"></nav>
+  <nav class="tabbar" id="subbar"></nav>
 
   <div id="entitiesSection">
     <nav class="tabbar" id="tabbar"></nav>
@@ -649,6 +686,58 @@
         <table>
           <thead><tr id="enemyThead"></tr></thead>
           <tbody id="enemyTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-entitysheet" hidden>
+    <div class="stats" id="entStats"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="entSearch" placeholder="Cerca per ID, nome o chiave&hellip;">
+      </div>
+      <select class="selbox" id="entTypeFilter"></select>
+      <select class="selbox" id="entRarityFilter"></select>
+      <button class="chip" id="entUnrealOnly" title="Mostra solo le colonne A:G, quelle lette oggi da Unreal">Solo colonne Unreal</button>
+      <button class="btn primary small" id="entPullBtn">Scarica dal foglio (anteprima)</button>
+      <button class="btn ghost small" id="entCsvBtn" title="Esporta la scheda ENTITIES da Google Sheets (File → Scarica → CSV) e caricala qui">Importa CSV (anteprima)</button>
+      <input type="file" id="entCsvFile" accept=".csv,text/csv" hidden>
+      <button class="btn ghost small" id="entUeReadBtn" title="Legge dagli EDA_ di Unreal i dati che il foglio non ha o non compila bene (sola lettura su Unreal)">Leggi da Unreal (anteprima)</button>
+      <button class="btn ghost small" id="entUeBtn" title="Controlla che l'Editor Unreal sia aperto e raggiungibile (sola lettura, non modifica nessun asset)">Test collegamento Unreal</button>
+    </div>
+    <div class="chart-card" id="entPullReport" hidden></div>
+    <div class="table-shell">
+      <div class="table-scroll">
+        <table>
+          <thead><tr id="entThead"></tr></thead>
+          <tbody id="entTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-modsheet" hidden>
+    <div class="stats" id="modStats"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="modSearch" placeholder="Cerca per ID, mesh&hellip;">
+      </div>
+      <select class="selbox" id="modSectionFilter"></select>
+      <button class="chip" id="modTechToggle" title="Mostra anche le colonne senza nome o con intestazione numerica (dati tecnici presenti nel foglio)">Colonne tecniche</button>
+      <button class="btn primary small" id="modPullBtn">Scarica dal foglio (anteprima)</button>
+      <button class="btn ghost small" id="modCsvBtn" title="Esporta il tab Modules (File → Scarica → CSV, con il tab Modules attivo) e caricalo qui">Importa CSV (anteprima)</button>
+      <input type="file" id="modCsvFile" accept=".csv,text/csv" hidden>
+      <button class="btn ghost small" id="modUeReadBtn" title="Legge dagli SMDA_ di Unreal mesh, shield mesh e quality (sola lettura su Unreal)">Leggi da Unreal (anteprima)</button>
+    </div>
+    <div class="chart-card" id="modReport" hidden></div>
+    <div class="table-shell">
+      <div class="table-scroll">
+        <table>
+          <thead><tr id="modThead"></tr></thead>
+          <tbody id="modTbody"></tbody>
         </table>
       </div>
     </div>
@@ -863,12 +952,25 @@ let uiState = {};
 CATS.forEach(c => { uiState[c.id] = { search:'', classFilter:'Tutti', rarityFilter:'Tutte', sortKey:'Name', sortDir:1, chartMetric: c.defaultChartMetric, chartMax: null, labelAngle: null }; });
 const SECTIONS = [
   {id:'entities', label:'Entities'},
+  {id:'entitysheet', label:'ENTITIES (foglio)'},
+  {id:'modsheet', label:'MODULES (foglio)'},
+  {id:'cargosheet', label:'CARGO/LOOT (foglio)'},
+  {id:'itemssheet', label:'ITEMS (foglio)'},
   {id:'quest', label:'Quest'},
   {id:'stations', label:'Stations'},
   {id:'enemies', label:'Enemies'},
   {id:'settings', label:'Impostazioni'},
 ];
-let activeSection = 'entities';
+let activeSection = 'entitysheet';
+const GROUPS = [
+  {id:'g_entities', label:'ENTITIES (foglio)', pages:[{id:'entitysheet',label:'Entities'},{id:'modsheet',label:'Modules'},{id:'cargosheet',label:'Cargo/Loot'},{id:'itemssheet',label:'Items'}]},
+  {id:'g_loc', label:'LOCALIZATION MASTER (foglio)', pages:[{id:'loc_identities',label:'Identities'},{id:'loc_entities',label:'Entities'},{id:'loc_quest',label:'Quest'},{id:'loc_eventsaudio',label:'EventsAudio'}]},
+  {id:'g_events', label:'EVENTS (foglio)', pages:[{id:'evt_mainevents',label:'MainEvents'},{id:'evt_eventtexts',label:'EventTexts'}]},
+  {id:'g_db', label:'DATABASE', pages:[{id:'entities',label:'Moduli'},{id:'quest',label:'Quest'},{id:'stations',label:'Stations'},{id:'enemies',label:'Enemies'}]},
+];
+const PANEL_IDS = ['quest','stations','enemies','entitysheet','modsheet','cargosheet','itemssheet','loc_identities','loc_entities','loc_quest','loc_eventsaudio','evt_mainevents','evt_eventtexts','settings'];
+const lastPage = {};
+function groupOf(pageId){ return GROUPS.find(g => g.pages.some(p => p.id === pageId)); }
 let activeTab = 'body';
 let drawerCtx = null; // {catId, id}
 
@@ -877,13 +979,31 @@ function persistConnections(){ try{ localStorage.setItem('hellgalaxy_sheet_conne
 function persistOauth(){ try{ localStorage.setItem('hellgalaxy_oauth_client_id', oauthClientId); }catch(e){} }
 
 /* ============================== API CLIENT (server.js + SQLite) ============================== */
+// Se il server ha HG_API_TOKEN risponde 401: il token viene chiesto una volta e
+// tenuto in localStorage (solo in questo browser).
+function apiToken(){ try{ return localStorage.getItem('hellgalaxy_api_token') || ''; }catch(e){ return ''; } }
+async function apiFetch(url, opts){
+  opts = opts || {};
+  const doFetch = () => {
+    const headers = Object.assign({}, opts.headers);
+    const t = apiToken();
+    if(t) headers['Authorization'] = 'Bearer ' + t;
+    return fetch(url, Object.assign({}, opts, {headers}));
+  };
+  let res = await doFetch();
+  if(res.status === 401 && url.startsWith('/api/')){
+    const t = prompt('Il server richiede il token API (HG_API_TOKEN):');
+    if(t){ try{ localStorage.setItem('hellgalaxy_api_token', t.trim()); }catch(e){} res = await doFetch(); }
+  }
+  return res;
+}
 async function apiGet(url){
-  const res = await fetch(url);
+  const res = await apiFetch(url);
   if(!res.ok) throw new Error('Richiesta fallita: ' + url);
   return res.json();
 }
 async function apiSend(url, method, body){
-  const res = await fetch(url, {method, headers:{'Content-Type':'application/json'}, body: body !== undefined ? JSON.stringify(body) : undefined});
+  const res = await apiFetch(url, {method, headers:{'Content-Type':'application/json'}, body: body !== undefined ? JSON.stringify(body) : undefined});
   if(!res.ok) throw new Error('Richiesta fallita: ' + url);
   return res.json();
 }
@@ -995,7 +1115,7 @@ function isDirty(catId, id){
   return Object.keys(orig).some(k => String(cur[k] ?? '') !== String(orig[k] ?? ''));
 }
 function dirtyCountFor(catId){ return CAT_BY_ID[catId].items.filter(i => isDirty(catId, i.ID)).length; }
-function totalDirtyCount(){ return CATS.reduce((sum,c) => sum + dirtyCountFor(c.id), 0) + dirtyEnemyCount(); }
+function totalDirtyCount(){ return CATS.reduce((sum,c) => sum + dirtyCountFor(c.id), 0) + dirtyEnemyCount() + dirtyEntityCount() + dirtyModSheetCount() + Object.values(TAB_VIEWS).reduce((a, v) => a + v.dirtyCount(), 0); }
 
 function fmtVal(col, v){
   if(v === undefined || v === null || v === '') return '—';
@@ -1020,14 +1140,21 @@ function sortVal(col, v){
 /* ============================== SHELL BUILD ============================== */
 function buildSectionbar(){
   const nav = document.getElementById('sectionbar');
-  const mainSections = SECTIONS.filter(s => s.id !== 'settings');
-  const settingsSection = SECTIONS.find(s => s.id === 'settings');
-  const btnHtml = (s, anchored) => `<button class="section-tab ${anchored?'section-settings':''} ${activeSection===s.id?'active':''}" data-section="${s.id}">${escapeHtml(s.label)}</button>`;
-  nav.innerHTML = `<div class="tabgroup">${mainSections.map(s => btnHtml(s, false)).join('')}</div>${settingsSection ? btnHtml(settingsSection, true) : ''}`;
+  const cur = groupOf(activeSection);
+  if(cur) lastPage[cur.id] = activeSection;
+  const btn = (id, label, active, anchored) => '<button class="section-tab ' + (anchored ? 'section-settings ' : '') + (active ? 'active' : '') + '" data-group="' + id + '">' + escapeHtml(label) + '</button>';
+  nav.innerHTML = '<div class="tabgroup">' + GROUPS.map(g => btn(g.id, g.label, cur === g, false)).join('') + '</div>' + btn('settings', 'Impostazioni', activeSection === 'settings', true);
   nav.querySelectorAll('.section-tab').forEach(el => el.addEventListener('click', () => {
-    activeSection = el.dataset.section;
+    const gid = el.dataset.group;
+    activeSection = gid === 'settings' ? 'settings' : (lastPage[gid] || GROUPS.find(g => g.id === gid).pages[0].id);
     renderAll();
   }));
+  const sub = document.getElementById('subbar');
+  if(cur){
+    sub.style.display = '';
+    sub.innerHTML = '<div class="tabgroup">' + cur.pages.map(p => '<button class="tab ' + (activeSection === p.id ? 'active' : '') + '" data-page="' + p.id + '">' + escapeHtml(p.label) + '</button>').join('') + '</div>';
+    sub.querySelectorAll('.tab').forEach(el => el.addEventListener('click', () => { activeSection = el.dataset.page; renderAll(); }));
+  } else { sub.style.display = 'none'; sub.innerHTML = ''; }
 }
 
 function buildTabbar(){
@@ -1630,6 +1757,9 @@ async function resetAllGlobal(){
   try{
     await apiResetAllModules();
     if(dirtyEnemyCount() > 0) await apiResetAllEnemies();
+    if(dirtyEntityCount() > 0) await apiResetAllEntities();
+    if(dirtyModSheetCount() > 0) await apiSend('/api/modules-sheet/reset-all', 'POST').then(loadModulesSheet);
+    for(const v of Object.values(TAB_VIEWS)){ if(v.dirtyCount() > 0){ await apiSend('/api/tabs/' + v.tab + '/reset-all', 'POST'); await v.load(); } }
     showToast("Tutte le modifiche sono state annullate");
     renderAll();
   }catch(err){ showToast('Impossibile ripristinare tutte le modifiche'); }
@@ -1933,11 +2063,25 @@ async function exportImagesZip(){
 }
 
 /* ============================== SETTINGS ============================== */
+function setTheme(t){
+  if(t === 'sheets') document.documentElement.dataset.theme = 'sheets'; else delete document.documentElement.dataset.theme;
+  try{ if(t === 'sheets') localStorage.setItem('hellgalaxy_theme', 'sheets'); else localStorage.removeItem('hellgalaxy_theme'); }catch(e){}
+  renderAll();
+}
 function renderSettings(){
   const panel = document.getElementById('panel-settings');
   const catOptions = [{id:'all', label:'Tutte le categorie'}, ...CATS.map(c => ({id:c.id, label:c.label}))];
   panel.innerHTML = `
     <div class="settings-grid">
+      <div class="card">
+        <h3>Aspetto</h3>
+        <p class="sub">Scegli il tema dell'interfaccia. Il tema <strong>Fogli Google</strong> è chiaro, con griglia e caratteri simili a Google Fogli, per rendere più morbido il passaggio dai fogli all'app. La scelta viene ricordata su questo browser.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <button class="theme-opt ${document.documentElement.dataset.theme !== 'sheets' ? 'active' : ''}" onclick="setTheme('dark')"><strong>Scuro</strong><br><span style="color:var(--text-dim);font-size:12px">Tema originale dell'app</span></button>
+          <button class="theme-opt ${document.documentElement.dataset.theme === 'sheets' ? 'active' : ''}" onclick="setTheme('sheets')"><strong>Fogli Google</strong><br><span style="color:var(--text-dim);font-size:12px">Chiaro, griglia, Arial</span></button>
+        </div>
+      </div>
+
       <div class="card">
         <h3>Autenticazione Google (anteprima)</h3>
         <p class="sub">Facoltativo per ora: quando collegherai davvero i fogli, questo Client ID OAuth servirà al tool per chiedere il tuo consenso e scrivere sui fogli con le API di Google Sheets. Non viene inviato da nessuna parte, resta solo in questo browser.</p>
@@ -2486,6 +2630,579 @@ function renderEnemies(){
   renderEnemyScatterChart();
   renderDirtyPill();
 }
+
+/* ============================== ENTITIES (foglio ENTITIES) ============================== */
+const ENT_COLS = ['(ID)','Label','BriefDescription','EntityType','BasePrice','BaseRarity','Icon','LabelKey','DescriptionKey','ProducerIcon','ModuleType','Quality'];
+const ENT_UNREAL_COLS = ENT_COLS.slice(0, 7);
+const ENT_TYPES = ['Module','Consumable','Item','Collectable'];
+let ENTITIES = [];
+let ENTITY_ORIGINALS = {};
+let ENT_EFF = {};          // valore effettivo (foglio / Unreal / modifica app) per Label, BriefDescription, Icon, ProducerIcon
+let ENT_UE_READ_AT = null; // ultima lettura da Unreal salvata nell'app
+let entUeReport = null;
+let entUi = { search:'', type:'Tutti', rarity:'Tutte', unrealOnly:false };
+let entPullReport = null;
+let entCsvText = ''; // CSV caricato a mano; se vuoto il pull legge il foglio dal server
+
+async function loadEntities(){
+  const data = await apiGet('/api/entities');
+  ENTITIES = data.items || [];
+  ENTITY_ORIGINALS = data.originals || {};
+  ENT_EFF = data.effective || {};
+  ENT_UE_READ_AT = data.ueReadAt || null;
+}
+async function apiSaveEntity(id, fields){
+  const {current} = await apiSend('/api/entities/' + encodeURIComponent(id), 'PUT', {fields});
+  const idx = ENTITIES.findIndex(e => e['(ID)'] === id);
+  if(idx >= 0) ENTITIES[idx] = current;
+  await loadEntities();
+}
+async function apiRevertEntity(id){
+  const {current} = await apiSend('/api/entities/' + encodeURIComponent(id) + '/revert', 'POST');
+  const idx = ENTITIES.findIndex(e => e['(ID)'] === id);
+  if(idx >= 0) ENTITIES[idx] = current;
+  await loadEntities();
+}
+async function apiResetAllEntities(){
+  const data = await apiSend('/api/entities/reset-all', 'POST');
+  ENTITIES = data.items || [];
+  ENTITY_ORIGINALS = data.originals || {};
+  ENT_EFF = data.effective || {};
+}
+function isDirtyEntity(id){
+  const cur = ENTITIES.find(e => e['(ID)'] === id), orig = ENTITY_ORIGINALS[id];
+  if(!cur || !orig) return false;
+  return ENT_COLS.some(c => String(cur[c] ?? '') !== String(orig[c] ?? ''));
+}
+function dirtyEntityCount(){ return ENTITIES.filter(e => isDirtyEntity(e['(ID)'])).length; }
+function entCols(){ return entUi.unrealOnly ? ENT_UNREAL_COLS : ENT_COLS; }
+
+function entFilteredList(){
+  let rows = ENTITIES.slice();
+  if(entUi.type !== 'Tutti') rows = rows.filter(e => e.EntityType === entUi.type);
+  if(entUi.rarity !== 'Tutte') rows = rows.filter(e => e.BaseRarity === entUi.rarity);
+  const q = entUi.search.trim().toLowerCase();
+  if(q) rows = rows.filter(e => [e['(ID)'], e.Label, e.LabelKey, e.DescriptionKey, e.Icon].some(v => String(v||'').toLowerCase().includes(q)));
+  return rows;
+}
+
+function renderEntityStats(){
+  const items = [
+    {l:'Entità totali', n: ENTITIES.length, accent:true},
+    ...ENT_TYPES.map(t => ({l:t, n: ENTITIES.filter(e => e.EntityType === t).length})),
+    {l:'Senza icona', n: ENTITIES.filter(e => !e.Icon).length},
+    {l:'Modificate nel tool', n: dirtyEntityCount()},
+    {l:'Campi da Unreal', n: Object.values(ENT_EFF).reduce((a, o) => a + Object.values(o).filter(x => x.src === 'unreal').length, 0)},
+  ];
+  document.getElementById('entStats').innerHTML = items.map(it => `
+    <div class="stat${it.accent?' accent':''}"><div class="n mono">${it.n}</div><div class="l">${escapeHtml(it.l)}</div></div>`).join('');
+}
+
+function renderEntityFilters(){
+  const typeSel = document.getElementById('entTypeFilter');
+  typeSel.innerHTML = ['Tutti', ...ENT_TYPES].map(t => `<option value="${t}" ${entUi.type===t?'selected':''}>${t==='Tutti'?'Tutti i tipi':t}</option>`).join('');
+  const raritySel = document.getElementById('entRarityFilter');
+  raritySel.innerHTML = ['Tutte', ...RARITY_ORDER].map(r => `<option value="${r}" ${entUi.rarity===r?'selected':''}>${r==='Tutte'?'Tutte le rarità':r}</option>`).join('');
+}
+
+function renderEntityTable(){
+  const cols = entCols();
+  document.getElementById('entThead').innerHTML = '<th></th>' + cols.map(c => `<th>${escapeHtml(c)}</th>`).join('');
+  const rows = entFilteredList();
+  const tbody = document.getElementById('entTbody');
+  if(!rows.length){
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="${cols.length+1}">${ENTITIES.length ? 'Nessuna entità corrisponde ai filtri.' : 'Nessuna entità nel database: esegui node scripts/migrate_entities_to_db.js oppure scarica dal foglio.'}</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(e => {
+    const id = e['(ID)'], dirty = isDirtyEntity(id);
+    const cells = cols.map(c => {
+      const ef = ENT_EFF[id] && ENT_EFF[id][c];
+      const v = ef ? ef.v : (e[c] ?? '');
+      const ueBadge = ef && ef.src === 'unreal' ? ' <span class="badge-type" style="font-size:9px;padding:1px 5px;color:var(--accent)" title="Valore letto da Unreal (il foglio è vuoto o non utilizzabile)">UE</span>' : '';
+      if(c === '(ID)') return `<td class="mono">${escapeHtml(v)}${dirty ? `<button type="button" class="btn ghost small revert-ent-btn" data-id="${escapeHtml(id)}" style="padding:2px 6px;font-size:10px;margin-left:6px;" title="Ripristina">↺</button>` : ''}</td>`;
+      const isNum = c === 'BasePrice' || c === 'Quality';
+      const color = c === 'BaseRarity' ? (RARITY_COLOR[v] || '') : '';
+      const shown = c === 'BriefDescription' ? escapeHtml(truncate(v, 70)) : escapeHtml(v);
+      return `<td class="editable-cell${isNum?' num-cell':''}" data-key="${c}" title="${c === 'BriefDescription' ? escapeHtml(v) : 'Clicca per modificare'}"${color?` style="color:${color}"`:''}>${shown}${ueBadge}</td>`;
+    }).join('');
+    return `<tr data-id="${escapeHtml(id)}"><td><span class="dot-edit ${dirty?'':'hidden-dot'}" title="Modificato"></span></td>${cells}</tr>`;
+  }).join('');
+  tbody.querySelectorAll('td.editable-cell').forEach(td => td.addEventListener('click', () => startEntityCellEdit(td, td.closest('tr').dataset.id, td.dataset.key)));
+  tbody.querySelectorAll('.revert-ent-btn').forEach(el => el.addEventListener('click', async e => {
+    e.stopPropagation();
+    try{ await apiRevertEntity(el.dataset.id); renderEntities(); showToast('Entità ripristinata'); }
+    catch(err){ showToast("Impossibile ripristinare l'entità"); }
+  }));
+}
+
+function startEntityCellEdit(td, id, key){
+  if(td.classList.contains('editing')) return;
+  const ent = ENTITIES.find(e => e['(ID)'] === id);
+  if(!ent) return;
+  const efc = ENT_EFF[id] && ENT_EFF[id][key];
+  const currentVal = efc ? efc.v : (ent[key] ?? '');
+  const originalHtml = td.innerHTML;
+  td.style.width = td.getBoundingClientRect().width + 'px';
+  td.classList.add('editing');
+  if(key === 'EntityType' || key === 'BaseRarity'){
+    const opts = key === 'EntityType' ? ENT_TYPES : RARITY_ORDER;
+    const all = opts.includes(currentVal) || currentVal === '' ? opts : [currentVal, ...opts];
+    td.innerHTML = `<select class="cell-input">${all.map(o => `<option value="${escapeHtml(o)}" ${o===currentVal?'selected':''}>${escapeHtml(o)}</option>`).join('')}</select>`;
+  } else {
+    td.innerHTML = `<input class="cell-input" type="text" value="${escapeHtml(currentVal)}">`;
+  }
+  const inputEl = td.querySelector('.cell-input');
+  inputEl.focus();
+  if(inputEl.select) inputEl.select();
+  inputEl.addEventListener('click', e => e.stopPropagation());
+  inputEl.addEventListener('mousedown', e => e.stopPropagation());
+  let done = false;
+  const finish = html => { td.classList.remove('editing'); td.style.width = ''; td.innerHTML = html; };
+  const commit = async () => {
+    if(done) return; done = true;
+    const val = inputEl.value;
+    if(val === currentVal){ finish(originalHtml); return; }
+    try{ await apiSaveEntity(id, {[key]: val}); renderEntities(); }
+    catch(err){ showToast('Impossibile salvare la modifica'); finish(originalHtml); }
+  };
+  inputEl.addEventListener('blur', commit);
+  inputEl.addEventListener('keydown', e => {
+    if(e.key === 'Enter'){ e.preventDefault(); inputEl.blur(); }
+    else if(e.key === 'Escape'){ e.preventDefault(); if(done) return; done = true; finish(originalHtml); }
+  });
+}
+
+async function entPull(apply, skipConflicts){
+  const box = document.getElementById('entPullReport');
+  box.hidden = false;
+  box.innerHTML = '<div class="chart-head"><div class="chart-title">Lettura del foglio&hellip;</div></div>';
+  const url = '/api/sync/pull/entities' + (apply ? '?apply=1' + (skipConflicts ? '&skipConflicts=1' : '') : '');
+  let res, data;
+  try{
+    res = await apiFetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(entCsvText ? {csv: entCsvText} : {})});
+    data = await res.json();
+  }catch(err){ data = {error: err.message}; res = {ok:false, status:0}; }
+  if(data.error){
+    box.innerHTML = `<div class="chart-head"><div class="chart-title">Impossibile leggere il foglio</div></div><p style="padding:0 16px 14px;color:var(--danger)">${escapeHtml(data.error)}</p>`;
+    return;
+  }
+  entPullReport = data;
+  if(data.applied){
+    await loadEntities();
+    renderEntities();
+    showToast('Entità aggiornate dal foglio');
+  }
+  renderEntityPullReport();
+}
+
+function renderEntityPullReport(){
+  const r = entPullReport, box = document.getElementById('entPullReport');
+  const list = (arr, n) => arr.length ? arr.slice(0, n).map(escapeHtml).join(', ') + (arr.length > n ? ` … (+${arr.length - n})` : '') : '—';
+  const changedTxt = r.changed.length ? r.changed.slice(0, 15).map(c => `${escapeHtml(c.id)} (${c.fields.map(escapeHtml).join(', ')})`).join('<br>') + (r.changed.length > 15 ? `<br>… (+${r.changed.length - 15})` : '') : '—';
+  const conflictsTxt = r.conflicts.slice(0, 15).map(c => `${escapeHtml(c.id)}.${escapeHtml(c.field)}: foglio "${escapeHtml(JSON.stringify(c.sheet))}" / tool "${escapeHtml(JSON.stringify(c.local))}"`).join('<br>');
+  const nothing = !r.added.length && !r.changed.length;
+  box.innerHTML = `
+    <div class="chart-head"><div class="chart-title">${r.applied ? 'Applicato' : 'Anteprima'} dal foglio<span class="sub">&nbsp;&middot; nessuna riga viene mai cancellata</span></div></div>
+    <div style="padding:0 16px 14px; font-size:12.5px; line-height:1.6">
+      <div><strong>Nuove</strong> (${r.added.length}): ${list(r.added, 20)}</div>
+      <div><strong>Cambiate</strong> (${r.changed.length}): ${changedTxt}</div>
+      <div><strong>Solo nel tool, assenti dal foglio</strong> (${r.missingInSheet.length}): ${list(r.missingInSheet, 20)}</div>
+      <div><strong>Invariate</strong>: ${r.unchanged}</div>
+      ${r.conflicts.length ? `<div style="color:var(--danger)"><strong>Conflitti</strong> (${r.conflicts.length}, modificati sia nel tool sia nel foglio):<br>${conflictsTxt}</div>` : ''}
+      <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+        ${!r.applied && !nothing && !r.conflicts.length ? '<button class="btn primary small" id="entApplyBtn">Applica</button>' : ''}
+        ${!r.applied && r.conflicts.length ? '<button class="btn ghost small" id="entApplySkipBtn">Applica tenendo i valori del tool nei conflitti</button>' : ''}
+        ${!r.applied && nothing && !r.conflicts.length ? '<span style="color:var(--text-dim)">Nulla da applicare.</span>' : ''}
+        <button class="btn ghost small" id="entCloseReportBtn">Chiudi</button>
+      </div>
+    </div>`;
+  const a = document.getElementById('entApplyBtn'); if(a) a.addEventListener('click', () => entPull(true, false));
+  const b = document.getElementById('entApplySkipBtn'); if(b) b.addEventListener('click', () => entPull(true, true));
+  document.getElementById('entCloseReportBtn').addEventListener('click', () => { box.hidden = true; });
+}
+
+function renderEntities(){
+  renderEntityStats();
+  renderEntityFilters();
+  renderEntityTable();
+  renderDirtyPill();
+}
+
+/* ============================== MODULES (tab Modules del foglio) ============================== */
+let MODS = [];
+let MOD_ORIG = {};
+let MOD_SECTIONS = [];
+let MOD_EFF = {};
+let MOD_UE_AT = null;
+let modUi = { search:'', section:'Tutte', tech:false };
+let modPullReport = null, modUeReport = null, modCsvText = '';
+const MOD_ALL_COLS = ['(ID)','__section','ModuleType','Rarity','Price','Quality','StaticMesh','ShieldStaticMesh','Icon'];
+const MOD_VIRTUAL = ['ShieldStaticMesh','Icon']; // letti da Unreal / dall'entità: non modificabili qui
+
+async function loadModulesSheet(){
+  const d = await apiGet('/api/modules-sheet');
+  MODS = d.items || []; MOD_ORIG = d.originals || {}; MOD_SECTIONS = d.sections || []; MOD_EFF = d.effective || {}; MOD_UE_AT = d.ueReadAt || null;
+}
+function isDirtyMod(id){
+  const cur = MODS.find(m => m['(ID)'] === id), o = MOD_ORIG[id];
+  return !!(cur && o && JSON.stringify(cur) !== JSON.stringify(o));
+}
+function dirtyModSheetCount(){ return MODS.filter(m => isDirtyMod(m['(ID)'])).length; }
+function modColsFor(){
+  if(modUi.section === 'Tutte') return MOD_ALL_COLS;
+  const sec = MOD_SECTIONS.find(x => x.name === modUi.section);
+  let h = sec ? sec.headers.filter(Boolean) : [];
+  if(!modUi.tech) h = h.filter(x => !/^\d+$/.test(x));
+  const cols = ['(ID)', ...h.filter(x => x !== '(ID)')];
+  const extra = [];
+  if(modUi.tech){
+    const set = new Set();
+    MODS.filter(m => m.__section === modUi.section).forEach(m => Object.keys(m).filter(k => k[0] === '#').forEach(k => set.add(k)));
+    extra.push(...[...set].sort());
+  }
+  const virt = MOD_VIRTUAL.filter(v => !cols.includes(v));
+  return [...cols, ...extra, ...virt];
+}
+function modFiltered(){
+  let rows = MODS.slice();
+  if(modUi.section !== 'Tutte') rows = rows.filter(m => m.__section === modUi.section);
+  const q = modUi.search.trim().toLowerCase();
+  if(q) rows = rows.filter(m => { const e = MOD_EFF[m['(ID)']] || {}; return [m['(ID)'], m.StaticMesh, e.StaticMesh && e.StaticMesh.v, e.ShieldStaticMesh && e.ShieldStaticMesh.v, e.Icon && e.Icon.v].some(v => String(v||'').toLowerCase().includes(q)); });
+  return rows;
+}
+function modCellValue(m, c){
+  const id = m['(ID)'], ef = MOD_EFF[id] && MOD_EFF[id][c];
+  if(ef) return {v: ef.v, src: ef.src};
+  if(c === '__section') return {v: m.__section, src:'sheet'};
+  return {v: m[c] ?? '', src:'sheet'};
+}
+function renderModStats(){
+  const eff = Object.values(MOD_EFF);
+  const items = [
+    {l:'Moduli', n: MODS.length, accent:true},
+    {l:'Sezioni con righe', n: new Set(MODS.map(m => m.__section)).size},
+    {l:'Con mesh', n: eff.filter(e => e.StaticMesh && e.StaticMesh.v).length},
+    {l:'Senza mesh', n: MODS.length - eff.filter(e => e.StaticMesh && e.StaticMesh.v).length},
+    {l:'Con shield mesh', n: eff.filter(e => e.ShieldStaticMesh && e.ShieldStaticMesh.v).length},
+    {l:'Campi da Unreal', n: eff.reduce((a, o) => a + Object.values(o).filter(x => x.src === 'unreal').length, 0)},
+    {l:'Modificati nel tool', n: dirtyModSheetCount()},
+  ];
+  document.getElementById('modStats').innerHTML = items.map(it => `<div class="stat${it.accent?' accent':''}"><div class="n mono">${it.n}</div><div class="l">${escapeHtml(it.l)}</div></div>`).join('');
+}
+function renderModFilters(){
+  const sel = document.getElementById('modSectionFilter');
+  const withRows = MOD_SECTIONS.filter(sx => MODS.some(m => m.__section === sx.name));
+  sel.innerHTML = ['Tutte', ...withRows.map(x => x.name)].map(n => `<option value="${escapeHtml(n)}" ${modUi.section===n?'selected':''}>${n==='Tutte' ? 'Tutte le sezioni' : escapeHtml(n) + ' (' + MODS.filter(m => m.__section === n).length + ')'}</option>`).join('');
+}
+function renderModTable(){
+  const cols = modColsFor();
+  const label = c => c === '__section' ? 'Sezione' : (c === 'ShieldStaticMesh' ? 'ShieldStaticMesh (UE)' : (c === 'Icon' ? 'Icona (entità)' : c));
+  document.getElementById('modThead').innerHTML = '<th></th>' + cols.map(c => `<th>${escapeHtml(label(c))}</th>`).join('');
+  const rows = modFiltered();
+  const tbody = document.getElementById('modTbody');
+  if(!rows.length){
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="${cols.length+1}">${MODS.length ? 'Nessun modulo corrisponde ai filtri.' : 'Nessun modulo nel database: premi "Scarica dal foglio" o "Importa CSV" per importare il tab Modules.'}</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(m => {
+    const id = m['(ID)'], dirty = isDirtyMod(id);
+    const cells = cols.map(c => {
+      const {v, src} = modCellValue(m, c);
+      const badge = src === 'unreal' ? ' <span class="badge-type" style="font-size:9px;padding:1px 5px;color:var(--accent)" title="Letto da Unreal">UE</span>' : '';
+      if(c === '(ID)') return `<td class="mono">${escapeHtml(v)}${dirty ? `<button type="button" class="btn ghost small revert-mod-btn" data-id="${escapeHtml(id)}" style="padding:2px 6px;font-size:10px;margin-left:6px;" title="Ripristina">↺</button>` : ''}</td>`;
+      const editable = c !== '__section' && !MOD_VIRTUAL.includes(c);
+      const color = c === 'Rarity' ? (RARITY_COLOR[v] || '') : '';
+      const num = /^-?[\d.]+$/.test(String(v)) && v !== '' ? ' num-cell' : '';
+      return `<td class="${editable?'editable-cell':''}${num}" data-key="${escapeHtml(c)}" title="${editable ? 'Clicca per modificare' : ''}"${color?` style="color:${color}"`:''}>${escapeHtml(truncate(v, 60))}${badge}</td>`;
+    }).join('');
+    return `<tr data-id="${escapeHtml(id)}"><td><span class="dot-edit ${dirty?'':'hidden-dot'}" title="Modificato"></span></td>${cells}</tr>`;
+  }).join('');
+  tbody.querySelectorAll('td.editable-cell').forEach(td => td.addEventListener('click', () => startModCellEdit(td, td.closest('tr').dataset.id, td.dataset.key)));
+  tbody.querySelectorAll('.revert-mod-btn').forEach(el => el.addEventListener('click', async e => {
+    e.stopPropagation();
+    try{ await apiSend('/api/modules-sheet/' + encodeURIComponent(el.dataset.id) + '/revert', 'POST'); await loadModulesSheet(); renderModSheet(); showToast('Modulo ripristinato'); }
+    catch(err){ showToast('Impossibile ripristinare il modulo'); }
+  }));
+}
+function startModCellEdit(td, id, key){
+  if(td.classList.contains('editing')) return;
+  const m = MODS.find(x => x['(ID)'] === id); if(!m) return;
+  const currentVal = modCellValue(m, key).v;
+  const originalHtml = td.innerHTML;
+  td.style.width = td.getBoundingClientRect().width + 'px';
+  td.classList.add('editing');
+  td.innerHTML = `<input class="cell-input" type="text" value="${escapeHtml(currentVal)}">`;
+  const inp = td.querySelector('.cell-input'); inp.focus(); inp.select();
+  inp.addEventListener('click', e => e.stopPropagation()); inp.addEventListener('mousedown', e => e.stopPropagation());
+  let done = false;
+  const finish = html => { td.classList.remove('editing'); td.style.width = ''; td.innerHTML = html; };
+  const commit = async () => {
+    if(done) return; done = true;
+    if(inp.value === currentVal){ finish(originalHtml); return; }
+    try{ await apiSend('/api/modules-sheet/' + encodeURIComponent(id), 'PUT', {fields: {[key]: inp.value}}); await loadModulesSheet(); renderModSheet(); }
+    catch(err){ showToast('Impossibile salvare la modifica'); finish(originalHtml); }
+  };
+  inp.addEventListener('blur', commit);
+  inp.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); inp.blur(); } else if(e.key === 'Escape'){ e.preventDefault(); if(done) return; done = true; finish(originalHtml); } });
+}
+function renderModSheet(){ renderModStats(); renderModFilters(); renderModTable(); renderDirtyPill(); }
+
+async function modPull(apply, skip){
+  const box = document.getElementById('modReport'); box.hidden = false;
+  box.innerHTML = '<div class="chart-head"><div class="chart-title">Lettura del tab Modules&hellip;</div></div>';
+  let res, data;
+  try{ res = await apiFetch('/api/sync/pull/modules' + (apply ? '?apply=1' + (skip ? '&skipConflicts=1' : '') : ''), {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(modCsvText ? {csv: modCsvText} : {})}); data = await res.json(); }
+  catch(err){ data = {error: err.message}; }
+  if(data.error){ box.innerHTML = '<div class="chart-head"><div class="chart-title" style="color:var(--danger)">Impossibile leggere il tab Modules</div></div><div style="padding:0 16px 14px;font-size:12.5px;color:var(--danger)">' + escapeHtml(data.error) + '</div>'; return; }
+  modPullReport = data;
+  if(data.applied){ await loadModulesSheet(); renderModSheet(); showToast('Tab Modules importato'); }
+  const r = data, nothing = !r.added.length && !r.changed.length;
+  const conflicts = r.conflicts.slice(0, 15).map(c => escapeHtml(c.id) + '.' + escapeHtml(c.field) + ': foglio "' + escapeHtml(JSON.stringify(c.sheet)) + '" / app "' + escapeHtml(JSON.stringify(c.local)) + '"').join('<br>');
+  box.innerHTML = '<div class="chart-head"><div class="chart-title">' + (r.applied ? 'Importato' : 'Anteprima') + ' dal tab Modules<span class="sub">&nbsp;&middot; nessuna riga viene mai cancellata</span></div></div>' +
+    '<div style="padding:0 16px 14px; font-size:12.5px; line-height:1.6">' +
+    '<div><strong>Righe nel foglio</strong>: ' + r.total + ' &middot; <strong>nuove</strong>: ' + r.added.length + ' &middot; <strong>cambiate</strong>: ' + r.changed.length + ' &middot; <strong>invariate</strong>: ' + r.unchanged + ' &middot; <strong>solo nell\'app</strong>: ' + r.missingInSheet.length + '</div>' +
+    '<div><strong>Sezioni</strong>: ' + r.sections.map(x => escapeHtml(x.name) + ' ' + x.rows).join(' &middot; ') + '</div>' +
+    entList('Cambiate', r.changed.map(c => c.id + ' (' + c.fields.join(', ') + ')'), 15) +
+    (r.conflicts.length ? '<div style="color:var(--danger);margin-top:6px"><strong>Conflitti</strong> (' + r.conflicts.length + ', modificati sia nell\'app sia nel foglio):<br>' + conflicts + '</div>' : '') +
+    '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">' +
+    (!r.applied && !r.conflicts.length ? '<button class="btn primary small" id="modApplyBtn">' + (nothing ? 'Aggiorna sezioni' : 'Applica') + '</button>' : '') +
+    (!r.applied && r.conflicts.length ? '<button class="btn ghost small" id="modApplySkipBtn">Applica tenendo i valori dell\'app nei conflitti</button>' : '') +
+    '<button class="btn ghost small" id="modCloseBtn">Chiudi</button></div></div>';
+  const a = document.getElementById('modApplyBtn'); if(a) a.addEventListener('click', () => modPull(true, false));
+  const b = document.getElementById('modApplySkipBtn'); if(b) b.addEventListener('click', () => modPull(true, true));
+  document.getElementById('modCloseBtn').addEventListener('click', () => { box.hidden = true; });
+}
+
+async function modUeRead(apply){
+  const box = document.getElementById('modReport'); box.hidden = false;
+  box.innerHTML = '<div class="chart-head"><div class="chart-title">Lettura degli SMDA_ da Unreal&hellip;</div></div>';
+  let data;
+  try{ const res = await apiFetch('/api/sync/unreal/modules' + (apply ? '?apply=1' : ''), {method:'POST'}); data = await res.json(); }
+  catch(err){ data = {ok:false, error: err.message}; }
+  if(data.ok === false || data.error){ box.innerHTML = '<div class="chart-head"><div class="chart-title" style="color:var(--danger)">Lettura da Unreal non riuscita</div></div><div style="padding:0 16px 14px;font-size:12.5px">' + escapeHtml(data.error || 'errore') + '</div>'; return; }
+  modUeReport = data;
+  if(data.applied){ await loadModulesSheet(); renderModSheet(); showToast('Dati di Unreal salvati nell\'app'); }
+  const r = data, f = r.fills;
+  box.innerHTML = '<div class="chart-head"><div class="chart-title">' + (r.applied ? 'Dati di Unreal salvati nell\'app' : 'Anteprima lettura da Unreal (SMDA_)') + '<span class="sub">&nbsp;&middot; sola lettura su Unreal: nessun asset modificato</span></div></div>' +
+    '<div style="padding:0 16px 14px; font-size:12.5px; line-height:1.6">' +
+    '<div><strong>SMDA_ letti</strong>: ' + r.readInUnreal + ' &middot; <strong>moduli nell\'app</strong>: ' + r.inApp + ' &middot; <strong>corrispondenti</strong>: ' + r.matched + ' &middot; ' + r.ms + ' ms</div>' +
+    '<div><strong>Campi che l\'app prenderà da Unreal</strong>: mesh ' + f.StaticMesh + ', shield mesh ' + f.ShieldStaticMesh + ', quality ' + f.Quality + '</div>' +
+    '<div style="color:var(--text-dim)">Regole: mesh e shield mesh dagli SMDA_; quality vale Unreal tranne il valore 10 (modulo non usato → foglio); le statistiche restano quelle del foglio (solo confronto).</div>' +
+    entList('SMDA_ senza mesh', r.noMesh, 30) +
+    entList('Quality diversa (vale Unreal)', r.qualityDiff, 30) +
+    entList('Statistiche diverse foglio/Unreal (solo segnalate)', r.statDiffSamples, 30) +
+    entList('Stesso ID in più cartelle di Unreal', r.duplicates, 30) +
+    entList('Moduli senza SMDA_ in Unreal', r.missingInUnreal, 30) +
+    entList('SMDA_ in Unreal che non sono nel tab Modules (mai cancellati)', r.onlyInUnreal, 40) +
+    entList('Asset legacy senza prefisso SMDA_ (ignorati)', r.legacy, 30) +
+    '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">' +
+    (!r.applied ? '<button class="btn primary small" id="modUeApplyBtn">Salva questi dati nell\'app</button>' : '') +
+    '<button class="btn ghost small" id="modUeCloseBtn">Chiudi</button></div></div>';
+  const a = document.getElementById('modUeApplyBtn'); if(a) a.addEventListener('click', () => modUeRead(true));
+  document.getElementById('modUeCloseBtn').addEventListener('click', () => { box.hidden = true; });
+}
+
+/* ============================== TAB GENERICI (CargoItemsAndLoots, Items) ============================== */
+const TAB_VIEWS = {};
+function makeTabView(tab, sectionId, title, sheetName, effCols){
+  const V = { tab, sectionId, rows: [], orig: {}, sections: [], eff: {}, ueAt: null, ui: {search:'', section:'Tutte', tech:false}, ueCount: 0 };
+  const el = id => document.getElementById(tab + '-' + id);
+  V.load = async () => { const d = await apiGet('/api/tabs/' + tab); V.rows = d.items || []; V.orig = d.originals || {}; V.sections = d.sections || []; V.eff = d.effective || {}; V.ueAt = d.ueReadAt || null; V.ueCount = d.ueCount || 0; };
+  V.isDirty = id => { const c = V.rows.find(r => r['(ID)'] === id), o = V.orig[id]; return !!(c && o && JSON.stringify(c) !== JSON.stringify(o)); };
+  V.dirtyCount = () => V.rows.filter(r => V.isDirty(r['(ID)'])).length;
+  V.cols = () => {
+    const secs = V.ui.section === 'Tutte' ? V.sections.filter(x => V.rows.some(r => r.__section === x.name)) : V.sections.filter(x => x.name === V.ui.section);
+    const set = [];
+    secs.forEach(sx => sx.headers.filter(Boolean).forEach(h => { if(!set.includes(h) && (V.ui.tech || !/^\d+$/.test(h))) set.push(h); }));
+    const cols = ['(ID)', ...(V.sections.length > 1 && V.ui.section === 'Tutte' ? ['__section'] : []), ...set.filter(h => h !== '(ID)')];
+    if(V.ui.tech){ const ex = new Set(); V.rows.forEach(r => Object.keys(r).forEach(k => { if(k[0] === '#') ex.add(k); })); cols.push(...[...ex].sort()); }
+    return cols;
+  };
+  V.val = (r, c) => { const e = V.eff[r['(ID)']] && V.eff[r['(ID)']][c]; return e ? {v: e.v, src: e.src} : {v: c === '__section' ? r.__section : (r[c] ?? ''), src: 'sheet'}; };
+  V.filtered = () => {
+    let rows = V.rows.slice();
+    if(V.ui.section !== 'Tutte') rows = rows.filter(r => r.__section === V.ui.section);
+    const q = V.ui.search.trim().toLowerCase();
+    if(q) rows = rows.filter(r => V.cols().some(c => String(V.val(r, c).v || '').toLowerCase().includes(q)));
+    return rows;
+  };
+  V.renderStats = () => {
+    const unrealFields = Object.values(V.eff).reduce((a, o) => a + Object.values(o).filter(x => x.src === 'unreal').length, 0);
+    const items = [{l:'Righe', n: V.rows.length, accent:true}, {l:'Sezioni', n: new Set(V.rows.map(r => r.__section)).size}, {l:'Campi da Unreal', n: unrealFields}, {l:'Dati Unreal salvati', n: V.ueCount}, {l:'Modificate nel tool', n: V.dirtyCount()}];
+    el('stats').innerHTML = items.map(it => '<div class="stat' + (it.accent ? ' accent' : '') + '"><div class="n mono">' + it.n + '</div><div class="l">' + escapeHtml(it.l) + '</div></div>').join('');
+  };
+  V.renderFilters = () => {
+    const withRows = V.sections.filter(x => V.rows.some(r => r.__section === x.name));
+    el('section').innerHTML = ['Tutte', ...withRows.map(x => x.name)].map(n => '<option value="' + escapeHtml(n) + '" ' + (V.ui.section === n ? 'selected' : '') + '>' + (n === 'Tutte' ? 'Tutte le sezioni' : escapeHtml(n) + ' (' + V.rows.filter(r => r.__section === n).length + ')') + '</option>').join('');
+  };
+  V.renderTable = () => {
+    const cols = V.cols();
+    el('thead').innerHTML = '<th></th>' + cols.map(c => '<th>' + escapeHtml(c === '__section' ? 'Sezione' : c) + '</th>').join('');
+    const rows = V.filtered(), tbody = el('tbody');
+    if(!rows.length){ tbody.innerHTML = '<tr class="empty-row"><td colspan="' + (cols.length + 1) + '">' + (V.rows.length ? 'Nessuna riga corrisponde ai filtri.' : 'Nessuna riga nel database: premi "Scarica dal foglio" o "Importa CSV" per importare il tab ' + escapeHtml(sheetName) + '.') + '</td></tr>'; return; }
+    tbody.innerHTML = rows.map(r => {
+      const id = r['(ID)'], dirty = V.isDirty(id);
+      const cells = cols.map(c => {
+        const {v, src} = V.val(r, c);
+        const badge = src === 'unreal' ? ' <span class="badge-type" style="font-size:9px;padding:1px 5px;color:var(--accent)" title="Letto da Unreal">UE</span>' : '';
+        if(c === '(ID)') return '<td class="mono">' + escapeHtml(v) + (dirty ? '<button type="button" class="btn ghost small tv-revert" data-id="' + escapeHtml(id) + '" style="padding:2px 6px;font-size:10px;margin-left:6px;" title="Ripristina">↺</button>' : '') + '</td>';
+        const editable = c !== '__section';
+        const num = v !== '' && /^-?[\d.]+$/.test(String(v)) ? ' num-cell' : '';
+        return '<td class="' + (editable ? 'editable-cell' : '') + num + '" data-key="' + escapeHtml(c) + '">' + escapeHtml(truncate(v, 60)) + badge + '</td>';
+      }).join('');
+      return '<tr data-id="' + escapeHtml(id) + '"><td><span class="dot-edit ' + (dirty ? '' : 'hidden-dot') + '"></span></td>' + cells + '</tr>';
+    }).join('');
+    tbody.querySelectorAll('td.editable-cell').forEach(td => td.addEventListener('click', () => V.edit(td, td.closest('tr').dataset.id, td.dataset.key)));
+    tbody.querySelectorAll('.tv-revert').forEach(b => b.addEventListener('click', async e => { e.stopPropagation(); try{ await apiSend('/api/tabs/' + tab + '/' + encodeURIComponent(b.dataset.id) + '/revert', 'POST'); await V.load(); V.render(); showToast('Riga ripristinata'); }catch(err){ showToast('Impossibile ripristinare'); } }));
+  };
+  V.edit = (td, id, key) => {
+    if(td.classList.contains('editing')) return;
+    const r = V.rows.find(x => x['(ID)'] === id); if(!r) return;
+    const cur = V.val(r, key).v, orig = td.innerHTML;
+    td.style.width = td.getBoundingClientRect().width + 'px'; td.classList.add('editing');
+    td.innerHTML = '<input class="cell-input" type="text" value="' + escapeHtml(cur) + '">';
+    const inp = td.querySelector('input'); inp.focus(); inp.select();
+    inp.addEventListener('click', e => e.stopPropagation()); inp.addEventListener('mousedown', e => e.stopPropagation());
+    let done = false;
+    const finish = h => { td.classList.remove('editing'); td.style.width = ''; td.innerHTML = h; };
+    const commit = async () => { if(done) return; done = true; if(inp.value === cur){ finish(orig); return; } try{ await apiSend('/api/tabs/' + tab + '/' + encodeURIComponent(id), 'PUT', {fields: {[key]: inp.value}}); await V.load(); V.render(); }catch(err){ showToast('Impossibile salvare la modifica'); finish(orig); } };
+    inp.addEventListener('blur', commit);
+    inp.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); inp.blur(); } else if(e.key === 'Escape'){ e.preventDefault(); if(done) return; done = true; finish(orig); } });
+  };
+  V.render = () => { V.renderStats(); V.renderFilters(); V.renderTable(); renderDirtyPill(); };
+  V.csv = '';
+  V.pull = async (apply, skip) => {
+    const box = el('report'); box.hidden = false;
+    box.innerHTML = '<div class="chart-head"><div class="chart-title">Lettura del tab ' + escapeHtml(sheetName) + '&hellip;</div></div>';
+    let data;
+    try{ const res = await apiFetch('/api/sync/pull/tab/' + tab + (apply ? '?apply=1' + (skip ? '&skipConflicts=1' : '') : ''), {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(V.csv ? {csv: V.csv} : {})}); data = await res.json(); }
+    catch(err){ data = {error: err.message}; }
+    if(data.error){ box.innerHTML = '<div class="chart-head"><div class="chart-title" style="color:var(--danger)">Impossibile leggere il tab ' + escapeHtml(sheetName) + '</div></div><div style="padding:0 16px 14px;font-size:12.5px;color:var(--danger)">' + escapeHtml(data.error) + '</div>'; return; }
+    if(data.applied){ await V.load(); V.render(); showToast('Tab ' + sheetName + ' importato'); }
+    const r = data, nothing = !r.added.length && !r.changed.length;
+    const conflicts = r.conflicts.slice(0, 15).map(c => escapeHtml(c.id) + '.' + escapeHtml(c.field) + ': foglio "' + escapeHtml(JSON.stringify(c.sheet)) + '" / app "' + escapeHtml(JSON.stringify(c.local)) + '"').join('<br>');
+    box.innerHTML = '<div class="chart-head"><div class="chart-title">' + (r.applied ? 'Importato' : 'Anteprima') + ' dal tab ' + escapeHtml(sheetName) + '<span class="sub">&nbsp;&middot; nessuna riga viene mai cancellata</span></div></div><div style="padding:0 16px 14px; font-size:12.5px; line-height:1.6">' +
+      '<div><strong>Righe nel foglio</strong>: ' + r.total + ' &middot; <strong>nuove</strong>: ' + r.added.length + ' &middot; <strong>cambiate</strong>: ' + r.changed.length + ' &middot; <strong>invariate</strong>: ' + r.unchanged + ' &middot; <strong>solo nell\'app</strong>: ' + r.missingInSheet.length + ' &middot; righe senza ID ignorate: ' + (r.ignoredRows || 0) + '</div>' +
+      '<div><strong>Sezioni</strong>: ' + r.sections.map(x => escapeHtml(x.name) + ' ' + x.rows).join(' &middot; ') + '</div>' +
+      entList('Cambiate', r.changed.map(c => c.id + ' (' + c.fields.join(', ') + ')'), 15) +
+      (r.conflicts.length ? '<div style="color:var(--danger);margin-top:6px"><strong>Conflitti</strong> (' + r.conflicts.length + '):<br>' + conflicts + '</div>' : '') +
+      '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">' +
+      (!r.applied && !r.conflicts.length ? '<button class="btn primary small" id="' + tab + '-apply">' + (nothing ? 'Aggiorna sezioni' : 'Applica') + '</button>' : '') +
+      (!r.applied && r.conflicts.length ? '<button class="btn ghost small" id="' + tab + '-applyskip">Applica tenendo i valori dell\'app nei conflitti</button>' : '') +
+      '<button class="btn ghost small" id="' + tab + '-close">Chiudi</button></div></div>';
+    const a = el('apply'); if(a) a.addEventListener('click', () => V.pull(true, false));
+    const b = el('applyskip'); if(b) b.addEventListener('click', () => V.pull(true, true));
+    el('close').addEventListener('click', () => { box.hidden = true; });
+  };
+  V.ueRead = async apply => {
+    const box = el('report'); box.hidden = false;
+    box.innerHTML = '<div class="chart-head"><div class="chart-title">Lettura da Unreal&hellip;</div></div>';
+    let r;
+    try{ const res = await apiFetch('/api/sync/unreal/tab/' + tab + (apply ? '?apply=1' : ''), {method:'POST'}); r = await res.json(); }
+    catch(err){ r = {ok:false, error: err.message}; }
+    if(r.ok === false || r.error){ box.innerHTML = '<div class="chart-head"><div class="chart-title" style="color:var(--danger)">Lettura da Unreal non riuscita</div></div><div style="padding:0 16px 14px;font-size:12.5px">' + escapeHtml(r.error || 'errore') + '</div>'; return; }
+    if(r.applied){ await V.load(); V.render(); showToast('Dati di Unreal salvati nell\'app'); }
+    const flat = o => Object.entries(o || {}).map(([k, v]) => k + ' ' + (Array.isArray(v) ? v.length : v)).join(', ') || 'nessuno';
+    box.innerHTML = '<div class="chart-head"><div class="chart-title">' + (r.applied ? 'Dati di Unreal salvati nell\'app' : 'Anteprima lettura da Unreal') + '<span class="sub">&nbsp;&middot; sola lettura su Unreal: nessun asset modificato</span></div></div><div style="padding:0 16px 14px; font-size:12.5px; line-height:1.6">' +
+      '<div><strong>Asset letti</strong>: ' + flat(r.readInUnreal) + ' &middot; <strong>righe nell\'app</strong>: ' + r.inApp + ' &middot; <strong>corrispondenti</strong>: ' + r.matched + ' &middot; ' + r.ms + ' ms</div>' +
+      '<div><strong>Campi che l\'app prenderà da Unreal</strong>: ' + flat(r.fills) + '</div>' +
+      '<div><strong>Differenze foglio/Unreal (solo segnalate, vale il foglio)</strong>: ' + flat(r.diffs) + '</div>' +
+      entList('Esempi di differenze', r.samples, 40) +
+      Object.entries(r.missing || {}).map(([k, v]) => entList('Righe senza ' + k + ' in Unreal', v, 30)).join('') +
+      Object.entries(r.orphans || {}).map(([k, v]) => entList(k + ' in Unreal non presenti nel foglio (mai cancellati)', v, 40)).join('') +
+      entList('Asset con lo stesso ID in più cartelle', (r.extra || {}).duplicates, 20) +
+      entList('Asset senza il prefisso atteso (ignorati)', (r.extra || {}).legacy, 20) +
+      entList('Asset non caricabili in Unreal (redirector o rotti: non letti)', (r.extra || {}).unloadable, 20) +
+      entList('Cartella Unreal diversa dalla sezione del foglio', (r.extra || {}).sectionMismatch, 20) +
+      entList('Cargo item con "can be sold" disattivato', (r.extra || {}).cantBeSold, 20) +
+      '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">' + (!r.applied ? '<button class="btn primary small" id="' + tab + '-ueapply">Salva questi dati nell\'app</button>' : '') + '<button class="btn ghost small" id="' + tab + '-ueclose">Chiudi</button></div></div>';
+    const a = el('ueapply'); if(a) a.addEventListener('click', () => V.ueRead(true));
+    el('ueclose').addEventListener('click', () => { box.hidden = true; });
+  };
+  // pannello
+  const panel = document.createElement('section');
+  panel.className = 'panel'; panel.id = 'panel-' + sectionId; panel.hidden = true;
+  panel.innerHTML = '<div class="stats" id="' + tab + '-stats"></div><div class="toolbar"><div class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" class="searchInput" id="' + tab + '-search" placeholder="Cerca&hellip;"></div>' +
+    '<select class="selbox" id="' + tab + '-section"></select><button class="chip" id="' + tab + '-tech" title="Mostra anche le colonne senza nome o con intestazione numerica">Colonne tecniche</button>' +
+    '<button class="btn primary small" id="' + tab + '-pull">Scarica dal foglio (anteprima)</button><button class="btn ghost small" id="' + tab + '-csvbtn" title="Esporta il tab ' + escapeHtml(sheetName) + ' (File → Scarica → CSV) e caricalo qui">Importa CSV (anteprima)</button><input type="file" id="' + tab + '-csvfile" accept=".csv,text/csv" hidden>' +
+    '<button class="btn ghost small" id="' + tab + '-ueread" title="Legge gli asset corrispondenti da Unreal (sola lettura)">Leggi da Unreal (anteprima)</button></div>' +
+    '<div class="chart-card" id="' + tab + '-report" hidden></div><div class="table-shell"><div class="table-scroll"><table><thead><tr id="' + tab + '-thead"></tr></thead><tbody id="' + tab + '-tbody"></tbody></table></div></div>';
+  document.getElementById('panel-settings').before(panel);
+  el('search').addEventListener('input', e => { V.ui.search = e.target.value; V.renderTable(); });
+  el('section').addEventListener('change', e => { V.ui.section = e.target.value; V.renderTable(); });
+  el('tech').addEventListener('click', e => { V.ui.tech = !V.ui.tech; e.currentTarget.classList.toggle('active', V.ui.tech); V.renderTable(); });
+  el('pull').addEventListener('click', () => { V.csv = ''; V.pull(false, false); });
+  el('csvbtn').addEventListener('click', () => el('csvfile').click());
+  el('csvfile').addEventListener('change', async e => { const f = e.target.files[0]; e.target.value = ''; if(!f) return; V.csv = await f.text(); V.pull(false, false); });
+  el('ueread').addEventListener('click', () => V.ueRead(false));
+  TAB_VIEWS[sectionId] = V;
+  return V;
+}
+makeTabView('cargo', 'cargosheet', 'CARGO/LOOT', 'CargoItemsAndLoots');
+makeTabView('items', 'itemssheet', 'ITEMS', 'Items');
+
+/* ============================== LOCALIZATION MASTER (copia fedele, sola lettura) ============================== */
+const GRID_VIEWS = {};
+function colName(i){ let n = i + 1, t = ''; while(n > 0){ t = String.fromCharCode(65 + ((n - 1) % 26)) + t; n = Math.floor((n - 1) / 26); } return t; }
+function makeGridView(tab, pageId, sheetName){
+  const V = { tab, pageId, headers: [], rows: [], count: 0, importedAt: null, search: '', csv: '' };
+  const el = id => document.getElementById('g-' + tab + '-' + id);
+  V.load = async () => { const d = await apiGet('/api/grid/' + tab); V.headers = d.headers || []; V.rows = d.rows || []; V.count = d.count || 0; V.importedAt = d.importedAt || null; };
+  V.render = () => {
+    const q = V.search.trim().toLowerCase();
+    const idx = [];
+    V.rows.forEach((r, i) => { if(!q || r.some(c => String(c).toLowerCase().includes(q))) idx.push(i); });
+    const LIMIT = 1000, shown = idx.slice(0, LIMIT);
+    el('info').innerHTML = V.count ? ('<strong>' + V.count + '</strong> righe &middot; <strong>' + V.headers.length + '</strong> colonne &middot; importato il ' + escapeHtml(new Date(V.importedAt).toLocaleString('it-IT')) + ' &middot; <span style="color:var(--text-dim)">copia fedele del tab ' + escapeHtml(sheetName) + ' del foglio (sola lettura: si modifica sul foglio)</span>' + (idx.length !== V.rows.length ? ' &middot; ' + idx.length + ' corrispondenti' : '') + (idx.length > LIMIT ? ' &middot; mostrate le prime ' + LIMIT : '')) : 'Nessun dato: premi "Scarica dal foglio" o "Importa CSV" per copiare il tab ' + escapeHtml(sheetName) + '.';
+    // EventsAudio: le righe con la stessa chiave di EventTexts (HS - Events) sono "in gioco" (DT_EventsText);
+    // le altre sono backup per il futuro, non presenti in gioco (decisione dell'utente, 2026-10-08).
+    let gameKeys = null;
+    if(tab === 'eventsaudio' && GRID_VIEWS['evt_eventtexts'] && GRID_VIEWS['evt_eventtexts'].rows.length){
+      const ev = GRID_VIEWS['evt_eventtexts'], ci = ev.headers.indexOf('FMOD ID');
+      if(ci >= 0) gameKeys = new Set(ev.rows.map(r => r[ci]).filter(Boolean));
+    }
+    const stato = r => gameKeys && r[0] ? (gameKeys.has(r[0]) ? '<td><span class="badge-type" style="color:var(--good)">in gioco</span></td>' : '<td><span class="badge-type" style="color:var(--text-faint)" title="Non presente in HS - Events: backup per il futuro, non in gioco">backup</span></td>') : (gameKeys ? '<td></td>' : '');
+    if(gameKeys){ const k = V.rows.filter(r => r[0]); const nb = k.filter(r => !gameKeys.has(r[0])).length; el('info').innerHTML += ' &middot; <strong>' + (k.length - nb) + '</strong> in gioco, <strong>' + nb + '</strong> backup (non in gioco)'; }
+    el('thead').innerHTML = '<th class="rownum">#</th>' + (gameKeys ? '<th>Stato</th>' : '') + V.headers.map((h, i) => '<th>' + escapeHtml(h || colName(i)) + '</th>').join('');
+    el('tbody').innerHTML = shown.map(i => '<tr' + (gameKeys && V.rows[i][0] && !gameKeys.has(V.rows[i][0]) ? ' style="opacity:.6"' : '') + '><td class="rownum">' + (i + 2) + '</td>' + stato(V.rows[i]) + V.rows[i].map(c => '<td title="' + escapeHtml(c) + '">' + escapeHtml(truncate(c, 110)) + '</td>').join('') + '</tr>').join('') || '<tr class="empty-row"><td colspan="' + (V.headers.length + 2) + '">Nessuna riga.</td></tr>';
+    renderDirtyPill();
+  };
+  V.pull = async apply => {
+    const box = el('report'); box.hidden = false;
+    box.innerHTML = '<div class="chart-head"><div class="chart-title">Lettura del tab ' + escapeHtml(sheetName) + '&hellip;</div></div>';
+    let r;
+    try{ const res = await apiFetch('/api/sync/pull/grid/' + tab + (apply ? '?apply=1' : ''), {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(V.csv ? {csv: V.csv} : {})}); r = await res.json(); }
+    catch(err){ r = {error: err.message}; }
+    if(r.error){ box.innerHTML = '<div class="chart-head"><div class="chart-title" style="color:var(--danger)">Impossibile leggere il tab ' + escapeHtml(sheetName) + '</div></div><div style="padding:0 16px 14px;font-size:12.5px;color:var(--danger)">' + escapeHtml(r.error) + '</div>'; return; }
+    if(r.applied){ await V.load(); V.render(); showToast('Tab ' + sheetName + ' copiato'); }
+    box.innerHTML = '<div class="chart-head"><div class="chart-title">' + (r.applied ? 'Copiato' : 'Anteprima') + ' dal tab ' + escapeHtml(sheetName) + '<span class="sub">&nbsp;&middot; copia fedele, sola lettura</span></div></div><div style="padding:0 16px 14px;font-size:12.5px;line-height:1.6">' +
+      '<div><strong>Righe nel foglio</strong>: ' + r.sheetRows + ' &middot; <strong>nell\'app</strong>: ' + r.appRows + ' &middot; <strong>colonne</strong>: ' + r.columns + '</div>' +
+      '<div>' + (r.identical ? 'Identico alla copia nell\'app: nulla da aggiornare.' : 'Righe cambiate: <strong>' + r.changedRows + '</strong> &middot; aggiunte: ' + r.added + ' &middot; rimosse dal foglio: ' + r.removed + (r.headersChanged ? ' &middot; <span style="color:var(--danger)">intestazioni cambiate</span>' : '')) + '</div>' +
+      '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">' + (!r.applied && !r.identical ? '<button class="btn primary small" id="g-' + tab + '-apply">Aggiorna la copia</button>' : '') + '<button class="btn ghost small" id="g-' + tab + '-close">Chiudi</button></div></div>';
+    const a = el('apply'); if(a) a.addEventListener('click', () => V.pull(true));
+    el('close').addEventListener('click', () => { box.hidden = true; });
+  };
+  const panel = document.createElement('section');
+  panel.className = 'panel'; panel.id = 'panel-' + pageId; panel.hidden = true;
+  panel.innerHTML = '<div class="toolbar"><div class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" class="searchInput" id="g-' + tab + '-search" placeholder="Cerca in tutte le colonne&hellip;"></div>' +
+    '<button class="btn primary small" id="g-' + tab + '-pull">Scarica dal foglio (anteprima)</button><button class="btn ghost small" id="g-' + tab + '-csvbtn" title="Esporta il tab ' + escapeHtml(sheetName) + ' (File → Scarica → CSV) e caricalo qui">Importa CSV (anteprima)</button><input type="file" id="g-' + tab + '-csvfile" accept=".csv,text/csv" hidden></div>' +
+    '<div id="g-' + tab + '-info" style="font-size:12.5px;padding:0 2px"></div><div class="chart-card" id="g-' + tab + '-report" hidden></div>' +
+    '<div class="table-shell"><div class="table-scroll"><table><thead><tr id="g-' + tab + '-thead"></tr></thead><tbody id="g-' + tab + '-tbody"></tbody></table></div></div>';
+  document.getElementById('panel-settings').before(panel);
+  el('search').addEventListener('input', e => { V.search = e.target.value; V.render(); });
+  el('pull').addEventListener('click', () => { V.csv = ''; V.pull(false); });
+  el('csvbtn').addEventListener('click', () => el('csvfile').click());
+  el('csvfile').addEventListener('change', async e => { const f = e.target.files[0]; e.target.value = ''; if(!f) return; V.csv = await f.text(); V.pull(false); });
+  GRID_VIEWS[pageId] = V;
+  return V;
+}
+makeGridView('identities', 'loc_identities', 'Identities');
+makeGridView('entities', 'loc_entities', 'Entities');
+makeGridView('quest', 'loc_quest', 'Quest');
+makeGridView('eventsaudio', 'loc_eventsaudio', 'EventsAudio');
+makeGridView('mainevents', 'evt_mainevents', 'MainEvents');
+makeGridView('eventtexts', 'evt_eventtexts', 'EventTexts');
 
 /* ============================== STATIONS ============================== */
 let STATIONS = [];
@@ -3080,7 +3797,7 @@ function renderQuests(){
 function renderAll(){
   buildSectionbar();
   document.getElementById('entitiesSection').hidden = activeSection !== 'entities';
-  ['quest','stations','enemies','settings'].forEach(id => {
+  PANEL_IDS.forEach(id => {
     document.getElementById('panel-'+id).hidden = activeSection !== id;
   });
 
@@ -3098,6 +3815,14 @@ function renderAll(){
     renderStationsTab();
   } else if(activeSection === 'enemies'){
     renderEnemies();
+  } else if(activeSection === 'entitysheet'){
+    renderEntities();
+  } else if(activeSection === 'modsheet'){
+    renderModSheet();
+  } else if(TAB_VIEWS[activeSection]){
+    TAB_VIEWS[activeSection].render();
+  } else if(GRID_VIEWS[activeSection]){
+    GRID_VIEWS[activeSection].render();
   } else if(activeSection === 'settings'){
     renderSettings();
   }
@@ -3120,6 +3845,96 @@ document.getElementById('enemyTierFilter').addEventListener('change', e => { ene
 document.getElementById('enemyBossToggle').addEventListener('click', e => { enemyUi.bossOnly = !enemyUi.bossOnly; e.currentTarget.classList.toggle('active', enemyUi.bossOnly); renderEnemies(); });
 document.getElementById('enemyInGameToggle').addEventListener('click', e => { enemyUi.inGameOnly = !enemyUi.inGameOnly; e.currentTarget.classList.toggle('active', enemyUi.inGameOnly); renderEnemies(); });
 document.getElementById('enemySyncBtn').addEventListener('click', openEnemiesSyncModal);
+
+document.getElementById('modSearch').addEventListener('input', e => { modUi.search = e.target.value; renderModTable(); });
+document.getElementById('modSectionFilter').addEventListener('change', e => { modUi.section = e.target.value; renderModTable(); });
+document.getElementById('modTechToggle').addEventListener('click', e => { modUi.tech = !modUi.tech; e.currentTarget.classList.toggle('active', modUi.tech); renderModTable(); });
+document.getElementById('modPullBtn').addEventListener('click', () => { modCsvText = ''; modPull(false, false); });
+document.getElementById('modCsvBtn').addEventListener('click', () => document.getElementById('modCsvFile').click());
+document.getElementById('modCsvFile').addEventListener('change', async e => { const f = e.target.files[0]; e.target.value = ''; if(!f) return; modCsvText = await f.text(); modPull(false, false); });
+document.getElementById('modUeReadBtn').addEventListener('click', () => modUeRead(false));
+
+document.getElementById('entSearch').addEventListener('input', e => { entUi.search = e.target.value; renderEntityTable(); });
+document.getElementById('entTypeFilter').addEventListener('change', e => { entUi.type = e.target.value; renderEntityTable(); });
+document.getElementById('entRarityFilter').addEventListener('change', e => { entUi.rarity = e.target.value; renderEntityTable(); });
+document.getElementById('entUnrealOnly').addEventListener('click', e => { entUi.unrealOnly = !entUi.unrealOnly; e.currentTarget.classList.toggle('active', entUi.unrealOnly); renderEntityTable(); });
+document.getElementById('entPullBtn').addEventListener('click', () => { entCsvText = ''; entPull(false, false); });
+document.getElementById('entCsvBtn').addEventListener('click', () => document.getElementById('entCsvFile').click());
+
+async function entUeRead(apply){
+  const box = document.getElementById('entPullReport');
+  box.hidden = false;
+  box.innerHTML = '<div class="chart-head"><div class="chart-title">Lettura da Unreal&hellip;</div></div>';
+  let res, data;
+  try{ res = await apiFetch('/api/sync/unreal/entities' + (apply ? '?apply=1' : ''), {method:'POST'}); data = await res.json(); }
+  catch(err){ data = {ok:false, error: err.message}; }
+  if(data.ok === false || data.error){
+    box.innerHTML = '<div class="chart-head"><div class="chart-title" style="color:var(--danger)">Lettura da Unreal non riuscita</div></div><div style="padding:0 16px 14px;font-size:12.5px">' + escapeHtml(data.error || 'errore') + '</div>';
+    return;
+  }
+  entUeReport = data;
+  if(data.applied){ await loadEntities(); renderEntities(); showToast('Dati di Unreal salvati nell\'app'); }
+  renderEntUeReport();
+}
+function entList(title, arr, n){
+  if(!arr || !arr.length) return '';
+  const shown = arr.slice(0, n || 30).map(escapeHtml).join('<br>');
+  return '<details style="margin-top:6px"><summary style="cursor:pointer"><strong>' + escapeHtml(title) + '</strong> (' + arr.length + ')</summary><div style="padding:6px 0 0 14px;font-size:12px;color:var(--text-dim)">' + shown + (arr.length > (n || 30) ? '<br>&hellip; (+' + (arr.length - (n || 30)) + ')' : '') + '</div></details>';
+}
+function renderEntUeReport(){
+  const r = entUeReport, box = document.getElementById('entPullReport');
+  const f = r.fills;
+  const sv = r.sheetVsUnreal;
+  box.innerHTML = '<div class="chart-head"><div class="chart-title">' + (r.applied ? 'Dati di Unreal salvati nell\'app' : 'Anteprima lettura da Unreal') + '<span class="sub">&nbsp;&middot; sola lettura su Unreal: nessun asset modificato</span></div></div>' +
+    '<div style="padding:0 16px 14px; font-size:12.5px; line-height:1.6">' +
+    '<div><strong>EDA_ letti in Unreal</strong>: ' + r.readInUnreal + ' &middot; <strong>entità nell\'app</strong>: ' + r.inApp + ' &middot; <strong>corrispondenti</strong>: ' + r.matched + ' &middot; ' + r.ms + ' ms</div>' +
+    '<div><strong>Campi che l\'app prenderà da Unreal</strong>: icona ' + f.Icon + ', produttore ' + f.ProducerIcon + ', nome ' + f.Label + ', descrizione ' + f.BriefDescription + '</div>' +
+    '<div style="color:var(--text-dim)">Regole: foglio = master; dove il foglio è vuoto o non utilizzabile si legge Unreal; icone solo immagini; produttore e icone: in caso di contraddizione vale Unreal.</div>' +
+    entList('Esempi di icone prese da Unreal', r.fillSamples.Icon, 12) +
+    entList('Produttore: foglio ≠ Unreal (vale Unreal)', r.contradictions.ProducerIcon, 30) +
+    entList('Icone di Unreal che non sono immagini (materiali: non importate)', r.iconNotImage, 30) +
+    entList('EDA_ senza icona in Unreal', r.noIcon, 30) +
+    entList('Entità dell\'app senza EDA_ in Unreal', r.missingInUnreal, 30) +
+    entList('EDA_ in Unreal che non sono nell\'app (mai cancellati)', r.onlyInUnreal, 40) +
+    '<div style="margin-top:8px"><strong>Solo confronto (vale il foglio, nessuna modifica)</strong>: tipo ' + sv.entity_type.length + ', rarità ' + sv.rarity.length + ', prezzo ' + sv.base_price.length + ', nome ' + sv.label.length + ', descrizione ' + sv.brief.length + '</div>' +
+    entList('Prezzo diverso', sv.base_price, 15) + entList('Rarità diversa', sv.rarity, 15) + entList('Tipo diverso', sv.entity_type, 15) + entList('Descrizione diversa', sv.brief, 10) +
+    '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">' +
+    (!r.applied ? '<button class="btn primary small" id="entUeApplyBtn">Salva questi dati nell\'app</button>' : '') +
+    '<button class="btn ghost small" id="entUeRClose">Chiudi</button></div></div>';
+  const a = document.getElementById('entUeApplyBtn'); if(a) a.addEventListener('click', () => entUeRead(true));
+  document.getElementById('entUeRClose').addEventListener('click', () => { box.hidden = true; });
+}
+document.getElementById('entUeReadBtn').addEventListener('click', () => entUeRead(false));
+document.getElementById('entUeBtn').addEventListener('click', async () => {
+  const box = document.getElementById('entPullReport');
+  box.hidden = false;
+  box.innerHTML = '<div class="chart-head"><div class="chart-title">Test collegamento Unreal&hellip;</div></div>';
+  let res, data;
+  try{ res = await apiFetch('/api/unreal/ping'); data = await res.json(); }
+  catch(err){ data = {ok:false, error: err.message}; }
+  const close = '<button class="btn ghost small" id="entUeCloseBtn" style="margin-top:10px">Chiudi</button>';
+  if(data.ok){
+    box.innerHTML = `<div class="chart-head"><div class="chart-title" style="color:var(--accent)">Editor Unreal raggiungibile<span class="sub">&nbsp;&middot; sola lettura, nessun asset modificato</span></div></div>
+      <div style="padding:0 16px 14px; font-size:12.5px; line-height:1.6">
+        <div><strong>Engine</strong>: ${escapeHtml(data.engine)}</div>
+        <div><strong>Progetto</strong>: ${escapeHtml(data.project)} <span style="color:var(--text-dim)">(${escapeHtml(data.projectDir)})</span></div>
+        <div><strong>Asset sporchi nell'Editor</strong>: ${data.dirtyContent} contenuti, ${data.dirtyMaps} mappe</div>
+        <div><strong>Pacchetti salvati dal test</strong>: ${data.savedPackages.length} (deve essere 0) &middot; <strong>Tempo</strong>: ${data.ms} ms</div>
+        <div style="color:var(--text-dim)">${escapeHtml(data.url)}</div>${close}
+      </div>`;
+  } else {
+    box.innerHTML = `<div class="chart-head"><div class="chart-title" style="color:var(--danger)">Editor Unreal non raggiungibile</div></div>
+      <div style="padding:0 16px 14px; font-size:12.5px; line-height:1.6"><div>${escapeHtml(data.error || 'errore sconosciuto')}</div>${close}</div>`;
+  }
+  document.getElementById('entUeCloseBtn').addEventListener('click', () => { box.hidden = true; });
+});
+document.getElementById('entCsvFile').addEventListener('change', async e => {
+  const f = e.target.files[0];
+  e.target.value = '';
+  if(!f) return;
+  entCsvText = await f.text();
+  entPull(false, false);
+});
 
 document.getElementById('stationSearch').addEventListener('input', e => { stationUi.search = e.target.value; renderStations(); });
 document.getElementById('catalogSearch').addEventListener('input', e => { catalogUi.search = e.target.value; renderStationsCatalog(); });
@@ -3152,6 +3967,22 @@ async function init(){
     await loadEnemies();
   }catch(err){
     console.error('Impossibile caricare data/enemies.json', err);
+  }
+  try{
+    await loadEntities();
+  }catch(err){
+    console.error('Impossibile caricare /api/entities', err);
+  }
+  try{
+    await loadModulesSheet();
+  }catch(err){
+    console.error('Impossibile caricare /api/modules-sheet', err);
+  }
+  for(const v of Object.values(GRID_VIEWS)){
+    try{ await v.load(); }catch(err){ console.error('Impossibile caricare /api/grid/' + v.tab, err); }
+  }
+  for(const v of Object.values(TAB_VIEWS)){
+    try{ await v.load(); }catch(err){ console.error('Impossibile caricare /api/tabs/' + v.tab, err); }
   }
   try{
     await loadStations();

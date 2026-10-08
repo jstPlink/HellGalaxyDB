@@ -5,6 +5,8 @@ Primarie/Secondarie, Produttori) del gioco, con export immagini per Unreal e
 un accenno di sincronizzazione Google Sheet (ancora mockup). I dati vivono in
 un database SQLite reale, letti e scritti da un piccolo server Node.
 
+> Documentazione tecnica completa (API, schema DB, deploy, piani): `docs/DOCUMENTAZIONE.md`.
+
 ## Struttura
 
 - `hellgalaxy.html` — l'interfaccia del tool. Va aperta tramite il server (vedi
@@ -90,6 +92,31 @@ dashboard Zero Trust il Public Hostname deve puntare a `http://hellgalaxy:8936`.
 pubblico può leggere e modificare tutto (le API `PUT`/`DELETE`, il ripristino
 globale) e scaricare anche `data/hellgalaxy.db`. Metti una policy Cloudflare
 Access (login via email) davanti all'hostname prima di renderlo pubblico.
+
+## Entità dal foglio Google
+
+La sezione **ENTITIES (foglio)** mostra le 270 entità del foglio `ENTITIES`.
+Il pulsante "Scarica dal foglio (anteprima)" legge il foglio tramite Apps Script
+e mostra cosa cambierebbe prima di applicare (mai cancellazioni, conflitti
+segnalati). Per attivarlo:
+
+1. Incolla `scripts/apps-script-sync.gs` nel foglio (Estensioni → Apps Script) e
+   pubblica una **nuova versione** della distribuzione.
+2. Avvia il server con `HG_SHEET_EXEC_URL` (URL `/exec`) e `HG_SHEET_SECRET`
+   (la chiave impostata con `impostaChiaveSegreta`). Opzionale: `HG_API_TOKEN`
+   per proteggere le API con `Authorization: Bearer`.
+
+Senza autorizzazioni sul foglio: esporta la scheda ENTITIES (File → Scarica → CSV)
+e usa il pulsante **Importa CSV (anteprima)**, oppure imposta `HG_SHEET_CSV_URL`
+(URL CSV del foglio, richiede che sia visibile a chiunque abbia il link).
+
+Tab **MODULES (foglio)**: stesso schema; per la lettura automatica serve anche `HG_SHEET_MODULES_GID` (ID del tab Modules) nel `.env`, oppure "Importa CSV" con l'export del tab.
+
+Tab **CARGO/LOOT (foglio)** e **ITEMS (foglio)**: stesso schema; `.env` con `HG_SHEET_CARGO_GID` e `HG_SHEET_ITEMS_GID` (ID dei tab), oppure "Importa CSV".
+
+Sezione **LOCALIZATION MASTER (foglio)**: copia fedele di 4 tab del foglio di localizzazione (`HG_LOC_SHEET_KEY` e `HG_LOC_GID_*` nel `.env`). In Impostazioni → Aspetto si può scegliere il tema "Fogli Google". Dettagli: `docs/LOCALIZZAZIONE.md`.
+
+Test automatici del tool: `node --test tests/tool_tests.js`.
 
 ## Continuare su un altro computer
 

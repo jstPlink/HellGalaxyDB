@@ -6,7 +6,8 @@ RUN apk add --no-cache tini
 
 WORKDIR /app
 COPY server.js hellgalaxy.html ./
-COPY scripts/migrate_to_db.js scripts/migrate_enemies_to_db.js ./scripts/
+COPY scripts/migrate_to_db.js scripts/migrate_enemies_to_db.js scripts/migrate_entities_to_db.js scripts/sheet_mappings.js scripts/unreal_bridge.js scripts/unreal_read.js scripts/entity_effective.js scripts/modules_sheet.js scripts/tabs_sheet.js scripts/tabs_server.js scripts/grid_tabs.js ./scripts/
+COPY scripts/unreal/entities_read.py scripts/unreal/modules_read.py scripts/unreal/tabs_read.py ./scripts/unreal/
 
 # Dati sorgente e immagini iniziali. Stanno in /seed e non sotto /app perche'
 # server.js serve staticamente tutto quello che trova sotto /app, e i volumi
