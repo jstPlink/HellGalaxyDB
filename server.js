@@ -16,6 +16,7 @@ const serverSync = require('./scripts/server_sync');
 const unrealSync = require('./scripts/unreal_sync');
 const agentHub = require('./scripts/agent_hub');
 const agentBundle = require('./scripts/agent_bundle');
+const quality = require('./scripts/quality_checks');
 
 const eff = require('./scripts/entity_effective');
 const msheet = require('./scripts/modules_sheet');
@@ -34,6 +35,12 @@ try {
 if ((process.env.HG_UE_MODE || 'agent') !== 'direct') unreal.useRemote(agentHub.submit);
 // Token dell'agente: se non è impostato (HG_AGENT_TOKEN) il server ne genera uno al primo avvio e lo conserva
 // nel volume dei dati (data/agent_token.txt, non servito via web). Il .bat dell'agente lo contiene già: nessuna configurazione.
+// Indirizzi dei fogli Google (ID e tab: non sono segreti, i fogli sono leggibili con il link): valori predefiniti
+// dal file scripts/sheets_defaults.json, usati solo se non sono già impostati nell'ambiente o nel .env.
+try {
+  const defs = JSON.parse(fs.readFileSync(path.join(__dirname, 'scripts', 'sheets_defaults.json'), 'utf8'));
+  for (const [k, v] of Object.entries(defs)) if (process.env[k] === undefined) process.env[k] = v;
+} catch (e) { /* nessun file di default */ }
 const AGENT_TOKEN = (() => {
   if (process.env.HG_AGENT_TOKEN) return process.env.HG_AGENT_TOKEN;
   const f = path.join(path.dirname(process.env.HG_DB_PATH || path.join(__dirname, 'data', 'hellgalaxy.db')), 'agent_token.txt');
@@ -424,6 +431,7 @@ async function pullEntities({ apply, skipConflicts, csv }) {
     for (const u of plan.update) {
       stmts.updateEntityBoth.run(JSON.stringify(u.current), JSON.stringify(u.original), now, u.id);
     }
+    rowsAdmin.purgeTombstones(); // le righe eliminate nell'app restano eliminate
     db.exec('COMMIT');
   } catch (e) { db.exec('ROLLBACK'); throw e; }
   report.applied = true;
@@ -543,6 +551,7 @@ async function pullModules({ apply, skipConflicts, csv }) {
     for (const u of plan.update) mst.updateBoth.run(u.original[msheet.SECTION_KEY], JSON.stringify(u.current), JSON.stringify(u.original), now, u.id);
     mst.clearSections.run();
     parsed.sections.forEach((s, i) => mst.insertSection.run(s.name, JSON.stringify(s.headers), i));
+    rowsAdmin.purgeTombstones();
     db.exec('COMMIT');
   } catch (e) { db.exec('ROLLBACK'); throw e; }
   report.applied = true;
@@ -617,7 +626,9 @@ function serveStatic(req, res, urlPath) {
 }
 
 // Tab CargoItemsAndLoots e Items del foglio (importazione esatta + lettura da Unreal in sola lettura).
-const tabsHandler = require('./scripts/tabs_server')({ db, sendJson, readJsonBody, SheetError, UnrealError: unreal.UnrealError, unrealRead, fs });
+const tabsHandler = require('./scripts/tabs_server')({ db, sendJson, readJsonBody, SheetError, UnrealError: unreal.UnrealError, unrealRead, fs, purgeTombstones: () => rowsAdmin.purgeTombstones() });
+// Righe nuove/eliminate dall'app (ENTITIES, MODULES, CARGO/LOOT, ITEMS)
+const rowsAdmin = require('./scripts/rows_admin')({ db, sendJson, readJsonBody, sheet, msheet });
 
 // Fogli "Localization Master" (Identities, Entities, Quest, EventsAudio): copia fedele di sola lettura.
 const gridHandler = require('./scripts/grid_tabs')({ db, sendJson, readJsonBody, SheetError, fs, onEntityText: mirrorLocTextToEntity });
@@ -760,6 +771,21 @@ const server = http.createServer(async (req, res) => {
       return res.end(agentBundle.buildBat({ serverUrl, token: AGENT_TOKEN }));
     }
     if (urlPath === '/api/agent/status' && req.method === 'GET') return sendJson(res, 200, { ...agentHub.status(), mode: (process.env.HG_UE_MODE || 'agent'), tokenConfigured: !!AGENT_TOKEN });
+    // ---- Controlli di qualità sui dati (sola lettura) ----
+    if (urlPath === '/api/quality' && req.method === 'GET') {
+      const mods = getAllModulesSheet();
+      const rowsOf = tab => db.prepare('SELECT current_json FROM sheet_rows WHERE tab = ?').all(tab).map(r => JSON.parse(r.current_json));
+      let locKeys = null, locEnglish = null;
+      const meta = db.prepare("SELECT headers_json FROM grid_tabs WHERE tab = 'entities'").get();
+      if (meta) {
+        const eng = JSON.parse(meta.headers_json).indexOf('ENGLISH');
+        locKeys = new Set(); locEnglish = new Map();
+        for (const r of db.prepare("SELECT cells_json FROM grid_rows WHERE tab = 'entities'").all()) { const c = JSON.parse(r.cells_json); if (c[0]) { locKeys.add(c[0]); if (eng >= 0) locEnglish.set(c[0], c[eng]); } }
+      }
+      const links = {}; for (const l of db.prepare('SELECT id, data_json FROM entity_links').all()) links[l.id] = JSON.parse(l.data_json);
+      const checks = quality.runChecks({ entities: getAllEntities().items, entEff: getAllEntities().effective, modules: mods.items, modEff: mods.effective, cargo: rowsOf('cargo'), items: rowsOf('items'), locKeys, locEnglish, links });
+      return sendJson(res, 200, { checks, errors: checks.filter(c => c.severity === 'error').length, warnings: checks.filter(c => c.severity === 'warn').length, at: new Date().toISOString() });
+    }
     // ---- Cronologia delle modifiche ----
     if (urlPath === '/api/history' && req.method === 'GET') {
       const where = [], args = [];
@@ -772,7 +798,7 @@ const server = http.createServer(async (req, res) => {
       const items = db.prepare('SELECT id, at, user, area, row_id, field, old, new, source FROM history' + (where.length ? ' WHERE ' + where.join(' AND ') : '') + ' ORDER BY id DESC LIMIT ?').all(...args, limit);
       const colors = {}; for (const u of db.prepare('SELECT name, color FROM users').all()) colors[u.name.toLowerCase()] = cleanColor(u.color) || defaultUserColor(u.name);
       return sendJson(res, 200, {
-        items: items.map(i => ({ ...i, color: colors[i.user.toLowerCase()] || '' })), hasMore: items.length === limit,
+        items: items.map(i => ({ ...i, color: colors[i.user.toLowerCase()] || '', restorable: i.field === '(riga)' && i.new === 'rimossa' && rowsAdmin.restorable(i.area, i.row_id) })), hasMore: items.length === limit,
         areas: db.prepare('SELECT DISTINCT area FROM history ORDER BY area').all().map(r => r.area),
         users: db.prepare('SELECT DISTINCT user FROM history ORDER BY user').all().map(r => r.user),
       });
@@ -958,6 +984,7 @@ const server = http.createServer(async (req, res) => {
         throw e;
       }
     }
+    if (await rowsAdmin(req, res, urlPath)) return;
     if (await tabsHandler(req, res, urlPath, query)) return;
     if (await gridHandler(req, res, urlPath, query)) return;
 

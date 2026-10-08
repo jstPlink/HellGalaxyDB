@@ -166,3 +166,8 @@ Alla creazione dell'utente scegli un colore: solo il pallino con l'iniziale (ico
 
 ## Agente Unreal scaricabile (2026-10-08)
 Sul PC dove lavori con l'Editor Unreal: nell'app clic su **"Agente: non connesso" → "Scarica agente (.bat)"**, metti il file sul desktop e fai doppio clic (serve Node.js). Funziona uguale con l'app in locale e sul server (sul server servono `HG_AGENT_TOKEN` e `HG_API_TOKEN`).
+
+## Righe, controlli (2026-10-08)
+- **+ Nuova riga** e cestino accanto all'ID in ENTITIES, MODULES, CARGO/LOOT, ITEMS; le righe eliminate si ripristinano dalla **Cronologia**.
+- **Controlli**: segnala valori fuori elenco, chiavi mancanti e righe orfane (sola lettura).
+- Gli indirizzi dei fogli Google sono già nell'app (`scripts/sheets_defaults.json`): "Scarica dal foglio" funziona anche sul NAS.

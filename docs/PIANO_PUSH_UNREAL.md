@@ -346,3 +346,16 @@ Browser (utente A) ──► App sul NAS ◄──(HTTPS, solo in uscita, token)
 - Canale app→Unreal verificato: ✅ (§2).
 - Domande §10: A, B, D, F, H, K, L, M risolte (§0); C e J rinviate dall'utente. L'utente ha segnalato **altri due punti in sospeso** ancora da comunicare.
 - Implementazione: ✅ **Fase 0 completata il 2026-10-07** (ping Editor, sola lettura); ✅ **lettura EDA_ da Unreal** (M1, sola lettura) completata; ⏸️ Fase 1 (push EDA_) **in pausa per vincolo dell'utente**: codice scritto ma non collegato e con scrittura bloccata. Quando una fase parte, aggiornare qui lo stato e `docs/DOCUMENTAZIONE.md` §8.
+
+## 12. Piano di verifica sull'Editor (2026-10-08) — da eseguire SOLO con il via libera esplicito dell'utente
+
+Obiettivo: provare che il percorso app → agente → Editor funziona anche in scrittura, a piccoli passi, con possibilità di fermarsi a ogni passo. Prima di iniziare **chiedere**: (a) l'altra sessione sul ramo crafting ha finito (asset sporchi nell'Editor: `BPW_SR_Crafting_Screen` risultava sporco il 2026-10-08 e non è nostro)? (b) l'utente abilita `HG_UE_ALLOW_WRITE=1` sull'app e sul PC dell'agente? (c) il progetto è su Plastic: salvare è consentito, **nessun check-in** (decisione §0 p.5).
+
+Prerequisiti (sola lettura, già funzionanti): agente connesso; "Sincronizza Unreal" senza errori; "Controlli" senza errori; ping dell'Editor con 0 asset sporchi (annotare quali sono prima di iniziare per non attribuirci quelli degli altri).
+1. **Test di sola lettura finale**: ricontrollare discrepanze (oggi: 1 EDA da creare, 193 diversi, 2 Blueprint mancanti, DataTable identiche) e annotare i pacchetti sporchi.
+2. **Prima scrittura, la più sicura**: `DT_EventsSignature` (nessun testo localizzato). `POST /api/unreal/datatables/apply {table:"signature", confirm:true}`. Verifica: il contenuto esportato dopo l'apply è identico, stesso numero di righe (665), un solo pacchetto salvato (`savedPackages`), nessun altro asset sporco.
+3. `DT_DialoguesMultiplicityRules`, poi `DT_EventsText` (qui verificare che il testo FText mantenga namespace/chiave `DT_EventsText [hash]` / `<Riga>_Text`; se l'import li cambia, **fermarsi** e annotarlo in `docs/INTERVENTI_UNREAL.md`).
+4. **Data Asset EDA_**: un lotto minimo (es. la creazione di `EDA_COL-RocketsRecharge` e 2-3 aggiornamenti scelti dall'utente) con `entities_push.py` in `apply`; verificare proprietà lette dopo la scrittura, nessun asset non voluto toccato, salvataggio solo degli asset modificati. Poi il resto in lotti da 40 (`HG_UE_BATCH`). Ricordare: per 187 EDA `ProducerIcon` viene scritto per la prima volta; `Test*` vanno esclusi dal push (decisione dell'utente).
+5. **Blueprint**: la creazione non è implementata (solo anteprima dei mancanti): scriverla dopo che i passi 2-4 sono verificati.
+6. **Cancellazioni** (gruppi A/B di `docs/INTERVENTI_UNREAL.md`): solo dopo ripetizione della verifica dei riferimenti (`scripts/unreal_cleanup.js`) e con il via libera dell'utente; mai prima di aver verificato i passi precedenti.
+Dopo ogni passo: ping (asset sporchi), "Sincronizza Unreal" (le discrepanze devono sparire per ciò che è stato scritto), cronologia, e riportare all'utente l'esito con onestà (cosa provato, cosa no). Se un passo fallisce: fermarsi, non riprovare alla cieca, descrivere l'errore.

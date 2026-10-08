@@ -6,7 +6,7 @@ RUN apk add --no-cache tini
 
 WORKDIR /app
 COPY server.js hellgalaxy.html VERSION ./
-COPY scripts/migrate_to_db.js scripts/migrate_enemies_to_db.js scripts/migrate_entities_to_db.js scripts/sheet_mappings.js scripts/unreal_bridge.js scripts/unreal_read.js scripts/entity_effective.js scripts/modules_sheet.js scripts/tabs_sheet.js scripts/tabs_server.js scripts/grid_tabs.js scripts/unreal_links.js scripts/unreal_datatables.js scripts/unreal_entities.js scripts/project_update.js scripts/agent_hub.js scripts/unreal_agent.js scripts/server_sync.js scripts/unreal_sync.js scripts/agent_bundle.js ./scripts/
+COPY scripts/migrate_to_db.js scripts/migrate_enemies_to_db.js scripts/migrate_entities_to_db.js scripts/sheet_mappings.js scripts/unreal_bridge.js scripts/unreal_read.js scripts/entity_effective.js scripts/modules_sheet.js scripts/tabs_sheet.js scripts/tabs_server.js scripts/grid_tabs.js scripts/unreal_links.js scripts/unreal_datatables.js scripts/unreal_entities.js scripts/project_update.js scripts/agent_hub.js scripts/unreal_agent.js scripts/server_sync.js scripts/unreal_sync.js scripts/agent_bundle.js scripts/sheets_defaults.json scripts/rows_admin.js scripts/quality_checks.js ./scripts/
 COPY scripts/unreal/entities_read.py scripts/unreal/modules_read.py scripts/unreal/tabs_read.py scripts/unreal/links_read.py scripts/unreal/datatables_io.py scripts/unreal/entities_push.py scripts/unreal/refs_check.py scripts/unreal/delete_assets.py ./scripts/unreal/
 
 # Dati sorgente e immagini iniziali. Stanno in /seed e non sotto /app perche'

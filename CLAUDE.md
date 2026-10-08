@@ -8,6 +8,7 @@ Altri documenti da leggere: `docs/INTERVENTI_UNREAL.md` (tutto ciò che richiede
 
 - **Progetto Unreal (`D:/Plastic/HellGalaxy`): NON modificare né creare file/asset** (documentazione compresa) senza chiedere: l'utente ci lavora in parallelo con un'altra sessione (ramo crafting). L'app lo **legge soltanto** (MCP dell'Editor, `auto_save:"false"`); la scrittura è bloccata da `HG_UE_ALLOW_WRITE`. Cancellazioni solo dopo verifica dei riferimenti e con via libera esplicito. Mai commit/check-in su Plastic.
 - **Commit e push del repository dell'app solo su richiesta esplicita** dell'utente. Ogni commit+push **incrementa il file `VERSION`** (mostrato sotto il titolo dell'app) e aggiorna la documentazione nello stesso commit.
+- **Verifica sull'Editor**: piano graduale in `docs/PIANO_PUSH_UNREAL.md` §12. La scrittura su Unreal si sblocca solo con il via libera esplicito dell'utente (`HG_UE_ALLOW_WRITE=1` sull'app **e** sul PC dell'agente); chiedere sempre prima.
 - **L'app non parla mai direttamente con l'Editor Unreal**: passa dall'**agente** (`scripts/unreal_agent.js`, `Avvia agente Unreal.bat`, `HG_AGENT_TOKEN`), anche in locale. Nessun blocco sulle modifiche degli utenti: solo notifiche "X ha modificato Y".
 - **Ad ogni risposta ricordare lo stato funzionale attuale dell'app** e aggiornare `docs/DOCUMENTAZIONE.md` §0; **numerare con i NUMERI (1, 2, 3…, non lettere) i punti a cui l'utente deve rispondere**.
 - Lingua dell'assistente: italiano. Per gli script usare Write/Edit, non heredoc di shell (i backslash si perdono).

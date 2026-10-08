@@ -2,3 +2,4 @@ server.log
 server_run.log
 storage/
 .env
+data/agent_token.txt

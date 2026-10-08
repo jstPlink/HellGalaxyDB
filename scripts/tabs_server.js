@@ -7,7 +7,7 @@ const tabsSheet = require('./tabs_sheet');
 const sheetMap = require('./sheet_mappings');
 const { TABS, ID_KEY, SECTION_KEY } = tabsSheet;
 
-module.exports = function createTabsHandler({ db, sendJson, readJsonBody, SheetError, UnrealError, unrealRead, fs }) {
+module.exports = function createTabsHandler({ db, sendJson, readJsonBody, SheetError, UnrealError, unrealRead, fs, purgeTombstones }) {
   db.exec(`CREATE TABLE IF NOT EXISTS sheet_rows (
     tab TEXT NOT NULL, id TEXT NOT NULL, section TEXT NOT NULL, ord INTEGER NOT NULL,
     current_json TEXT NOT NULL, original_json TEXT NOT NULL, updated_at TEXT NOT NULL,
@@ -91,6 +91,7 @@ module.exports = function createTabsHandler({ db, sendJson, readJsonBody, SheetE
       for (const u of plan.update) q.updateBoth.run(u.original[SECTION_KEY], JSON.stringify(u.current), JSON.stringify(u.original), now, cfg.key, u.id);
       q.clearSections.run(cfg.key);
       parsed.sections.forEach((s, i) => q.insertSection.run(cfg.key, s.name, JSON.stringify(s.headers), i));
+      if (purgeTombstones) purgeTombstones();
       db.exec('COMMIT');
     } catch (e) { db.exec('ROLLBACK'); throw e; }
     report.applied = true;

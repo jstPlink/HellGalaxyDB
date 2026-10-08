@@ -1,6 +1,6 @@
 # Prompt per riprendere il lavoro in una nuova sessione
 
-Ultimo aggiornamento: 2026-10-08 (sera), v0.2.2: agente Unreal, DataTable, collegamenti, notifiche, login utenti, passo 4 server, "Sincronizza Unreal"/"Aggiorna Unreal", elenco modifiche locali. Unreal: nessuna scrittura finché l'utente non sblocca "in blocco"; si lavora solo su ciò che non modifica Unreal. Copiare il blocco qui sotto come primo messaggio della nuova sessione (cartella di lavoro: `C:\Users\franc\Desktop\Github\HellGalaxyDB`).
+Ultimo aggiornamento: 2026-10-08 (fine giornata, v0.2.5), l'utente cambia computer: la nuova sessione deve verificare l'app sull'Editor Unreal. Copiare il blocco qui sotto come primo messaggio della nuova sessione (cartella di lavoro: la cartella del repository HellGalaxyDB sul nuovo computer: fare `git pull` e `git log` per vedere la versione).
 
 ````
 Riprendi il lavoro sul progetto HellGalaxyDB (app Node senza dipendenze npm + SQLite, in C:\Users\franc\Desktop\Github\HellGalaxyDB). Rispondi sempre in italiano.
@@ -33,6 +33,11 @@ Controlla anche la memoria automatica (MEMORY.md).
 - Dati letti da Unreal salvati nel DB dell'app (entities_ue, sheet_ue, modules_ue, entity_links). Station supply e piloni: cargo allineato a Unreal.
 - Decisioni dell'utente sui Test*: da cancellare da Unreal, restare nei fogli; in futuro l'app li creerà con un solo collegamento proveniente dall'app (non implementato).
 
+3b) NUOVO COMPUTER (2026-10-08)
+- Dopo `git pull`: `node server.js` (Node 22.5+ / 24). Il `.env` non è nel repository: il token dell'agente viene generato dal server (data/agent_token.txt), gli indirizzi dei fogli sono in scripts/sheets_defaults.json. Il database data/hellgalaxy.db è nel repository (contiene le decisioni dell'utente).
+- Sul PC dell'Editor: nell'app clic su "Agente: non connesso" -> "Scarica agente (.bat)" e avviarlo (serve Node.js); l'Editor Unreal deve essere aperto sul progetto HellGalaxy.
+- Novità della v0.2.5 da conoscere: righe nuove/eliminate (cestino e "+ Nuova riga"), pulsante "Controlli" (qualità dati), "Cronologia" (chi/cosa/quando, ripristino righe), colore utente, indirizzi fogli predefiniti. I dati del NAS sono separati da quelli locali (il NAS non ha le decisioni locali finché non si invia il pacchetto con HG_REMOTE_URL o si rifà "Scarica dal foglio" + "Sincronizza Unreal").
+
 4) COME INIZIARE
 a) Riassumi in 10 righe lo stato che hai capito e mostra le domande aperte (DOCUMENTAZIONE §0b + backlog punto 9) NUMERATE con numeri.
 b) Controlla che l'agente sia connesso e l'Editor raggiungibile con GET /api/unreal/ping e GET /api/agent/status (solo lettura). Non fare altro su Unreal.
@@ -43,5 +48,5 @@ c) Poi aspetta le risposte dell'utente. Prossimi passi proposti: (1) passo 3 "Bl
 - I punti a cui l'utente deve rispondere vanno numerati con NUMERI (1, 2, 3…), non lettere (richiesta del 2026-10-08).
 - Verifica sul serio (test e prova nel browser/Editor in sola lettura) e di' con onestà cosa non hai potuto provare.
 - Per gli script usa Write/Edit, non heredoc di shell (i backslash si perdono); i file sorgente hanno fine riga CRLF: preservali.
-- Fino a nuova indicazione lavora solo sull'applicazione.
+- NUOVO (2026-10-08): l'utente vuole che tu lavori SULL'EDITOR per verificare la funzionalità dell'app. Questo NON significa che la scrittura sia già sbloccata: prima chiedi (1) se l'altra sessione sul ramo crafting ha finito, (2) il via libera esplicito a HG_UE_ALLOW_WRITE=1 sull'app E sul PC dell'agente, (3) conferma che si salva senza check-in su Plastic. Poi segui docs/PIANO_PUSH_UNREAL.md §12 (verifica graduale: DT_EventsSignature -> altre DataTable -> piccolo lotto EDA_ -> resto; Blueprint e cancellazioni dopo). Prima di tutto verifica in sola lettura (ping, asset sporchi, Sincronizza Unreal, Controlli).
 ````

@@ -30,6 +30,9 @@ on:
       - scripts/project_update.js
       - scripts/agent_hub.js
       - scripts/agent_bundle.js
+      - scripts/sheets_defaults.json
+      - scripts/rows_admin.js
+      - scripts/quality_checks.js
       - scripts/unreal/refs_check.py
       - scripts/unreal/delete_assets.py
       - scripts/unreal_agent.js

@@ -775,3 +775,61 @@ test('T33 cronologia: ogni modifica registra utente, area, campo, valore prima e
   assert.ok(n1 >= before + 2);
   assert.equal((await get('?area=NONESISTE')).items.length, 0, 'filtro per area');
 });
+
+test('T34 righe nuove ed eliminate dall\'app: creazione, duplicato, eliminazione che resiste al pull, ripristino', async () => {
+  const mk = (area, body) => api('POST', '/api/rows/' + area, body, AUTH);
+  // entità nuova
+  assert.equal((await mk('entities', { id: 'COL-NuovaProva' })).status, 200);
+  assert.equal((await mk('entities', { id: 'col-nuovaprova' })).status, 409, 'duplicato (senza distinzione maiuscole)');
+  assert.equal((await mk('entities', { id: 'ID con spazi' })).status, 400);
+  let ents = (await api('GET', '/api/entities', null, AUTH)).json.items;
+  const n = ents.find(e => e['(ID)'] === 'COL-NuovaProva');
+  assert.ok(n && n.Label === '' && n.EntityType === '', 'riga vuota con tutte le colonne');
+  assert.equal((await api('PUT', '/api/entities/COL-NuovaProva', { fields: { Label: 'Prova' } }, AUTH)).status, 200);
+  // un pull dal foglio non la tocca (resta "solo nell'app")
+  const p = await api('POST', '/api/sync/pull/entities?apply=1&skipConflicts=1', null, AUTH);
+  assert.equal(p.status, 200);
+  assert.ok((await api('GET', '/api/entities', null, AUTH)).json.items.some(e => e['(ID)'] === 'COL-NuovaProva'));
+  // eliminazione di una riga del foglio: dopo il pull NON ritorna
+  const target = ents.find(e => e['(ID)'] === 'MOD02-Engine_M');
+  assert.ok(target);
+  assert.equal((await api('DELETE', '/api/rows/entities/MOD02-Engine_M', null, AUTH)).status, 200);
+  assert.ok(!(await api('GET', '/api/entities', null, AUTH)).json.items.some(e => e['(ID)'] === 'MOD02-Engine_M'));
+  await api('POST', '/api/sync/pull/entities?apply=1&skipConflicts=1', null, AUTH);
+  assert.ok(!(await api('GET', '/api/entities', null, AUTH)).json.items.some(e => e['(ID)'] === 'MOD02-Engine_M'), 'il pull non la fa tornare');
+  assert.ok((await api('GET', '/api/rows/deleted', null, AUTH)).json.items.some(i => i.id === 'MOD02-Engine_M'));
+  // ripristino
+  assert.equal((await api('POST', '/api/rows/entities/MOD02-Engine_M/restore', null, AUTH)).status, 200);
+  const back = (await api('GET', '/api/entities', null, AUTH)).json.items.find(e => e['(ID)'] === 'MOD02-Engine_M');
+  assert.equal(back.Label, target.Label, 'stessi dati di prima');
+  // cronologia: aggiunta e rimozione registrate
+  const h = (await api('GET', '/api/history?q=COL-NuovaProva', null, AUTH)).json.items;
+  assert.ok(h.some(i => i.field === '(riga)' && i.new === 'aggiunta'));
+  // riga nuova nei tab a sezioni: serve la sezione
+  assert.equal((await mk('modules', { id: 'MOD-NuovoProva' })).status, 400, 'senza sezione valida');
+  // pulizia
+  await api('DELETE', '/api/rows/entities/COL-NuovaProva', null, AUTH);
+});
+
+test('T35 controlli di qualità: segnalano valori fuori elenco e righe orfane (sola lettura)', async () => {
+  const q = require('../scripts/quality_checks');
+  const ent = (id, o) => ({ '(ID)': id, Label: 'x', BriefDescription: '', EntityType: 'Item', BasePrice: '1', BaseRarity: 'Common', Icon: 'T_X', LabelKey: id + '-Name', DescriptionKey: '', ...o });
+  const res = q.runChecks({
+    entities: [ent('A'), ent('B', { EntityType: 'Boh', BaseRarity: 'Rarissimo', BasePrice: 'tanti', Icon: '' }), ent('C', { LabelKey: 'MANCA-Name' })],
+    modules: [{ '(ID)': 'ORFANO' }], modEff: {}, cargo: [{ '(ID)': 'A', StackValue: 'dieci', Attractable: 'forse' }], items: [],
+    locKeys: new Set(['A-Name', 'B-Name']), locEnglish: new Map([['A-Name', 'diverso']]), links: {},
+  });
+  const by = c => res.find(r => r.code === c);
+  assert.deepEqual(by('ent-type').items, ['B = "Boh"']);
+  assert.ok(by('ent-rarity') && by('ent-price') && by('ent-icon'));
+  assert.deepEqual(by('mod-no-entity').items, ['ORFANO']);
+  assert.ok(by('cargo-stack') && by('cargo-bool'));
+  assert.deepEqual(by('loc-label-key').items, ['C → MANCA-Name']);
+  assert.deepEqual(by('loc-label-diff').items, ['A']);
+  assert.equal(res[0].severity, 'error', 'gli errori vengono per primi');
+  // la rotta funziona sul database di test e non scrive nulla
+  const before = (await api('GET', '/api/history?limit=500', null, AUTH)).json.items.length;
+  const r = await api('GET', '/api/quality', null, AUTH);
+  assert.equal(r.status, 200); assert.ok(Array.isArray(r.json.checks));
+  assert.equal((await api('GET', '/api/history?limit=500', null, AUTH)).json.items.length, before);
+});
