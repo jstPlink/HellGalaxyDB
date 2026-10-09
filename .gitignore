@@ -4,3 +4,4 @@ storage/
 .env
 data/agent_token.txt
 data/media/
+data/backups/

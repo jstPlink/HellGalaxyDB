@@ -41,6 +41,7 @@ on:
       - scripts/unreal_sync.js
       - scripts/unreal_drift.js
       - scripts/remote_replica.js
+      - scripts/backup.js
       - scripts/unreal/tabs_read.py
       - scripts/unreal/entities_read.py
       - scripts/unreal/modules_read.py

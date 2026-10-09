@@ -608,7 +608,7 @@ function serveStatic(req, res, urlPath) {
   // da /api/* (protetta dal token, se impostato). Restano pubblici l'HTML, le
   // immagini e i JSON usati dalla UI (data/*.json, data/*.csv).
   const relPosix = path.relative(ROOT, file).split(path.sep).join('/');
-  if (/\.(db|gs|sh|env)$/i.test(relPosix) || /^(scripts|tests|docs|\.git|\.github|\.claude|data\/media)\//.test(relPosix) ||
+  if (/\.(db|gs|sh|env)$/i.test(relPosix) || /^(scripts|tests|docs|\.git|\.github|\.claude|data\/media|data\/backups)\//.test(relPosix) ||
       ['server.js', 'Dockerfile', 'docker-compose.yml', 'CLAUDE.md'].includes(relPosix) || /(^|\/)agent_token\.txt$/i.test(relPosix)) {
     res.writeHead(404); res.end('not found'); return;
   }
@@ -632,7 +632,10 @@ const tabsHandler = require('./scripts/tabs_server')({ db, sendJson, readJsonBod
 const rowsAdmin = require('./scripts/rows_admin')({ db, sendJson, readJsonBody, sheet, msheet });
 // Replica automatica verso il server (solo righe cambiate): ogni modifica fatta in locale arriva anche sul server (HG_REMOTE_URL).
 const remoteReplica = require('./scripts/remote_replica');
+let replicaRev = 0; // aumenta a ogni modifica dei dati: l'app locale lo legge per sapere se c'è qualcosa di nuovo da scaricare
 const replica = remoteReplica.createReplica({ db, baseDir: path.join(path.dirname(DB_PATH), 'media'), log: m => console.log(m) });
+// Backup del database (giornaliero alle 03:00 ora italiana, manuale, e prima di ogni "Applica su Unreal").
+const backup = require('./scripts/backup')({ db, dbPath: DB_PATH, sendJson, readJsonBody, log: m => console.log(m) });
 // Texture/mesh esportate da Unreal (via agente), anteprime, contatore dello spazio occupato.
 const media = require('./scripts/media')({ db, sendJson, readJsonBody, dbPath: DB_PATH, imagesDir: IMAGES_DIR, agentToken: AGENT_TOKEN, apiToken: API_TOKEN, bridge: unreal, getAgentStatus: () => agentHub.status() });
 
@@ -726,7 +729,11 @@ const server = http.createServer(async (req, res) => {
     if (snap) res.on('finish', () => { try { if (res.statusCode < 400) recordHistory(snap, req, urlPath, queryString); } catch (e) { /* la cronologia non deve mai rompere una richiesta */ } });
   }
   res.on('finish', () => { try { recordChange(req, urlPath, queryString, res.statusCode); } catch (e) { /* il registro non deve mai rompere una richiesta */ } });
-  res.on('finish', () => { if (req.method !== 'GET' && res.statusCode < 400 && !/^\/api\/(agent|import|remote|users|project-update)\b/.test(urlPath)) replica.schedule(); });
+  res.on('finish', () => {
+    if (req.method === 'GET' || res.statusCode >= 400) return;
+    if (!/^\/api\/(agent|replica|remote|users|project-update)\b/.test(urlPath)) replicaRev++;
+    if (!/^\/api\/(agent|import|replica|remote|users|project-update)\b/.test(urlPath)) replica.schedule();
+  });
 
   try {
     if (urlPath === '/api/data' && req.method === 'GET') {
@@ -762,7 +769,7 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'no-store' });
       return res.end(agentBundle.buildScript(ROOT));
     }
-    if (urlPath === '/api/media/upload' && req.method === 'POST') { await media.upload(req, res, Object.fromEntries(query)); replica.schedule(); return; }
+    if (urlPath === '/api/media/upload' && req.method === 'POST') { await media.upload(req, res, Object.fromEntries(query)); replicaRev++; replica.schedule(); return; }
     if (API_TOKEN && urlPath.startsWith('/api/')) {
       const given = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
       if (given !== API_TOKEN) return sendJson(res, 401, { error: 'token mancante o errato' });
@@ -838,6 +845,20 @@ const server = http.createServer(async (req, res) => {
     if (urlPath === '/api/import/delta' && req.method === 'POST') {
       const body = await readJsonBody(req);
       try { return sendJson(res, 200, { ok: true, ...remoteReplica.importDelta(db, body) }); }
+      catch (e) { return sendJson(res, 400, { ok: false, error: e.message }); }
+    }
+    // Sincronizzazione server → locale: il server espone impronte e righe; l'app locale ne chiede solo quelle cambiate
+    if (urlPath === '/api/replica/rev' && req.method === 'GET') return sendJson(res, 200, { rev: replicaRev });
+    if (urlPath === '/api/replica/manifest' && req.method === 'GET') return sendJson(res, 200, { rev: replicaRev, tables: remoteReplica.manifest(db) });
+    if (urlPath === '/api/replica/rows' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      try { return sendJson(res, 200, { rows: remoteReplica.rowsByKeys(db, body.table, body.keys) }); }
+      catch (e) { return sendJson(res, 400, { error: e.message }); }
+    }
+    if (urlPath === '/api/replica/conflicts' && req.method === 'GET') return sendJson(res, 200, { conflicts: replica.conflicts() });
+    if (urlPath === '/api/replica/resolve' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      try { return sendJson(res, 200, await replica.resolve(String(body.table || ''), String(body.key || ''), String(body.choice || ''))); }
       catch (e) { return sendJson(res, 400, { ok: false, error: e.message }); }
     }
     if (urlPath === '/api/remote/status' && req.method === 'GET') return sendJson(res, 200, { ...replica.status(), pending: replica.status().configured ? replica.pendingCount() : 0 });
@@ -933,6 +954,7 @@ const server = http.createServer(async (req, res) => {
     if (urlPath === '/api/project-update' && req.method === 'POST') {
       const body = await readJsonBody(req);
       try {
+        if (body.mode === 'apply') { try { backup.create('prima-di-unreal'); } catch (e) { return sendJson(res, 500, { ok: false, error: 'Backup del database non riuscito, aggiornamento annullato: ' + e.message }); } }
         const job = await projectUpdate.run(body.mode === 'apply' ? 'apply' : 'dry', {
           entityRows: () => stmts.allEntities.all().map(r => JSON.parse(r.current_json)), src: gridSrc, confirm: body.confirm === true, db });
         return sendJson(res, 202, { job });
@@ -1002,6 +1024,7 @@ const server = http.createServer(async (req, res) => {
         throw e;
       }
     }
+    if (await backup(req, res, urlPath)) return;
     if (await media(req, res, urlPath, Object.fromEntries(query))) return;
     if (await rowsAdmin(req, res, urlPath)) return;
     if (await tabsHandler(req, res, urlPath, query)) return;
@@ -1095,4 +1118,4 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => { console.log(`Hell Galaxy Database in ascolto su http://localhost:${PORT}`); replica.startScheduler(); });
+server.listen(PORT, () => { console.log(`Hell Galaxy Database in ascolto su http://localhost:${PORT}`); replica.startScheduler(); backup.startScheduler(); });

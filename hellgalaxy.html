@@ -575,7 +575,7 @@
     <div class="top-actions">
       <button class="btn small" id="userBtn" onclick="hgSwitchUser()" title="Utente attuale: clic per cambiare utente"><span id="userLabel"></span></button>
       <span class="dirty-pill" id="agentPill"title="Agente Unreal: il ponte tra l'app e l'Editor (si avvia sul PC dove è aperto l'Editor)"><span class="dot"></span><span id="agentLabel">Agente: &hellip;</span></span>
-      <button class="btn ghost small" id="qualityBtn" title="Controlli di qualità sui dati (sola lettura): valori fuori elenco, chiavi mancanti, righe orfane">Controlli</button>
+      <button class="btn small" id="qualityBtn" style="background:#d93025;border-color:#b3261e;color:#fff;font-weight:600" title="Cose da risolvere nei dati (sola lettura): valori fuori elenco, chiavi mancanti, righe orfane">Da risolvere</button>
       <button class="btn ghost small" id="historyBtn" title="Cronologia delle modifiche: chi ha cambiato cosa e quando, con il valore prima e dopo">Cronologia</button>
       <span class="dirty-pill" id="dirtyPill"><span class="dot"></span><span id="dirtyLabel">Nessuna modifica</span></span>
       <button class="btn xl" id="syncUnrealBtn" title="Legge Unreal (sola lettura) e mostra le discrepanze tra l'app e il progetto. Parte da solo dopo l'accesso.">Sincronizza Unreal</button>
@@ -1356,6 +1356,7 @@ function buildSectionbar(){
   if(cur) lastPage[cur.id] = activeSection;
   const btn = (id, label, active, anchored) => '<button class="section-tab ' + (anchored ? 'section-settings ' : '') + (active ? 'active' : '') + '" data-group="' + id + '">' + escapeHtml(label) + '</button>';
   nav.innerHTML = '<div class="tabgroup">' + GROUPS.map(g => btn(g.id, g.label, cur === g, false)).join('') + '</div>' + btn('settings', 'Impostazioni', activeSection === 'settings', true);
+  if(typeof REPLICA_CONFLICTS !== 'undefined' && REPLICA_CONFLICTS){ const sb = nav.querySelector('.section-settings'); if(sb) sb.innerHTML = 'Impostazioni <span style="background:#d93025;color:#fff;border-radius:9px;padding:0 6px;font-size:11px">⚠ ' + REPLICA_CONFLICTS + '</span>'; }
   nav.querySelectorAll('.section-tab').forEach(el => el.addEventListener('click', () => {
     const gid = el.dataset.group;
     activeSection = gid === 'settings' ? 'settings' : (lastPage[gid] || GROUPS.find(g => g.id === gid).pages[0].id);
@@ -2294,6 +2295,43 @@ function setTheme(t){
   try{ localStorage.setItem('hellgalaxy_theme', t === 'sheets' ? 'sheets' : 'dark'); }catch(e){}
   renderAll();
 }
+let REPLICA_CONFLICTS = 0;
+const romeTime = iso => iso ? new Date(iso).toLocaleString('it-IT', {timeZone:'Europe/Rome', day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit'}) : '–';
+async function pollReplica(){
+  try{
+    const s = await apiGet('/api/remote/status');
+    if(s.conflicts !== REPLICA_CONFLICTS){ REPLICA_CONFLICTS = s.conflicts; const b = document.querySelector('#sectionbar .section-settings'); if(b) b.innerHTML = 'Impostazioni' + (REPLICA_CONFLICTS ? ' <span style="background:#d93025;color:#fff;border-radius:9px;padding:0 6px;font-size:11px">⚠ ' + REPLICA_CONFLICTS + '</span>' : ''); }
+  }catch(e){ /* offline */ }
+}
+async function refreshReplicaBox(){
+  const box = document.getElementById('replicaBox'); if(!box) return;
+  try{
+    const [s, c] = await Promise.all([apiGet('/api/remote/status'), apiGet('/api/replica/conflicts')]);
+    if(!s.configured){ box.innerHTML = '<span style="color:var(--text-dim)">Non configurata: questa app non invia dati a un server (HG_REMOTE_URL assente nel .env).</span>'; return; }
+    box.innerHTML = '<div style="font-size:12.5px;line-height:1.7">Server: <span class="mono">' + escapeHtml(s.url) + '</span><br>Ultima sincronizzazione: <strong>' + romeTime(s.lastAt) + '</strong> (ora italiana)' + (s.lastResult ? ' · inviate ' + (s.lastResult.upserted || 0) + ' righe, ricevute ' + (s.lastResult.pulled || 0) : '') + '<br>In attesa di invio: <strong>' + (s.pending || 0) + '</strong> righe · controllo del server ogni ' + s.pullSeconds + ' s · invio di controllo alle ' + escapeHtml(s.times.join(', ')) + (s.running ? '<br><strong>Sincronizzazione in corso…</strong>' : '') + (s.error ? '<br><span style="color:var(--danger)">Ultimo errore: ' + escapeHtml(s.error) + '</span>' : '') + '</div>' +
+      (c.conflicts.length ? '<div style="margin-top:10px;border:1px solid #d93025;border-radius:8px;padding:8px"><strong style="color:#d93025">⚠ ' + c.conflicts.length + ' conflitti da risolvere</strong><div style="font-size:12px;color:var(--text-dim);margin:4px 0">La stessa riga è stata cambiata sia qui sia sul server (o eliminata da una parte e cambiata dall\'altra). Finché non scegli, resta com\'è su entrambi i lati.</div>' +
+        c.conflicts.slice(0, 30).map(x => { const lk = JSON.parse(x.key), name = x.local && (x.local.current_json ? (() => { try{ const j = JSON.parse(x.local.current_json); return j.Label || j['(ID)'] || ''; }catch(e){ return ''; } })() : ''); return '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--border-soft);padding:5px 0;font-size:12.5px"><span class="mono">' + escapeHtml(x.table) + ' · ' + escapeHtml(lk.join(' / ')) + '</span>' + (name ? '<span>(' + escapeHtml(name) + ')</span>' : '') + '<span style="color:var(--text-dim)">' + escapeHtml(x.kind) + '</span><span style="margin-left:auto"><button class="btn small rp-res" data-t="' + escapeHtml(x.table) + '" data-k="' + escapeHtml(x.key) + '" data-c="local">Mantieni la mia</button> <button class="btn ghost small rp-res" data-t="' + escapeHtml(x.table) + '" data-k="' + escapeHtml(x.key) + '" data-c="server">Prendi quella del server</button></span></div>'; }).join('') + '</div>' : '');
+    box.querySelectorAll('.rp-res').forEach(b => b.addEventListener('click', async () => { try{ await apiSend('/api/replica/resolve', 'POST', {table: b.dataset.t, key: b.dataset.k, choice: b.dataset.c}); showToast('Conflitto risolto'); }catch(e){ showToast('Impossibile risolvere il conflitto'); } refreshReplicaBox(); pollReplica(); }));
+  }catch(e){ box.textContent = 'Impossibile leggere lo stato della sincronizzazione.'; }
+}
+async function downloadBackup(file){
+  try{
+    const res = await apiFetch('/api/backups/' + encodeURIComponent(file));
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const blob = await res.blob(), a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = file; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  }catch(e){ showToast('Download del backup non riuscito'); }
+}
+async function refreshBackupBox(){
+  const box = document.getElementById('backupBox'); if(!box) return;
+  try{
+    const d = await apiGet('/api/backups');
+    const fmt = iso => new Date(iso).toLocaleString('it-IT', {timeZone:'Europe/Rome', day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit'});
+    box.innerHTML = d.backups.length ? '<table style="border-collapse:collapse;font-size:12.5px;width:100%">' + d.backups.slice(0, 12).map(b => '<tr style="border-top:1px solid var(--border-soft)"><td style="padding:3px 6px;white-space:nowrap">' + fmt(b.at) + '</td><td style="padding:3px 6px">' + escapeHtml(b.kind === 'auto' ? 'automatico' : (b.kind === 'manuale' ? 'manuale' : 'prima di Unreal')) + '</td><td class="mono" style="padding:3px 6px;text-align:right">' + fmtBytes(b.bytes) + '</td><td style="padding:3px 6px"><button class="btn ghost small bk-dl" data-f="' + escapeHtml(b.file) + '">Scarica</button></td></tr>').join('') + '</table>' + (d.backups.length > 12 ? '<div class="sub">… e altri ' + (d.backups.length - 12) + '</div>' : '') : 'Nessun backup ancora.';
+    box.querySelectorAll('.bk-dl').forEach(b => b.addEventListener('click', () => downloadBackup(b.dataset.f)));
+  }catch(e){ box.textContent = 'Impossibile leggere i backup.'; }
+}
 let mediaTimer = null;
 async function refreshStorageBox(){
   const box = document.getElementById('storageBox'); if(!box) return;
@@ -2357,6 +2395,20 @@ function renderSettings(){
         <div id="mediaSyncState" class="sub" style="margin-top:8px"></div>
       </div>
 
+      <div class="card" id="replicaCard">
+        <h3>Sincronizzazione con il server</h3>
+        <p class="sub">Ogni modifica fatta qui arriva da sola sul server e quelle dei colleghi arrivano qui (solo le righe cambiate). Se la stessa riga è cambiata da entrambe le parti non viene sovrascritta: la scegli tu.</p>
+        <div id="replicaBox">Caricamento&hellip;</div>
+        <div style="margin-top:10px"><button class="btn ghost small" id="replicaNowBtn">Sincronizza ora</button></div>
+      </div>
+
+      <div class="card">
+        <h3>Backup del database</h3>
+        <p class="sub">Copie del database (dati dei fogli, modifiche, letture da Unreal). Ogni giorno alle 03:00 (ora italiana), a mano, e <strong>prima di ogni "Applica su Unreal"</strong>. Si tengono le ultime 14 automatiche, 20 manuali e 10 prima di Unreal. Per ripristinare: ferma l'app, copia il file scelto in <code>data/hellgalaxy.db</code> e riavvia.</p>
+        <div id="backupBox">Caricamento&hellip;</div>
+        <div style="margin-top:10px"><button class="btn ghost small" id="backupNowBtn">Crea backup ora</button></div>
+      </div>
+
       <div class="card">
         <h3>Server &amp; database</h3>
         <p class="sub">I dati di ogni modulo (statistiche, descrizioni, immagini) vivono ora in un database reale (<code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">data/hellgalaxy.db</code>, SQLite) letto e scritto da <code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">server.js</code>. Le immagini caricate vengono salvate come file veri in <code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">images/&lt;categoria&gt;/&lt;ID&gt;.jpg</code>. Per lavorare da un altro computer: copia/sincronizza (es. via Seafile) l'intera cartella del progetto — <code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">data/hellgalaxy.db</code> e <code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">images/</code> incluse — e avvia <code style="font-family:'IBM Plex Mono',monospace;background:var(--surface-3);padding:1px 5px;border-radius:4px;">node server.js</code> lì. Lavora con il server acceso su un solo computer alla volta, per evitare che la sincronizzazione di cartelle scriva sul database mentre è in uso.</p>
@@ -2418,7 +2470,9 @@ function renderSettings(){
     showToast('Link salvato');
   }));
   document.getElementById('exportZipBtn').addEventListener('click', exportImagesZip);
-  refreshStorageBox();
+  refreshStorageBox(); refreshBackupBox(); refreshReplicaBox();
+  document.getElementById('replicaNowBtn').addEventListener('click', async () => { const b = document.getElementById('replicaNowBtn'); b.disabled = true; try{ const r = await apiSend('/api/remote/sync', 'POST'); showToast(r.ok === false ? 'Sincronizzazione non riuscita: ' + r.error : (r.configured === false ? 'Sincronizzazione con il server non configurata' : 'Sincronizzato: inviate ' + r.upserted + ' righe, ricevute ' + r.pulled)); }catch(e){ showToast('Sincronizzazione non riuscita'); } b.disabled = false; refreshReplicaBox(); });
+  document.getElementById('backupNowBtn').addEventListener('click', async () => { try{ await apiSend('/api/backups', 'POST'); showToast('Backup creato'); refreshBackupBox(); refreshStorageBox(); }catch(e){ showToast('Backup non riuscito'); } });
   document.getElementById('mediaSyncBtn').addEventListener('click', () => startMediaSync(false));
   document.getElementById('mediaSyncForceBtn').addEventListener('click', () => { if(confirm('Riesportare da Unreal tutte le texture e le mesh (può richiedere parecchi minuti)?')) startMediaSync(true); });
   document.getElementById('addConnBtn').addEventListener('click', () => document.getElementById('addForm').classList.add('show'));
@@ -3396,7 +3450,7 @@ function renderDbCollectionTable(){
   tbody.innerHTML = rows.map(r => {
     const lk = MEDIA.links[r.id] || {};
     const img = lk.icon ? '<img src="media/textures/' + encodeURIComponent(lk.icon) + '.png" loading="lazy" alt="" title="' + escapeHtml(lk.icon) + '" style="width:44px;height:44px;object-fit:contain;border-radius:6px;display:block">' : '<span class="mono" style="color:var(--text-faint)" title="Nessuna immagine nell\'app">&ndash;</span>';
-    const mk = ['static_mesh','loot_mesh_0','loot_mesh_1','loot_mesh_2','loot_mesh_3','loot_mesh_4','loot_mesh_5','loot_mesh_6'].find(k => lk[k] && MEDIA.assets.mesh[lk[k]]);
+    const mk = ['static_mesh','bp_mesh_0','bp_mesh_1','bp_mesh_2','loot_mesh_0','loot_mesh_1','loot_mesh_2','loot_mesh_3','loot_mesh_4','loot_mesh_5','loot_mesh_6'].find(k => lk[k] && MEDIA.assets.mesh[lk[k]]);
     const mesh = mk && MEDIA.assets.mesh[lk[mk]];
     const meshCell = mesh ? '<button type="button" class="dbm-mesh" data-id="' + escapeHtml(r.id) + '" title="Apri anteprima e scarica FBX" style="background:none;border:0;padding:0;cursor:pointer">' + (mesh.preview ? '<img src="media/previews/' + encodeURIComponent(lk[mk]) + '.png" loading="lazy" alt="" style="width:44px;height:44px;object-fit:contain;display:block">' : '<span class="badge-type">FBX</span>') + '</button>' : '<span style="color:var(--text-faint)">&ndash;</span>';
     return '<tr data-id="' + escapeHtml(r.id) + '"><td>' + img + '</td><td>' + meshCell + '</td><td class="mono">' + escapeHtml(r.id) + '</td><td>' + (escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>') + '</td><td style="color:' + (RARITY_COLOR[r.rarity] || '') + '">' + escapeHtml(r.rarity) + '</td><td class="num-cell">' + escapeHtml(r.price) + '</td><td>' + escapeHtml(cfg.type === 'Item' ? r.sub : '') + '</td><td style="white-space:nowrap"><button type="button" class="btn ghost small dbc-open" data-id="' + escapeHtml(r.id) + '" data-page="' + cfg.detail + '">' + escapeHtml(cfg.detailLabel) + ' &rarr;</button> <button type="button" class="btn ghost small dbc-open" data-id="' + escapeHtml(r.id) + '" data-page="entitysheet">Entit&agrave; &rarr;</button></td></tr>';
@@ -3448,7 +3502,7 @@ async function downloadMesh(name){
 }
 // Il file FBX viene richiesto al server solo quando premi "Scarica": aprire la finestra carica soltanto le anteprime.
 function openMeshDialog(id){
-  const lk = MEDIA.links[id] || {}, parts = [['static_mesh', 'Mesh'], ['shield_static_mesh', 'Shield mesh']].concat([0,1,2,3,4,5,6].map(i => ['loot_mesh_' + i, 'Mesh del loot ' + (i + 1)])).filter(([k]) => lk[k] && MEDIA.assets.mesh[lk[k]]);
+  const lk = MEDIA.links[id] || {}, parts = [['static_mesh', 'Mesh'], ['shield_static_mesh', 'Shield mesh']].concat([0,1,2,3,4,5,6].map(i => ['loot_mesh_' + i, 'Mesh del loot ' + (i + 1)])).concat([0,1,2,3,4,5,6].map(i => ['bp_mesh_' + i, 'Mesh del Blueprint ' + (i + 1)])).filter(([k]) => lk[k] && MEDIA.assets.mesh[lk[k]]);
   if(!parts.length) return;
   const old = document.getElementById('meshDlg'); if(old) old.remove();
   const ov = document.createElement('div'); ov.id = 'meshDlg';
@@ -4516,6 +4570,7 @@ async function pollChanges(){
 }
 refreshAgentPill(); setInterval(refreshAgentPill, 10000);
 pollChanges(); setInterval(pollChanges, 5000);
+pollReplica(); setInterval(pollReplica, 15000);
 
 /* ---- "Aggiorna il progetto": Data Asset -> DataTable -> Blueprint -> server, con stato di ogni passo ---- */
 const PU_STATUS = {pending:['in attesa','var(--text-faint)'], running:['in corso…','var(--accent)'], ok:['ok','var(--good)'], error:['ERRORE','var(--danger)'], blocked:['BLOCCATO','var(--danger)'], todo:['non implementato','var(--text-dim)'], skipped:['saltato','var(--text-faint)']};
@@ -4707,7 +4762,7 @@ async function openQuality(){
   let o = document.getElementById('qOverlay'); if(o) o.remove();
   o = document.createElement('div'); o.id = 'qOverlay';
   o.style.cssText = 'position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px';
-  o.innerHTML = '<div style="background:var(--surface,var(--bg));border:1px solid var(--border);border-radius:10px;padding:20px;width:100%;max-width:900px;max-height:90vh;overflow:auto;color:var(--text)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h3 style="margin:0">Controlli di qualità</h3><button class="btn ghost small" id="qClose">Chiudi</button></div><p style="margin:0 0 12px;color:var(--text-dim);font-size:12.5px">Sola lettura: non modifica nulla e non tocca Unreal. Rosso = da sistemare prima di aggiornare Unreal; giallo = da valutare; grigio = informazione.</p><div id="qBody">Controllo&hellip;</div></div>';
+  o.innerHTML = '<div style="background:var(--surface,var(--bg));border:1px solid var(--border);border-radius:10px;padding:20px;width:100%;max-width:900px;max-height:90vh;overflow:auto;color:var(--text)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h3 style="margin:0">Da risolvere</h3><button class="btn ghost small" id="qClose">Chiudi</button></div><p style="margin:0 0 12px;color:var(--text-dim);font-size:12.5px">Sola lettura: non modifica nulla e non tocca Unreal. Rosso = da sistemare prima di aggiornare Unreal; giallo = da valutare; grigio = informazione.</p><div id="qBody">Controllo&hellip;</div></div>';
   document.body.appendChild(o);
   document.getElementById('qClose').onclick = () => o.remove();
   o.addEventListener('click', e => { if(e.target === o) o.remove(); });

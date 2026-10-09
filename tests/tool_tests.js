@@ -871,6 +871,7 @@ test('T37 replica automatica verso il server: solo le righe cambiate (dati e med
   try {
     for (const b of [BL, BR]) await waitFor(async () => (await fetch(b + '/api/health')).ok);
     const id = (await (await fetch(BL + '/api/entities')).json()).items[0]['(ID)'];
+    assert.equal((await (await fetch(BL + '/api/remote/sync', { method: 'POST' })).json()).ok, true); // prima sincronizzazione: stato di partenza condiviso
     // 1) una modifica locale arriva sul server da sola
     assert.equal((await fetch(`${BL}/api/entities/${encodeURIComponent(id)}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: { Label: 'Replica prova' } }) })).status, 200);
     await waitFor(async () => (await (await fetch(BR + '/api/entities')).json()).items.find(e => e['(ID)'] === id).Label === 'Replica prova');
@@ -890,5 +891,72 @@ test('T37 replica automatica verso il server: solo le righe cambiate (dati e med
     // 4) una riga eliminata in locale (tabella con chiave) viene eliminata anche sul server
     assert.equal((await fetch(`${BL}/api/rows/entities`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: 'ZZ-Prova' }) })).status, 200);
     await waitFor(async () => (await (await fetch(BR + '/api/entities')).json()).items.some(e => e['(ID)'] === 'ZZ-Prova'));
+  } finally { local.kill(); remote.kill(); }
+});
+
+test('T38 backup del database: creazione manuale, elenco, scarico, nome non valido, copia leggibile', async () => {
+  const P6 = 18945, B6 = `http://127.0.0.1:${P6}`;
+  fs.mkdirSync(path.join(tmp, 'bk'), { recursive: true }); fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'bk', 'bk.db'));
+  const srv = spawn(process.execPath, [path.join(ROOT, 'server.js')], { env: { ...process.env, HG_DB_PATH: path.join(tmp, 'bk', 'bk.db'), HG_PORT: String(P6), HG_REMOTE_URL: '' }, stdio: 'ignore' });
+  try {
+    for (let i = 0; i < 50; i++) { try { if ((await fetch(B6 + '/api/health')).ok) break; } catch (e) { /* non ancora su */ } await new Promise(r => setTimeout(r, 100)); }
+    const r = await (await fetch(B6 + '/api/backups', { method: 'POST' })).json();
+    assert.equal(r.ok, true); assert.match(r.file, /^hellgalaxy-\d{8}-\d{6}-manuale\.db$/); assert.ok(r.bytes > 1000);
+    const l = await (await fetch(B6 + '/api/backups')).json();
+    assert.ok(l.backups.some(b => b.file === r.file && b.kind === 'manuale')); assert.equal(l.timezone, 'Europe/Rome');
+    const d = await fetch(B6 + '/api/backups/' + r.file);
+    assert.equal(d.status, 200);
+    const out = path.join(tmp, 'bk', 'copia.db'); fs.writeFileSync(out, Buffer.from(await d.arrayBuffer()));
+    const { DatabaseSync } = require('node:sqlite'); const c = new DatabaseSync(out, { readOnly: true });
+    assert.ok(c.prepare('SELECT COUNT(*) n FROM entities').get().n > 0, 'la copia è un database leggibile'); c.close();
+    assert.equal((await fetch(B6 + '/api/backups/..%2F..%2Fserver.js')).status, 404);
+    assert.equal((await fetch(B6 + '/api/backups/hellgalaxy-1.db')).status, 404);
+    const st = await (await fetch(B6 + '/api/storage')).json();
+    assert.ok(st.items.find(i => i.id === 'backups').bytes > 0, 'i backup sono nel contatore dello spazio');
+  } finally { srv.kill(); }
+});
+
+test('T39 replica server → locale: righe cambiate dai colleghi, eliminazioni, media e conflitti con scelta', async () => {
+  const PL = 18946, PR = 18947, BL = `http://127.0.0.1:${PL}`, BR = `http://127.0.0.1:${PR}`;
+  fs.mkdirSync(path.join(tmp, 'pl'), { recursive: true }); fs.mkdirSync(path.join(tmp, 'pr'), { recursive: true });
+  fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'pl', 'l.db')); fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'pr', 'r.db'));
+  const mk = (db, port, extra) => spawn(process.execPath, [path.join(ROOT, 'server.js')], { env: { ...process.env, HG_DB_PATH: path.join(tmp, db), HG_PORT: String(port), HG_AGENT_TOKEN: 'tok-pull', HG_REMOTE_DEBOUNCE_MS: '300', HG_REMOTE_PULL_SECONDS: '1', HG_REMOTE_URL: '', HG_REMOTE_TOKEN: '', ...extra }, stdio: 'ignore' });
+  const remote = mk('pr/r.db', PR, {}), local = mk('pl/l.db', PL, { HG_REMOTE_URL: BR });
+  const J = { 'Content-Type': 'application/json' };
+  const waitFor = async (fn, ms = 20000) => { const t0 = Date.now(); for (;;) { try { const v = await fn(); if (v) return v; } catch (e) { /* riprova */ } if (Date.now() - t0 > ms) throw new Error('timeout in attesa della replica'); await new Promise(r => setTimeout(r, 200)); } };
+  const label = async (b, id) => (await (await fetch(b + '/api/entities')).json()).items.find(e => e['(ID)'] === id).Label;
+  try {
+    for (const b of [BL, BR]) await waitFor(async () => (await fetch(b + '/api/health')).ok);
+    const ids = (await (await fetch(BL + '/api/entities')).json()).items.map(e => e['(ID)']);
+    const [A, B, C] = ids;
+    // stato di partenza condiviso: prima sincronizzazione (le due copie partono uguali)
+    assert.equal((await (await fetch(BL + '/api/remote/sync', { method: 'POST' })).json()).ok, true);
+    // 1) un collega modifica sul server → arriva in locale (solo quella riga)
+    assert.equal((await fetch(`${BR}/api/entities/${encodeURIComponent(A)}`, { method: 'PUT', headers: J, body: JSON.stringify({ fields: { Label: 'Dal server' } }) })).status, 200);
+    await waitFor(async () => (await label(BL, A)) === 'Dal server');
+    // 2) una riga nuova creata sul server arriva in locale; poi viene eliminata sul server e sparisce in locale
+    assert.equal((await fetch(`${BR}/api/rows/entities`, { method: 'POST', headers: J, body: JSON.stringify({ id: 'ZZ-Server' }) })).status, 200);
+    await waitFor(async () => (await (await fetch(BL + '/api/entities')).json()).items.some(e => e['(ID)'] === 'ZZ-Server'));
+    assert.equal((await fetch(`${BR}/api/rows/entities/ZZ-Server`, { method: 'DELETE' })).status, 200);
+    await waitFor(async () => !(await (await fetch(BL + '/api/entities')).json()).items.some(e => e['(ID)'] === 'ZZ-Server'));
+    // 3) media caricati sul server arrivano in locale (file compresi)
+    assert.equal((await fetch(`${BR}/api/media/upload?kind=texture&name=T_dal_server.png`, { method: 'POST', headers: { Authorization: 'Bearer tok-pull' }, body: Buffer.from([137, 80, 78, 71, 1, 2]) })).status, 200);
+    await waitFor(async () => (await (await fetch(BL + '/api/media')).json()).assets.texture.T_dal_server);
+    assert.equal((await fetch(BL + '/media/textures/T_dal_server.png')).status, 200);
+    // 4) conflitto: la stessa riga cambia su entrambi i lati → non si sovrascrive, compare l'avviso
+    await fetch(`${BL}/api/entities/${encodeURIComponent(B)}`, { method: 'PUT', headers: J, body: JSON.stringify({ fields: { Label: 'Locale B' } }) });
+    await fetch(`${BR}/api/entities/${encodeURIComponent(B)}`, { method: 'PUT', headers: J, body: JSON.stringify({ fields: { Label: 'Server B' } }) });
+    const cf = await waitFor(async () => { const c = (await (await fetch(BL + '/api/replica/conflicts')).json()).conflicts; return c.find(x => x.table === 'entities' && x.key === JSON.stringify([B])) ? c : null; });
+    assert.equal(await label(BL, B), 'Locale B'); assert.equal(await label(BR, B), 'Server B');
+    // 5) scelta "Mantieni la mia" → il server prende quella locale
+    assert.equal((await (await fetch(BL + '/api/replica/resolve', { method: 'POST', headers: J, body: JSON.stringify({ table: 'entities', key: JSON.stringify([B]), choice: 'local' }) })).json()).ok, true);
+    await waitFor(async () => (await label(BR, B)) === 'Locale B');
+    // 6) altro conflitto risolto con "Prendi quella del server"
+    await fetch(`${BL}/api/entities/${encodeURIComponent(C)}`, { method: 'PUT', headers: J, body: JSON.stringify({ fields: { Label: 'Locale C' } }) });
+    await fetch(`${BR}/api/entities/${encodeURIComponent(C)}`, { method: 'PUT', headers: J, body: JSON.stringify({ fields: { Label: 'Server C' } }) });
+    await waitFor(async () => (await (await fetch(BL + '/api/replica/conflicts')).json()).conflicts.some(x => x.key === JSON.stringify([C])));
+    assert.equal((await (await fetch(BL + '/api/replica/resolve', { method: 'POST', headers: J, body: JSON.stringify({ table: 'entities', key: JSON.stringify([C]), choice: 'server' }) })).json()).ok, true);
+    assert.equal(await label(BL, C), 'Server C');
+    const st = await (await fetch(BL + '/api/remote/status')).json(); assert.equal(st.conflicts, 0);
   } finally { local.kill(); remote.kill(); }
 });

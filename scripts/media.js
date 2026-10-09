@@ -132,9 +132,10 @@ module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imag
     const media = mediaSizes.textures + mediaSizes.previews + mediaSizes.meshes;
     const database = fileSize(dbPath) + fileSize(dbPath + '-wal') + fileSize(dbPath + '-shm');
     const images = dirSize(imagesDir);
-    const dataOther = Math.max(0, dirSize(dataDir) - media - database);
+    const backups = dirSize(path.join(dataDir, 'backups'));
+    const dataOther = Math.max(0, dirSize(dataDir) - media - database - backups);
     const items = [{ id: 'database', label: 'Database', bytes: database }, { id: 'images', label: 'Immagini (images/)', bytes: images }, { id: 'textures', label: 'Texture (icone)', bytes: mediaSizes.textures },
-      { id: 'previews', label: 'Anteprime mesh', bytes: mediaSizes.previews }, { id: 'meshes', label: 'File FBX', bytes: mediaSizes.meshes }, { id: 'data', label: 'Altri dati (CSV/JSON)', bytes: dataOther }];
+      { id: 'previews', label: 'Anteprime mesh', bytes: mediaSizes.previews }, { id: 'meshes', label: 'File FBX', bytes: mediaSizes.meshes }, { id: 'backups', label: 'Backup del database', bytes: backups }, { id: 'data', label: 'Altri dati (CSV/JSON)', bytes: dataOther }];
     let disk = null;
     try { const s = fs.statfsSync(dataDir); disk = { free: Number(s.bavail) * Number(s.bsize), total: Number(s.blocks) * Number(s.bsize) }; } catch (e) { /* non disponibile */ }
     return { items, total: items.reduce((a, i) => a + i.bytes, 0), disk, counts: { textures: db.prepare("SELECT COUNT(*) c FROM media_assets WHERE kind='texture'").get().c, meshes: db.prepare("SELECT COUNT(*) c FROM media_assets WHERE kind='mesh'").get().c } };
@@ -160,9 +161,9 @@ module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imag
     try {
       const inv = bridge.lastJsonLine((await bridge.execPython(`${py()}\n\ninventory()\n`, { timeoutMs: 240000 })).output);
       const save = db.prepare('INSERT OR REPLACE INTO media_links (owner, role, kind, name) VALUES (?, ?, ?, ?)');
-      // le mesh dei loot (LDA_) servono solo per gli ID che esistono in ENTITIES (gli altri LDA_ sono orfani)
+      // le mesh dei loot (LDA_) e dei Blueprint servono solo per gli ID che esistono in ENTITIES (gli altri sono orfani)
       const entIds = new Set(db.prepare('SELECT id FROM entities').all().map(r => r.id));
-      for (const m of inv.meshes) m.owners = m.owners.filter(o => !o.role.startsWith('loot_mesh_') || entIds.has(o.id));
+      for (const m of inv.meshes) m.owners = m.owners.filter(o => !(o.role.startsWith('loot_mesh_') || o.role.startsWith('bp_mesh_')) || entIds.has(o.id));
       inv.meshes = inv.meshes.filter(m => m.owners.length);
       db.exec('BEGIN');
       try {

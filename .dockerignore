@@ -11,3 +11,4 @@ scripts/*.py
 scripts/*.gs
 .env
 data/media
+data/backups

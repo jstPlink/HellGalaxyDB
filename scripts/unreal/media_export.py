@@ -13,6 +13,7 @@ import unreal, json, os, tempfile
 EDA_FOLDER = '/Game/2_LOGIC/Entities/DataAssets/Entities'
 SMDA_FOLDER = '/Game/2_LOGIC/Entities/DataAssets/Modules'
 LDA_FOLDER = '/Game/2_LOGIC/Entities/DataAssets/Loots'
+BP_FOLDERS = ['/Game/2_LOGIC/Entities/BP/Loots', '/Game/2_LOGIC/Entities/BP/Items']  # BP_ACS_Loot_<ID> e SML_SI_<ID>: le mesh stanno nei Blueprint
 
 
 def _prop(o, name):
@@ -74,6 +75,24 @@ def inventory():
             arr = []
         for i, m in enumerate(arr):
             _add(meshes, m, n[4:], 'loot_mesh_%d' % i, 'StaticMesh')
+    # mesh referenziate dai Blueprint degli oggetti (loot e item): dipendenze dirette di tipo StaticMesh (sola lettura dell'Asset Registry)
+    ar = unreal.AssetRegistryHelpers.get_asset_registry()
+    opt = unreal.AssetRegistryDependencyOptions(include_soft_package_references=True, include_hard_package_references=True, include_searchable_names=False, include_soft_management_references=False, include_hard_management_references=False)
+    for folder in BP_FOLDERS:
+        for a in _assets(folder):
+            n = str(a.asset_name)
+            owner = n[len('BP_ACS_Loot_'):] if n.startswith('BP_ACS_Loot_') else (n[len('SML_SI_'):] if n.startswith('SML_SI_') else None)
+            if not owner:
+                continue
+            i = 0
+            for pkg in sorted(str(x) for x in (ar.get_dependencies(a.package_name, opt) or [])):
+                if not pkg.startswith('/Game'):
+                    continue
+                for d in ar.get_assets_by_package_name(pkg):
+                    if str(d.asset_class_path.asset_name) == 'StaticMesh':
+                        o = d.get_asset()
+                        _add(meshes, o, owner, 'bp_mesh_%d' % i, 'StaticMesh')
+                        i += 1
     print(json.dumps({'textures': sorted(textures.values(), key=lambda x: x['path']), 'meshes': sorted(meshes.values(), key=lambda x: x['path'])}))
 
 
