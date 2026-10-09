@@ -24,7 +24,9 @@ const msheet = require('./scripts/modules_sheet');
 
 // File .env opzionale (ignorato da git): righe NOME=valore. Le variabili già
 // presenti nell'ambiente hanno la precedenza.
+// SICUREZZA: con HG_DB_PATH (solo test, database temporaneo) il .env NON si legge mai: un test non deve poter parlare con il server vero.
 try {
+  if (process.env.HG_DB_PATH) throw new Error('modalità test');
   for (const line of fs.readFileSync(path.join(__dirname, '.env'), 'utf8').split(/\r?\n/)) {
     const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/);
     if (m && !(m[1] in process.env)) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
