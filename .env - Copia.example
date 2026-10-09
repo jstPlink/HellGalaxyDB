@@ -1,0 +1,15 @@
+# Copia questo file in ".env" (stessa cartella del docker-compose.yml sul NAS, oppure nella cartella dell'app locale) e compila.
+# Il file ".env" non va mai nel repository.
+
+# --- Sul NAS (accanto a docker-compose.yml) ---
+# Password condivisa per usare il sito: scegli una stringa lunga e casuale. Chi apre il sito la inserisce una volta (il browser la ricorda).
+HG_API_TOKEN=dkJINSOIjiasof34fs02nf2032nOJNF808NUfj80s
+# Facoltativo: se vuoto lo genera il server.
+HG_AGENT_TOKEN=
+
+# --- Sul PC dell'app locale (cartella del progetto) ---
+# Indirizzo del server e stessa password (HG_API_TOKEN del NAS): attiva l'invio automatico delle modifiche al server.
+# HG_REMOTE_URL=https://hgdb.fplinio.it
+# HG_REMOTE_TOKEN=
+# Orari dell'invio di controllo, ora italiana (predefinito 08:00,13:00,19:00)
+# HG_REMOTE_SYNC_TIMES=08:00,13:00,19:00
