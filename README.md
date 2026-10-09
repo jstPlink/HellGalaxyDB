@@ -178,3 +178,7 @@ Sul PC dove lavori con l'Editor Unreal: nell'app clic su **"Agente: non connesso
 - **Spazio occupato**: Impostazioni → "Spazio occupato sul server" (database, immagini, texture, anteprime, FBX, disco libero).
 - **Sincronizza Unreal** parte da solo solo al login. Prima di "Applica su Unreal" l'app verifica in sottofondo che Unreal non sia stato modificato da altri dopo l'ultima lettura (altrimenti avvisa).
 - Il `.bat` dell'agente installa Node.js da solo se manca. Le notifiche "X ha modificato…" mostrano il pallino dell'utente.
+
+## Server con password e invio automatico (v0.2.7)
+- Sul NAS crea accanto a `docker-compose.yml` un file `.env` (modello: `.env.example`) con `HG_API_TOKEN=<stringa lunga e casuale>`, poi `docker compose pull && docker compose up -d`. Da quel momento chi apre il sito inserisce la password una volta (il browser la ricorda); se la cambi, tutti la reinseriscono.
+- Sul PC dell'app locale, nel `.env`: `HG_REMOTE_URL=https://hgdb.fplinio.it` e `HG_REMOTE_TOKEN=<la stessa password>`. Da allora ogni modifica (e i media) arriva da sola sul server, solo le righe cambiate, anche agli orari 08:00, 13:00, 19:00 (ora italiana). L'invio verso Unreal resta un clic.

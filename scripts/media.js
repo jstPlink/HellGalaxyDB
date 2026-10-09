@@ -14,7 +14,7 @@ const crypto = require('crypto');
 
 const PY = path.join(__dirname, 'unreal', 'media_export.py');
 const NAME_RE = /^[A-Za-z0-9_.\-]{1,160}$/;
-const KINDS = { texture: { dir: 'textures', ext: '.png' }, mesh: { dir: 'meshes', ext: '.fbx' }, obj: { dir: null, ext: '.obj' } };
+const KINDS = { texture: { dir: 'textures', ext: '.png' }, mesh: { dir: 'meshes', ext: '.fbx' }, obj: { dir: null, ext: '.obj' }, preview: { dir: 'previews', ext: '.png' } };
 const MAX_UPLOAD = 1024 * 1024 * 1024;
 
 // ---------- anteprima della mesh: rasterizzatore software da OBJ a PNG (nessuna dipendenza) ----------
@@ -83,7 +83,7 @@ function renderPreview(objText, size = 256) {
   return encodePng(size, size, out);
 }
 
-module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imagesDir, agentToken, bridge, getAgentStatus }) {
+module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imagesDir, agentToken, apiToken, bridge, getAgentStatus }) {
   const base = path.join(path.dirname(dbPath), 'media');
   for (const d of ['textures', 'meshes', 'previews']) fs.mkdirSync(path.join(base, d), { recursive: true });
   db.exec(`CREATE TABLE IF NOT EXISTS media_assets (kind TEXT NOT NULL, name TEXT NOT NULL, size INTEGER NOT NULL, preview INTEGER NOT NULL DEFAULT 0, path TEXT, exported_at TEXT NOT NULL, PRIMARY KEY (kind, name))`);
@@ -92,7 +92,9 @@ module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imag
   // ---------- caricamento (solo agente, token agente) ----------
   async function upload(req, res, query) {
     const given = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
-    if (!agentToken || given !== agentToken) return sendJson(res, 401, { error: 'token agente mancante o errato (HG_AGENT_TOKEN)' });
+    // chi può caricare: l'agente (token agente) oppure l'app locale che replica sul server (token API; se il server non ha token API, nessuna intestazione)
+    const okAgent = !!agentToken && given === agentToken, okApi = apiToken ? given === apiToken : !req.headers.authorization;
+    if (!okAgent && !okApi) return sendJson(res, 401, { error: 'token mancante o errato (HG_AGENT_TOKEN / HG_API_TOKEN)' });
     const k = KINDS[query.kind], file = String(query.name || '');
     if (!k || !NAME_RE.test(file) || !file.endsWith(k.ext)) return sendJson(res, 400, { error: 'tipo o nome file non validi' });
     const name = file.slice(0, -k.ext.length);
@@ -113,6 +115,7 @@ module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imag
         return sendJson(res, 200, { ok: true, preview: png.length });
       }
       fs.renameSync(tmp, path.join(base, k.dir, file));
+      if (query.kind === 'preview') { db.prepare('UPDATE media_assets SET preview = 1 WHERE kind = ? AND name = ?').run('mesh', name); return sendJson(res, 200, { ok: true, size }); }
       db.prepare(`INSERT INTO media_assets (kind, name, size, preview, exported_at) VALUES (?, ?, ?, ?, ?)
         ON CONFLICT(kind, name) DO UPDATE SET size = excluded.size, exported_at = excluded.exported_at`)
         .run(query.kind, name, size, fs.existsSync(path.join(base, 'previews', name + '.png')) && query.kind === 'mesh' ? 1 : 0, new Date().toISOString());

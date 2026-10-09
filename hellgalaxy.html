@@ -525,6 +525,9 @@
   html[data-theme="sheets"] .btn.xl:hover{ background:#f1f3f4; border-color:#5f6368; }
   html[data-theme="sheets"] .btn.xl.primary{ background:#188038; border-color:#188038; color:#fff; }
   html[data-theme="sheets"] .btn.xl.primary:hover{ background:#137333; border-color:#137333; }
+  .tab.temp{ background:#fff3b0 !important; border-color:#e0b400 !important; color:#5c4a00 !important; }
+  .tab.temp.active{ box-shadow: inset 0 -3px 0 #b88a00; font-weight:600; }
+  .th-temp, .td-temp{ background:#fff3b0 !important; color:#5c4a00 !important; }
   .btn.temp, .chip.temp{ background:#fff3b0 !important; border-color:#e0b400 !important; color:#5c4a00 !important; }
   .btn.temp:hover, .chip.temp:hover{ background:#ffe97a !important; }
   .section-tab{ border:2px solid var(--border); background: var(--surface-2); box-shadow:0 1px 3px rgba(0,0,0,.25); }
@@ -837,7 +840,7 @@
     <div class="table-shell">
       <div class="table-scroll">
         <table>
-          <thead><tr><th>Immagine</th><th>Mesh</th><th>ID</th><th>Nome</th><th>Tipo di modulo</th><th></th></tr></thead>
+          <thead><tr><th>Immagine</th><th>Mesh</th><th>ID</th><th>Nome</th><th>Tipo di modulo</th><th class="th-temp" title="Provvisoria: letta dal catalogo della pagina Stations (evento/stazione di sblocco)">Condizione di sblocco</th><th></th></tr></thead>
           <tbody id="dbmTbody"></tbody>
         </table>
       </div>
@@ -1099,10 +1102,10 @@ const GROUPS = [
     {id:'d_consumable', label:'Consumable', pages:[{id:'dbconsumable',label:'Consumable'}]},
     {id:'d_item', label:'Item', pages:[{id:'dbitem',label:'Item'}]},
     {id:'d_collectable', label:'Collectable', pages:[{id:'dbcollectable',label:'Collectable'}]},
-    {id:'d_old', label:'Moduli (vecchie pagine)', pages:[{id:'entities',label:'Moduli (vecchie pagine)'}]},
-    {id:'d_quest', label:'Quest', pages:[{id:'quest',label:'Quest'}]},
-    {id:'d_stations', label:'Stations', pages:[{id:'stations',label:'Stations'}]},
-    {id:'d_enemies', label:'Enemies', pages:[{id:'enemies',label:'Enemies'}]},
+    {id:'d_old', label:'Moduli (vecchie pagine)', temp:true, pages:[{id:'entities',label:'Moduli (vecchie pagine)'}]},
+    {id:'d_quest', label:'Quest', temp:true, pages:[{id:'quest',label:'Quest'}]},
+    {id:'d_stations', label:'Stations', temp:true, pages:[{id:'stations',label:'Stations'}]},
+    {id:'d_enemies', label:'Enemies', temp:true, pages:[{id:'enemies',label:'Enemies'}]},
   ]},
 ];
 const PANEL_IDS = ['dbmodules','quest','stations','enemies','entitysheet','modsheet','cargosheet','itemssheet','loc_identities','loc_entities','loc_quest','loc_eventsaudio','evt_mainevents','evt_eventtexts','settings'];
@@ -1364,7 +1367,7 @@ function buildSectionbar(){
     // secondo livello: ENTITIES / LOCALIZATION MASTER / EVENTS; terzo livello: le loro pagine
     const ch = childOf(cur, activeSection) || cur.children[0];
     sub.style.display = '';
-    sub.innerHTML = '<div class="tabgroup">' + cur.children.map(c => '<button class="tab ' + (c === ch ? 'active' : '') + '" data-child="' + c.id + '">' + escapeHtml(c.label) + '</button>').join('') + '</div>';
+    sub.innerHTML = '<div class="tabgroup">' + cur.children.map(c => '<button class="tab ' + (c.temp ? 'temp ' : '') + (c === ch ? 'active' : '') + '" data-child="' + c.id + '">' + escapeHtml(c.label) + '</button>').join('') + '</div>';
     sub.querySelectorAll('.tab').forEach(el => el.addEventListener('click', () => { const c = cur.children.find(x => x.id === el.dataset.child); activeSection = lastPage[c.id] || c.pages[0].id; renderAll(); }));
     lastPage[ch.id] = activeSection;
     if(ch.pages.length > 1) sub2.style.display = '';
@@ -3320,15 +3323,15 @@ function renderDbSectionTable(){
   const st = dbsState(), cols = dbsNumCols(), rows = dbsFiltered();
   const arrow = k => st.sortKey === k ? (st.sortDir > 0 ? ' ▲' : ' ▼') : '';
   const th = (k, label) => '<th class="dbs-sort" data-key="' + escapeHtml(k) + '" style="cursor:pointer">' + escapeHtml(label) + arrow(k) + '</th>';
-  document.getElementById('dbsThead').innerHTML = '<th>Immagine</th><th>Mesh</th>' + th('ID', 'ID') + th('Name', 'Nome') + th('Rarity', 'Rarità') + cols.map(c => th(c, c)).join('') + '<th></th>';
+  document.getElementById('dbsThead').innerHTML = '<th>Immagine</th><th>Mesh</th>' + th('ID', 'ID') + '<th class="th-temp" title="Provvisoria: letta dal catalogo della pagina Stations (evento/stazione di sblocco)">Condizione di sblocco</th>' + th('Name', 'Nome') + th('Rarity', 'Rarità') + cols.map(c => th(c, c)).join('') + '<th></th>';
   document.getElementById('dbsThead').querySelectorAll('.dbs-sort').forEach(h => h.addEventListener('click', () => { const s = dbsState(); if(s.sortKey === h.dataset.key) s.sortDir = -s.sortDir; else { s.sortKey = h.dataset.key; s.sortDir = 1; } renderDbSectionTable(); }));
   const tbody = document.getElementById('dbsTbody');
-  if(!rows.length){ tbody.innerHTML = '<tr class="empty-row"><td colspan="' + (cols.length + 6) + '">Nessun modulo corrisponde ai filtri.</td></tr>'; return; }
+  if(!rows.length){ tbody.innerHTML = '<tr class="empty-row"><td colspan="' + (cols.length + 7) + '">Nessun modulo corrisponde ai filtri.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => {
     const lk = MEDIA.links[r.ID] || {}, mesh = lk.static_mesh && MEDIA.assets.mesh[lk.static_mesh];
     const img = lk.icon ? '<img src="media/textures/' + encodeURIComponent(lk.icon) + '.png" loading="lazy" alt="" title="' + escapeHtml(lk.icon) + '" style="width:44px;height:44px;object-fit:contain;border-radius:6px;display:block">' : '<span class="mono" style="color:var(--text-faint)">&ndash;</span>';
     const mc = mesh ? '<button type="button" class="dbm-mesh" data-id="' + escapeHtml(r.ID) + '" title="Apri anteprima e scarica FBX" style="background:none;border:0;padding:0;cursor:pointer">' + (mesh.preview ? '<img src="media/previews/' + encodeURIComponent(lk.static_mesh) + '.png" loading="lazy" alt="" style="width:44px;height:44px;object-fit:contain;display:block">' : '<span class="badge-type">FBX</span>') + '</button>' : '<span style="color:var(--text-faint)">&ndash;</span>';
-    return '<tr data-id="' + escapeHtml(r.ID) + '"><td>' + img + '</td><td>' + mc + '</td><td class="mono">' + escapeHtml(r.ID) + '</td><td>' + escapeHtml(r.Name) + '</td><td style="color:' + (RARITY_COLOR[r.Rarity] || '') + '">' + escapeHtml(r.Rarity) + '</td>' + cols.map(c => { const v = modCellValue(r.__m, c).v; return '<td class="num-cell">' + escapeHtml(v === '' ? '' : (isNaN(dbsNum(v)) ? v : dbsFmt(dbsNum(v)))) + '</td>'; }).join('') + '<td><button type="button" class="btn ghost small dbs-open" data-id="' + escapeHtml(r.ID) + '">Statistiche &rarr;</button></td></tr>';
+    return '<tr data-id="' + escapeHtml(r.ID) + '"><td>' + img + '</td><td>' + mc + '</td><td class="mono">' + escapeHtml(r.ID) + '</td><td class="td-temp" style="font-size:11.5px" title="Provvisoria: dal catalogo di Stations">' + (unlockConditionFor(r.ID) || '&ndash;') + '</td><td>' + escapeHtml(r.Name) + '</td><td style="color:' + (RARITY_COLOR[r.Rarity] || '') + '">' + escapeHtml(r.Rarity) + '</td>' + cols.map(c => { const v = modCellValue(r.__m, c).v; return '<td class="num-cell">' + escapeHtml(v === '' ? '' : (isNaN(dbsNum(v)) ? v : dbsFmt(dbsNum(v)))) + '</td>'; }).join('') + '<td><button type="button" class="btn ghost small dbs-open" data-id="' + escapeHtml(r.ID) + '">Statistiche &rarr;</button></td></tr>';
   }).join('');
   tbody.querySelectorAll('.dbm-mesh').forEach(b => b.addEventListener('click', () => openMeshDialog(b.dataset.id)));
   tbody.querySelectorAll('.dbs-open').forEach(b => b.addEventListener('click', () => dbsOpenStats(b.dataset.id)));
@@ -3346,7 +3349,7 @@ function renderDbModSection(){
   renderDbSectionTable();
   if(!dbsLoading){
     dbsLoading = true;
-    Promise.all([loadModulesSheet(), loadEntities(), loadMedia()]).then(() => { if(DBMSEC[activeSection]){ dbsDrawChart(dbsFiltered(), dbsNumCols().length ? dbsNumCols() : ['Price']); renderDbSectionTable(); } }).catch(() => {}).finally(() => { dbsLoading = false; });
+    Promise.all([loadModulesSheet(), loadEntities(), loadMedia(), STATION_CATALOG.length ? null : loadStations()]).then(() => { if(DBMSEC[activeSection]){ dbsDrawChart(dbsFiltered(), dbsNumCols().length ? dbsNumCols() : ['Price']); renderDbSectionTable(); } }).catch(() => {}).finally(() => { dbsLoading = false; });
   }
 }
 document.getElementById('dbsSearch').addEventListener('input', e => { dbsState().search = e.target.value; dbsDrawChart(dbsFiltered(), dbsNumCols()); renderDbSectionTable(); });
@@ -3423,6 +3426,13 @@ function renderDbCollection(){
 }
 /* ---- DATABASE › Moduli: collection costruita dalle tab foglio MODULES + ENTITIES ---- */
 let dbmUi = { search:'', type:'Tutti' };
+// Condizione di sblocco (PROVVISORIA): dal catalogo della pagina Stations (evento di sblocco + stazione di origine) e dalla colonna "Unlocked In" del foglio Modules
+function unlockConditionFor(id){
+  const parts = [], seen = new Set(), add = (cls, txt) => { const k = cls + txt; if(txt && !seen.has(k)){ seen.add(k); parts.push('<span class="mono" ' + (cls === 'st' ? 'style="color:var(--accent)"' : '') + '>' + escapeHtml(txt) + '</span>'); } };
+  STATION_CATALOG.filter(c => c.entityId === id).forEach(c => { add('ev', c.unlockRules); add('st', c.unlockStation); });
+  const m = MODS.find(x => x['(ID)'] === id); if(m && m['Unlocked In']) add('st', m['Unlocked In']);
+  return parts.join('<br>');
+}
 /* ---- media esportati da Unreal (texture, mesh, anteprime) ---- */
 let MEDIA = { links:{}, assets:{texture:{}, mesh:{}} };
 async function loadMedia(){ try{ MEDIA = await apiGet('/api/media'); }catch(e){ /* nessun media: la vista funziona comunque */ } }
@@ -3470,13 +3480,14 @@ function dbmFiltered(){
 }
 function renderDbModuleTable(){
   const rows = dbmFiltered(), tbody = document.getElementById('dbmTbody');
-  if(!rows.length){ tbody.innerHTML = `<tr class="empty-row"><td colspan="6">${MODS.length ? 'Nessun modulo corrisponde ai filtri.' : 'Nessun modulo: importa il tab Modules da ENTITIES (foglio) › Modules.'}</td></tr>`; return; }
+  if(!rows.length){ tbody.innerHTML = `<tr class="empty-row"><td colspan="7">${MODS.length ? 'Nessun modulo corrisponde ai filtri.' : 'Nessun modulo: importa il tab Modules da ENTITIES (foglio) › Modules.'}</td></tr>`; return; }
   tbody.innerHTML = rows.map(r => {
     const dir = DBM_IMG_DIR[r.section], lk = MEDIA.links[r.id] || {};
     const img = lk.icon ? `<img src="media/textures/${encodeURIComponent(lk.icon)}.png" loading="lazy" alt="" title="${escapeHtml(lk.icon)}" style="width:44px;height:44px;object-fit:contain;border-radius:6px;display:block">` : dir ? `<img src="images/${dir}/${encodeURIComponent(r.id)}.jpg" alt="" style="width:44px;height:44px;object-fit:cover;border-radius:6px;display:block" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mono',textContent:'–',title:'Nessuna immagine nell\\'app'}))">` : `<span class="mono" style="color:var(--text-faint)" title="Nessuna immagine nell'app${r.icon ? ' (icona in Unreal: ' + escapeHtml(r.icon) + ')' : ''}">–</span>`;
     const mesh = lk.static_mesh && MEDIA.assets.mesh[lk.static_mesh];
     const meshCell = mesh ? `<button type="button" class="dbm-mesh" data-id="${escapeHtml(r.id)}" title="Apri anteprima e scarica FBX" style="background:none;border:0;padding:0;cursor:pointer">${mesh.preview ? `<img src="media/previews/${encodeURIComponent(lk.static_mesh)}.png" loading="lazy" alt="" style="width:44px;height:44px;object-fit:contain;display:block">` : '<span class="badge-type">FBX</span>'}</button>` : '<span style="color:var(--text-faint)">&ndash;</span>';
-    return `<tr data-id="${escapeHtml(r.id)}"><td>${img}</td><td>${meshCell}</td><td class="mono">${escapeHtml(r.id)}</td><td>${escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>'}</td><td>${escapeHtml(r.section)}${r.moduleType && r.moduleType !== r.section ? ' <span class="badge-type">' + escapeHtml(r.moduleType) + '</span>' : ''}</td><td><button type="button" class="btn ghost small dbm-open" data-id="${escapeHtml(r.id)}" data-section="${escapeHtml(r.section)}">Statistiche &rarr;</button></td></tr>`;
+    const unlock = unlockConditionFor(r.id);
+    return `<tr data-id="${escapeHtml(r.id)}"><td>${img}</td><td>${meshCell}</td><td class="mono">${escapeHtml(r.id)}</td><td>${escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>'}</td><td>${escapeHtml(r.section)}${r.moduleType && r.moduleType !== r.section ? ' <span class="badge-type">' + escapeHtml(r.moduleType) + '</span>' : ''}</td><td class="td-temp" style="font-size:11.5px" title="Provvisoria: dal catalogo di Stations">${unlock || '&ndash;'}</td><td><button type="button" class="btn ghost small dbm-open" data-id="${escapeHtml(r.id)}" data-section="${escapeHtml(r.section)}">Statistiche &rarr;</button></td></tr>`;
   }).join('');
   tbody.querySelectorAll('.dbm-mesh').forEach(b => b.addEventListener('click', () => openMeshDialog(b.dataset.id)));
   tbody.querySelectorAll('.dbm-open').forEach(b => b.addEventListener('click', () => {
@@ -3497,7 +3508,7 @@ function renderDbModules(){
   // ricarica i dati dei fogli così le modifiche fatte altrove compaiono subito nella collection
   if(!dbmLoading){
     dbmLoading = true;
-    Promise.all([loadModulesSheet(), loadEntities(), loadMedia()]).then(() => { if(activeSection === 'dbmodules') renderDbModuleTable(); }).catch(() => {}).finally(() => { dbmLoading = false; });
+    Promise.all([loadModulesSheet(), loadEntities(), loadMedia(), STATION_CATALOG.length ? null : loadStations()]).then(() => { if(activeSection === 'dbmodules') renderDbModuleTable(); }).catch(() => {}).finally(() => { dbmLoading = false; });
   }
 }
 async function modPull(apply, skip){
@@ -4660,7 +4671,7 @@ async function loadHistory(more){
 }
 function renderHistory(){
   const body = document.getElementById('histBody'); if(!body) return;
-  const fmt = iso => new Date(iso).toLocaleString('it-IT', {day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit'});
+  const fmt = iso => new Date(iso).toLocaleString('it-IT', {timeZone:'Europe/Rome', day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit'});
   const sel = (id, list, cur, all) => '<select id="' + id + '" class="selbox"><option value="">' + all + '</option>' + list.map(x => '<option value="' + escapeHtml(x) + '"' + (x === cur ? ' selected' : '') + '>' + escapeHtml(x) + '</option>').join('') + '</select>';
   const SRC = {modifica: '', ripristino: ' <span class="badge-type">ripristino</span>', importazione: ' <span class="badge-type">importazione</span>'};
   body.innerHTML = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">' + sel('histArea', hUi.areas, hUi.area, 'Tutte le aree') + sel('histUser', hUi.users, hUi.user, 'Tutti gli utenti') + '<input type="text" id="histQ" class="searchInput" placeholder="Cerca ID, campo o valore&hellip;" value="' + escapeHtml(hUi.q) + '" style="flex:1;min-width:180px"></div>'

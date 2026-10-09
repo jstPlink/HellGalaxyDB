@@ -860,3 +860,35 @@ test('T36 media: caricamento dall\'agente (token), anteprima della mesh da OBJ, 
     assert.equal((await fetch(B4 + '/api/media/sync', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })).status, 503, 'senza agente errore chiaro');
   } finally { srv.kill(); fs.rmSync(path.join(path.dirname(path.join(tmp, 'media.db')), 'media'), { recursive: true, force: true }); }
 });
+
+test('T37 replica automatica verso il server: solo le righe cambiate (dati e media), invii successivi a 0, orari in ora italiana', async () => {
+  const PL = 18943, PR = 18944, BL = `http://127.0.0.1:${PL}`, BR = `http://127.0.0.1:${PR}`;
+  fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'rep-local.db')); fs.mkdirSync(path.join(tmp, 'remote'), { recursive: true }); fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'remote', 'rep-remote.db')); // cartella a parte: i media del server non sono quelli locali
+  const mk = (db, port, extra) => spawn(process.execPath, [path.join(ROOT, 'server.js')], { env: { ...process.env, HG_DB_PATH: path.join(tmp, db), HG_PORT: String(port), HG_AGENT_TOKEN: 'tok-rep', HG_REMOTE_DEBOUNCE_MS: '300', HG_REMOTE_URL: '', HG_REMOTE_TOKEN: '', ...extra }, stdio: 'ignore' });
+  const remote = mk('remote/rep-remote.db', PR, {}), local = mk('rep-local.db', PL, { HG_REMOTE_URL: BR });
+  const up = (b, kind, name, body) => fetch(`${b}/api/media/upload?kind=${kind}&name=${name}`, { method: 'POST', headers: { Authorization: 'Bearer tok-rep' }, body });
+  const waitFor = async (fn, ms = 15000) => { const t0 = Date.now(); for (;;) { try { const v = await fn(); if (v) return v; } catch (e) { /* riprova */ } if (Date.now() - t0 > ms) throw new Error('timeout in attesa della replica'); await new Promise(r => setTimeout(r, 200)); } };
+  try {
+    for (const b of [BL, BR]) await waitFor(async () => (await fetch(b + '/api/health')).ok);
+    const id = (await (await fetch(BL + '/api/entities')).json()).items[0]['(ID)'];
+    // 1) una modifica locale arriva sul server da sola
+    assert.equal((await fetch(`${BL}/api/entities/${encodeURIComponent(id)}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: { Label: 'Replica prova' } }) })).status, 200);
+    await waitFor(async () => (await (await fetch(BR + '/api/entities')).json()).items.find(e => e['(ID)'] === id).Label === 'Replica prova');
+    // 2) i media caricati in locale arrivano sul server (file + anteprima)
+    assert.equal((await up(BL, 'texture', 'T_rep.png', Buffer.from([137, 80, 78, 71]))).status, 200);
+    assert.equal((await up(BL, 'mesh', 'SM_rep.fbx', Buffer.alloc(3000, 2))).status, 200);
+    assert.equal((await up(BL, 'obj', 'SM_rep.obj', Buffer.from('v 0 0 0\nv 9 0 0\nv 0 9 0\nf 1 2 3\n'))).status, 200);
+    const idx = await waitFor(async () => { const j = await (await fetch(BR + '/api/media')).json(); return j.assets.mesh.SM_rep && j.assets.mesh.SM_rep.preview && j.assets.texture.T_rep ? j : null; });
+    assert.equal(idx.assets.mesh.SM_rep.size, 3000);
+    assert.equal((await fetch(BR + '/media/previews/SM_rep.png')).status, 200);
+    assert.equal((await fetch(BR + '/api/media/mesh/SM_rep.fbx')).status, 200);
+    // 3) un secondo invio non ha nulla da mandare (solo righe cambiate); stato in ora italiana
+    const st = await waitFor(async () => { const s = await (await fetch(BL + '/api/remote/status')).json(); return s.pending === 0 && !s.running && s.lastAt ? s : null; });
+    assert.equal(st.timezone, 'Europe/Rome'); assert.ok(st.times.length >= 1);
+    const again = await (await fetch(BL + '/api/remote/sync', { method: 'POST' })).json();
+    assert.equal(again.ok, true); assert.equal(again.upserted + again.deleted + again.files, 0);
+    // 4) una riga eliminata in locale (tabella con chiave) viene eliminata anche sul server
+    assert.equal((await fetch(`${BL}/api/rows/entities`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: 'ZZ-Prova' }) })).status, 200);
+    await waitFor(async () => (await (await fetch(BR + '/api/entities')).json()).items.some(e => e['(ID)'] === 'ZZ-Prova'));
+  } finally { local.kill(); remote.kill(); }
+});

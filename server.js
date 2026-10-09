@@ -630,8 +630,11 @@ function serveStatic(req, res, urlPath) {
 const tabsHandler = require('./scripts/tabs_server')({ db, sendJson, readJsonBody, SheetError, UnrealError: unreal.UnrealError, unrealRead, fs, purgeTombstones: () => rowsAdmin.purgeTombstones() });
 // Righe nuove/eliminate dall'app (ENTITIES, MODULES, CARGO/LOOT, ITEMS)
 const rowsAdmin = require('./scripts/rows_admin')({ db, sendJson, readJsonBody, sheet, msheet });
+// Replica automatica verso il server (solo righe cambiate): ogni modifica fatta in locale arriva anche sul server (HG_REMOTE_URL).
+const remoteReplica = require('./scripts/remote_replica');
+const replica = remoteReplica.createReplica({ db, baseDir: path.join(path.dirname(DB_PATH), 'media'), log: m => console.log(m) });
 // Texture/mesh esportate da Unreal (via agente), anteprime, contatore dello spazio occupato.
-const media = require('./scripts/media')({ db, sendJson, readJsonBody, dbPath: DB_PATH, imagesDir: IMAGES_DIR, agentToken: AGENT_TOKEN, bridge: unreal, getAgentStatus: () => agentHub.status() });
+const media = require('./scripts/media')({ db, sendJson, readJsonBody, dbPath: DB_PATH, imagesDir: IMAGES_DIR, agentToken: AGENT_TOKEN, apiToken: API_TOKEN, bridge: unreal, getAgentStatus: () => agentHub.status() });
 
 // Fogli "Localization Master" (Identities, Entities, Quest, EventsAudio): copia fedele di sola lettura.
 const gridHandler = require('./scripts/grid_tabs')({ db, sendJson, readJsonBody, SheetError, fs, onEntityText: mirrorLocTextToEntity });
@@ -649,7 +652,7 @@ try { APP_VERSION = fs.readFileSync(path.join(__dirname, 'VERSION'), 'utf8').tri
 // Registro delle modifiche (solo in memoria): serve a avvisare gli altri utenti "X ha modificato Y" e a proporre il refresh.
 // Nessun blocco: chi modifica non viene mai fermato (decisione dell'utente, 2026-10-08).
 const changeLog = []; let changeRev = 0;
-const CHANGE_LABELS = [[/^\/api\/import\/bundle/, 'tutti i fogli (dati inviati dall\'app locale)'], [/^\/api\/entities/, 'ENTITIES'], [/^\/api\/modules-sheet/, 'MODULES'], [/^\/api\/tabs\/cargo/, 'CARGO/LOOT'], [/^\/api\/tabs\/items/, 'ITEMS'],
+const CHANGE_LABELS = [[/^\/api\/import\/(bundle|delta)/, 'i dati (inviati dall\'app locale)'], [/^\/api\/entities/, 'ENTITIES'], [/^\/api\/modules-sheet/, 'MODULES'], [/^\/api\/tabs\/cargo/, 'CARGO/LOOT'], [/^\/api\/tabs\/items/, 'ITEMS'],
   [/^\/api\/grid\/entities/, 'Localization Master › Entities'], [/^\/api\/grid\/([a-z]+)/, 'Localization/Events'], [/^\/api\/(modules|enemies|producers)/, 'DATABASE'], [/^\/api\/sync\/pull\/(entities|modules|tab|grid)/, 'importazione dal foglio']];
 function recordChange(req, urlPath, queryString, status) {
   if (status >= 400 || req.method === 'GET') return;
@@ -690,7 +693,7 @@ const hv = v => (v === undefined || v === null ? '' : typeof v === 'object' ? JS
 function recordHistory(before, req, urlPath, queryString) {
   const after = takeHistorySnapshot();
   const user = String(req.headers['x-hg-user'] ? decodeURIComponent(String(req.headers['x-hg-user'])) : 'sistema').slice(0, 60);
-  const source = /\/(revert|reset-all)$/.test(urlPath) ? 'ripristino' : /^\/api\/(sync\/pull|import\/bundle)/.test(urlPath) ? 'importazione' : 'modifica';
+  const source = /\/(revert|reset-all)$/.test(urlPath) ? 'ripristino' : /^\/api\/(sync\/pull|import\/(bundle|delta))/.test(urlPath) ? 'importazione' : 'modifica';
   const now = new Date().toISOString();
   const rows = [];
   for (const [area] of HISTORY_SNAP) {
@@ -723,6 +726,7 @@ const server = http.createServer(async (req, res) => {
     if (snap) res.on('finish', () => { try { if (res.statusCode < 400) recordHistory(snap, req, urlPath, queryString); } catch (e) { /* la cronologia non deve mai rompere una richiesta */ } });
   }
   res.on('finish', () => { try { recordChange(req, urlPath, queryString, res.statusCode); } catch (e) { /* il registro non deve mai rompere una richiesta */ } });
+  res.on('finish', () => { if (req.method !== 'GET' && res.statusCode < 400 && !/^\/api\/(agent|import|remote|users|project-update)\b/.test(urlPath)) replica.schedule(); });
 
   try {
     if (urlPath === '/api/data' && req.method === 'GET') {
@@ -758,7 +762,7 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'no-store' });
       return res.end(agentBundle.buildScript(ROOT));
     }
-    if (urlPath === '/api/media/upload' && req.method === 'POST') return media.upload(req, res, Object.fromEntries(query));
+    if (urlPath === '/api/media/upload' && req.method === 'POST') { await media.upload(req, res, Object.fromEntries(query)); replica.schedule(); return; }
     if (API_TOKEN && urlPath.startsWith('/api/')) {
       const given = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
       if (given !== API_TOKEN) return sendJson(res, 401, { error: 'token mancante o errato' });
@@ -830,6 +834,14 @@ const server = http.createServer(async (req, res) => {
       try { return sendJson(res, 200, { ok: true, imported: serverSync.importBundle(db, body) }); }
       catch (e) { return sendJson(res, 400, { ok: false, error: e.message }); }
     }
+    // Replica automatica: lato server riceve le righe cambiate; lato locale mostra lo stato / invia subito
+    if (urlPath === '/api/import/delta' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      try { return sendJson(res, 200, { ok: true, ...remoteReplica.importDelta(db, body) }); }
+      catch (e) { return sendJson(res, 400, { ok: false, error: e.message }); }
+    }
+    if (urlPath === '/api/remote/status' && req.method === 'GET') return sendJson(res, 200, { ...replica.status(), pending: replica.status().configured ? replica.pendingCount() : 0 });
+    if (urlPath === '/api/remote/sync' && req.method === 'POST') return sendJson(res, 200, await replica.run('invio manuale'));
     if (urlPath === '/api/remote/push' && req.method === 'POST') {
       const body = await readJsonBody(req);
       try { return sendJson(res, 200, { ok: true, ...(await serverSync.pushToRemote(db, { apply: body.apply === true })) }); }
@@ -1083,4 +1095,4 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => console.log(`Hell Galaxy Database in ascolto su http://localhost:${PORT}`));
+server.listen(PORT, () => { console.log(`Hell Galaxy Database in ascolto su http://localhost:${PORT}`); replica.startScheduler(); });

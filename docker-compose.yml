@@ -5,11 +5,12 @@ services:
     restart: unless-stopped
     ports:
       - "8936:8936"
-    # Token condiviso con l'agente Unreal (sul PC dell'Editor). Scegli una stringa lunga e casuale e
-    # mettila anche nel .env dell'agente (HG_AGENT_TOKEN). Senza, nessun agente può collegarsi.
-    # environment:
-    #   - HG_AGENT_TOKEN=INCOLLA_QUI_UN_TOKEN_LUNGO
-    #   - HG_API_TOKEN=OPZIONALE_TOKEN_UTENTI
+    # I token si scrivono in un file .env accanto a questo compose (vedi .env.example): Docker lo legge da solo.
+    #  - HG_API_TOKEN: password condivisa per usare il sito (ogni persona la inserisce una volta nel browser) e per la replica dell'app locale.
+    #  - HG_AGENT_TOKEN: per gli agenti Unreal (se vuoto lo genera il server e lo conserva).
+    environment:
+      - HG_API_TOKEN=${HG_API_TOKEN:-}
+      - HG_AGENT_TOKEN=${HG_AGENT_TOKEN:-}
     # Volumi gestiti da Docker: sono creati con i permessi giusti, quindi non
     # serve preparare cartelle. Per avere invece i file in una cartella del NAS
     # sostituisci con percorsi tipo /volume1/docker/hellgalaxy/data:/app/data
