@@ -11,8 +11,11 @@ import unreal, json, base64
 
 
 def delete(payload_b64):
-    pkgs = json.loads(base64.b64decode(payload_b64).decode('utf-8'))
-    inset = set(pkgs)
+    data = json.loads(base64.b64decode(payload_b64).decode('utf-8'))
+    # payload: elenco di pacchetti da cancellare, oppure {pkgs:[...], inset:[...]} dove inset = TUTTO l'insieme da cancellare
+    # (un asset referenziato solo da asset dell'insieme si puo' cancellare)
+    pkgs = data['pkgs'] if isinstance(data, dict) else data
+    inset = set(data['inset']) if isinstance(data, dict) and 'inset' in data else set(pkgs)
     ar = unreal.AssetRegistryHelpers.get_asset_registry()
     opts = unreal.AssetRegistryDependencyOptions(
         include_soft_package_references=True, include_hard_package_references=True,

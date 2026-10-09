@@ -525,6 +525,23 @@
   html[data-theme="sheets"] .btn.xl:hover{ background:#f1f3f4; border-color:#5f6368; }
   html[data-theme="sheets"] .btn.xl.primary{ background:#188038; border-color:#188038; color:#fff; }
   html[data-theme="sheets"] .btn.xl.primary:hover{ background:#137333; border-color:#137333; }
+  /* ===== coerenza stilistica della parte superiore: pulsanti, tag e schede hanno stessa forma, bordo e carattere ===== */
+  .top-actions{ gap:10px; align-items:center; flex-wrap:wrap; }
+  .top-actions > .btn, .top-actions > .dirty-pill{ box-sizing:border-box; min-height:40px; padding:0 16px; display:inline-flex; align-items:center; gap:8px; font-family:inherit; font-size:13.5px; font-weight:600; letter-spacing:.01em; line-height:1; border:2px solid var(--border); border-radius:8px; background:var(--surface-2); color:var(--text); box-shadow:0 1px 3px rgba(0,0,0,.25); white-space:nowrap; cursor:pointer; }
+  .top-actions > .btn:hover, .top-actions > .dirty-pill:hover{ border-color: color-mix(in srgb, var(--text-faint) 60%, var(--border)); }
+  .top-actions > .dirty-pill.on{ border-color: color-mix(in srgb, var(--danger) 60%, var(--border)); }
+  .top-actions > .btn.primary{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+  .top-actions > .btn.danger-solid{ background:#d93025; border-color:#b3261e; color:#fff; }
+  .top-actions > .btn:disabled{ opacity:.5; cursor:default; }
+  html[data-theme="sheets"] .top-actions > .btn, html[data-theme="sheets"] .top-actions > .dirty-pill{ border-radius:8px; background:#fff; border-color:#9aa0a6; color:#202124; box-shadow:0 1px 2px rgba(60,64,67,.35); }
+  html[data-theme="sheets"] .top-actions > .btn:hover, html[data-theme="sheets"] .top-actions > .dirty-pill:hover{ background:#f1f3f4; border-color:#5f6368; }
+  html[data-theme="sheets"] .top-actions > .btn.primary{ background:#188038; border-color:#188038; color:#fff; }
+  html[data-theme="sheets"] .top-actions > .btn.danger-solid{ background:#d93025; border-color:#b3261e; color:#fff; }
+  .section-tab{ min-height:40px; font-size:14px; padding:0 20px; }
+  .tab{ box-sizing:border-box; min-height:34px; padding:0 14px; font-size:13px; font-weight:600; border-width:2px !important; border-radius:8px !important; display:inline-flex; align-items:center; gap:6px; }
+  #userBtn.btn{ border-radius:8px; font-size:13.5px; font-weight:600; padding:0 16px 0 6px; border-color:var(--border); }
+  html[data-theme="sheets"] #userBtn.btn{ border-color:#9aa0a6; }
+  html[data-theme="sheets"] .tab.active{ background:#e6f4ea; border-color:#188038; color:#137333; }
   .tab.temp{ background:#fff3b0 !important; border-color:#e0b400 !important; color:#5c4a00 !important; }
   .tab.temp.active{ box-shadow: inset 0 -3px 0 #b88a00; font-weight:600; }
   .th-temp, .td-temp{ background:#fff3b0 !important; color:#5c4a00 !important; }
@@ -573,14 +590,13 @@
       </div>
     </div>
     <div class="top-actions">
-      <button class="btn small" id="userBtn" onclick="hgSwitchUser()" title="Utente attuale: clic per cambiare utente"><span id="userLabel"></span></button>
-      <span class="dirty-pill" id="agentPill"title="Agente Unreal: il ponte tra l'app e l'Editor (si avvia sul PC dove è aperto l'Editor)"><span class="dot"></span><span id="agentLabel">Agente: &hellip;</span></span>
-      <button class="btn small" id="qualityBtn" style="background:#d93025;border-color:#b3261e;color:#fff;font-weight:600" title="Cose da risolvere nei dati (sola lettura): valori fuori elenco, chiavi mancanti, righe orfane">Da risolvere</button>
-      <button class="btn ghost small" id="historyBtn" title="Cronologia delle modifiche: chi ha cambiato cosa e quando, con il valore prima e dopo">Cronologia</button>
+      <button class="btn" id="userBtn" onclick="hgSwitchUser()" title="Utente attuale: clic per cambiare utente"><span id="userLabel"></span></button>
+      <span class="dirty-pill" id="agentPill" title="Agente Unreal: il ponte tra l'app e l'Editor (si avvia sul PC dove è aperto l'Editor)"><span class="dot"></span><span id="agentLabel">Agente: &hellip;</span></span>
+      <button class="btn danger-solid" id="qualityBtn" title="Cose da risolvere nei dati (sola lettura): valori fuori elenco, chiavi mancanti, righe orfane">Da risolvere</button>
+      <button class="btn" id="historyBtn" title="Cronologia delle modifiche: chi ha cambiato cosa e quando, con il valore prima e dopo">Cronologia</button>
       <span class="dirty-pill" id="dirtyPill"><span class="dot"></span><span id="dirtyLabel">Nessuna modifica</span></span>
-      <button class="btn xl" id="syncUnrealBtn" title="Legge Unreal (sola lettura) e mostra le discrepanze tra l'app e il progetto. Parte da solo dopo l'accesso.">Sincronizza Unreal</button>
-      <button class="btn primary xl" id="projUpdBtn" title="Aggiorna Unreal con i soli dati cambiati nell'app: Data Asset, DataTable, Blueprint, poi server (con stato di ogni passo)">Aggiorna Unreal</button>
-      <button class="btn ghost xl" id="resetAllBtn">Ripristina tutto</button>
+      <button class="btn" id="syncUnrealBtn" title="Legge Unreal (sola lettura) e mostra le discrepanze tra l'app e il progetto. Parte da solo al login.">Leggi Unreal</button>
+      <button class="btn primary" id="projUpdBtn" title="Scrive in Unreal i soli dati cambiati nell'app: Data Asset, DataTable, Blueprint, poi server (con stato di ogni passo). Prima verifica che Unreal non sia cambiato.">Scrivi Unreal</button>
     </div>
   </header>
 
@@ -1090,13 +1106,8 @@ const SECTIONS = [
   {id:'enemies', label:'Enemies'},
   {id:'settings', label:'Impostazioni'},
 ];
-let activeSection = 'entitysheet';
+let activeSection = 'dbmodules'; // pagina di apertura: DATABASE › Moduli
 const GROUPS = [
-  {id:'g_sheets', label:'FOGLI GOOGLE', children:[
-    {id:'s_entities', label:'ENTITIES', pages:[{id:'entitysheet',label:'Entities'},{id:'modsheet',label:'Modules'},{id:'cargosheet',label:'Cargo/Loot'},{id:'itemssheet',label:'Items'}]},
-    {id:'s_loc', label:'LOCALIZATION MASTER', pages:[{id:'loc_identities',label:'Identities'},{id:'loc_entities',label:'Entities'},{id:'loc_quest',label:'Quest'},{id:'loc_eventsaudio',label:'EventsAudio'}]},
-    {id:'s_events', label:'EVENTS', pages:[{id:'evt_mainevents',label:'MainEvents'},{id:'evt_eventtexts',label:'EventTexts'}]},
-  ]},
   {id:'g_db', label:'DATABASE', children:[
     {id:'d_modules', label:'Moduli', pages:[{id:'dbmodules',label:'Tutti i moduli'},{id:'dbmod_body',label:'Main Body'},{id:'dbmod_engine',label:'Engine'},{id:'dbmod_primary',label:'Primary'},{id:'dbmod_secondary',label:'Secondary'},{id:'dbmod_pylon',label:'Pylons'}]},
     {id:'d_consumable', label:'Consumable', pages:[{id:'dbconsumable',label:'Consumable'}]},
@@ -1106,6 +1117,11 @@ const GROUPS = [
     {id:'d_quest', label:'Quest', temp:true, pages:[{id:'quest',label:'Quest'}]},
     {id:'d_stations', label:'Stations', temp:true, pages:[{id:'stations',label:'Stations'}]},
     {id:'d_enemies', label:'Enemies', temp:true, pages:[{id:'enemies',label:'Enemies'}]},
+  ]},
+  {id:'g_sheets', label:'FOGLI GOOGLE', children:[
+    {id:'s_entities', label:'ENTITIES', pages:[{id:'entitysheet',label:'Entities'},{id:'modsheet',label:'Modules'},{id:'cargosheet',label:'Cargo/Loot'},{id:'itemssheet',label:'Items'}]},
+    {id:'s_loc', label:'LOCALIZATION MASTER', pages:[{id:'loc_identities',label:'Identities'},{id:'loc_entities',label:'Entities'},{id:'loc_quest',label:'Quest'},{id:'loc_eventsaudio',label:'EventsAudio'}]},
+    {id:'s_events', label:'EVENTS', pages:[{id:'evt_mainevents',label:'MainEvents'},{id:'evt_eventtexts',label:'EventTexts'}]},
   ]},
 ];
 const PANEL_IDS = ['dbmodules','quest','stations','enemies','entitysheet','modsheet','cargosheet','itemssheet','loc_identities','loc_entities','loc_quest','loc_eventsaudio','evt_mainevents','evt_eventtexts','settings'];
@@ -1862,7 +1878,6 @@ function renderDirtyPill(){
   const label = document.getElementById('dirtyLabel');
   pill.classList.toggle('on', n>0);
   label.textContent = n === 0 ? "Nessuna modifica" : (n===1 ? "1 modifica in sospeso" : n + " modifiche in sospeso");
-  document.getElementById('resetAllBtn').disabled = n===0;
 }
 
 /* ============================== DRAWER ============================== */
@@ -3042,7 +3057,7 @@ function renderEntityFilters(){
 // Cella "Unreal" (tag di collegamento) condivisa da ENTITIES, Modules, Cargo/Loot e Items (stesso ID dell'entità).
 function linkCellHtml(id){
   const lk = ENT_LINKS[id], lt = lk && LINK_TAGS[lk.tag];
-  const lkTitle = lk ? [lt.d].concat(lk.notes || [], (lk.usedBy || []).map(u => u.asset + ': ' + u.refs + ' riferimenti (es. ' + ((u.sample || [])[0] || '') + ')')).join(' | ') : 'Premi "Sincronizza Unreal"';
+  const lkTitle = lk ? [lt.d].concat(lk.notes || [], (lk.usedBy || []).map(u => u.asset + ': ' + u.refs + ' riferimenti (es. ' + ((u.sample || [])[0] || '') + ')')).join(' | ') : 'Premi "Leggi Unreal"';
   return `<td title="${escapeHtml(lkTitle)}">${lk ? `<span class="badge-type" style="color:${lt.c}">${lt.t}</span>` + (lk.inTranslations ? ' <span class="badge-type" style="font-size:9px;padding:1px 5px">DT</span>' : '') : '<span style="color:var(--text-faint)">&ndash;</span>'}</td>`;
 }
 function renderEntityTable(){
@@ -4480,7 +4495,6 @@ document.getElementById('scrim').addEventListener('click', closeDrawer);
 document.getElementById('dwClose').addEventListener('click', closeDrawer);
 document.getElementById('dwSave').addEventListener('click', saveDrawer);
 document.getElementById('dwRevert').addEventListener('click', revertDrawer);
-document.getElementById('resetAllBtn').addEventListener('click', resetAllGlobal);
 document.getElementById('modalClose').addEventListener('click', closeSyncModal);
 document.getElementById('modalOkBtn').addEventListener('click', closeSyncModal);
 document.getElementById('modalScrim').addEventListener('click', e => { if(e.target.id==='modalScrim') closeSyncModal(); });
@@ -4578,7 +4592,7 @@ let puTimer = null, puWrite = false;
 function renderProjUpd(job){
   const box = document.getElementById('projUpdBox'); box.hidden = false;
   const steps = job ? job.steps.map(s => { const st = PU_STATUS[s.status] || [s.status, '']; return '<tr><td style="padding:4px 10px 4px 0;white-space:nowrap"><strong>' + escapeHtml(s.title) + '</strong></td><td style="padding:4px 10px;color:' + st[1] + ';white-space:nowrap">' + st[0] + '</td><td style="padding:4px 0;font-size:12px;color:var(--text-dim)">' + escapeHtml(s.detail || '') + (s.ms ? ' <span style="color:var(--text-faint)">(' + s.ms + ' ms)</span>' : '') + '</td></tr>'; }).join('') : '<tr><td style="color:var(--text-dim)">Nessun aggiornamento eseguito in questa sessione.</td></tr>';
-  box.innerHTML = '<div class="chart-head"><div class="chart-title">Aggiorna Unreal<span class="sub">&nbsp;&middot; ordine: Data Asset &rarr; DataTable &rarr; Blueprint &rarr; server' + (job ? ' &middot; ' + (job.mode === 'apply' ? 'APPLICA' : 'anteprima') + (job.running ? ' (in corso)' : '') : '') + '</span></div></div>' +
+  box.innerHTML = '<div class="chart-head"><div class="chart-title">Scrivi Unreal<span class="sub">&nbsp;&middot; ordine: Data Asset &rarr; DataTable &rarr; Blueprint &rarr; server' + (job ? ' &middot; ' + (job.mode === 'apply' ? 'APPLICA' : 'anteprima') + (job.running ? ' (in corso)' : '') : '') + '</span></div></div>' +
     '<div style="padding:0 16px 14px;font-size:12.5px"><table style="border-collapse:collapse">' + steps + '</table>' +
     '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn primary small" id="puDry"' + (job && job.running ? ' disabled' : '') + '>Anteprima (sola lettura su Unreal)</button>' +
     '<button class="btn ghost small" id="puApply"' + (job && job.running ? ' disabled' : '') + ' title="' + (puWrite ? 'Scrive su Unreal' : 'Scrittura su Unreal disabilitata (HG_UE_ALLOW_WRITE)') + '">Applica su Unreal' + (puWrite ? '' : ' (bloccato)') + '</button>' +
@@ -4657,9 +4671,10 @@ function openLocalChanges(){
   }).join('') : '<p style="color:var(--text-dim)">Nessuna modifica locale: tutti i dati coincidono con l\'originale importato dal foglio.</p>';
   o.innerHTML = '<div style="background:var(--surface,var(--bg));border:1px solid var(--border);border-radius:10px;padding:20px;width:100%;max-width:760px;max-height:90vh;overflow:auto;color:var(--text)">'
     + '<h3 style="margin:0 0 4px">Modifiche fatte in locale (' + list.length + ')</h3><p style="margin:0 0 8px;color:var(--text-dim);font-size:12.5px">Valore originale del foglio &rarr; valore attuale nell\'app. Con &laquo;Ripristina&raquo; riporti la singola riga al valore originale.</p>'
-    + body + '<div style="margin-top:14px;display:flex;gap:8px"><button class="btn ghost small" id="lcClose">Chiudi</button></div></div>';
+    + body + '<div style="margin-top:14px;display:flex;gap:8px;align-items:center"><button class="btn ghost small" id="lcClose">Chiudi</button><button class="btn danger small" id="lcResetAll" style="margin-left:auto"' + (list.length ? '' : ' disabled') + ' title="Riporta TUTTE le modifiche locali ai valori originali dei fogli (non annullabile)">Ripristina tutto</button></div></div>';
   document.body.appendChild(o);
   document.getElementById('lcClose').onclick = () => o.remove();
+  document.getElementById('lcResetAll').onclick = async () => { await resetAllGlobal(); o.remove(); renderDirtyPill(); openLocalChanges(); };
   o.querySelectorAll('.lc-revert').forEach(b => b.addEventListener('click', async () => {
     const x = list[Number(b.dataset.i)]; b.disabled = true;
     try{
@@ -4799,7 +4814,7 @@ function usShow(job){
     if(!d.error && d.total === 0) body += '<p style="color:var(--good)"><strong>Nessuna discrepanza: app e Unreal coincidono.</strong></p>';
   }
   o.innerHTML = '<div style="background:var(--surface,var(--bg));border:1px solid var(--border);border-radius:10px;padding:20px;width:100%;max-width:760px;max-height:90vh;overflow:auto;color:var(--text)">'
-    + '<h3 style="margin:0 0 4px">Sincronizza Unreal' + (job.running ? ' &middot; in corso&hellip;' : '') + '</h3><p style="margin:0 0 10px;color:var(--text-dim);font-size:12.5px">Solo lettura su Unreal: nulla viene scritto nel progetto. I tag di collegamento si salvano solo nell\'app.</p>'
+    + '<h3 style="margin:0 0 4px">Leggi Unreal' + (job.running ? ' &middot; in corso&hellip;' : '') + '</h3><p style="margin:0 0 10px;color:var(--text-dim);font-size:12.5px">Solo lettura su Unreal: nulla viene scritto nel progetto. I tag di collegamento si salvano solo nell\'app.</p>'
     + steps + (d && d.error ? '<p style="color:var(--danger)">' + escapeHtml(d.error) + '</p>' : '') + body
     + '<div style="margin-top:14px;display:flex;gap:8px"><button class="btn ghost small" id="usAgain"' + (job.running ? ' disabled' : '') + '>Sincronizza di nuovo</button>' + (d && d.error && /agente/i.test(d.error) ? '<button class="btn primary small" id="usHelp">Come collegare l\'agente</button>' : '') + '<button class="btn ghost small" id="usClose">Chiudi</button></div></div>';
   const uh = document.getElementById('usHelp'); if(uh) uh.onclick = () => { usClose(); showAgentHelp(); };
@@ -4812,11 +4827,11 @@ async function runUnrealSync(auto){
     const res = await apiFetch('/api/unreal-sync', {method:'POST', headers:{'Content-Type':'application/json'}, body:'{}'});
     const r = await res.json();
     if(!res.ok && r.code !== 'busy'){
-      if(auto){ showToast(r.code === 'agent_offline' ? 'Sincronizzazione Unreal non eseguita: agente non connesso' : 'Sincronizzazione Unreal non riuscita: ' + (r.error || res.status)); }
+      if(auto){ showToast(r.code === 'agent_offline' ? 'Lettura di Unreal non eseguita: agente non connesso' : 'Lettura di Unreal non riuscita: ' + (r.error || res.status)); }
       else { usShow({running:false, steps:[], discrepancies:{error: r.error || 'errore', datatables:[], dataassets:{creates:[],updates:[],orphans:[]}, blueprints:{expected:0,missing:[]}, total:1}}); }
       return;
     }
-  }catch(err){ if(!auto) showToast('Sincronizzazione non avviata: ' + err.message); return; }
+  }catch(err){ if(!auto) showToast('Lettura non avviata: ' + err.message); return; }
   const poll = async () => {
     let d; try{ d = await apiGet('/api/unreal-sync'); }catch(err){ return; }
     const job = d.job; if(!job) return;

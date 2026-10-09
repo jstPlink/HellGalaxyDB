@@ -10,6 +10,8 @@ const sheet = require('./scripts/sheet_mappings');
 const unreal = require('./scripts/unreal_bridge');
 const unrealRead = require('./scripts/unreal_read');
 const unrealDrift = require('./scripts/unreal_drift');
+const cleanupPlan = require('./scripts/unreal_cleanup_plan');
+let lastCleanupPlan = null;
 const unrealLinks = require('./scripts/unreal_links');
 const unrealTables = require('./scripts/unreal_datatables');
 const projectUpdate = require('./scripts/project_update');
@@ -1100,6 +1102,19 @@ const server = http.createServer(async (req, res) => {
     // Prima di aggiornare Unreal: l'app era sincronizzata con Unreal? (SOLA LETTURA; confronta Unreal con l'ultima lettura salvata)
     if (urlPath === '/api/unreal/drift' && req.method === 'POST') {
       try { return sendJson(res, 200, await unrealDrift.check(db)); }
+      catch (e) { if (e instanceof unreal.UnrealError) return sendJson(res, e.status, { ok: false, error: e.message, code: e.code }); throw e; }
+    }
+    // Pulizia di Unreal: piano in SOLA LETTURA, poi cancellazione (richiede HG_UE_ALLOW_WRITE=1 su app e agente + confirm)
+    if (urlPath === '/api/unreal/cleanup/plan' && req.method === 'POST') {
+      try { lastCleanupPlan = await cleanupPlan.buildPlan(db); return sendJson(res, 200, { counts: lastCleanupPlan.counts, keepSample: lastCleanupPlan.keep.slice(0, 40), builtAt: lastCleanupPlan.builtAt }); }
+      catch (e) { if (e instanceof unreal.UnrealError) return sendJson(res, e.status, { ok: false, error: e.message, code: e.code }); throw e; }
+    }
+    if (urlPath === '/api/unreal/cleanup/plan' && req.method === 'GET') return sendJson(res, lastCleanupPlan ? 200 : 404, lastCleanupPlan || { error: 'nessun piano: premere prima POST /api/unreal/cleanup/plan' });
+    if (urlPath === '/api/unreal/cleanup/status' && req.method === 'GET') return sendJson(res, 200, { job: cleanupPlan.status() });
+    if (urlPath === '/api/unreal/cleanup/apply' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      if (!lastCleanupPlan) return sendJson(res, 400, { error: 'nessun piano: premere prima POST /api/unreal/cleanup/plan' });
+      try { backup.create('prima-di-unreal'); return sendJson(res, 202, { job: cleanupPlan.applyPlan(lastCleanupPlan, { confirm: body.confirm === true, limit: Number(body.limit) || 0 }) }); }
       catch (e) { if (e instanceof unreal.UnrealError) return sendJson(res, e.status, { ok: false, error: e.message, code: e.code }); throw e; }
     }
     if (urlPath === '/api/unreal/ping' && req.method === 'GET') {

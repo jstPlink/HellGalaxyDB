@@ -1,0 +1,1150 @@
+# Pulizia di Unreal — piano del 2026-10-09 (generato in sola lettura)
+
+Prova già eseguita (5 Data Asset senza Blueprint cancellati e visibili in Plastic come "Removed": CIDA_MOD100-TestGun, CIDA_MOD13b-RocketLauncher_L_Poor, EDA_COL-IronCode_A, EDA_COL-ShieldCharger, EDA_MOD100-TestGun).
+
+**Rimanenti da cancellare: 945** (357 Blueprint + 588 Data Asset). **Da tenere: 192** (usati da asset che restano).
+
+Per famiglia: {"EDA":120,"altro":87,"SMDA":90,"CIDA":152,"LDA":128,"SIDA":11,"CI":152,"BP_ACS_Loot":132,"SML_SI":2,"SML_SM":70,"BP":1}
+
+## Da tenere (con il motivo)
+- DataAssets/Entities/EDA_COL-SonicMatter — usato da asset che restano (es. BP_ACS_SonicMatter)
+- DataAssets/Entities/EDA_COL-SonicMatter_Red — usato da asset che restano (es. BP_ACS_SonicMatter_NG_Red)
+- DataAssets/Entities/EDA_COL-SonicMatter_Green — usato da asset che restano (es. BP_ACS_SonicMatter_NG_Green)
+- DataAssets/Entities/EDA_COL-SonicMatter_Black — usato da asset che restano (es. BP_ACS_SonicMatter_NG_RedBlack)
+- DataAssets/Entities/EDA_COL-IonicCharcoalRed — usato da asset che restano (es. BPC_Interactable_MaalaxmiCharchoalPile)
+- DataAssets/Modules/Pylon/SMDA_MOD37-StdToolbox — usato da asset che restano (es. SML_SM_Toolbox)
+- DataAssets/Loots/LDA_COL-SonicMatter — usato da asset che restano (es. BP_ACS_SonicMatter)
+- DataAssets/Loots/LDA_COL-SonicMatter_Red — usato da asset che restano (es. BP_ACS_SonicMatter_NG_Red)
+- DataAssets/Loots/LDA_COL-SonicMatter_Green — usato da asset che restano (es. BP_ACS_SonicMatter_NG_Green)
+- DataAssets/Loots/LDA_COL-SonicMatter_Black — usato da asset che restano (es. BP_ACS_SonicMatter_NG_RedBlack)
+- BP/CargoItems/CI_Rock — usato da asset che restano (es. DEP_DT_CargoItemTranslation)
+- BP/Loots/BP_ACS_Loot_Rock — usato da asset che restano (es. DEP_DT_CargoItemTranslation)
+- BP/CargoItems/CI_Iron — usato da asset che restano (es. DEP_DT_CargoItemTranslation)
+- BP/Loots/BP_ACS_Loot_Iron — usato da asset che restano (es. DEP_DT_CargoItemTranslation)
+- BP/CargoItems/CI_Gold — usato da asset che restano (es. DEP_DT_CargoItemTranslation)
+- BP/Loots/BP_ACS_Loot_Gold — usato da asset che restano (es. DEP_DT_CargoItemTranslation)
+- BP/Modules/Pylon/SML_SM_PY-P2_P3_S — usato da asset che restano (es. 04-Asteroids)
+- BP/Modules/Pylon/SML_SM_PY-P2_DP2_S — usato da asset che restano (es. 04-Asteroids)
+- BP/Modules/Pylon/SML_SM_PY-P1_DP2_S — usato da asset che restano (es. ShipsMeshesCreation)
+- BP/Modules/Pylon/SML_SM_PY-P1_DP1_S — usato da asset che restano (es. ShipsMeshesCreation)
+- BP/Modules/Pylon/SML_SM_PY-DP1_DP1_S — usato da asset che restano (es. ShipsMeshesCreation)
+- BP/Modules/MainEngine/SML_SM_MOD00-StartingEngine — usato da asset che restano (es. BP_CinematicStartingShip-Static)
+- BP/Loots/BP_ACS_Loot_COL-Zinc — usato da asset che restano (es. DA_CR_Core_Rock_A)
+- BP/Loots/BP_ACS_Loot_COL-Uranium — usato da asset che restano (es. DA_CR_Core_Radium_A)
+- BP/Loots/BP_ACS_Loot_COL-Trismuth — usato da asset che restano (es. DA_CR_Tree_Uranium_A)
+- BP/Loots/BP_ACS_Loot_COL-Titanium — usato da asset che restano (es. BP_Interactable_Loot_MetalJunk_B_00)
+- BP/Loots/BP_ACS_Loot_COL-RocketAmmo — usato da asset che restano (es. CinematicCapitalShip_Montage)
+- BP/Loots/BP_ACS_Loot_COL-Rock — usato da asset che restano (es. BP_Interactable_Loot)
+- BP/Loots/BP_ACS_Loot_COL-RadioactiveWaste — usato da asset che restano (es. DA_CR_Core_RadioactiveWaste_A)
+- BP/Loots/BP_ACS_Loot_COL-MinesAmmo — usato da asset che restano (es. BP_Interactable_Loot_Mines)
+- BP/Loots/BP_ACS_Loot_COL-Mercury — usato da asset che restano (es. DA_CR_EN-Tier3_Loot_Iron)
+- BP/Loots/BP_ACS_Loot_COL-Lithium — usato da asset che restano (es. DA_CR_EN-Tier3_Loot_Gold)
+- BP/Loots/BP_ACS_Loot_COL-IronLoot00 — usato da asset che restano (es. DA_WD_Sy02q13_A)
+- BP/Loots/BP_ACS_Loot_COL-Iron — usato da asset che restano (es. DA_CR_EN-Tier3_Loot_Iron)
+- BP/Loots/BP_ACS_Loot_COL-Integrity — usato da asset che restano (es. BP_Interactable_Loot_InstantIntegrity)
+- BP/Loots/BP_ACS_Loot_COL-GoldenLoot_A — usato da asset che restano (es. DA_WD_Sy02q08_D)
+- BP/Loots/BP_ACS_Loot_COL-GoldCode_C — usato da asset che restano (es. DA_WD_Sy02q07_E)
+- BP/Loots/BP_ACS_Loot_COL-GoldCode_B — usato da asset che restano (es. DA_WD_Sy02q07_D)
+- BP/Loots/BP_ACS_Loot_COL-GoldCode_A — usato da asset che restano (es. DA_WD_Sy02q07_C)
+- BP/Loots/BP_ACS_Loot_COL-GatlingAmmo — usato da asset che restano (es. Vizzi_Test_VFX)
+- BP/Loots/BP_ACS_Loot_COL-Echilium — usato da asset che restano (es. BP_Octupus)
+- BP/Loots/BP_ACS_Loot_COL-CrystalDust — usato da asset che restano (es. DA_CR_Core_CrystalDust_A)
+- BP/Loots/BP_ACS_Loot_COL-Credits — usato da asset che restano (es. CinematicCapitalShip_Montage)
+- BP/Loots/BP_ACS_Loot_COL-Copper — usato da asset che restano (es. DA_CR_EN-Tier3_Loot_Gold)
+- BP/Modules/PrimaryWeapon/SML_SM_MOD56-Organic_S — usato da asset che restano (es. BP_StartingShip6Dof_Tier2_Tree)
+- BP/Modules/Cargo/SML_SM_MOD04-Cargo_S — usato da asset che restano (es. BP_StartingShip6Dof_Tier3B)
+- BP/Modules/SonicMatterExtractor/SML_SM_MOD17-SonicMatterExtractor_S — usato da asset che restano (es. BP_StartingShip6Dof_Tier0_A)
+- BP/Modules/SecondaryWeapon/NPC/SML_NPC_MOD30-RocketLauncher_S — usato da asset che restano (es. CinematicCapitalShip_Montage)
+- BP/Modules/PrimaryWeapon/SML_SM_MOD56c-Organic_Starting — usato da asset che restano (es. BP_StartingShip6Dof_OrganicTest)
+- BP/Modules/PrimaryWeapon/SML_SM_MOD10a-IntLaser — usato da asset che restano (es. SML_SM_SBDY06-Blade)
+- BP/Modules/MainEngine/SML_SM_MOD00a-InternalEngine_01 — usato da asset che restano (es. SML_SM_BODY02a-Dragon_Iron)
+- BP/Modules/DefensiveWeapon/SML_SM_MOD16-MineDropper — usato da asset che restano (es. BP_ACS_Loot_COL-MinesAmmo)
+- BP/Modules/Decoration/SML_SM_MOD20-Blades — usato da asset che restano (es. TestScene_Appio2)
+- BP/Modules/Cargo/SML_SM_MOD06-Cargo_L — usato da asset che restano (es. BP_StartingShip6Dof_Tier3MaxSpeed)
+- BP/Modules/Cargo/SML_SM_MOD04-Cargo_XS — usato da asset che restano (es. BP_StartingShip6DofNew0_Appio)
+- BP/Loots/BP_ACS_Loot_MetalJunk — usato da asset che restano (es. DEP_DT_CargoItemTranslation)
+- BP/Items/InternalCargo/SML_SI_InternalCargo_StationRoom — usato da asset che restano (es. TestScene_Andrea)
+- BP/CargoItems/CI_TestAiAugSys — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Loots/BP_ACS_Loot_TestAiAugSys — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Items/AIAugmentationsSystem/SML_SI_TestAiAugSys — usato da asset che restano (es. DT_EntityTranslations)
+- BP/CargoItems/CI_TestHeatSink — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Loots/BP_ACS_Loot_TestHeatSink — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Items/HeatSink/SML_SI_TestHeatSink — usato da asset che restano (es. DT_EntityTranslations)
+- BP/CargoItems/CI_TestPowPlan — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Loots/BP_ACS_Loot_TestPowPlan — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Items/PowerGenerator/SML_SI_TestPowPlan — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Items/PowerPlant/SML_SI_TestPowPlan_DEP — usato da asset che restano (es. SML_SM_MainBody)
+- BP/CargoItems/CI_TestRadar — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Loots/BP_ACS_Loot_TestRadar — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Items/Radar/SML_SI_TestRadar — usato da asset che restano (es. DT_EntityTranslations)
+- BP/CargoItems/CI_TestSecEng — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Loots/BP_ACS_Loot_TestSecEng — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Items/SecondaryEngine/SML_SI_TestSecEng — usato da asset che restano (es. DT_EntityTranslations)
+- BP/CargoItems/CI_TestShieldGen — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Loots/BP_ACS_Loot_TestShieldGen — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Items/ShieldGenerator/SML_SI_TestShieldGen — usato da asset che restano (es. DT_EntityTranslations)
+- BP/CargoItems/CI_TestTractBeam — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Loots/BP_ACS_Loot_TestTractBeam — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Items/TractorBeam/SML_SI_TestTractBeam — usato da asset che restano (es. DT_EntityTranslations)
+- BP/CargoItems/CI_TestWarpDrive — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Loots/BP_ACS_Loot_TestWarpDrive — usato da asset che restano (es. DT_EntityTranslations)
+- BP/Items/WarpDrive/SML_SI_TestWarpDrive — usato da asset che restano (es. DT_EntityTranslations)
+- DataAssets/Entities/DA_Entity_Rock — usato da asset che restano (es. CI_Rock)
+- DataAssets/Entities/DA_Entity_Iron — usato da asset che restano (es. CI_Iron)
+- DataAssets/Entities/DA_Entity_Gold — usato da asset che restano (es. CI_Gold)
+- DataAssets/Entities/EDA_PY-P2_P3_S — usato da asset che restano (es. SML_SM_PY-P2_P3_S)
+- DataAssets/Entities/EDA_PY-P2_DP2_S — usato da asset che restano (es. SML_SM_PY-P2_DP2_S)
+- DataAssets/Entities/EDA_PY-P1_DP2_S — usato da asset che restano (es. SML_SM_PY-P1_DP2_S)
+- DataAssets/Entities/EDA_PY-P1_DP1_S — usato da asset che restano (es. SML_SM_PY-P1_DP1_S)
+- DataAssets/Entities/EDA_PY-DP1_DP1_S — usato da asset che restano (es. SML_SM_PY-DP1_DP1_S)
+- DataAssets/Entities/EDA_MOD00-StartingEngine — usato da asset che restano (es. SML_SM_MOD00-StartingEngine)
+- DataAssets/Entities/EDA_COL-Zinc — usato da asset che restano (es. BP_ACS_Loot_COL-Zinc)
+- DataAssets/Entities/EDA_COL-Uranium — usato da asset che restano (es. BP_ACS_Loot_COL-Uranium)
+- DataAssets/Entities/EDA_COL-Trismuth — usato da asset che restano (es. BP_ACS_Loot_COL-Trismuth)
+- DataAssets/Entities/EDA_COL-Titanium — usato da asset che restano (es. BP_ACS_Loot_COL-Titanium)
+- DataAssets/Entities/EDA_COL-RocketAmmo — usato da asset che restano (es. BP_ACS_Loot_COL-RocketAmmo)
+- DataAssets/Entities/EDA_COL-Rock — usato da asset che restano (es. BP_ACS_Loot_COL-Rock)
+- DataAssets/Entities/EDA_COL-RadioactiveWaste — usato da asset che restano (es. BP_ACS_Loot_COL-RadioactiveWaste)
+- DataAssets/Entities/EDA_COL-MinesAmmo — usato da asset che restano (es. BP_ACS_Loot_COL-MinesAmmo)
+- DataAssets/Entities/EDA_COL-Mercury — usato da asset che restano (es. BP_ACS_Loot_COL-Mercury)
+- DataAssets/Entities/EDA_COL-Lithium — usato da asset che restano (es. BP_ACS_Loot_COL-Lithium)
+- DataAssets/Entities/EDA_COL-IronLoot00 — usato da asset che restano (es. BP_ACS_Loot_COL-IronLoot00)
+- DataAssets/Entities/EDA_COL-Iron — usato da asset che restano (es. BP_ACS_Loot_COL-Iron)
+- DataAssets/Entities/EDA_COL-InstantIntegrity — usato da asset che restano (es. BP_ACS_Loot_COL-Integrity)
+- DataAssets/Entities/EDA_COL-GoldenLoot_A — usato da asset che restano (es. BP_ACS_Loot_COL-GoldenLoot_A)
+- DataAssets/Entities/EDA_COL-GoldCode_C — usato da asset che restano (es. BP_ACS_Loot_COL-GoldCode_C)
+- DataAssets/Entities/EDA_COL-GoldCode_B — usato da asset che restano (es. BP_ACS_Loot_COL-GoldCode_B)
+- DataAssets/Entities/EDA_COL-GoldCode_A — usato da asset che restano (es. BP_ACS_Loot_COL-GoldCode_A)
+- DataAssets/Entities/EDA_COL-GatlingAmmo — usato da asset che restano (es. BP_ACS_Loot_COL-GatlingAmmo)
+- DataAssets/Entities/EDA_COL-Echilium — usato da asset che restano (es. BP_ACS_Loot_COL-Echilium)
+- DataAssets/Entities/EDA_COL-CrystalDust — usato da asset che restano (es. BP_ACS_Loot_COL-CrystalDust)
+- DataAssets/Entities/EDA_COL-Credits — usato da asset che restano (es. BP_ACS_Loot_COL-Credits)
+- DataAssets/Entities/EDA_COL-Copper — usato da asset che restano (es. BP_ACS_Loot_COL-Copper)
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD56-Organic_S — usato da asset che restano (es. SML_SM_MOD56-Organic_S)
+- DataAssets/Modules/Cargo/SMDA_MOD04-Cargo_S — usato da asset che restano (es. SML_SM_MOD04-Cargo_S)
+- DataAssets/Modules/SonicMatterExtractor/SMDA_MOD17-SonicMatterExtractor_S — usato da asset che restano (es. SML_SM_MOD17-SonicMatterExtractor_S)
+- DataAssets/Modules/SecondaryWeapon/SMDA_NPC_MOD30-RocketLauncher_S — usato da asset che restano (es. SML_NPC_MOD30-RocketLauncher_S)
+- DataAssets/Modules/Pylon/SMDA_PY-P2_P3_S — usato da asset che restano (es. SML_SM_PY-P2_P3_S)
+- DataAssets/Modules/Pylon/SMDA_PY-P2_DP2_S — usato da asset che restano (es. SML_SM_PY-P2_DP2_S)
+- DataAssets/Modules/Pylon/SMDA_PY-P1_DP2_S — usato da asset che restano (es. SML_SM_PY-P1_DP2_S)
+- DataAssets/Modules/Pylon/SMDA_PY-P1_DP1_S — usato da asset che restano (es. SML_SM_PY-P1_DP1_S)
+- DataAssets/Modules/Pylon/SMDA_PY-DP1_DP1_S — usato da asset che restano (es. SML_SM_PY-DP1_DP1_S)
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD56c-Organic_Starting — usato da asset che restano (es. SML_SM_MOD56c-Organic_Starting)
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD10a-IntLaser — usato da asset che restano (es. SML_SM_MOD10a-IntLaser)
+- DataAssets/Modules/MainEngine/SMDA_MOD00a-InternalEngine_01 — usato da asset che restano (es. SML_SM_MOD00a-InternalEngine_01)
+- DataAssets/Modules/MainEngine/SMDA_MOD00-StartingEngine — usato da asset che restano (es. SML_SM_MOD00-StartingEngine)
+- DataAssets/Modules/DefensiveWeapon/SMDA_MOD16-MineDropper — usato da asset che restano (es. SML_SM_MOD16-MineDropper)
+- DataAssets/Modules/Decoration/SMDA_MOD20-Blades — usato da asset che restano (es. SML_SM_MOD20-Blades)
+- DataAssets/Modules/Cargo/SMDA_MOD06-Cargo_L — usato da asset che restano (es. SML_SM_MOD06-Cargo_L)
+- DataAssets/Modules/Cargo/SMDA_MOD04-Cargo_XS — usato da asset che restano (es. SML_SM_MOD04-Cargo_XS)
+- DataAssets/CargoItems/DA_CI_Rock — usato da asset che restano (es. CI_Rock)
+- DataAssets/CargoItems/DA_CI_Iron — usato da asset che restano (es. CI_Iron)
+- DataAssets/CargoItems/DA_CI_Gold — usato da asset che restano (es. CI_Gold)
+- DataAssets/Loots/DA_Loot_Rock — usato da asset che restano (es. BP_ACS_Loot_Rock)
+- DataAssets/Loots/DA_Loot_Iron — usato da asset che restano (es. BP_ACS_Loot_Iron)
+- DataAssets/Loots/DA_Loot_Gold — usato da asset che restano (es. BP_ACS_Loot_Gold)
+- DataAssets/Loots/COL-MetalJunk — usato da asset che restano (es. BP_ACS_Loot_MetalJunk)
+- DataAssets/Loots/LDA_COL-Zinc — usato da asset che restano (es. BP_ACS_Loot_COL-Zinc)
+- DataAssets/Loots/LDA_COL-Uranium — usato da asset che restano (es. BP_ACS_Loot_COL-Uranium)
+- DataAssets/Loots/LDA_COL-Trismuth — usato da asset che restano (es. BP_ACS_Loot_COL-Trismuth)
+- DataAssets/Loots/LDA_COL-Titanium — usato da asset che restano (es. BP_ACS_Loot_COL-Titanium)
+- DataAssets/Loots/LDA_COL-ShieldCharger — usato da asset che restano (es. BP_ACS_Loot_COL-Integrity)
+- DataAssets/Loots/LDA_COL-RocketAmmo — usato da asset che restano (es. BP_ACS_Loot_COL-RocketAmmo)
+- DataAssets/Loots/LDA_COL-Rock — usato da asset che restano (es. BP_ACS_Loot_COL-Rock)
+- DataAssets/Loots/LDA_COL-RadioactiveWaste — usato da asset che restano (es. BP_ACS_Loot_COL-RadioactiveWaste)
+- DataAssets/Loots/LDA_COL-MinesAmmo — usato da asset che restano (es. BP_ACS_Loot_COL-MinesAmmo)
+- DataAssets/Loots/LDA_COL-Mercury — usato da asset che restano (es. BP_ACS_Loot_COL-Mercury)
+- DataAssets/Loots/LDA_COL-Lithium — usato da asset che restano (es. BP_ACS_Loot_COL-Lithium)
+- DataAssets/Loots/LDA_COL-IronLoot00 — usato da asset che restano (es. BP_ACS_Loot_COL-IronLoot00)
+- DataAssets/Loots/LDA_COL-Iron — usato da asset che restano (es. BP_ACS_Loot_COL-Iron)
+- DataAssets/Loots/LDA_COL-GoldenLoot_A — usato da asset che restano (es. BP_ACS_Loot_COL-GoldenLoot_A)
+- DataAssets/Loots/LDA_COL-GoldCode_C — usato da asset che restano (es. BP_ACS_Loot_COL-GoldCode_C)
+- DataAssets/Loots/LDA_COL-GoldCode_B — usato da asset che restano (es. BP_ACS_Loot_COL-GoldCode_B)
+- DataAssets/Loots/LDA_COL-GoldCode_A — usato da asset che restano (es. BP_ACS_Loot_COL-GoldCode_A)
+- DataAssets/Loots/LDA_COL-GatlingAmmo — usato da asset che restano (es. BP_ACS_Loot_COL-GatlingAmmo)
+- DataAssets/Loots/LDA_COL-Echilium — usato da asset che restano (es. BP_ACS_Loot_COL-Echilium)
+- DataAssets/Loots/LDA_COL-CrystalDust — usato da asset che restano (es. BP_ACS_Loot_COL-CrystalDust)
+- DataAssets/Loots/LDA_COL-Credits — usato da asset che restano (es. BP_ACS_Loot_COL-Credits)
+- DataAssets/Loots/LDA_COL-Copper — usato da asset che restano (es. BP_ACS_Loot_COL-Copper)
+- DataAssets/Items/InternalCargo/SIDA_InternalCargo_StationRoom — usato da asset che restano (es. SML_SI_InternalCargo_StationRoom)
+- DataAssets/Entities/EDA_TestAiAugSys — usato da asset che restano (es. CI_TestAiAugSys)
+- DataAssets/Items/AiAugmentationsSystem/SIDA_TestAiAugSys — usato da asset che restano (es. SML_SI_TestAiAugSys)
+- DataAssets/CargoItems/CIDA_TestAiAugSys — usato da asset che restano (es. CI_TestAiAugSys)
+- DataAssets/Loots/LDA_TestAiAugSys — usato da asset che restano (es. BP_ACS_Loot_TestAiAugSys)
+- DataAssets/Entities/EDA_TestHeatSink — usato da asset che restano (es. CI_TestHeatSink)
+- DataAssets/Items/HeatSink/SIDA_TestHeatSink — usato da asset che restano (es. SML_SI_TestHeatSink)
+- DataAssets/CargoItems/CIDA_TestHeatSink — usato da asset che restano (es. CI_TestHeatSink)
+- DataAssets/Loots/LDA_TestHeatSink — usato da asset che restano (es. BP_ACS_Loot_TestHeatSink)
+- DataAssets/Entities/EDA_TestPowPlan — usato da asset che restano (es. CI_TestPowPlan)
+- DataAssets/Items/PowerGenerator/SIDA_TestPowPlan — usato da asset che restano (es. SML_SI_TestPowPlan)
+- DataAssets/CargoItems/CIDA_TestPowPlan — usato da asset che restano (es. CI_TestPowPlan)
+- DataAssets/Loots/LDA_TestPowPlan — usato da asset che restano (es. BP_ACS_Loot_TestPowPlan)
+- DataAssets/Entities/EDA_TestRadar — usato da asset che restano (es. CI_TestRadar)
+- DataAssets/Items/Radar/SIDA_TestRadar — usato da asset che restano (es. SML_SI_TestRadar)
+- DataAssets/CargoItems/CIDA_TestRadar — usato da asset che restano (es. CI_TestRadar)
+- DataAssets/Loots/LDA_TestRadar — usato da asset che restano (es. BP_ACS_Loot_TestRadar)
+- DataAssets/Entities/EDA_TestSecEng — usato da asset che restano (es. CI_TestSecEng)
+- DataAssets/Items/SecondaryEngine/SIDA_TestSecEng — usato da asset che restano (es. SML_SI_TestSecEng)
+- DataAssets/CargoItems/CIDA_TestSecEng — usato da asset che restano (es. CI_TestSecEng)
+- DataAssets/Loots/LDA_TestSecEng — usato da asset che restano (es. BP_ACS_Loot_TestSecEng)
+- DataAssets/Entities/EDA_TestShieldGen — usato da asset che restano (es. CI_TestShieldGen)
+- DataAssets/Items/ShieldGenerator/SIDA_TestShieldGen — usato da asset che restano (es. SML_SI_TestShieldGen)
+- DataAssets/CargoItems/CIDA_TestShieldGen — usato da asset che restano (es. CI_TestShieldGen)
+- DataAssets/Loots/LDA_TestShieldGen — usato da asset che restano (es. BP_ACS_Loot_TestShieldGen)
+- DataAssets/Entities/EDA_TestTractBeam — usato da asset che restano (es. CI_TestTractBeam)
+- DataAssets/Items/TractorBeam/SIDA_TestTractBeam — usato da asset che restano (es. SML_SI_TestTractBeam)
+- DataAssets/CargoItems/CIDA_TestTractBeam — usato da asset che restano (es. CI_TestTractBeam)
+- DataAssets/Loots/LDA_TestTractBeam — usato da asset che restano (es. BP_ACS_Loot_TestTractBeam)
+- DataAssets/Entities/EDA_TestWarpDrive — usato da asset che restano (es. CI_TestWarpDrive)
+- DataAssets/Items/WarpDrive/SIDA_TestWarpDrive — usato da asset che restano (es. SML_SI_TestWarpDrive)
+- DataAssets/CargoItems/CIDA_TestWarpDrive — usato da asset che restano (es. CI_TestWarpDrive)
+- DataAssets/Loots/LDA_TestWarpDrive — usato da asset che restano (es. BP_ACS_Loot_TestWarpDrive)
+
+## Blueprint da cancellare (357)
+- BP/CargoItems/CI_COL-Antimony
+- BP/CargoItems/CI_COL-Arodisium
+- BP/CargoItems/CI_COL-Ashedium
+- BP/CargoItems/CI_COL-Atedex
+- BP/CargoItems/CI_COL-Aureuryrin
+- BP/CargoItems/CI_COL-BlueEnergyStorage
+- BP/CargoItems/CI_COL-Bolognum
+- BP/CargoItems/CI_COL-Brass
+- BP/CargoItems/CI_COL-Cobalt
+- BP/CargoItems/CI_COL-ControlSystem
+- BP/CargoItems/CI_COL-Copper
+- BP/CargoItems/CI_COL-Corder
+- BP/CargoItems/CI_COL-Credits
+- BP/CargoItems/CI_COL-CrystalDust
+- BP/CargoItems/CI_COL-Dercor
+- BP/CargoItems/CI_COL-DetonationSystem
+- BP/CargoItems/CI_COL-EXKnob
+- BP/CargoItems/CI_COL-EXRefiner
+- BP/CargoItems/CI_COL-Echilium
+- BP/CargoItems/CI_COL-F-5-D
+- BP/CargoItems/CI_COL-Farnezius
+- BP/CargoItems/CI_COL-Fuel
+- BP/CargoItems/CI_COL-Gallium
+- BP/CargoItems/CI_COL-GatlingAmmo
+- BP/CargoItems/CI_COL-Genusirius
+- BP/CargoItems/CI_COL-GoldCode_A
+- BP/CargoItems/CI_COL-GoldCode_B
+- BP/CargoItems/CI_COL-GoldCode_C
+- BP/CargoItems/CI_COL-GoldenLoot_A
+- BP/CargoItems/CI_COL-Goldsmith
+- BP/CargoItems/CI_COL-Gyzer
+- BP/CargoItems/CI_COL-Hademy
+- BP/CargoItems/CI_COL-HiFreqWave
+- BP/CargoItems/CI_COL-IG-Relay
+- BP/CargoItems/CI_COL-InputSphere
+- BP/CargoItems/CI_COL-IonicCharcoal
+- BP/CargoItems/CI_COL-IonicCharcoalRed
+- BP/CargoItems/CI_COL-Iron
+- BP/CargoItems/CI_COL-IronLoot00
+- BP/CargoItems/CI_COL-Ironyrin
+- BP/CargoItems/CI_COL-Iyzer
+- BP/CargoItems/CI_COL-Jidereum
+- BP/CargoItems/CI_COL-Joniscus
+- BP/CargoItems/CI_COL-Kilmin
+- BP/CargoItems/CI_COL-Lavherius
+- BP/CargoItems/CI_COL-Lithium
+- BP/CargoItems/CI_COL-LogPro
+- BP/CargoItems/CI_COL-Lollipop
+- BP/CargoItems/CI_COL-LowFreqWave
+- BP/CargoItems/CI_COL-Lyv
+- BP/CargoItems/CI_COL-Manganese
+- BP/CargoItems/CI_COL-Mercury
+- BP/CargoItems/CI_COL-MetalPesticide
+- BP/CargoItems/CI_COL-Mimicrum
+- BP/CargoItems/CI_COL-MinesAmmo
+- BP/CargoItems/CI_COL-Nickel
+- BP/CargoItems/CI_COL-OpalMind
+- BP/CargoItems/CI_COL-Orichalcum
+- BP/CargoItems/CI_COL-Otuliseom
+- BP/CargoItems/CI_COL-Ox-Zubirio
+- BP/CargoItems/CI_COL-Palladium
+- BP/CargoItems/CI_COL-Pewter
+- BP/CargoItems/CI_COL-PolishedCylinder
+- BP/CargoItems/CI_COL-PolymerizerWebSystem
+- BP/CargoItems/CI_COL-Polys-999
+- BP/CargoItems/CI_COL-PressureStabilizer
+- BP/CargoItems/CI_COL-Promethium
+- BP/CargoItems/CI_COL-RadioactiveWaste
+- BP/CargoItems/CI_COL-Rakedder
+- BP/CargoItems/CI_COL-ReInnovator
+- BP/CargoItems/CI_COL-RedEnergyStorage
+- BP/CargoItems/CI_COL-Rock
+- BP/CargoItems/CI_COL-RocketAmmo
+- BP/CargoItems/CI_COL-Sarfkron
+- BP/CargoItems/CI_COL-Shen-ten
+- BP/CargoItems/CI_COL-Silver
+- BP/CargoItems/CI_COL-Sohelium
+- BP/CargoItems/CI_COL-SonicMatter
+- BP/CargoItems/CI_COL-SonicMatter_Asteroids
+- BP/CargoItems/CI_COL-SonicMatter_Black
+- BP/CargoItems/CI_COL-SonicMatter_Elephants
+- BP/CargoItems/CI_COL-SonicMatter_Green
+- BP/CargoItems/CI_COL-SonicMatter_InsectKiss
+- BP/CargoItems/CI_COL-SonicMatter_Outpost
+- BP/CargoItems/CI_COL-SonicMatter_Red
+- BP/CargoItems/CI_COL-SonicMatter_SnakeHead
+- BP/CargoItems/CI_COL-SorterPYR
+- BP/CargoItems/CI_COL-StaticElectricityS
+- BP/CargoItems/CI_COL-Sunyus
+- BP/CargoItems/CI_COL-Tin
+- BP/CargoItems/CI_COL-Titanium
+- BP/CargoItems/CI_COL-TranslatorAI
+- BP/CargoItems/CI_COL-Trismuth
+- BP/CargoItems/CI_COL-Tungsten
+- BP/CargoItems/CI_COL-Uranium
+- BP/CargoItems/CI_COL-Vlynker
+- BP/CargoItems/CI_COL-Vytted
+- BP/CargoItems/CI_COL-Waste
+- BP/CargoItems/CI_COL-Yaker
+- BP/CargoItems/CI_COL-Zinc
+- BP/CargoItems/CI_COL-Zirconium
+- BP/CargoItems/CI_COL-Ziudder
+- BP/CargoItems/CI_MOD00-StartingEngine
+- BP/CargoItems/CI_MOD15b-Gatling_01_Poor
+- BP/CargoItems/CI_MOD15c-Gatling_01_Premium
+- BP/CargoItems/CI_MOD21a-IntGatling
+- BP/CargoItems/CI_MOD43-SonicMatterShooter_S
+- BP/CargoItems/CI_MOD53-GatlingIron_S
+- BP/CargoItems/CI_MOD54-LaserGold_L
+- BP/CargoItems/CI_PY-DP1_DP1_L
+- BP/CargoItems/CI_PY-DP1_DP1_M
+- BP/CargoItems/CI_PY-DP1_DP1_S
+- BP/CargoItems/CI_PY-DP1_DP2_L
+- BP/CargoItems/CI_PY-DP1_DP2_M
+- BP/CargoItems/CI_PY-DP1_DP2_S
+- BP/CargoItems/CI_PY-DP1_DP3_L
+- BP/CargoItems/CI_PY-DP1_DP3_M
+- BP/CargoItems/CI_PY-DP1_DP3_S
+- BP/CargoItems/CI_PY-DP2_DP2_L
+- BP/CargoItems/CI_PY-DP2_DP2_M
+- BP/CargoItems/CI_PY-DP2_DP2_S
+- BP/CargoItems/CI_PY-DP2_DP3_L
+- BP/CargoItems/CI_PY-DP2_DP3_M
+- BP/CargoItems/CI_PY-DP2_DP3_S
+- BP/CargoItems/CI_PY-DP3_DP3_L
+- BP/CargoItems/CI_PY-DP3_DP3_M
+- BP/CargoItems/CI_PY-DP3_DP3_S
+- BP/CargoItems/CI_PY-P1_DP1_L
+- BP/CargoItems/CI_PY-P1_DP1_M
+- BP/CargoItems/CI_PY-P1_DP1_S
+- BP/CargoItems/CI_PY-P1_DP2_L
+- BP/CargoItems/CI_PY-P1_DP2_M
+- BP/CargoItems/CI_PY-P1_DP2_S
+- BP/CargoItems/CI_PY-P1_DP3_L
+- BP/CargoItems/CI_PY-P1_DP3_M
+- BP/CargoItems/CI_PY-P1_DP3_S
+- BP/CargoItems/CI_PY-P1_P3_L
+- BP/CargoItems/CI_PY-P1_P3_M
+- BP/CargoItems/CI_PY-P1_P3_S
+- BP/CargoItems/CI_PY-P2_DP2_L
+- BP/CargoItems/CI_PY-P2_DP2_M
+- BP/CargoItems/CI_PY-P2_DP2_S
+- BP/CargoItems/CI_PY-P2_DP3_L
+- BP/CargoItems/CI_PY-P2_DP3_M
+- BP/CargoItems/CI_PY-P2_DP3_S
+- BP/CargoItems/CI_PY-P2_P3_L
+- BP/CargoItems/CI_PY-P2_P3_M
+- BP/CargoItems/CI_PY-P2_P3_S
+- BP/CargoItems/CI_PY-P3_DP3_L
+- BP/CargoItems/CI_PY-P3_DP3_M
+- BP/CargoItems/CI_PY-P3_DP3_S
+- BP/CargoItems/CI_TestHeatSink2
+- BP/Items/HeatSink/SML_SI_TestHeatSink2
+- BP/Items/ShieldGenerator/SML_SI_HeatShield
+- BP/Loots/BP_ACS_Loot_COL-Ammo
+- BP/Loots/BP_ACS_Loot_COL-Antimony
+- BP/Loots/BP_ACS_Loot_COL-Arodisium
+- BP/Loots/BP_ACS_Loot_COL-Ashedium
+- BP/Loots/BP_ACS_Loot_COL-Aureuryrin
+- BP/Loots/BP_ACS_Loot_COL-BlueEnergyStorage
+- BP/Loots/BP_ACS_Loot_COL-Bolognum
+- BP/Loots/BP_ACS_Loot_COL-Brass
+- BP/Loots/BP_ACS_Loot_COL-Cobalt
+- BP/Loots/BP_ACS_Loot_COL-ControlSystem
+- BP/Loots/BP_ACS_Loot_COL-Corder
+- BP/Loots/BP_ACS_Loot_COL-Dercor
+- BP/Loots/BP_ACS_Loot_COL-DetonationSystem
+- BP/Loots/BP_ACS_Loot_COL-EXKnob
+- BP/Loots/BP_ACS_Loot_COL-EXRefiner
+- BP/Loots/BP_ACS_Loot_COL-F-5-D
+- BP/Loots/BP_ACS_Loot_COL-Farnezius
+- BP/Loots/BP_ACS_Loot_COL-Fuel
+- BP/Loots/BP_ACS_Loot_COL-Gallium
+- BP/Loots/BP_ACS_Loot_COL-Genusirius
+- BP/Loots/BP_ACS_Loot_COL-Goldsmith
+- BP/Loots/BP_ACS_Loot_COL-Gyzer
+- BP/Loots/BP_ACS_Loot_COL-Hademy
+- BP/Loots/BP_ACS_Loot_COL-HiFreqWave
+- BP/Loots/BP_ACS_Loot_COL-IG-Relay
+- BP/Loots/BP_ACS_Loot_COL-InputSphere
+- BP/Loots/BP_ACS_Loot_COL-IonicCharcoal
+- BP/Loots/BP_ACS_Loot_COL-IonicCharcoalRed
+- BP/Loots/BP_ACS_Loot_COL-Ironyrin
+- BP/Loots/BP_ACS_Loot_COL-Iyzer
+- BP/Loots/BP_ACS_Loot_COL-Jidereum
+- BP/Loots/BP_ACS_Loot_COL-Joniscus
+- BP/Loots/BP_ACS_Loot_COL-Kilmin
+- BP/Loots/BP_ACS_Loot_COL-Lavherius
+- BP/Loots/BP_ACS_Loot_COL-LogPro
+- BP/Loots/BP_ACS_Loot_COL-Lollipop
+- BP/Loots/BP_ACS_Loot_COL-LowFreqWave
+- BP/Loots/BP_ACS_Loot_COL-Manganese
+- BP/Loots/BP_ACS_Loot_COL-MetalPesticide
+- BP/Loots/BP_ACS_Loot_COL-Mimicrum
+- BP/Loots/BP_ACS_Loot_COL-MineAmmo
+- BP/Loots/BP_ACS_Loot_COL-Nickel
+- BP/Loots/BP_ACS_Loot_COL-OpalMind
+- BP/Loots/BP_ACS_Loot_COL-Orichalcum
+- BP/Loots/BP_ACS_Loot_COL-Otuliseom
+- BP/Loots/BP_ACS_Loot_COL-Ox-Zubirio
+- BP/Loots/BP_ACS_Loot_COL-Palladium
+- BP/Loots/BP_ACS_Loot_COL-Pewter
+- BP/Loots/BP_ACS_Loot_COL-PolishedCylinder
+- BP/Loots/BP_ACS_Loot_COL-PolymerizerWebSystem
+- BP/Loots/BP_ACS_Loot_COL-Polys-999
+- BP/Loots/BP_ACS_Loot_COL-PressureStabilizer
+- BP/Loots/BP_ACS_Loot_COL-Promethium
+- BP/Loots/BP_ACS_Loot_COL-Rakedder
+- BP/Loots/BP_ACS_Loot_COL-ReInnovator
+- BP/Loots/BP_ACS_Loot_COL-RedEnergyStorage
+- BP/Loots/BP_ACS_Loot_COL-Rockets
+- BP/Loots/BP_ACS_Loot_COL-Sarfkron
+- BP/Loots/BP_ACS_Loot_COL-Shen-ten
+- BP/Loots/BP_ACS_Loot_COL-Shield
+- BP/Loots/BP_ACS_Loot_COL-Silver
+- BP/Loots/BP_ACS_Loot_COL-Sohelium
+- BP/Loots/BP_ACS_Loot_COL-SonicMatter
+- BP/Loots/BP_ACS_Loot_COL-SonicMatter_Asteroids
+- BP/Loots/BP_ACS_Loot_COL-SonicMatter_Black
+- BP/Loots/BP_ACS_Loot_COL-SonicMatter_Elephants
+- BP/Loots/BP_ACS_Loot_COL-SonicMatter_Green
+- BP/Loots/BP_ACS_Loot_COL-SonicMatter_InsectKiss
+- BP/Loots/BP_ACS_Loot_COL-SonicMatter_Outpost
+- BP/Loots/BP_ACS_Loot_COL-SonicMatter_Red
+- BP/Loots/BP_ACS_Loot_COL-SonicMatter_SnakeHead
+- BP/Loots/BP_ACS_Loot_COL-SorterPYR
+- BP/Loots/BP_ACS_Loot_COL-StaticElectricityS
+- BP/Loots/BP_ACS_Loot_COL-Sunyus
+- BP/Loots/BP_ACS_Loot_COL-Tin
+- BP/Loots/BP_ACS_Loot_COL-TranslatorAI
+- BP/Loots/BP_ACS_Loot_COL-Tungsten
+- BP/Loots/BP_ACS_Loot_COL-Vlynker
+- BP/Loots/BP_ACS_Loot_COL-Vytted
+- BP/Loots/BP_ACS_Loot_COL-Waste
+- BP/Loots/BP_ACS_Loot_COL-Yaker
+- BP/Loots/BP_ACS_Loot_COL-Zirconium
+- BP/Loots/BP_ACS_Loot_COL-Ziudder
+- BP/Loots/BP_ACS_Loot_MOD00-StartingEngine
+- BP/Loots/BP_ACS_Loot_MOD15b-Gatling_01_Poor
+- BP/Loots/BP_ACS_Loot_MOD15c-Gatling_01_Premium
+- BP/Loots/BP_ACS_Loot_MOD21a-IntGatling
+- BP/Loots/BP_ACS_Loot_MOD53-GatlingIron_S
+- BP/Loots/BP_ACS_Loot_MOD54-LaserGold_L
+- BP/Loots/BP_ACS_Loot_PY-DP1_DP1_L
+- BP/Loots/BP_ACS_Loot_PY-DP1_DP1_M
+- BP/Loots/BP_ACS_Loot_PY-DP1_DP1_S
+- BP/Loots/BP_ACS_Loot_PY-DP1_DP2_L
+- BP/Loots/BP_ACS_Loot_PY-DP1_DP2_M
+- BP/Loots/BP_ACS_Loot_PY-DP1_DP2_S
+- BP/Loots/BP_ACS_Loot_PY-DP1_DP3_L
+- BP/Loots/BP_ACS_Loot_PY-DP1_DP3_M
+- BP/Loots/BP_ACS_Loot_PY-DP1_DP3_S
+- BP/Loots/BP_ACS_Loot_PY-DP2_DP2_L
+- BP/Loots/BP_ACS_Loot_PY-DP2_DP2_M
+- BP/Loots/BP_ACS_Loot_PY-DP2_DP2_S
+- BP/Loots/BP_ACS_Loot_PY-DP2_DP3_L
+- BP/Loots/BP_ACS_Loot_PY-DP2_DP3_M
+- BP/Loots/BP_ACS_Loot_PY-DP2_DP3_S
+- BP/Loots/BP_ACS_Loot_PY-DP3_DP3_L
+- BP/Loots/BP_ACS_Loot_PY-DP3_DP3_M
+- BP/Loots/BP_ACS_Loot_PY-DP3_DP3_S
+- BP/Loots/BP_ACS_Loot_PY-P1_DP1_L
+- BP/Loots/BP_ACS_Loot_PY-P1_DP1_M
+- BP/Loots/BP_ACS_Loot_PY-P1_DP1_S
+- BP/Loots/BP_ACS_Loot_PY-P1_DP2_L
+- BP/Loots/BP_ACS_Loot_PY-P1_DP2_M
+- BP/Loots/BP_ACS_Loot_PY-P1_DP2_S
+- BP/Loots/BP_ACS_Loot_PY-P1_DP3_L
+- BP/Loots/BP_ACS_Loot_PY-P1_DP3_M
+- BP/Loots/BP_ACS_Loot_PY-P1_DP3_S
+- BP/Loots/BP_ACS_Loot_PY-P1_P3_L
+- BP/Loots/BP_ACS_Loot_PY-P1_P3_M
+- BP/Loots/BP_ACS_Loot_PY-P1_P3_S
+- BP/Loots/BP_ACS_Loot_PY-P2_DP2_L
+- BP/Loots/BP_ACS_Loot_PY-P2_DP2_M
+- BP/Loots/BP_ACS_Loot_PY-P2_DP2_S
+- BP/Loots/BP_ACS_Loot_PY-P2_DP3_L
+- BP/Loots/BP_ACS_Loot_PY-P2_DP3_M
+- BP/Loots/BP_ACS_Loot_PY-P2_DP3_S
+- BP/Loots/BP_ACS_Loot_PY-P2_P3_L
+- BP/Loots/BP_ACS_Loot_PY-P2_P3_M
+- BP/Loots/BP_ACS_Loot_PY-P2_P3_S
+- BP/Loots/BP_ACS_Loot_PY-P3_DP3_L
+- BP/Loots/BP_ACS_Loot_PY-P3_DP3_M
+- BP/Loots/BP_ACS_Loot_PY-P3_DP3_S
+- BP/Loots/BP_ACS_Loot_TestHeatSink2
+- BP/Modules/Cargo/SML_SM_MOD05-Cargo_M
+- BP/Modules/Cargo/SML_SM_MOD31-WormCargo
+- BP/Modules/Decoration/SML_SM_MOD33-WormTail
+- BP/Modules/FuelTank/SML_SM_MOD29-FuelTank
+- BP/Modules/MainEngine/SML_SM_MOD00a-InternalEngine_00
+- BP/Modules/MainEngine/SML_SM_MOD34-MaalaxmiEngine_S
+- BP/Modules/MainEngine/SML_SM_MOD35-MaalaxmiEngine_M
+- BP/Modules/MainEngine/SML_SM_MOD36-MaalaxmiEngine_L
+- BP/Modules/NuclearRocket/SML_SM_MOD22-Bomb
+- BP/Modules/NuclearRocket/SML_SM_MOD23-MOAB666
+- BP/Modules/NuclearRocket/SML_SM_MOD24-NeptuneMissile
+- BP/Modules/PrimaryWeapon/SML_SM_MOD15-Gatling_03
+- BP/Modules/PrimaryWeapon/SML_SM_MOD15a-IntGatling
+- BP/Modules/PrimaryWeapon/SML_SM_MOD15b-Gatling_01_Poor
+- BP/Modules/PrimaryWeapon/SML_SM_MOD15b-IntGatling
+- BP/Modules/PrimaryWeapon/SML_SM_MOD15c-Gatling_01_Premium
+- BP/Modules/PrimaryWeapon/SML_SM_MOD21a-IntGatling
+- BP/Modules/PrimaryWeapon/SML_SM_MOD53-GatlingIron_S
+- BP/Modules/PrimaryWeapon/SML_SM_MOD54-LaserGold_L
+- BP/Modules/PrimaryWeapon/SML_SM_MOD55-GatlingLevel1_S
+- BP/Modules/PrimaryWeapon/SML_SM_MOD55-GatlingLevel2_S
+- BP/Modules/PrimaryWeapon/SML_SM_MOD55-GatlingLevel3_S
+- BP/Modules/PrimaryWeapon/SML_SM_MOD55-GatlingLevel4_S
+- BP/Modules/PrimaryWeapon/SML_SM_MOD57-Organic_M
+- BP/Modules/PrimaryWeapon/SML_SM_MOD58-Organic_L
+- BP/Modules/PrimaryWeapon/SML_SM_MOD59-OrganicLevel_S
+- BP/Modules/Pylon/SML_SM_PY-DP1_DP1_L
+- BP/Modules/Pylon/SML_SM_PY-DP1_DP1_M
+- BP/Modules/Pylon/SML_SM_PY-DP1_DP2_L
+- BP/Modules/Pylon/SML_SM_PY-DP1_DP2_M
+- BP/Modules/Pylon/SML_SM_PY-DP1_DP2_S
+- BP/Modules/Pylon/SML_SM_PY-DP1_DP3_L
+- BP/Modules/Pylon/SML_SM_PY-DP1_DP3_M
+- BP/Modules/Pylon/SML_SM_PY-DP1_DP3_S
+- BP/Modules/Pylon/SML_SM_PY-DP2_DP2_L
+- BP/Modules/Pylon/SML_SM_PY-DP2_DP2_M
+- BP/Modules/Pylon/SML_SM_PY-DP2_DP2_S
+- BP/Modules/Pylon/SML_SM_PY-DP2_DP3_L
+- BP/Modules/Pylon/SML_SM_PY-DP2_DP3_M
+- BP/Modules/Pylon/SML_SM_PY-DP2_DP3_S
+- BP/Modules/Pylon/SML_SM_PY-DP3_DP3_L
+- BP/Modules/Pylon/SML_SM_PY-DP3_DP3_M
+- BP/Modules/Pylon/SML_SM_PY-DP3_DP3_S
+- BP/Modules/Pylon/SML_SM_PY-P1_DP1_L
+- BP/Modules/Pylon/SML_SM_PY-P1_DP1_M
+- BP/Modules/Pylon/SML_SM_PY-P1_DP2_L
+- BP/Modules/Pylon/SML_SM_PY-P1_DP2_M
+- BP/Modules/Pylon/SML_SM_PY-P1_DP3_L
+- BP/Modules/Pylon/SML_SM_PY-P1_DP3_M
+- BP/Modules/Pylon/SML_SM_PY-P1_DP3_S
+- BP/Modules/Pylon/SML_SM_PY-P1_P3_L
+- BP/Modules/Pylon/SML_SM_PY-P1_P3_M
+- BP/Modules/Pylon/SML_SM_PY-P1_P3_S
+- BP/Modules/Pylon/SML_SM_PY-P2_DP2_L
+- BP/Modules/Pylon/SML_SM_PY-P2_DP2_M
+- BP/Modules/Pylon/SML_SM_PY-P2_DP3_L
+- BP/Modules/Pylon/SML_SM_PY-P2_DP3_M
+- BP/Modules/Pylon/SML_SM_PY-P2_DP3_S
+- BP/Modules/Pylon/SML_SM_PY-P2_P3_L
+- BP/Modules/Pylon/SML_SM_PY-P2_P3_M
+- BP/Modules/Pylon/SML_SM_PY-P3_DP3_L
+- BP/Modules/Pylon/SML_SM_PY-P3_DP3_M
+- BP/Modules/Pylon/SML_SM_PY-P3_DP3_S
+- BP/Modules/SecondaryWeapon/SML_SM_MOD16-MineDropper
+- BP/Modules/SecondaryWeapon/SML_SM_MOD43-SonicMatterShooter_S
+- BP/Modules/SonicMatterExtractor/SML_SM_MOD18-SonicMatterExtractor_M
+- BP/Modules/SonicMatterExtractor/SML_SM_MOD19-SonicMatterExtractor_L
+- BP/Modules/Toolbox/MOD38-DefuseToolbox
+- BP/Modules/Toolbox/SML_SM_MOD37-StdToolbox
+- BP/Modules/Toolbox/SML_SM_MOD38-DefuseToolbox
+- BP/Modules/Turret/SML_SM_MOD08-Gun_M
+
+## Data Asset da cancellare (588)
+- DataAssets/CargoItems/CIDA_COL-Antimony — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Arodisium — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Ashedium — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Atedex — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Aureuryrin — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-BlueEnergyStorage — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Bolognum — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Brass — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Cobalt — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-ControlSystem — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Copper — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Corder — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Credits — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-CrystalDust — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Dercor — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-DetonationSystem — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-EXKnob — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-EXRefiner — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Echilium — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-F-5-D — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Farnezius — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Fuel — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Gallium — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-GatlingAmmo — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Genusirius — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-GoldCode_A — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-GoldCode_B — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-GoldCode_C — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-GoldenLoot_A — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Goldsmith — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Gyzer — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Hademy — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-HiFreqWave — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-IG-Relay — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-InputSphere — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-IonicCharcoal — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-IonicCharcoalRed — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Iron — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-IronLoot00 — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Ironyrin — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Iyzer — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Jidereum — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Joniscus — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Kilmin — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Lavherius — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Lithium — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-LogPro — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Lollipop — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-LowFreqWave — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Lyv — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Manganese — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Mercury — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-MetalPesticide — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Mimicrum — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-MinesAmmo — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Nickel — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-OpalMind — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Orichalcum — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Otuliseom — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Ox-Zubirio — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Palladium — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Pewter — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-PolishedCylinder — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-PolymerizerWebSystem — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Polys-999 — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-PressureStabilizer — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Promethium — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-RadioactiveWaste — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Rakedder — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-ReInnovator — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-RedEnergyStorage — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Rock — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-RocketAmmo — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Sarfkron — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Shen-ten — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Silver — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Sohelium — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-SonicMatter — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-SonicMatter_Asteroids — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-SonicMatter_Black — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-SonicMatter_Elephants — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-SonicMatter_Green — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-SonicMatter_InsectKiss — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-SonicMatter_Outpost — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-SonicMatter_Red — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-SonicMatter_SnakeHead — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-SorterPYR — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-StaticElectricityS — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Sunyus — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Tin — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Titanium — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-TranslatorAI — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Trismuth — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Tungsten — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Uranium — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Vlynker — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Vytted — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Waste — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Yaker — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Zinc — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Zirconium — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_COL-Ziudder — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_MOD00-StartingEngine — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_MOD15b-Gatling_01_Poor — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_MOD15c-Gatling_01_Premium — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_MOD21a-IntGatling — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_MOD43-SonicMatterExtractor_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_MOD53-GatlingIron_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_MOD54-LaserGold_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP1_DP1_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP1_DP1_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP1_DP1_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP1_DP2_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP1_DP2_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP1_DP2_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP1_DP3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP1_DP3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP1_DP3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP2_DP2_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP2_DP2_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP2_DP2_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP2_DP3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP2_DP3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP2_DP3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP3_DP3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP3_DP3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-DP3_DP3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P1_DP1_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P1_DP1_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P1_DP1_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P1_DP2_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P1_DP2_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P1_DP2_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P1_DP3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P1_DP3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P1_DP3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P1_P3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P1_P3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P1_P3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P2_DP2_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P2_DP2_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P2_DP2_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P2_DP3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P2_DP3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P2_DP3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P2_P3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P2_P3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P2_P3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P3_DP3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P3_DP3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_PY-P3_DP3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/CargoItems/CIDA_TestHeatSink2 — non è nel tab CargoItemsAndLoots
+- DataAssets/Entities/EDA_COL-Antimony — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Arodisium — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Ashedium — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Atedex — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Aureuryrin — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-BlueEnergyStorage — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Bolognum — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Brass — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Cobalt — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-ControlSystem — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Corder — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Dercor — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-DetonationSystem — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-EXKnob — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-EXRefiner — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-F-5-D — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Farnezius — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Fuel — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Gallium — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Genusirius — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Goldsmith — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Gyzer — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Hademy — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-HiFreqWave — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-IG-Relay — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-InputSphere — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-IonicCharcoal — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Ironyrin — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Iyzer — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Jidereum — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Joniscus — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Kilmin — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Lavherius — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-LogPro — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Lollipop — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-LowFreqWave — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Lyv — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Manganese — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-MetalPesticide — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Mimicrum — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Nickel — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-OpalMind — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Orichalcum — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Otuliseom — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Ox-Zubirio — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Palladium — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Pewter — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-PolishedCylinder — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-PolymerizerWebSystem — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Polys-999 — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-PressureStabilizer — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Promethium — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Rakedder — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-ReInnovator — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-RedEnergyStorage — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Sarfkron — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Shen-ten — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Silver — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Sohelium — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-SonicMatter_Asteroids — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-SonicMatter_Elephants — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-SonicMatter_InsectKiss — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-SonicMatter_Outpost — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-SonicMatter_SnakeHead — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-SorterPYR — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-StaticElectricityS — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Sunyus — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Tin — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-TranslatorAI — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Tungsten — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Vlynker — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Vytted — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Waste — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Yaker — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Zirconium — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_COL-Ziudder — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_MOD15b-Gatling_01_Poor — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_MOD15c-Gatling_01_Premium — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_MOD21a-IntGatling — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_MOD43-SonicMatterExtractor_S — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_MOD53-GatlingIron_S — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_MOD54-LaserGold_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP1_DP1_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP1_DP1_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP1_DP2_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP1_DP2_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP1_DP2_S — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP1_DP3_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP1_DP3_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP1_DP3_S — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP2_DP2_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP2_DP2_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP2_DP2_S — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP2_DP3_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP2_DP3_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP2_DP3_S — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP3_DP3_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP3_DP3_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-DP3_DP3_S — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P1_DP1_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P1_DP1_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P1_DP2_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P1_DP2_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P1_DP3_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P1_DP3_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P1_DP3_S — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P1_P3_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P1_P3_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P1_P3_S — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P2_DP2_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P2_DP2_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P2_DP3_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P2_DP3_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P2_DP3_S — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P2_P3_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P2_P3_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P3_DP3_L — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P3_DP3_M — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_PY-P3_DP3_S — non è nel foglio ENTITIES
+- DataAssets/Entities/EDA_TestHeatSink2 — non è nel foglio ENTITIES
+- DataAssets/Items/AiAugmentationSystem/SIDA_Test — non è nel tab Items (asset di test o vecchio)
+- DataAssets/Items/AiAugmentationSystem/SIDA_TestAiAugSys — duplicato in cartella diversa (AiAugmentationSystem, sezione AiAugmentationsSystem)
+- DataAssets/Items/HeatSink/SIDA_Test — non è nel tab Items (asset di test o vecchio)
+- DataAssets/Items/HeatSink/SIDA_TestHeatSink2 — non è nel tab Items (asset di test o vecchio)
+- DataAssets/Items/PowerGenerator/SIDA_Test — non è nel tab Items (asset di test o vecchio)
+- DataAssets/Items/Radar/SIDA_Test — non è nel tab Items (asset di test o vecchio)
+- DataAssets/Items/SecondaryEngine/SIDA_Test — non è nel tab Items (asset di test o vecchio)
+- DataAssets/Items/ShieldGenerator/SIDA_Test — non è nel tab Items (asset di test o vecchio)
+- DataAssets/Items/SonicMatterCollecter/SIDA_SonicMatterCollector_S — non caricabile (classe C++ mancante o asset rotto)
+- DataAssets/Items/TractorBeam/SIDA_Test — non è nel tab Items (asset di test o vecchio)
+- DataAssets/Items/WarpDrive/SIDA_Test — non è nel tab Items (asset di test o vecchio)
+- DataAssets/Loots/BODY01-Spartan — senza prefisso LDA_
+- DataAssets/Loots/BODY02-Dragon — senza prefisso LDA_
+- DataAssets/Loots/BODY03-Principal — senza prefisso LDA_
+- DataAssets/Loots/COL-Aluminium — senza prefisso LDA_
+- DataAssets/Loots/COL-Bolognum — senza prefisso LDA_
+- DataAssets/Loots/COL-Brass — senza prefisso LDA_
+- DataAssets/Loots/COL-Cobalt — senza prefisso LDA_
+- DataAssets/Loots/COL-Copper — senza prefisso LDA_
+- DataAssets/Loots/COL-Corder — senza prefisso LDA_
+- DataAssets/Loots/COL-Crystal — senza prefisso LDA_
+- DataAssets/Loots/COL-CrystalDust — senza prefisso LDA_
+- DataAssets/Loots/COL-Echilium — senza prefisso LDA_
+- DataAssets/Loots/COL-Gallium — senza prefisso LDA_
+- DataAssets/Loots/COL-Gold — senza prefisso LDA_
+- DataAssets/Loots/COL-Hademy — senza prefisso LDA_
+- DataAssets/Loots/COL-IonicCharcoal — senza prefisso LDA_
+- DataAssets/Loots/COL-Iron — senza prefisso LDA_
+- DataAssets/Loots/COL-Lithium — senza prefisso LDA_
+- DataAssets/Loots/COL-Mercury — senza prefisso LDA_
+- DataAssets/Loots/COL-Mimicrum — senza prefisso LDA_
+- DataAssets/Loots/COL-Nickel — senza prefisso LDA_
+- DataAssets/Loots/COL-Orichalcum — senza prefisso LDA_
+- DataAssets/Loots/COL-Palladium — senza prefisso LDA_
+- DataAssets/Loots/COL-Pewter — senza prefisso LDA_
+- DataAssets/Loots/COL-Polys-999 — senza prefisso LDA_
+- DataAssets/Loots/COL-Promethium — senza prefisso LDA_
+- DataAssets/Loots/COL-RadioactiveWaste — senza prefisso LDA_
+- DataAssets/Loots/COL-Radium — senza prefisso LDA_
+- DataAssets/Loots/COL-Recondigen — senza prefisso LDA_
+- DataAssets/Loots/COL-Rock — senza prefisso LDA_
+- DataAssets/Loots/COL-Shen-ten — senza prefisso LDA_
+- DataAssets/Loots/COL-Silver — senza prefisso LDA_
+- DataAssets/Loots/COL-SonicMatter — senza prefisso LDA_
+- DataAssets/Loots/COL-Sunyus — senza prefisso LDA_
+- DataAssets/Loots/COL-Tin — senza prefisso LDA_
+- DataAssets/Loots/COL-Titanium — senza prefisso LDA_
+- DataAssets/Loots/COL-Trismuth — senza prefisso LDA_
+- DataAssets/Loots/COL-Tungsten — senza prefisso LDA_
+- DataAssets/Loots/COL-Uranium — senza prefisso LDA_
+- DataAssets/Loots/COL-Waste — senza prefisso LDA_
+- DataAssets/Loots/COL-Zinc — senza prefisso LDA_
+- DataAssets/Loots/COL-Zirconium — senza prefisso LDA_
+- DataAssets/Loots/LDA_COL-Antimony — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Arodisium — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Ashedium — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Atedex — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Aureuryrin — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-BlueEnergyStorage — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Bolognum — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Brass — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Cobalt — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-ControlSystem — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Corder — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Dercor — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-DetonationSystem — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-EXKnob — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-EXRefiner — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-F-5-D — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Farnezius — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Fuel — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Gallium — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Genusirius — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Goldsmith — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Gyzer — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Hademy — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-HiFreqWave — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-IG-Relay — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-InputSphere — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-IonicCharcoal — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-IonicCharcoalRed — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Ironyrin — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Iyzer — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Jidereum — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Joniscus — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Kilmin — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Lavherius — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-LogPro — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Lollipop — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-LowFreqWave — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Lyv — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Manganese — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-MetalPesticide — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Mimicrum — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Nickel — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-OpalMind — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Orichalcum — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Otuliseom — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Ox-Zubirio — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Palladium — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Pewter — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-PolishedCylinder — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-PolymerizerWebSystem — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Polys-999 — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-PressureStabilizer — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Promethium — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Rakedder — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-ReInnovator — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-RedEnergyStorage — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Sarfkron — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Shen-ten — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Silver — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Sohelium — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-SonicMatter_Asteroids — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-SonicMatter_Elephants — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-SonicMatter_InsectKiss — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-SonicMatter_Outpost — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-SonicMatter_SnakeHead — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-SorterPYR — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-StaticElectricityS — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Sunyus — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Tin — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-TranslatorAI — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Tungsten — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Vlynker — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Vytted — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Waste — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Yaker — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Zirconium — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_COL-Ziudder — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_MOD00-StartingEngine — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_MOD100-TestGun — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_MOD13b-RocketLauncher_L_Poor — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_MOD15b-Gatling_01_Poor — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_MOD15c-Gatling_01_Premium — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_MOD21a-IntGatling — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_MOD53-GatlingIron_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_MOD54-LaserGold_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP1_DP1_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP1_DP1_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP1_DP1_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP1_DP2_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP1_DP2_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP1_DP2_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP1_DP3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP1_DP3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP1_DP3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP2_DP2_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP2_DP2_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP2_DP2_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP2_DP3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP2_DP3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP2_DP3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP3_DP3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP3_DP3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-DP3_DP3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P1_DP1_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P1_DP1_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P1_DP1_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P1_DP2_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P1_DP2_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P1_DP2_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P1_DP3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P1_DP3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P1_DP3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P1_P3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P1_P3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P1_P3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P2_DP2_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P2_DP2_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P2_DP2_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P2_DP3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P2_DP3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P2_DP3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P2_P3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P2_P3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P2_P3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P3_DP3_L — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P3_DP3_M — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_PY-P3_DP3_S — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/LDA_TestHeatSink2 — non è nel tab CargoItemsAndLoots
+- DataAssets/Loots/MOD01-Engine_S — senza prefisso LDA_
+- DataAssets/Loots/MOD02-Engine_M — senza prefisso LDA_
+- DataAssets/Loots/MOD03-Engine_L — senza prefisso LDA_
+- DataAssets/Loots/MOD04-Cargo_S — senza prefisso LDA_
+- DataAssets/Loots/MOD05-Cargo_M — senza prefisso LDA_
+- DataAssets/Loots/MOD06-Cargo_L — senza prefisso LDA_
+- DataAssets/Loots/MOD07-Gun_S_00 — senza prefisso LDA_
+- DataAssets/Loots/MOD07-Gun_S_01 — senza prefisso LDA_
+- DataAssets/Loots/MOD07-Gun_S_02 — senza prefisso LDA_
+- DataAssets/Loots/MOD07-Gun_S_03 — senza prefisso LDA_
+- DataAssets/Loots/MOD07-Gun_S_04 — senza prefisso LDA_
+- DataAssets/Loots/MOD07-Gun_S_05 — senza prefisso LDA_
+- DataAssets/Loots/MOD07-Gun_S_06 — senza prefisso LDA_
+- DataAssets/Loots/MOD07-Gun_S_07 — senza prefisso LDA_
+- DataAssets/Loots/MOD08-Gun_M — senza prefisso LDA_
+- DataAssets/Loots/MOD10-Laser_S — senza prefisso LDA_
+- DataAssets/Loots/MOD11-Laser_L — senza prefisso LDA_
+- DataAssets/Loots/MOD12-RocketLauncher_M — senza prefisso LDA_
+- DataAssets/Loots/MOD13-RocketLauncher_L — senza prefisso LDA_
+- DataAssets/Loots/MOD14-AlienRocketLauncher_L — senza prefisso LDA_
+- DataAssets/Loots/MOD15-Gatling_01 — senza prefisso LDA_
+- DataAssets/Loots/MOD16-MineDropper — senza prefisso LDA_
+- DataAssets/Loots/MOD17-SonicMatterExtractor_S — senza prefisso LDA_
+- DataAssets/Loots/MOD18-SonicMatterExtractor_M — senza prefisso LDA_
+- DataAssets/Loots/MOD19-SonicMatterExtractor_L — senza prefisso LDA_
+- DataAssets/Loots/MOD20-Blades — senza prefisso LDA_
+- DataAssets/Loots/MOD21-Gatling_02 — senza prefisso LDA_
+- DataAssets/Loots/MOD22-Bomb — senza prefisso LDA_
+- DataAssets/Loots/SBDY01-Eagle — senza prefisso LDA_
+- DataAssets/Loots/SBDY02-Classic — senza prefisso LDA_
+- DataAssets/Modules/Cargo/SMDA_MOD05-Cargo_M — non è nel tab Modules
+- DataAssets/Modules/Cargo/SMDA_MOD31-WormCargo — non è nel tab Modules
+- DataAssets/Modules/Decoration/SMDA_MOD33-WormTail — non è nel tab Modules
+- DataAssets/Modules/FuelTank/SMDA_MOD29-FuelTank — non è nel tab Modules
+- DataAssets/Modules/MainBody/SMDA_BODY01-Spartan_Tier5 — non è nel tab Modules
+- DataAssets/Modules/MainBody/SMDA_BODY05-Fregade — non è nel tab Modules
+- DataAssets/Modules/MainBody/SMDA_BODY06-AppioBody — non è nel tab Modules
+- DataAssets/Modules/MainEngine/SMDA_MOD00-TestEngine — non è nel tab Modules
+- DataAssets/Modules/MainEngine/SMDA_MOD00a-InternalEngine_00 — non è nel tab Modules
+- DataAssets/Modules/MainEngine/SMDA_MOD01a-Engine_Iron_M — non è nel tab Modules
+- DataAssets/Modules/MainEngine/SMDA_MOD34-MaalaxmiEngine_S — non è nel tab Modules
+- DataAssets/Modules/MainEngine/SMDA_MOD35-MaalaxmiEngine_M — non è nel tab Modules
+- DataAssets/Modules/MainEngine/SMDA_MOD36-MaalaxmiEngine_L — non è nel tab Modules
+- DataAssets/Modules/NuclearRocket/SMDA_MOD22-Bomb — non è nel tab Modules
+- DataAssets/Modules/NuclearRocket/SMDA_MOD23-MOAB666 — non è nel tab Modules
+- DataAssets/Modules/NuclearRocket/SMDA_MOD24-NeptuneMissile — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDAMOD07-Gun_S_00 — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/PrimaryWeapon/SMDAMOD07-Gun_S_01 — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/PrimaryWeapon/SMDAMOD07-Gun_S_02 — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/PrimaryWeapon/SMDAMOD07-Gun_S_03 — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/PrimaryWeapon/SMDAMOD07-Gun_S_04 — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/PrimaryWeapon/SMDAMOD07-Gun_S_05 — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/PrimaryWeapon/SMDAMOD07-Gun_S_06 — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/PrimaryWeapon/SMDAMOD07-Gun_S_07 — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/PrimaryWeapon/SMDAMOD10-Laser_S — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/PrimaryWeapon/SMDAMOD11-Laser_L — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/PrimaryWeapon/SMDAMOD15-Gatling_01 — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/PrimaryWeapon/SMDAMOD21-Gatling_02 — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/PrimaryWeapon/SMDA_COL-RehunRelic — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD100-TestGun — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD15-Gatling_03 — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD15a-IntGatling — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD15b-Gatling_01_Poor — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD15b-IntGatling — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD15c-Gatling_01_Premium — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD21a-IntGatling — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD53-GatlingIron_S — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD54-LaserGold_L — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD55-GatlingLevel1_S — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD55-GatlingLevel2_S — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD55-GatlingLevel3_S — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD55-GatlingLevel4_S — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD57-Organic_M — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD58-Organic_L — non è nel tab Modules
+- DataAssets/Modules/PrimaryWeapon/SMDA_MOD59-OrganicLevel_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_Empire_PY-P1_P1_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_Empire_PY-P2_DP1_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_Empire_PY-P3_DP2_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_Gold_PY-P1_P1_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_Gold_PY-P2_DP1_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_Gold_PY-P3_DP2_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_Iron_PY-P1_P1_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_Iron_PY-P2_DP1_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_Iron_PY-P3_DP2_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_MOD38-DefuseToolbox — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_Maalaxmi_PY-P1_P1_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_Maalaxmi_PY-P2_DP1_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_Maalaxmi_PY-P3_DP2_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP1_DP1_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP1_DP1_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP1_DP2_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP1_DP2_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP1_DP2_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP1_DP3_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP1_DP3_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP1_DP3_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP2_DP2_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP2_DP2_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP2_DP2_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP2_DP3_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP2_DP3_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP2_DP3_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP3_DP3_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP3_DP3_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-DP3_DP3_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P1_DP1_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P1_DP1_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P1_DP2_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P1_DP2_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P1_DP3_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P1_DP3_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P1_DP3_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P1_P3_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P1_P3_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P1_P3_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P2_DP2_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P2_DP2_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P2_DP3_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P2_DP3_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P2_DP3_S — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P2_P3_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P2_P3_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P3_DP3_L — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P3_DP3_M — non è nel tab Modules
+- DataAssets/Modules/Pylon/SMDA_PY-P3_DP3_S — non è nel tab Modules
+- DataAssets/Modules/SecondaryWeapon/SMDAMOD12-RocketLauncher_M — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/SecondaryWeapon/SMDAMOD13-RocketLauncher_L — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/SecondaryWeapon/SMDAMOD14-AlienRocketLauncher_L — nomenclatura errata (senza SMDA_)
+- DataAssets/Modules/SecondaryWeapon/SMDA_MOD16-MineDropper — non è nel tab Modules
+- DataAssets/Modules/SecondaryWeapon/SMDA_MOD43-SonicMatterShooter_S — non è nel tab Modules
+- DataAssets/Modules/SonicMatterExtractor/SMDA_MOD18-SonicMatterExtractor_M — non è nel tab Modules
+- DataAssets/Modules/SonicMatterExtractor/SMDA_MOD19-SonicMatterExtractor_L — non è nel tab Modules
+- DataAssets/Modules/Toolbox/SMDA_MOD37-StdToolbox — non è nel tab Modules
+- DataAssets/Modules/Toolbox/SMDA_MOD38-DefuseToolbox — non è nel tab Modules
+- DataAssets/Modules/Turret/SMDA_MOD08-Gun_M — duplicato in cartella diversa dalla sezione (Turret, sezione PrimaryWeapon)
