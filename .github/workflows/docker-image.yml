@@ -44,6 +44,9 @@ on:
       - scripts/backup.js
       - scripts/unreal_cleanup.js
       - scripts/unreal_cleanup_plan.js
+      - scripts/unreal_producer.js
+      - scripts/unreal/producer_apply.py
+      - scripts/unreal/producer_assets.py
       - scripts/unreal/tabs_read.py
       - scripts/unreal/entities_read.py
       - scripts/unreal/modules_read.py

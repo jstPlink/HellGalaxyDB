@@ -20,6 +20,7 @@ const unrealSync = require('./scripts/unreal_sync');
 const agentHub = require('./scripts/agent_hub');
 const agentBundle = require('./scripts/agent_bundle');
 const quality = require('./scripts/quality_checks');
+const unrealProducer = require('./scripts/unreal_producer');
 
 const eff = require('./scripts/entity_effective');
 const msheet = require('./scripts/modules_sheet');
@@ -790,6 +791,12 @@ const server = http.createServer(async (req, res) => {
       return res.end(agentBundle.buildBat({ serverUrl, token: AGENT_TOKEN }));
     }
     if (urlPath === '/api/agent/status' && req.method === 'GET') return sendJson(res, 200, { ...agentHub.status(), mode: (process.env.HG_UE_MODE || 'agent'), tokenConfigured: !!AGENT_TOKEN });
+    // ---- ProducerIcon degli EDA_ (anteprima in sola lettura; apply scrive solo quel campo, bloccato da HG_UE_ALLOW_WRITE) ----
+    if (urlPath === '/api/unreal/producer-icons' && req.method === 'POST') {
+      const body = await readJsonBody(req);
+      try { return sendJson(res, 200, await unrealProducer.producerIcons(stmts.allEntities.all().map(r => JSON.parse(r.current_json)), { apply: body.apply === true, confirm: body.confirm === true })); }
+      catch (e) { if (e instanceof unreal.UnrealError) return sendJson(res, e.status, { ok: false, error: e.message, code: e.code }); throw e; }
+    }
     // ---- Controlli di qualità sui dati (sola lettura) ----
     if (urlPath === '/api/quality' && req.method === 'GET') {
       const mods = getAllModulesSheet();

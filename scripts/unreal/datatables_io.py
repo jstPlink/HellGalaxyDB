@@ -35,7 +35,7 @@ def import_one(key, csv_b64):
         print(json.dumps({'ok': False, 'error': 'DataTable non trovata: ' + path}))
         return
     ok = unreal.DataTableFunctionLibrary.fill_data_table_from_csv_string(t, csv)
-    saved = False
+    saved = False  # regola dell'utente (2026-10-12): niente salvataggio, la DataTable resta modificata in memoria
     if ok:
-        saved = bool(unreal.EditorAssetLibrary.save_asset(path, only_if_is_dirty=False))
+        t.modify()
     print(json.dumps({'ok': bool(ok), 'saved': saved, 'path': path}))

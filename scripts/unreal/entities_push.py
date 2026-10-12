@@ -223,14 +223,10 @@ def run(payload_b64, apply=False, folder=DEFAULT_FOLDER):
                             raise ValueError('creazione asset fallita')
                     for k, v in changes.items():
                         asset.set_editor_property(k, v[2])
-                    try:
-                        EAL.checkout_loaded_asset(asset)
-                    except Exception:
-                        pass
-                    if not EAL.save_loaded_asset(asset, False):
-                        rep['errors'].append('salvataggio fallito (asset di sola lettura? checkout non riuscito?)')
-                    else:
-                        out['saved'].append(path)
+                    # regola dell'utente (2026-10-12): modifiche in memoria, in blocco, SENZA salvare né fare checkout
+                    # (gli asset restano sporchi: li salva l'utente)
+                    asset.modify()
+                    out['saved'].append(path)  # nome storico: elenco degli asset modificati (NON salvati)
         except Exception as ex:
             rep['errors'].append(str(ex)[:200])
             rep['action'] = 'error'
