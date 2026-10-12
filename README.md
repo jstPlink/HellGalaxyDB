@@ -172,6 +172,11 @@ Sul PC dove lavori con l'Editor Unreal: nell'app clic su **"Agente: non connesso
 - **Controlli**: segnala valori fuori elenco, chiavi mancanti e righe orfane (sola lettura).
 - Gli indirizzi dei fogli Google sono già nell'app (`scripts/sheets_defaults.json`): "Scarica dal foglio" funziona anche sul NAS.
 
+## Novità v0.2.13 (2026-10-12)
+- **DATABASE › Events**: tipi di evento (nome + prefisso; iniziali IC e QE). **Più eventi di sblocco** per modulo e per stazione (clic sulla cella). Nome stazione modificabile anche da Stations.
+- **Immagine e mesh dei moduli**: clic per ingrandire o "Rimuovere collegamento".
+- Tab Localization gialla accanto a Quest ed Enemies; menu Tipo modulo con lo stile del Produttore.
+
 ## Novità v0.2.12 (2026-10-12)
 - **DATABASE › Stations**: elenco delle stazioni (ID, nome, condizione di sblocco, moduli che si sbloccano lì). **Localization › Stations**: nomi delle stazioni modificabili (solo nell'app).
 - **Condizione di sblocco** dei moduli: clic sulla cella per impostare evento (`EV_` automatico) e stazione; filtro Con/Senza evento in "Tutti i moduli".

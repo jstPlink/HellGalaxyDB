@@ -986,6 +986,13 @@ test('T40 immagini/mesh trascinate, rinomina dell\'ID e cambio del tipo di modul
   assert.equal((await fetch(BASE + '/api/custom-media/ZZ-Mod1/mesh?filename=prova.fbx', { method: 'POST', headers: { ...H, 'Content-Type': 'application/octet-stream' }, body: fbx })).status, 200);
   assert.equal((await api('GET', '/api/media', null, AUTH)).json.links['ZZ-Mod1'].static_mesh, 'custom_ZZ-Mod1');
   assert.equal((await fetch(BASE + '/api/custom-media/NESSUNO/image', { method: 'POST', headers: { ...H }, body: png })).status, 404);
+  // togliere il collegamento di immagine e mesh (si può riassegnare dopo)
+  assert.equal((await fetch(BASE + '/api/custom-media/ZZ-Mod1/image', { method: 'DELETE', headers: { ...H } })).status, 200);
+  assert.equal(((await api('GET', '/api/media', null, AUTH)).json.links['ZZ-Mod1'] || {}).icon, undefined, 'immagine tolta');
+  assert.equal((await fetch(BASE + '/api/custom-media/ZZ-Mod1/mesh', { method: 'DELETE', headers: { ...H } })).status, 200);
+  assert.equal(((await api('GET', '/api/media', null, AUTH)).json.links['ZZ-Mod1'] || {}).static_mesh, undefined, 'mesh tolta');
+  assert.equal((await fetch(BASE + '/api/custom-media/ZZ-Mod1/image', { method: 'POST', headers: { ...H, 'Content-Type': 'image/png' }, body: png })).status, 200);
+  assert.equal((await api('GET', '/api/media', null, AUTH)).json.links['ZZ-Mod1'].icon, 'custom_ZZ-Mod1', 'riassegnabile dopo la rimozione');
   // cambio del tipo di modulo: anche ModuleType dell'entità
   const sec2 = secs.find(x => x !== secs[0]);
   assert.equal((await api('POST', '/api/rows/modules/ZZ-Mod1/section', { section: sec2 }, AUTH)).status, 200);
@@ -1117,4 +1124,35 @@ test('T46 nome di una stazione (Identities › ENGLISH) modificabile nell\'app, 
   assert.ok(h.some(i => i.field === 'nome (Identities)' && i.new === 'Stazione di prova'));
   await api('POST', '/api/sync/pull/grid/identities?apply=1', { csv }, AUTH);
   assert.equal((await api('GET', '/api/grid/identities', null, AUTH)).json.rows[rowNo - 2][2], 'Stazione di prova', 'la modifica locale resta dopo un nuovo pull');
+});
+
+test('T47 più eventi di sblocco per modulo e per stazione (elenco, doppioni, rimozione, cronologia)', async () => {
+  const putM = b => api('PUT', '/api/unlock-conditions', b, AUTH), putS = b => api('PUT', '/api/station-unlocks', b, AUTH);
+  assert.equal((await putM({ id: 'ZZ-Multi', events: ['EV_A_1', 'B_2', 'A_1', ''], station: 'SS-BirthyRock' })).status, 200);
+  const m = (await api('GET', '/api/unlock-conditions', null, AUTH)).json.items['ZZ-Multi'];
+  assert.deepEqual(m.events, ['A_1', 'B_2']); assert.equal(m.event, 'A_1');
+  assert.equal((await putM({ id: 'ZZ-Multi', events: ['bad id'], station: '' })).status, 400);
+  assert.equal((await putS({ id: 'SS-BirthyRock', events: ['EV_X_1', 'Y_2'] })).status, 200);
+  assert.deepEqual((await api('GET', '/api/station-unlocks', null, AUTH)).json.items['SS-BirthyRock'].events, ['X_1', 'Y_2']);
+  assert.equal((await putS({ id: 'SS-Inesistente', events: ['Z'] })).status, 400);
+  const h = (await api('GET', '/api/history?q=SS-BirthyRock', null, AUTH)).json.items;
+  assert.ok(h.some(i => i.field === 'eventi di sblocco' && i.new === 'EV_X_1, EV_Y_2'));
+  assert.equal((await putS({ id: 'SS-BirthyRock', events: [] })).status, 200);
+  assert.equal((await api('GET', '/api/station-unlocks', null, AUTH)).json.items['SS-BirthyRock'], undefined);
+  assert.equal((await putM({ id: 'ZZ-Multi', events: [], station: '' })).status, 200);
+});
+
+test('T48 tipi di evento (nome + prefisso): IC e QE iniziali, aggiunta, modifica, prefisso non valido, eliminazione', async () => {
+  const list = async () => (await api('GET', '/api/event-types', null, AUTH)).json.items;
+  const l0 = await list();
+  assert.ok(l0.some(r => r.name === 'Interaction complete' && r.prefix === 'IC'));
+  assert.ok(l0.some(r => r.name === 'Quest end' && r.prefix === 'QE'));
+  const id = (await api('POST', '/api/event-types', { name: 'Prova', prefix: '"ZZ"' }, AUTH)).json.id;
+  assert.equal((await list()).find(r => r.id === id).prefix, 'ZZ', 'le virgolette si tolgono');
+  assert.equal((await api('PUT', '/api/event-types/' + id, { name: 'Prova 2', prefix: 'Z Z' }, AUTH)).status, 400);
+  assert.equal((await api('PUT', '/api/event-types/' + id, { name: 'Prova 2', prefix: 'ZY' }, AUTH)).status, 200);
+  assert.equal((await list()).find(r => r.id === id).name, 'Prova 2');
+  assert.equal((await api('DELETE', '/api/event-types/' + id, null, AUTH)).status, 200);
+  assert.equal((await api('DELETE', '/api/event-types/' + id, null, AUTH)).status, 404);
+  assert.equal((await list()).length, l0.length);
 });

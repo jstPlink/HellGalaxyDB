@@ -636,6 +636,7 @@ const tabsHandler = require('./scripts/tabs_server')({ db, sendJson, readJsonBod
 // Righe nuove/eliminate dall'app (ENTITIES, MODULES, CARGO/LOOT, ITEMS)
 const translations = require('./scripts/translations')({ db, sendJson, readJsonBody });
 const unlockConditions = require('./scripts/unlock_conditions')({ db, sendJson, readJsonBody });
+const eventTypes = require('./scripts/event_types')({ db, sendJson, readJsonBody });
 const rowsAdmin = require('./scripts/rows_admin')({ db, sendJson, readJsonBody, sheet, msheet, addLocRows: rows => gridHandler.addAppRows('entities', rows) });
 // Replica automatica verso il server (solo righe cambiate): ogni modifica fatta in locale arriva anche sul server (HG_REMOTE_URL).
 const remoteReplica = require('./scripts/remote_replica');
@@ -1041,6 +1042,7 @@ const server = http.createServer(async (req, res) => {
     if (await media(req, res, urlPath, Object.fromEntries(query), queryString)) return;
     if (await translations(req, res, urlPath, query)) return;
     if (await unlockConditions(req, res, urlPath)) return;
+    if (await eventTypes(req, res, urlPath)) return;
     if (await rowsAdmin(req, res, urlPath)) return;
     if (await tabsHandler(req, res, urlPath, query)) return;
     if (await gridHandler(req, res, urlPath, query)) return;

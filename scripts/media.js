@@ -145,6 +145,8 @@ module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imag
   // Un solo file per ID e ruolo: textures/custom_<ID>.png (la UI converte in PNG) e meshes/custom_<ID>.fbx.
   // Restano solo nell'app: verranno importate in Unreal quando si scriveranno gli SMDA_/le texture (non ancora fatto).
   db.exec(`CREATE TABLE IF NOT EXISTS custom_links (owner TEXT NOT NULL, role TEXT NOT NULL, kind TEXT NOT NULL, name TEXT NOT NULL, user TEXT, at TEXT, PRIMARY KEY (owner, role))`);
+  // collegamenti di Unreal che l'utente ha tolto a una riga (non si rimettono da soli alla sincronizzazione successiva)
+  db.exec(`CREATE TABLE IF NOT EXISTS media_hidden (owner TEXT NOT NULL, role TEXT NOT NULL, user TEXT, at TEXT, PRIMARY KEY (owner, role))`);
   const ID_RE = /^[A-Za-z0-9][A-Za-z0-9_.\-]{0,99}$/;
   const userOf = req => String(req.headers['x-hg-user'] ? decodeURIComponent(String(req.headers['x-hg-user'])) : 'sistema').slice(0, 60);
   function readRaw(req, max) {
@@ -176,6 +178,7 @@ module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imag
       try { fs.rmSync(path.join(base, 'previews', name + '.png'), { force: true }); } catch (e) { /* nessuna anteprima precedente */ }
     }
     const now = new Date().toISOString();
+    db.prepare('DELETE FROM media_hidden WHERE owner = ? AND role = ?').run(id, role);
     const prev = db.prepare('SELECT name FROM custom_links WHERE owner = ? AND role = ?').get(id, role);
     db.prepare('INSERT OR REPLACE INTO media_assets (kind, name, size, preview, path, exported_at) VALUES (?, ?, ?, 0, ?, ?)').run(isImg ? 'texture' : 'mesh', name, buf.length, 'caricato dall\'utente', now);
     db.prepare('INSERT OR REPLACE INTO custom_links (owner, role, kind, name, user, at) VALUES (?, ?, ?, ?, ?, ?)').run(id, role, isImg ? 'texture' : 'mesh', name, userOf(req), now);
@@ -188,8 +191,9 @@ module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imag
     const assets = { texture: {}, mesh: {} };
     for (const r of db.prepare('SELECT kind, name, size, preview FROM media_assets').all()) if (fs.existsSync(path.join(base, r.kind === 'mesh' ? 'meshes' : 'textures', r.name + (r.kind === 'mesh' ? '.fbx' : '.png')))) assets[r.kind][r.name] = r.kind === 'mesh' ? { size: r.size, preview: !!r.preview } : { size: r.size };
     const links = {};
+    const hidden = new Set(db.prepare('SELECT owner, role FROM media_hidden').all().map(r => r.owner + '\n' + r.role));
     for (const r of db.prepare('SELECT owner, role, kind, name FROM media_links').all()) {
-      if (!assets[r.kind][r.name]) continue;
+      if (!assets[r.kind][r.name] || hidden.has(r.owner + '\n' + r.role)) continue;
       (links[r.owner] = links[r.owner] || {})[r.role] = r.name;
     }
     // le immagini/mesh dell'utente sostituiscono quelle di Unreal per lo stesso ruolo
@@ -197,7 +201,9 @@ module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imag
       if (!assets[r.kind][r.name]) continue;
       (links[r.owner] = links[r.owner] || {})[r.role] = r.name;
     }
-    return { links, assets };
+    const hiddenIdx = {};
+    for (const r of db.prepare('SELECT owner, role FROM media_hidden').all()) (hiddenIdx[r.owner] = hiddenIdx[r.owner] || []).push(r.role);
+    return { links, assets, hidden: hiddenIdx };
   }
 
   // ---------- sincronizzazione da Unreal (in background, a lotti) ----------
@@ -289,8 +295,14 @@ module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imag
     if ((m = urlPath.match(/^\/api\/custom-media\/([^/]+)\/(image|mesh)$/)) && req.method === 'POST') { await customUpload(req, res, decodeURIComponent(m[1]), m[2], query); return true; }
     if ((m = urlPath.match(/^\/api\/custom-media\/([^/]+)\/(image|mesh)$/)) && req.method === 'DELETE') {
       const id = decodeURIComponent(m[1]), role = m[2] === 'image' ? 'icon' : 'static_mesh';
-      db.prepare('DELETE FROM custom_links WHERE owner = ? AND role = ?').run(id, role);
-      logHistory(req, id, m[2] === 'image' ? 'immagine' : 'mesh', 'caricata dall\'utente', '(tolta: torna quella di Unreal)');
+      // toglie il collegamento: quello dell'utente e quello letto da Unreal (nascosto, non cancellato da Unreal)
+      const isImg = m[2] === 'image', kind = isImg ? 'texture' : 'mesh', roles = new Set(isImg ? ['icon'] : ['static_mesh']);
+      for (const r of db.prepare('SELECT role FROM media_links WHERE owner = ? AND kind = ?').all(id, kind)) if (isImg ? r.role === 'icon' : true) roles.add(r.role);
+      const had = db.prepare('SELECT 1 FROM custom_links WHERE owner = ? AND kind = ?').get(id, kind);
+      db.prepare('DELETE FROM custom_links WHERE owner = ? AND kind = ?').run(id, kind);
+      const ins = db.prepare('INSERT OR REPLACE INTO media_hidden (owner, role, user, at) VALUES (?, ?, ?, ?)'), at = new Date().toISOString();
+      for (const role of roles) ins.run(id, role, userOf(req), at);
+      logHistory(req, id, isImg ? 'immagine' : 'mesh', had ? 'caricata dall\'utente' : 'collegata da Unreal', '(collegamento tolto)');
       sendJson(res, 200, { ok: true }); return true;
     }
     if (urlPath === '/api/media' && req.method === 'GET') { sendJson(res, 200, index()); return true; }

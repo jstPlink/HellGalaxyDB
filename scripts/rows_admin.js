@@ -77,7 +77,7 @@ module.exports = function createRowsAdmin({ db, sendJson, readJsonBody, sheet, m
         db.prepare('UPDATE ' + t + ' SET id = ?, current_json = ?, original_json = ? WHERE id = ?').run(to, fix(r.current_json), fix(r.original_json), from);
       }
     }
-    for (const [t, col] of [['entities_ue', 'id'], ['modules_ue', 'id'], ['sheet_ue', 'id'], ['entity_links', 'id'], ['media_links', 'owner'], ['custom_links', 'owner'], ['app_rows', 'id'], ['deleted_rows', 'id']]) {
+    for (const [t, col] of [['entities_ue', 'id'], ['modules_ue', 'id'], ['sheet_ue', 'id'], ['entity_links', 'id'], ['media_links', 'owner'], ['custom_links', 'owner'], ['media_hidden', 'owner'], ['app_rows', 'id'], ['deleted_rows', 'id']]) {
       try { db.prepare('UPDATE ' + t + ' SET ' + col + ' = ? WHERE ' + col + ' = ?').run(to, from); } catch (e) { /* tabella assente */ }
     }
     // le immagini/mesh dell'utente sono salvate con il nome dell'ID: aggiornare il nome registrato non basta, quindi si lasciano i file e si rimappa il nome

@@ -47,6 +47,7 @@ on:
       - scripts/unreal_producer.js
       - scripts/translations.js
       - scripts/unlock_conditions.js
+      - scripts/event_types.js
       - scripts/unreal/producer_apply.py
       - scripts/unreal/producer_assets.py
       - scripts/unreal/tabs_read.py
