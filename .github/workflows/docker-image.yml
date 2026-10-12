@@ -45,6 +45,8 @@ on:
       - scripts/unreal_cleanup.js
       - scripts/unreal_cleanup_plan.js
       - scripts/unreal_producer.js
+      - scripts/translations.js
+      - scripts/unlock_conditions.js
       - scripts/unreal/producer_apply.py
       - scripts/unreal/producer_assets.py
       - scripts/unreal/tabs_read.py

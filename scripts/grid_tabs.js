@@ -12,6 +12,10 @@ const GRID_TABS = {
   eventsaudio: { key: 'eventsaudio', sheetName: 'EventsAudio', keyEnv: 'HG_LOC_SHEET_KEY', gidEnv: 'HG_LOC_GID_EVENTSAUDIO', mockEnv: 'HG_LOC_MOCK_EVENTSAUDIO' },
   // Foglio "HS - Events": solo MainEvents ed EventTexts sono utili (alimentano le DataTable di Unreal).
   mainevents: { key: 'mainevents', sheetName: 'MainEvents', keyEnv: 'HG_EVT_SHEET_KEY', gidEnv: 'HG_EVT_GID_MAINEVENTS', mockEnv: 'HG_EVT_MOCK_MAINEVENTS' },
+  // Foglio "Stations" (privato: serve la condivisione "chiunque abbia il link" per scaricarlo dall'app; altrimenti "Importa CSV"):
+  // solo le due pagine usate, copia fedele di sola lettura.
+  stationlocks: { key: 'stationlocks', sheetName: 'GenericLockRules', keyEnv: 'HG_STN_SHEET_KEY', gidEnv: 'HG_STN_GID_LOCKS', mockEnv: 'HG_STN_MOCK_LOCKS' },
+  stationrules: { key: 'stationrules', sheetName: 'SpaceStationRules', keyEnv: 'HG_STN_SHEET_KEY', gidEnv: 'HG_STN_GID_RULES', mockEnv: 'HG_STN_MOCK_RULES' },
   eventtexts: { key: 'eventtexts', sheetName: 'EventTexts', keyEnv: 'HG_EVT_SHEET_KEY', gidEnv: 'HG_EVT_GID_EVENTTEXTS', mockEnv: 'HG_EVT_MOCK_EVENTTEXTS' },
 };
 
@@ -35,6 +39,8 @@ module.exports = function createGridHandler({ db, sendJson, readJsonBody, SheetE
   // Si conserva il valore del foglio ("original") per il badge "modificato" e per i pull successivi.
   db.exec(`CREATE TABLE IF NOT EXISTS grid_edits (
     tab TEXT NOT NULL, row_no INTEGER NOT NULL, col INTEGER NOT NULL, original TEXT NOT NULL, PRIMARY KEY (tab, row_no, col))`);
+  // Righe create nell'app (es. testi di un nuovo modulo): non esistono nel foglio, quindi un nuovo pull non le deve cancellare.
+  db.exec(`CREATE TABLE IF NOT EXISTS grid_added (tab TEXT NOT NULL, key TEXT NOT NULL, cells_json TEXT NOT NULL, PRIMARY KEY (tab, key))`);
   const q = {
     edits: db.prepare('SELECT row_no, col, original FROM grid_edits WHERE tab = ?'),
     getEdit: db.prepare('SELECT original FROM grid_edits WHERE tab = ? AND row_no = ? AND col = ?'),
@@ -127,6 +133,13 @@ module.exports = function createGridHandler({ db, sendJson, readJsonBody, SheetE
       q.clearRows.run(cfg.key);
       g.rows.forEach((r, i) => q.insertRow.run(cfg.key, i + 2, JSON.stringify(r))); // numero di riga come nel foglio
       q.upsertMeta.run(cfg.key, JSON.stringify(g.headers), g.rows.length, new Date().toISOString());
+      // righe create nell'app: restano in fondo (se il foglio nel frattempo ha la stessa chiave, vale il foglio)
+      { const have = new Set(g.rows.map(r => r[0])); let n = g.rows.length;
+        for (const a of db.prepare('SELECT key, cells_json FROM grid_added WHERE tab = ?').all(cfg.key)) {
+          if (have.has(a.key)) { db.prepare('DELETE FROM grid_added WHERE tab = ? AND key = ?').run(cfg.key, a.key); continue; }
+          q.insertRow.run(cfg.key, ++n + 1, a.cells_json);
+        }
+        if (n !== g.rows.length) q.upsertMeta.run(cfg.key, JSON.stringify(g.headers), n, new Date().toISOString()); }
       // le modifiche fatte nell'app restano; il valore del foglio diventa il nuovo "originale"
       for (const e of edits) {
         const r = g.rows[e.row - 2];
@@ -157,6 +170,19 @@ module.exports = function createGridHandler({ db, sendJson, readJsonBody, SheetE
       sendJson(res, 200, getGrid('entities'));
       return true;
     }
+    // Modifica del nome inglese (ENGLISH) di una riga di Identities (es. nome di una stazione): solo nell'app, non sul foglio.
+    if ((m = urlPath.match(/^\/api\/grid\/identities\/(\d+)$/)) && req.method === 'PUT') {
+      const body = await readJsonBody(req), rowNo = Number(m[1]), col = englishCol('identities');
+      const row = q.getRow.get('identities', rowNo);
+      if (!row || col < 0) { sendJson(res, 404, { error: 'riga non trovata' }); return true; }
+      const cells = JSON.parse(row.cells_json), old = cells[col], val = String(body.value ?? '');
+      if (val.length > 500) { sendJson(res, 400, { error: 'testo troppo lungo (massimo 500 caratteri)' }); return true; }
+      setCell('identities', rowNo, col, val);
+      if (old !== val) { const user = String(req.headers['x-hg-user'] ? decodeURIComponent(String(req.headers['x-hg-user'])) : 'sistema').slice(0, 60);
+        try { db.prepare('INSERT INTO history (at, user, area, row_id, field, old, new, source) VALUES (?, ?, ?, ?, ?, ?, ?, ?)').run(new Date().toISOString(), user, 'Localization', cells[0], 'nome (Identities)', String(old).slice(0, 2000), val.slice(0, 2000), 'modifica'); } catch (e) { /* cronologia opzionale */ } }
+      sendJson(res, 200, getGrid('identities'));
+      return true;
+    }
     if ((m = urlPath.match(new RegExp('^/api/sync/pull/grid/(' + names + ')$'))) && req.method === 'POST') {
       const body = await readJsonBody(req);
       sendJson(res, 200, await pull(GRID_TABS[m[1]], { apply: query.get('apply') === '1', csv: typeof body.csv === 'string' ? body.csv : '' }));
@@ -164,6 +190,20 @@ module.exports = function createGridHandler({ db, sendJson, readJsonBody, SheetE
     }
     return false;
   }
+  // Aggiunge righe al tab (cells = array di celle nell'ordine delle colonne); ritorna false se il tab non è stato importato.
+  handle.addAppRows = (tab, rowsCells) => {
+    const meta = q.meta.get(tab); if (!meta) return false;
+    const width = JSON.parse(meta.headers_json).length;
+    let last = db.prepare('SELECT COALESCE(MAX(row_no), 1) AS m FROM grid_rows WHERE tab = ?').get(tab).m;
+    for (const cells of rowsCells) {
+      const row = cells.slice(0, width); while (row.length < width) row.push('');
+      if (findByKey(tab, row[0])) continue;
+      q.insertRow.run(tab, ++last, JSON.stringify(row));
+      db.prepare('INSERT OR REPLACE INTO grid_added (tab, key, cells_json) VALUES (?, ?, ?)').run(tab, row[0], JSON.stringify(row));
+    }
+    q.upsertMeta.run(tab, meta.headers_json, db.prepare('SELECT COUNT(*) AS n FROM grid_rows WHERE tab = ?').get(tab).n, meta.imported_at);
+    return true;
+  };
   handle.setEnglishByKey = setEnglishByKey;
   return handle;
 };

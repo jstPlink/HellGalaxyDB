@@ -13,6 +13,7 @@ import unreal, json, os, tempfile
 EDA_FOLDER = '/Game/2_LOGIC/Entities/DataAssets/Entities'
 SMDA_FOLDER = '/Game/2_LOGIC/Entities/DataAssets/Modules'
 LDA_FOLDER = '/Game/2_LOGIC/Entities/DataAssets/Loots'
+PRODUCER_FOLDER = '/Game/3_ASSETS/UI/Icons/Producer'
 BP_FOLDERS = ['/Game/2_LOGIC/Entities/BP/Loots', '/Game/2_LOGIC/Entities/BP/Items']  # BP_ACS_Loot_<ID> e SML_SI_<ID>: le mesh stanno nei Blueprint
 
 
@@ -53,6 +54,13 @@ def inventory():
         o = a.get_asset()
         if o is not None:
             _add(textures, _prop(o, 'icon'), n[4:], 'icon', 'Texture2D')
+    # icone dei produttori (ICN_producer_<sigla>): mostrate nella colonna "Produttore" delle pagine dei moduli
+    for a in _assets(PRODUCER_FOLDER):
+        n = str(a.asset_name)
+        if n.lower().startswith('icn_producer_') and str(a.asset_class_path.asset_name) == 'Texture2D':
+            o = a.get_asset()
+            if o is not None:
+                _add(textures, o, 'PRODUCER-' + n[len('ICN_producer_'):], 'icon', 'Texture2D')
     for a in _assets(SMDA_FOLDER):
         n = str(a.asset_name)
         if not n.startswith('SMDA_'):

@@ -172,6 +172,11 @@ Sul PC dove lavori con l'Editor Unreal: nell'app clic su **"Agente: non connesso
 - **Controlli**: segnala valori fuori elenco, chiavi mancanti e righe orfane (sola lettura).
 - Gli indirizzi dei fogli Google sono già nell'app (`scripts/sheets_defaults.json`): "Scarica dal foglio" funziona anche sul NAS.
 
+## Novità v0.2.12 (2026-10-12)
+- **DATABASE › Stations**: elenco delle stazioni (ID, nome, condizione di sblocco, moduli che si sbloccano lì). **Localization › Stations**: nomi delle stazioni modificabili (solo nell'app).
+- **Condizione di sblocco** dei moduli: clic sulla cella per impostare evento (`EV_` automatico) e stazione; filtro Con/Senza evento in "Tutti i moduli".
+- Colonne localizzate in celeste chiaro; tolta la scheda Modules (OLD); più spazio tra i gruppi di schede.
+
 ## Novità v0.2.6 (2026-10-08)
 - **Schede**: **FOGLI GOOGLE** (ENTITIES · LOCALIZATION MASTER · EVENTS, ognuna con le sue pagine) e **DATABASE** (Moduli con sotto-categorie *Main Body, Engine, Primary, Secondary, Pylons* e grafici di confronto; Consumable, Item, Collectable; Quest, Stations, Enemies e le vecchie pagine moduli). Le collection del DATABASE leggono i fogli: ogni modifica fatta nei fogli compare lì, e "Statistiche →" porta al tab del foglio.
 - **Texture e mesh da Unreal**: Impostazioni → "Scarica texture e mesh da Unreal" (serve agente connesso ed Editor aperto; sola lettura sul progetto). Le texture e le anteprime delle mesh si caricano subito; l'**FBX** si scarica solo al clic. I file stanno in `data/media/` (non nel repository).

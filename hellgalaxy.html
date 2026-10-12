@@ -90,6 +90,11 @@
   /* targhetta e icona profilo dell'utente */
   #userBtn{ display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px; padding:4px 14px 4px 5px; border-radius:999px; border:2px solid var(--text); color:var(--text); }
   .hg-av{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; font-weight:800; font-size:14px; flex:none; box-sizing:border-box; border:2px solid var(--hg-ring,#111); }
+  .drop-slot{ width:44px; height:44px; display:flex; align-items:center; justify-content:center; border-radius:6px; position:relative; }
+  .drop-slot.empty{ border:2px dashed var(--border); color:var(--text-faint); font-size:15px; }
+  .drop-slot.over{ outline:3px solid var(--accent); outline-offset:1px; background:color-mix(in srgb, var(--accent) 18%, transparent); }
+  .prod-sel{ font-size:12px; padding:2px 4px; max-width:96px; border:1px solid var(--border); border-radius:6px; background:var(--surface-2); color:var(--text); }
+  .dbm-edit{ cursor:text; } .dbm-edit:hover{ background:color-mix(in srgb, var(--accent) 12%, transparent); }
   .row-del{ padding:1px 5px !important; font-size:11px !important; margin-left:6px; opacity:.25; }
   tr:hover .row-del{ opacity:1; }
   .hg-sw{ width:26px; height:26px; border-radius:50%; border:3px solid transparent; cursor:pointer; padding:0; }
@@ -145,7 +150,18 @@
   }
 
   /* ---------- tabs ---------- */
-  .tabbar{ display:flex; gap:6px; flex-wrap:wrap; border-bottom:1px solid var(--border-soft); padding-bottom:2px; }
+  .tabbar{ display:flex; gap:6px; flex-wrap:wrap; }
+  .tab.tab-gap{ margin-left:53px; }
+  /* terzo livello: niente riquadri, testo con sottolineatura, rientrato sotto la scheda di secondo livello e collegato con un tratto verticale */
+  #subbar2{ margin-top:2px; }
+  .tabgroup.lvl3{ gap:6px; }
+  /* stessa estetica del secondo livello, ma con il contorno più sottile (1 px) */
+  .tab3{ appearance:none; box-sizing:border-box; min-height:34px; padding:0 14px; font-size:13px; font-weight:600; display:inline-flex; align-items:center; gap:6px; cursor:pointer; border:1px solid var(--border); background:var(--surface-2); color:var(--text-dim); border-radius:8px; }
+  .tab3:hover{ color:var(--text); background:var(--surface); }
+  .tab3.active{ color:var(--text); background:var(--surface); border-color:var(--accent); }
+  html[data-theme="sheets"] .tab3{ background:#fff; border:1px solid #9aa0a6; border-radius:8px; color:#3c4043; }
+  html[data-theme="sheets"] .tab3:hover{ background:#f1f3f4; border-color:#5f6368; }
+  html[data-theme="sheets"] .tab3.active{ background:#e6f4ea; color:#137333; border:1px solid #188038; }
   .tab{
     appearance:none; border:1px solid transparent; background:transparent; color: var(--text-dim);
     padding:9px 14px; border-radius:9px 9px 0 0; font-size:13.5px; font-weight:500;
@@ -550,6 +566,7 @@
   .tab.temp{ background:#fff3b0 !important; border-color:#e0b400 !important; color:#5c4a00 !important; }
   .tab.temp.active{ box-shadow: inset 0 -3px 0 #b88a00; font-weight:600; }
   .th-temp, .td-temp{ background:#fff3b0 !important; color:#5c4a00 !important; }
+  .loc-col{ background:#dff1fb !important; color:#0b3a52 !important; }
   .btn.temp, .chip.temp{ background:#fff3b0 !important; border-color:#e0b400 !important; color:#5c4a00 !important; }
   .btn.temp:hover, .chip.temp:hover{ background:#ffe97a !important; }
   .section-tab{ border:2px solid var(--border); background: var(--surface-2); box-shadow:0 1px 3px rgba(0,0,0,.25); }
@@ -841,8 +858,55 @@
     <div class="table-shell">
       <div class="table-scroll">
         <table>
-          <thead><tr><th>Immagine</th><th>Mesh</th><th>ID</th><th>Nome</th><th>Rarit&agrave;</th><th>Produttore</th><th>Prezzo</th><th id="dbcSubTh">Tipo</th><th></th></tr></thead>
+          <thead><tr><th>Immagine</th><th>Mesh</th><th>ID</th><th class="loc-col">Nome</th><th>Rarit&agrave;</th><th>Produttore</th><th>Prezzo</th><th id="dbcSubTh">Tipo</th><th></th></tr></thead>
           <tbody id="dbcTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-dbstations" hidden>
+    <div class="stats" id="dbstStats"></div>
+    <div class="toolbar">
+      <div class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="dbstSearch" placeholder="Cerca una stazione&hellip;"></div>
+      <span class="hint" style="font-size:12px;color:var(--text-dim)">ID dalla prima colonna di FOGLI GOOGLE &rsaquo; STATIONS &rsaquo; SpaceStationRules; nome dal Localization Master (Identities); condizione di sblocco dalle colonne evento di SpaceStationRules.</span>
+    </div>
+    <div class="table-shell"><div class="table-scroll"><table>
+      <thead><tr><th class="rownum">#</th><th>ID</th><th class="loc-col">Nome stazione</th><th>Condizione di sblocco</th><th>Moduli che si sbloccano qui</th></tr></thead>
+      <tbody id="dbstTbody"></tbody>
+    </table></div></div>
+  </section>
+
+  <section class="panel" id="panel-dbloc_stations" hidden>
+    <div class="stats" id="dblsStats"></div>
+    <div class="toolbar">
+      <div class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="dblsSearch" placeholder="Cerca per ID o nome&hellip;"></div>
+      <span class="hint" style="font-size:12px;color:var(--text-dim)">Nomi delle stazioni, dal Localization Master (FOGLI GOOGLE &rsaquo; LOCALIZATION MASTER &rsaquo; Identities). Clic sul nome per modificarlo (la modifica resta nell'app, non scrive sul foglio).</span>
+    </div>
+    <div class="table-shell"><div class="table-scroll"><table>
+      <thead><tr><th>ID</th><th class="loc-col">Nome stazione</th></tr></thead>
+      <tbody id="dblsTbody"></tbody>
+    </table></div></div>
+  </section>
+
+  <section class="panel" id="panel-dbloc_modules" hidden>
+    <div class="stats" id="dblStats"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="dblSearch" placeholder="Cerca per ID, nome o descrizione&hellip;">
+      </div>
+      <select class="selbox" id="dblTypeFilter"></select>
+      <button class="chip" id="dblMissing" title="Mostra solo i moduli senza nome o senza descrizione">Solo da completare</button>
+      <span class="hint" style="font-size:12px;color:var(--text-dim)">Testi da tradurre dei moduli: <b>ID</b>, <b>nome</b> e <b>descrizione</b>. Clic su nome o descrizione per modificarli (aggiorna ENTITIES e il Localization Master).</span>
+    </div>
+    <div class="table-shell">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>ID</th><th class="loc-col">Nome</th><th class="loc-col">Descrizione</th><th>Tipo</th><th></th></tr></thead>
+          <tbody id="dblTbody"></tbody>
         </table>
       </div>
     </div>
@@ -856,12 +920,13 @@
         <input type="text" class="searchInput" id="dbmSearch" placeholder="Cerca per ID, nome o tipo&hellip;">
       </div>
       <select class="selbox" id="dbmTypeFilter"></select>
-      <span class="hint" style="font-size:12px;color:var(--text-dim)">Collection <b>Moduli</b>: i dati arrivano da MODULES (foglio) e ENTITIES (foglio); ogni modifica fatta lì si vede qui.</span>
+      <select class="selbox" id="dbmUnlockFilter" title="Filtra i moduli per evento di sblocco"><option value="all">Tutti (con e senza evento)</option><option value="with">Con evento di sblocco</option><option value="without">Senza evento di sblocco</option></select>
     </div>
+    <div style="margin:6px 0 8px"><button class="btn primary" id="dbmNewBtn" title="Crea un nuovo modulo: ENTITIES, MODULES, Cargo/Loot e testi del Localization Master in un colpo solo">+ Nuovo modulo</button></div>
     <div class="table-shell">
       <div class="table-scroll">
         <table>
-          <thead><tr><th>Immagine</th><th>Mesh</th><th>ID</th><th>Nome</th><th>Tipo di modulo</th><th class="th-temp" title="Provvisoria: letta dal catalogo della pagina Stations (evento/stazione di sblocco)">Condizione di sblocco</th><th></th></tr></thead>
+          <thead><tr><th>Immagine</th><th>Mesh</th><th>ID</th><th class="loc-col">Nome</th><th>Tipo di modulo</th><th>Produttore</th><th>Condizione di sblocco</th><th></th></tr></thead>
           <tbody id="dbmTbody"></tbody>
         </table>
       </div>
@@ -1114,22 +1179,23 @@ const SECTIONS = [
 let activeSection = 'dbmodules'; // pagina di apertura: DATABASE › Moduli
 const GROUPS = [
   {id:'g_db', label:'DATABASE', children:[
-    {id:'d_modules', label:'Moduli', pages:[{id:'dbmodules',label:'Tutti i moduli'},{id:'dbmod_body',label:'Main Body'},{id:'dbmod_engine',label:'Engine'},{id:'dbmod_primary',label:'Primary'},{id:'dbmod_secondary',label:'Secondary'},{id:'dbmod_pylon',label:'Pylons'}]},
+    {id:'d_modules', label:'Modules', pages:[{id:'dbmodules',label:'Tutti i moduli'},{id:'dbmod_body',label:'Main Body'},{id:'dbmod_engine',label:'Engine'},{id:'dbmod_primary',label:'Primary'},{id:'dbmod_secondary',label:'Secondary'},{id:'dbmod_pylon',label:'Pylons'}]},
     {id:'d_consumable', label:'Consumable', pages:[{id:'dbconsumable',label:'Consumable'}]},
     {id:'d_item', label:'Item', pages:[{id:'dbitem',label:'Item'}]},
     {id:'d_collectable', label:'Collectable', pages:[{id:'dbcollectable',label:'Collectable'}]},
-    {id:'d_old', label:'Moduli (vecchie pagine)', temp:true, pages:[{id:'entities',label:'Moduli (vecchie pagine)'}]},
-    {id:'d_quest', label:'Quest', temp:true, pages:[{id:'quest',label:'Quest'}]},
-    {id:'d_stations', label:'Stations', temp:true, pages:[{id:'stations',label:'Stations'}]},
+    {id:'d_stations', label:'Stations', pages:[{id:'dbstations',label:'Stations'}]},
+    {id:'d_loc', label:'Localization', gap:true, showSub:true, pages:[{id:'dbloc_modules',label:'Modules'},{id:'dbloc_stations',label:'Stations'}]},
+    {id:'d_quest', label:'Quest', temp:true, gap:true, pages:[{id:'quest',label:'Quest'}]},
     {id:'d_enemies', label:'Enemies', temp:true, pages:[{id:'enemies',label:'Enemies'}]},
   ]},
   {id:'g_sheets', label:'FOGLI GOOGLE', children:[
     {id:'s_entities', label:'ENTITIES', pages:[{id:'entitysheet',label:'Entities'},{id:'modsheet',label:'Modules'},{id:'cargosheet',label:'Cargo/Loot'},{id:'itemssheet',label:'Items'}]},
     {id:'s_loc', label:'LOCALIZATION MASTER', pages:[{id:'loc_identities',label:'Identities'},{id:'loc_entities',label:'Entities'},{id:'loc_quest',label:'Quest'},{id:'loc_eventsaudio',label:'EventsAudio'}]},
     {id:'s_events', label:'EVENTS', pages:[{id:'evt_mainevents',label:'MainEvents'},{id:'evt_eventtexts',label:'EventTexts'}]},
+    {id:'s_stations', label:'STATIONS', pages:[{id:'stn_locks',label:'GenericLockRules'},{id:'stn_rules',label:'SpaceStationRules'}]},
   ]},
 ];
-const PANEL_IDS = ['dbmodules','quest','stations','enemies','entitysheet','modsheet','cargosheet','itemssheet','loc_identities','loc_entities','loc_quest','loc_eventsaudio','evt_mainevents','evt_eventtexts','settings'];
+const PANEL_IDS = ['dbmodules','dbstations','dbloc_stations','dbloc_modules','quest','stations','enemies','entitysheet','modsheet','cargosheet','itemssheet','loc_identities','loc_entities','loc_quest','loc_eventsaudio','evt_mainevents','evt_eventtexts','stn_locks','stn_rules','settings'];
 const lastPage = {};
 GROUPS.forEach(g => { if(g.children) g.pages = g.children.flatMap(c => c.pages); });
 function childOf(g, pageId){ return g && g.children && g.children.find(c => c.pages.some(p => p.id === pageId)); }
@@ -1389,12 +1455,12 @@ function buildSectionbar(){
     // secondo livello: ENTITIES / LOCALIZATION MASTER / EVENTS; terzo livello: le loro pagine
     const ch = childOf(cur, activeSection) || cur.children[0];
     sub.style.display = '';
-    sub.innerHTML = '<div class="tabgroup">' + cur.children.map(c => '<button class="tab ' + (c.temp ? 'temp ' : '') + (c === ch ? 'active' : '') + '" data-child="' + c.id + '">' + escapeHtml(c.label) + '</button>').join('') + '</div>';
+    sub.innerHTML = '<div class="tabgroup">' + cur.children.map(c => '<button class="tab ' + (c.gap ? 'tab-gap ' : '') + (c.temp ? 'temp ' : '') + (c === ch ? 'active' : '') + '" data-child="' + c.id + '">' + escapeHtml(c.label) + '</button>').join('') + '</div>';
     sub.querySelectorAll('.tab').forEach(el => el.addEventListener('click', () => { const c = cur.children.find(x => x.id === el.dataset.child); activeSection = lastPage[c.id] || c.pages[0].id; renderAll(); }));
     lastPage[ch.id] = activeSection;
-    if(ch.pages.length > 1) sub2.style.display = '';
-    sub2.innerHTML = ch.pages.length < 2 ? '' : '<div class="tabgroup">' + ch.pages.map(p => '<button class="tab ' + (activeSection === p.id ? 'active' : '') + '" data-page="' + p.id + '">' + escapeHtml(p.label) + '</button>').join('') + '</div>';
-    sub2.querySelectorAll('.tab').forEach(el => el.addEventListener('click', () => { activeSection = el.dataset.page; renderAll(); }));
+    if(ch.pages.length > 1 || ch.showSub) sub2.style.display = '';
+    sub2.innerHTML = (ch.pages.length < 2 && !ch.showSub) ? '' : '<div class="tabgroup lvl3">' + ch.pages.map(p => '<button class="tab3 ' + (activeSection === p.id ? 'active' : '') + '" data-page="' + p.id + '">' + escapeHtml(p.label) + '</button>').join('') + '</div>';
+    sub2.querySelectorAll('.tab3').forEach(el => el.addEventListener('click', () => { activeSection = el.dataset.page; renderAll(); }));
   } else if(cur){
     sub.style.display = '';
     sub.innerHTML = '<div class="tabgroup">' + cur.pages.map(p => '<button class="tab ' + (activeSection === p.id ? 'active' : '') + '" data-page="' + p.id + '">' + escapeHtml(p.label) + '</button>').join('') + '</div>';
@@ -3321,13 +3387,65 @@ let dbsUi = {};
 function dbsState(){ const k = activeSection; return dbsUi[k] || (dbsUi[k] = {search:'', rarity:'Tutte', metric:null, max:null, angle:null, sortKey:'Name', sortDir:1}); }
 const dbsNum = v => { const n = parseFloat(String(v == null ? '' : v).replace(',', '.')); return isFinite(n) && /^-?[\d.,]+$/.test(String(v).trim()) ? n : NaN; };
 const dbsFmt = v => (Math.round(v * 100) / 100).toLocaleString('it-IT');
-// Produttore (ProducerIcon): valore effettivo dell'entità (foglio, altrimenti Unreal) con l'icona se la texture è stata esportata
+// ---- slot immagine / mesh (si può trascinare un file sopra: viene assegnato alla riga) ----
+const MESH_KEYS = ['static_mesh','bp_mesh_0','bp_mesh_1','bp_mesh_2','loot_mesh_0','loot_mesh_1','loot_mesh_2','loot_mesh_3','loot_mesh_4','loot_mesh_5','loot_mesh_6'];
+function texVer(name){ const a = MEDIA.assets && MEDIA.assets.texture && MEDIA.assets.texture[name]; return a && a.size ? '?v=' + a.size : ''; }
+function slotImage(id, section){
+  const lk = MEDIA.links[id] || {}, dir = DBM_IMG_DIR[section];
+  const img = lk.icon ? '<img src="media/textures/' + encodeURIComponent(lk.icon) + '.png' + texVer(lk.icon) + '" loading="lazy" alt="" title="' + escapeHtml(lk.icon) + ' - trascina qui un\'immagine per sostituirla" style="width:44px;height:44px;object-fit:contain;border-radius:6px;display:block">'
+    : dir ? '<img src="images/' + dir + '/' + encodeURIComponent(id) + '.jpg" alt="" onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{className:\'mono\',style:\'color:var(--text-faint)\',textContent:\'\u2013\'}))" style="width:44px;height:44px;object-fit:contain;border-radius:6px;display:block">' : '';
+  return '<div class="drop-slot' + (img ? '' : ' empty') + '" data-id="' + escapeHtml(id) + '" data-kind="image" title="' + (img ? 'Trascina qui un\'immagine per sostituirla' : 'Trascina qui un\'immagine (PNG, JPG, WEBP) per assegnarla a questa riga') + '">' + (img || '&#11015;') + '</div>';
+}
+function slotMesh(id){
+  const lk = MEDIA.links[id] || {}, mk = MESH_KEYS.find(k => lk[k] && MEDIA.assets.mesh[lk[k]]), mesh = mk && MEDIA.assets.mesh[lk[mk]];
+  const inner = mesh ? '<button type="button" class="dbm-mesh" data-id="' + escapeHtml(id) + '" title="Apri anteprima e scarica FBX (trascina qui un FBX per sostituirla)" style="background:none;border:0;padding:0;cursor:pointer">' + (mesh.preview ? '<img src="media/previews/' + encodeURIComponent(lk[mk]) + '.png" loading="lazy" alt="" style="width:44px;height:44px;object-fit:contain;display:block">' : '<span class="badge-type">FBX</span>') + '</button>' : '';
+  return '<div class="drop-slot' + (inner ? '' : ' empty') + '" data-id="' + escapeHtml(id) + '" data-kind="mesh" title="' + (inner ? 'Trascina qui un FBX per sostituire la mesh' : 'Trascina qui un file FBX per assegnare la mesh a questa riga') + '">' + (inner || '&#11015;') + '</div>';
+}
+// PNG dal file trascinato (anche JPG/WEBP): lo converte il browser, il server riceve sempre un PNG (max 1024 px)
+async function fileToPng(file){
+  const bmp = await createImageBitmap(file), k = Math.min(1, 1024 / Math.max(bmp.width, bmp.height));
+  const cv = document.createElement('canvas'); cv.width = Math.max(1, Math.round(bmp.width * k)); cv.height = Math.max(1, Math.round(bmp.height * k));
+  cv.getContext('2d').drawImage(bmp, 0, 0, cv.width, cv.height);
+  return await new Promise(res => cv.toBlob(res, 'image/png'));
+}
+async function dropOnSlot(slot, file){
+  const id = slot.dataset.id, kind = slot.dataset.kind;
+  try{
+    let res;
+    if(kind === 'image'){
+      if(!/^image\//.test(file.type)) { showToast('Serve un file immagine (PNG, JPG o WEBP)'); return; }
+      const blob = await fileToPng(file);
+      res = await apiFetch('/api/custom-media/' + encodeURIComponent(id) + '/image', {method:'POST', headers:{'Content-Type':'image/png'}, body: blob});
+    } else {
+      if(!/\.fbx$/i.test(file.name)) { showToast('Serve un file FBX (.fbx) per la mesh'); return; }
+      showToast('Carico la mesh ' + file.name + '...');
+      res = await apiFetch('/api/custom-media/' + encodeURIComponent(id) + '/mesh?filename=' + encodeURIComponent(file.name), {method:'POST', headers:{'Content-Type':'application/octet-stream'}, body: file});
+    }
+    const j = await res.json().catch(() => ({}));
+    if(!res.ok){ showToast(j.error || 'Impossibile assegnare il file'); return; }
+    await loadMedia(); renderAll(); showToast((kind === 'image' ? 'Immagine' : 'Mesh') + ' assegnata a ' + id);
+  }catch(err){ showToast('Impossibile assegnare il file: ' + err.message); }
+}
+['dragenter','dragover'].forEach(ev => document.addEventListener(ev, e => { const sl = e.target.closest && e.target.closest('.drop-slot'); if(!sl) return; e.preventDefault(); sl.classList.add('over'); }));
+document.addEventListener('dragleave', e => { const sl = e.target.closest && e.target.closest('.drop-slot'); if(sl) sl.classList.remove('over'); });
+document.addEventListener('drop', e => { const sl = e.target.closest && e.target.closest('.drop-slot'); if(!sl) return; e.preventDefault(); sl.classList.remove('over'); const f = e.dataTransfer.files && e.dataTransfer.files[0]; if(f) dropOnSlot(sl, f); });
+
+// Produttore (ProducerIcon): icona (texture esportata da Unreal, altrimenti l'immagine di images/producers) + menu per cambiarlo
+function producerList(){ return [...new Set(ENTITIES.map(e => String(e.ProducerIcon || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b)); }
 function producerCellHtml(id){
   const e = ENTITIES.find(x => x['(ID)'] === id) || {}, ef = ENT_EFF[id] && ENT_EFF[id].ProducerIcon;
-  const sigla = String((ef && ef.v) || e.ProducerIcon || '').trim();
-  if(!sigla) return '<td><span class="mono" style="color:var(--text-faint)">&ndash;</span></td>';
-  return '<td style="white-space:nowrap"><img src="media/textures/ICN_producer_' + encodeURIComponent(sigla) + '.png" alt="" onerror="this.remove()" style="width:22px;height:22px;object-fit:contain;vertical-align:middle;margin-right:6px"><span title="Asset Unreal: ICN_producer_' + escapeHtml(sigla) + '">' + escapeHtml(sigla) + '</span></td>';
+  const sigla = String((ef && ef.v) || e.ProducerIcon || '').trim(), list = producerList();
+  if(sigla && !list.includes(sigla)) list.push(sigla);
+  const fallback = "this.onerror=function(){this.remove()};this.src='images/producers/" + encodeURIComponent(sigla) + ".jpg'";
+  const icon = sigla ? '<img src="media/textures/ICN_producer_' + encodeURIComponent(sigla) + '.png" alt="" onerror="' + fallback + '" style="width:30px;height:30px;object-fit:contain;border-radius:5px;flex:none">' : '';
+  const sel = '<select class="prod-sel" data-id="' + escapeHtml(id) + '" title="Cambia il produttore (vale per l\'entità ' + escapeHtml(id) + ')"><option value="">&ndash;</option>' + list.map(x => '<option value="' + escapeHtml(x) + '"' + (x === sigla ? ' selected' : '') + '>' + escapeHtml(x) + '</option>').join('') + '</select>';
+  return '<td><div style="display:flex;align-items:center;gap:6px">' + icon + sel + '</div></td>';
 }
+document.addEventListener('change', async e => {
+  const sel = e.target.closest && e.target.closest('.prod-sel'); if(!sel) return;
+  try{ await apiSend('/api/entities/' + encodeURIComponent(sel.dataset.id), 'PUT', {fields: {ProducerIcon: sel.value}}); await loadEntities(); renderAll(); showToast('Produttore di ' + sel.dataset.id + ': ' + (sel.value || 'nessuno')); }
+  catch(err){ showToast('Impossibile cambiare il produttore'); }
+});
 function dbsAllRows(){
   const cfg = DBMSEC[activeSection]; if(!cfg) return [];
   const ents = {}; ENTITIES.forEach(e => { ents[e['(ID)']] = e; });
@@ -3404,15 +3522,14 @@ function renderDbSectionTable(){
   const st = dbsState(), cols = dbsNumCols(), rows = dbsFiltered();
   const arrow = k => st.sortKey === k ? (st.sortDir > 0 ? ' ▲' : ' ▼') : '';
   const th = (k, label) => '<th class="dbs-sort" data-key="' + escapeHtml(k) + '" style="cursor:pointer">' + escapeHtml(label) + arrow(k) + '</th>';
-  document.getElementById('dbsThead').innerHTML = '<th>Immagine</th><th>Mesh</th>' + th('ID', 'ID') + '<th class="th-temp" title="Provvisoria: letta dal catalogo della pagina Stations (evento/stazione di sblocco)">Condizione di sblocco</th>' + th('Name', 'Nome') + th('Rarity', 'Rarità') + '<th>Produttore</th>' + cols.map(c => th(c, c)).join('') + '<th></th>';
+  document.getElementById('dbsThead').innerHTML = '<th>Immagine</th><th>Mesh</th>' + th('ID', 'ID') + '<th>Condizione di sblocco</th>' + th('Name', 'Nome').replace('class="dbs-sort"', 'class="dbs-sort loc-col"') + th('Rarity', 'Rarità') + '<th>Produttore</th>' + cols.map(c => th(c, c)).join('') + '<th></th>';
   document.getElementById('dbsThead').querySelectorAll('.dbs-sort').forEach(h => h.addEventListener('click', () => { const s = dbsState(); if(s.sortKey === h.dataset.key) s.sortDir = -s.sortDir; else { s.sortKey = h.dataset.key; s.sortDir = 1; } renderDbSectionTable(); }));
   const tbody = document.getElementById('dbsTbody');
   if(!rows.length){ tbody.innerHTML = '<tr class="empty-row"><td colspan="' + (cols.length + 8) + '">Nessun modulo corrisponde ai filtri.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => {
     const lk = MEDIA.links[r.ID] || {}, mesh = lk.static_mesh && MEDIA.assets.mesh[lk.static_mesh];
-    const img = lk.icon ? '<img src="media/textures/' + encodeURIComponent(lk.icon) + '.png" loading="lazy" alt="" title="' + escapeHtml(lk.icon) + '" style="width:44px;height:44px;object-fit:contain;border-radius:6px;display:block">' : '<span class="mono" style="color:var(--text-faint)">&ndash;</span>';
-    const mc = mesh ? '<button type="button" class="dbm-mesh" data-id="' + escapeHtml(r.ID) + '" title="Apri anteprima e scarica FBX" style="background:none;border:0;padding:0;cursor:pointer">' + (mesh.preview ? '<img src="media/previews/' + encodeURIComponent(lk.static_mesh) + '.png" loading="lazy" alt="" style="width:44px;height:44px;object-fit:contain;display:block">' : '<span class="badge-type">FBX</span>') + '</button>' : '<span style="color:var(--text-faint)">&ndash;</span>';
-    return '<tr data-id="' + escapeHtml(r.ID) + '"><td>' + img + '</td><td>' + mc + '</td><td class="mono">' + escapeHtml(r.ID) + '</td><td class="td-temp" style="font-size:11.5px" title="Provvisoria: dal catalogo di Stations">' + (unlockConditionFor(r.ID) || '&ndash;') + '</td><td>' + escapeHtml(r.Name) + '</td><td style="color:' + (RARITY_COLOR[r.Rarity] || '') + '">' + escapeHtml(r.Rarity) + '</td>' + producerCellHtml(r.ID) + cols.map(c => { const v = modCellValue(r.__m, c).v; return '<td class="num-cell">' + escapeHtml(v === '' ? '' : (isNaN(dbsNum(v)) ? v : dbsFmt(dbsNum(v)))) + '</td>'; }).join('') + '<td><button type="button" class="btn ghost small dbs-open" data-id="' + escapeHtml(r.ID) + '">Statistiche &rarr;</button></td></tr>';
+    const img = slotImage(r.ID, (r.__m || {}).__section), mc = slotMesh(r.ID);
+    return '<tr data-id="' + escapeHtml(r.ID) + '"><td>' + img + '</td><td>' + mc + '</td><td class="mono">' + escapeHtml(r.ID) + '</td><td class="dbm-unlock" data-id="' + escapeHtml(r.ID) + '" style="font-size:11.5px;cursor:pointer" title="Clic per impostare evento e stazione di sblocco">' + (unlockConditionFor(r.ID) || '&ndash;') + '</td><td class="loc-col">' + escapeHtml(r.Name) + '</td><td style="color:' + (RARITY_COLOR[r.Rarity] || '') + '">' + escapeHtml(r.Rarity) + '</td>' + producerCellHtml(r.ID) + cols.map(c => { const v = modCellValue(r.__m, c).v; return '<td class="num-cell">' + escapeHtml(v === '' ? '' : (isNaN(dbsNum(v)) ? v : dbsFmt(dbsNum(v)))) + '</td>'; }).join('') + '<td><button type="button" class="btn ghost small dbs-open" data-id="' + escapeHtml(r.ID) + '">Statistiche &rarr;</button></td></tr>';
   }).join('');
   tbody.querySelectorAll('.dbm-mesh').forEach(b => b.addEventListener('click', () => openMeshDialog(b.dataset.id)));
   tbody.querySelectorAll('.dbs-open').forEach(b => b.addEventListener('click', () => dbsOpenStats(b.dataset.id)));
@@ -3476,11 +3593,11 @@ function renderDbCollectionTable(){
   if(!rows.length){ tbody.innerHTML = '<tr class="empty-row"><td colspan="9">Nessuna entit&agrave; corrisponde ai filtri.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => {
     const lk = MEDIA.links[r.id] || {};
-    const img = lk.icon ? '<img src="media/textures/' + encodeURIComponent(lk.icon) + '.png" loading="lazy" alt="" title="' + escapeHtml(lk.icon) + '" style="width:44px;height:44px;object-fit:contain;border-radius:6px;display:block">' : '<span class="mono" style="color:var(--text-faint)" title="Nessuna immagine nell\'app">&ndash;</span>';
+    const img = slotImage(r.id, '');
     const mk = ['static_mesh','bp_mesh_0','bp_mesh_1','bp_mesh_2','loot_mesh_0','loot_mesh_1','loot_mesh_2','loot_mesh_3','loot_mesh_4','loot_mesh_5','loot_mesh_6'].find(k => lk[k] && MEDIA.assets.mesh[lk[k]]);
     const mesh = mk && MEDIA.assets.mesh[lk[mk]];
-    const meshCell = mesh ? '<button type="button" class="dbm-mesh" data-id="' + escapeHtml(r.id) + '" title="Apri anteprima e scarica FBX" style="background:none;border:0;padding:0;cursor:pointer">' + (mesh.preview ? '<img src="media/previews/' + encodeURIComponent(lk[mk]) + '.png" loading="lazy" alt="" style="width:44px;height:44px;object-fit:contain;display:block">' : '<span class="badge-type">FBX</span>') + '</button>' : '<span style="color:var(--text-faint)">&ndash;</span>';
-    return '<tr data-id="' + escapeHtml(r.id) + '"><td>' + img + '</td><td>' + meshCell + '</td><td class="mono">' + escapeHtml(r.id) + '</td><td>' + (escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>') + '</td><td style="color:' + (RARITY_COLOR[r.rarity] || '') + '">' + escapeHtml(r.rarity) + '</td>' + producerCellHtml(r.id) + '<td class="num-cell">' + escapeHtml(r.price) + '</td><td>' + escapeHtml(cfg.type === 'Item' ? r.sub : '') + '</td><td style="white-space:nowrap"><button type="button" class="btn ghost small dbc-open" data-id="' + escapeHtml(r.id) + '" data-page="' + cfg.detail + '">' + escapeHtml(cfg.detailLabel) + ' &rarr;</button> <button type="button" class="btn ghost small dbc-open" data-id="' + escapeHtml(r.id) + '" data-page="entitysheet">Entit&agrave; &rarr;</button></td></tr>';
+    const meshCell = slotMesh(r.id);
+    return '<tr data-id="' + escapeHtml(r.id) + '"><td>' + img + '</td><td>' + meshCell + '</td><td class="mono">' + escapeHtml(r.id) + '</td><td class="loc-col">' + (escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>') + '</td><td style="color:' + (RARITY_COLOR[r.rarity] || '') + '">' + escapeHtml(r.rarity) + '</td>' + producerCellHtml(r.id) + '<td class="num-cell">' + escapeHtml(r.price) + '</td><td>' + escapeHtml(cfg.type === 'Item' ? r.sub : '') + '</td><td style="white-space:nowrap"><button type="button" class="btn ghost small dbc-open" data-id="' + escapeHtml(r.id) + '" data-page="' + cfg.detail + '">' + escapeHtml(cfg.detailLabel) + ' &rarr;</button> <button type="button" class="btn ghost small dbc-open" data-id="' + escapeHtml(r.id) + '" data-page="entitysheet">Entit&agrave; &rarr;</button></td></tr>';
   }).join('');
   tbody.querySelectorAll('.dbm-mesh').forEach(b => b.addEventListener('click', () => openMeshDialog(b.dataset.id)));
   tbody.querySelectorAll('.dbc-open').forEach(b => b.addEventListener('click', () => dbcOpenDetail(b.dataset.id, b.dataset.page)));
@@ -3506,14 +3623,142 @@ function renderDbCollection(){
   }
 }
 /* ---- DATABASE › Moduli: collection costruita dalle tab foglio MODULES + ENTITIES ---- */
-let dbmUi = { search:'', type:'Tutti' };
+let dbmUi = { search:'', type:'Tutti', unlock:'all' };
 // Condizione di sblocco (PROVVISORIA): dal catalogo della pagina Stations (evento di sblocco + stazione di origine) e dalla colonna "Unlocked In" del foglio Modules
-function unlockConditionFor(id){
-  const parts = [], seen = new Set(), add = (cls, txt) => { const k = cls + txt; if(txt && !seen.has(k)){ seen.add(k); parts.push('<span class="mono" ' + (cls === 'st' ? 'style="color:var(--accent)"' : '') + '>' + escapeHtml(txt) + '</span>'); } };
-  STATION_CATALOG.filter(c => c.entityId === id).forEach(c => { add('ev', c.unlockRules); add('st', c.unlockStation); });
-  const m = MODS.find(x => x['(ID)'] === id); if(m && m['Unlocked In']) add('st', m['Unlocked In']);
-  return parts.join('<br>');
+// Indice delle condizioni di sblocco costruito dalla copia del foglio STATIONS (GenericLockRules + SpaceStationRules):
+//   regola di sblocco = colonna "UnlockRules"; stazione = colonna "Sblocchi visualizzato in" se è l'ID di una stazione di SpaceStationRules.
+let LOCK_IDX = null, LOCK_SIG = '';
+function lockIndex(){
+  const gl = GRID_VIEWS['stn_locks'], gr = GRID_VIEWS['stn_rules'];
+  if(!gl || !gl.rows || !gl.rows.length) return null;
+  const sig = gl.rows.length + ':' + gl.importedAt + ':' + (gr ? gr.rows.length + ':' + gr.importedAt : '');
+  if(LOCK_IDX && LOCK_SIG === sig) return LOCK_IDX;
+  const stationIds = new Set(); if(gr && gr.rows) gr.rows.forEach(r => { const v = String(r[0] || '').trim(); if(v && v !== 'SpaceStationID') stationIds.add(v); });
+  const idx = {}; let ci = null;
+  const all = [gl.headers].concat(gl.rows);
+  for(const r of all){
+    const first = String(r[0] || '').trim();
+    if(first === 'EntityID'){ ci = {rules: r.findIndex(x => String(x).trim() === 'UnlockRules'), shown: r.findIndex(x => String(x).trim() === 'Sblocchi visualizzato in')}; continue; }
+    if(!ci || !first) continue;
+    const rules = String(r[ci.rules] || '').trim(), shown = ci.shown >= 0 ? String(r[ci.shown] || '').trim() : '';
+    const e = idx[first] || (idx[first] = {rules: [], stations: []});
+    if(rules && !e.rules.includes(rules)) e.rules.push(rules);
+    if(shown && stationIds.has(shown) && !e.stations.includes(shown)) e.stations.push(shown);
+  }
+  LOCK_IDX = idx; LOCK_SIG = sig; return idx;
 }
+// Condizioni impostate nell'app (prevalgono sul foglio): { <EntityID>: {event (senza EV_), station} }
+let UNLOCKS = {};
+async function loadUnlocks(){ try{ UNLOCKS = (await apiGet('/api/unlock-conditions')).items || {}; }catch(e){ /* nessuna impostazione */ } }
+function unlockInfo(id){
+  const u = UNLOCKS[id];
+  if(u) return {rules: u.event ? ['EV_' + u.event] : [], stations: u.station ? [u.station] : [], custom: true};
+  const rules = [], stations = [], li = lockIndex();
+  if(li){ const e = li[id]; if(e){ e.rules.forEach(x => rules.push(x)); e.stations.forEach(x => stations.push(x)); } }
+  else STATION_CATALOG.filter(c => c.entityId === id).forEach(c => { if(c.unlockRules && !rules.includes(c.unlockRules)) rules.push(c.unlockRules); if(c.unlockStation && !stations.includes(c.unlockStation)) stations.push(c.unlockStation); });
+  const m = MODS.find(x => x['(ID)'] === id); if(m && m['Unlocked In'] && !stations.includes(m['Unlocked In'])) stations.push(m['Unlocked In']);
+  return {rules, stations, custom: false};
+}
+function unlockConditionFor(id){
+  const i = unlockInfo(id), span = (txt, st) => '<span class="mono" ' + (st ? 'style="color:var(--accent)"' : '') + '>' + escapeHtml(txt) + '</span>';
+  return i.rules.map(x => span(x, false)).concat(i.stations.map(x => span(x, true))).join('<br>');
+}
+// Elenco delle stazioni: prima colonna di SpaceStationRules (FOGLI GOOGLE › STATIONS).
+function stationList(){
+  const g = GRID_VIEWS['stn_rules'], out = [];
+  if(g && g.rows) g.rows.forEach(r => { const v = String(r[0] || '').trim(); if(v && v !== 'SpaceStationID' && !out.includes(v)) out.push(v); });
+  return out;
+}
+function openUnlockDialog(id){
+  const stations = stationList(), cur = unlockInfo(id);
+  const curEv = (cur.rules[0] || '').replace(/^EV_/i, ''), curSt = cur.stations[0] || '';
+  const old = document.getElementById('ulOverlay'); if(old) old.remove();
+  const o = document.createElement('div'); o.id = 'ulOverlay';
+  o.style.cssText = 'position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px';
+  const lab = 'display:block;margin:12px 0 3px;color:var(--text-dim);font-size:12.5px';
+  o.innerHTML = '<div style="background:var(--surface,var(--bg));border:1px solid var(--border);border-radius:10px;padding:22px;width:100%;max-width:460px;max-height:92vh;overflow:auto;color:var(--text)"><h3 style="margin:0 0 2px">Condizione di sblocco</h3><div class="mono" style="color:var(--text-dim);font-size:12.5px">' + escapeHtml(id) + '</div>'
+    + '<div style="' + lab + '">Inserire solo l\'evento, la particella &quot;EV_&quot; verr&agrave; aggiunta in automatico come prefisso</div>'
+    + '<div style="display:flex;align-items:center;gap:6px"><span class="mono" style="color:var(--text-dim)">EV_</span><input type="text" id="ulEvent" maxlength="150" style="flex:1" placeholder="es. TST_Unlock1"></div>'
+    + '<label style="' + lab + '" for="ulStation">Stazione</label>'
+    + '<select id="ulStation" style="width:100%"><option value="">&ndash; nessuna &ndash;</option>' + stations.map(s => '<option value="' + escapeHtml(s) + '">' + escapeHtml(s) + '</option>').join('') + '</select>'
+    + '<div style="margin-top:6px;font-size:12px;color:var(--text-dim)">In questa stazione si vedr&agrave; sbloccato questo modulo.</div>'
+    + '<p id="ulErr" style="color:#d9534f;min-height:1.2em;margin:10px 0 0;font-size:13px"></p>'
+    + '<div style="display:flex;gap:8px;margin-top:8px"><button class="btn primary" id="ulOk">Conferma</button><button class="btn ghost" id="ulCancel">Annulla</button><button class="btn ghost" id="ulClear" style="margin-left:auto" title="Toglie la condizione impostata nell\'app (torna quella del foglio STATIONS, se c\'&egrave;)">Rimuovi impostazione</button></div></div>';
+  document.body.appendChild(o);
+  const q = x => document.getElementById(x);
+  q('ulEvent').value = curEv;
+  if(curSt && !stations.includes(curSt)) q('ulStation').insertAdjacentHTML('beforeend', '<option value="' + escapeHtml(curSt) + '">' + escapeHtml(curSt) + '</option>');
+  q('ulStation').value = curSt; q('ulEvent').focus();
+  const close = () => o.remove();
+  o.addEventListener('mousedown', e => { if(e.target === o) close(); });
+  q('ulCancel').onclick = close;
+  const save = async (event, station, msg) => {
+    try{ await apiSend('/api/unlock-conditions', 'PUT', {id, event, station}); await loadUnlocks(); close(); renderAll(); showToast(msg); }
+    catch(err){ q('ulErr').textContent = 'Errore: ' + err.message; }
+  };
+  q('ulOk').onclick = () => save(q('ulEvent').value.trim(), q('ulStation').value, 'Condizione di sblocco salvata');
+  q('ulClear').onclick = () => save('', '', 'Impostazione rimossa');
+  q('ulEvent').addEventListener('keydown', e => { if(e.key === 'Enter') q('ulOk').click(); });
+}
+document.addEventListener('click', e => { const c = e.target.closest && e.target.closest('.dbm-unlock'); if(c) openUnlockDialog(c.dataset.id); });
+/* ---- DATABASE › Stations: elenco delle stazioni di SpaceStationRules ---- */
+let dbstSearch = '', dblsSearch = '';
+// Nome inglese di una stazione: Localization Master › Identities (KEY = ID della stazione, colonna ENGLISH).
+function stationName(id){
+  const g = GRID_VIEWS['loc_identities']; if(!g || !g.rows) return '';
+  const ei = g.headers.indexOf('ENGLISH'), r = g.rows.find(x => String(x[0] || '').trim() === id);
+  return r && ei >= 0 ? String(r[ei] || '').trim() : '';
+}
+// Condizione di sblocco di una stazione: evento di sblocco (colonna "Unlock Event (cutscene)") ed eventuale evento nella colonna senza titolo a destra.
+function stationUnlock(id){
+  const g = GRID_VIEWS['stn_rules']; if(!g || !g.rows) return [];
+  const r = g.rows.find(x => String(x[0] || '').trim() === id); if(!r) return [];
+  const ui = g.headers.findIndex(h => String(h).trim() === 'Unlock Event (cutscene)'), out = [];
+  [ui >= 0 ? ui : 9, 14].forEach(i => { const v = String(r[i] || '').trim(); if(v && !out.includes(v)) out.push(v); });
+  return out;
+}
+function renderDbStations(){
+  const all = stationList(), q = dbstSearch.trim().toLowerCase(), rows = q ? all.filter(s => (s + ' ' + stationName(s)).toLowerCase().includes(q)) : all;
+  const mods = MODS.map(m => m['(ID)']);
+  const count = s => mods.filter(id => unlockInfo(id).stations.includes(s));
+  const dash = '<span style="color:var(--text-faint)">&ndash;</span>';
+  document.getElementById('dbstStats').innerHTML = '<div class="stat accent"><div class="n mono">' + all.length + '</div><div class="l">Stazioni</div></div>';
+  document.getElementById('dbstSearch').value = dbstSearch;
+  document.getElementById('dbstTbody').innerHTML = rows.length ? rows.map((s, i) => { const c = count(s), n = stationName(s), u = stationUnlock(s); return '<tr><td class="rownum">' + (i + 1) + '</td><td class="mono">' + escapeHtml(s) + '</td><td class="loc-col">' + (escapeHtml(n) || dash) + '</td><td class="mono" style="font-size:11.5px">' + (u.length ? u.map(x => escapeHtml(x)).join('<br>') : dash) + '</td><td class="mono" style="font-size:11.5px">' + (c.length ? c.map(x => escapeHtml(x)).join('<br>') : dash) + '</td></tr>'; }).join('')
+    : '<tr class="empty-row"><td colspan="5">' + (all.length ? 'Nessuna stazione corrisponde.' : 'Nessuna stazione: importa SpaceStationRules da FOGLI GOOGLE &rsaquo; STATIONS.') + '</td></tr>';
+}
+/* ---- DATABASE › Localization › Stations: nomi delle stazioni (sola lettura, dal Localization Master › Identities) ---- */
+// Numero di riga (come nel foglio) della stazione in Identities, per la modifica del nome.
+function stationRowNo(id){
+  const g = GRID_VIEWS['loc_identities']; if(!g || !g.rows) return 0;
+  const i = g.rows.findIndex(x => String(x[0] || '').trim() === id); return i < 0 ? 0 : i + 2;
+}
+function renderDbLocStations(){
+  const all = stationList(), q = dblsSearch.trim().toLowerCase(), rows = q ? all.filter(s => (s + ' ' + stationName(s)).toLowerCase().includes(q)) : all;
+  const dash = '<span style="color:var(--text-faint)">&ndash;</span>';
+  document.getElementById('dblsStats').innerHTML = [{l:'Stazioni', n: all.length, accent:true}, {l:'Senza nome', n: all.filter(s => !stationName(s)).length}].map(it => '<div class="stat' + (it.accent ? ' accent' : '') + '"><div class="n mono">' + it.n + '</div><div class="l">' + escapeHtml(it.l) + '</div></div>').join('');
+  document.getElementById('dblsSearch').value = dblsSearch;
+  document.getElementById('dblsTbody').innerHTML = rows.length ? rows.map(s => '<tr><td class="mono">' + escapeHtml(s) + '</td>' + (stationRowNo(s) ? '<td class="loc-col dbls-edit" data-id="' + escapeHtml(s) + '" style="cursor:pointer" title="Clic per modificare il nome">' : '<td class="loc-col" title="Questa stazione non è in Identities: aggiungila al foglio per dare un nome">') + (escapeHtml(stationName(s)) || dash) + '</td></tr>').join('') : '<tr class="empty-row"><td colspan="2">' + (all.length ? 'Nessuna stazione corrisponde.' : 'Nessuna stazione: importa SpaceStationRules da FOGLI GOOGLE &rsaquo; STATIONS.') + '</td></tr>';
+}
+document.getElementById('dblsSearch').addEventListener('input', e => { dblsSearch = e.target.value; renderDbLocStations(); });
+document.addEventListener('click', e => {
+  const c = e.target.closest && e.target.closest('.dbls-edit'); if(!c || c.querySelector('input')) return;
+  const id = c.dataset.id, old = stationName(id), rowNo = stationRowNo(id);
+  c.innerHTML = '<input type="text" class="cell-input" maxlength="500" style="width:100%;min-width:260px">';
+  const inp = c.firstChild; inp.value = old; inp.focus(); inp.select();
+  let done = false;
+  const commit = async save => {
+    if(done) return; done = true;
+    if(save && inp.value.trim() !== old){
+      try{ await apiSend('/api/grid/identities/' + rowNo, 'PUT', {value: inp.value.trim()}); await GRID_VIEWS['loc_identities'].load(); showToast('Nome di ' + id + ' aggiornato'); }
+      catch(err){ showToast('Impossibile salvare il nome'); }
+    }
+    renderDbLocStations();
+  };
+  inp.addEventListener('blur', () => commit(true));
+  inp.addEventListener('keydown', ev => { if(ev.key === 'Escape') commit(false); else if(ev.key === 'Enter'){ ev.preventDefault(); commit(true); } });
+});
+document.getElementById('dbstSearch').addEventListener('input', e => { dbstSearch = e.target.value; renderDbStations(); });
 /* ---- media esportati da Unreal (texture, mesh, anteprime) ---- */
 let MEDIA = { links:{}, assets:{texture:{}, mesh:{}} };
 async function loadMedia(){ try{ MEDIA = await apiGet('/api/media'); }catch(e){ /* nessun media: la vista funziona comunque */ } }
@@ -3555,20 +3800,21 @@ function dbmRows(){
 function dbmFiltered(){
   let rows = dbmRows();
   if(dbmUi.type !== 'Tutti') rows = rows.filter(r => r.section === dbmUi.type);
+  if(dbmUi.unlock !== 'all') rows = rows.filter(r => (unlockInfo(r.id).rules.length > 0) === (dbmUi.unlock === 'with'));
   const q = dbmUi.search.trim().toLowerCase();
   if(q) rows = rows.filter(r => [r.id, r.name, r.section, r.moduleType].some(v => String(v || '').toLowerCase().includes(q)));
   return rows;
 }
 function renderDbModuleTable(){
   const rows = dbmFiltered(), tbody = document.getElementById('dbmTbody');
-  if(!rows.length){ tbody.innerHTML = `<tr class="empty-row"><td colspan="7">${MODS.length ? 'Nessun modulo corrisponde ai filtri.' : 'Nessun modulo: importa il tab Modules da ENTITIES (foglio) › Modules.'}</td></tr>`; return; }
+  if(!rows.length){ tbody.innerHTML = `<tr class="empty-row"><td colspan="8">${MODS.length ? 'Nessun modulo corrisponde ai filtri.' : 'Nessun modulo: importa il tab Modules da ENTITIES (foglio) › Modules.'}</td></tr>`; return; }
   tbody.innerHTML = rows.map(r => {
     const dir = DBM_IMG_DIR[r.section], lk = MEDIA.links[r.id] || {};
-    const img = lk.icon ? `<img src="media/textures/${encodeURIComponent(lk.icon)}.png" loading="lazy" alt="" title="${escapeHtml(lk.icon)}" style="width:44px;height:44px;object-fit:contain;border-radius:6px;display:block">` : dir ? `<img src="images/${dir}/${encodeURIComponent(r.id)}.jpg" alt="" style="width:44px;height:44px;object-fit:cover;border-radius:6px;display:block" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mono',textContent:'–',title:'Nessuna immagine nell\\'app'}))">` : `<span class="mono" style="color:var(--text-faint)" title="Nessuna immagine nell'app${r.icon ? ' (icona in Unreal: ' + escapeHtml(r.icon) + ')' : ''}">–</span>`;
+    const img = slotImage(r.id, r.section);
     const mesh = lk.static_mesh && MEDIA.assets.mesh[lk.static_mesh];
-    const meshCell = mesh ? `<button type="button" class="dbm-mesh" data-id="${escapeHtml(r.id)}" title="Apri anteprima e scarica FBX" style="background:none;border:0;padding:0;cursor:pointer">${mesh.preview ? `<img src="media/previews/${encodeURIComponent(lk.static_mesh)}.png" loading="lazy" alt="" style="width:44px;height:44px;object-fit:contain;display:block">` : '<span class="badge-type">FBX</span>'}</button>` : '<span style="color:var(--text-faint)">&ndash;</span>';
+    const meshCell = slotMesh(r.id);
     const unlock = unlockConditionFor(r.id);
-    return `<tr data-id="${escapeHtml(r.id)}"><td>${img}</td><td>${meshCell}</td><td class="mono">${escapeHtml(r.id)}</td><td>${escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>'}</td><td>${escapeHtml(r.section)}${r.moduleType && r.moduleType !== r.section ? ' <span class="badge-type">' + escapeHtml(r.moduleType) + '</span>' : ''}</td><td class="td-temp" style="font-size:11.5px" title="Provvisoria: dal catalogo di Stations">${unlock || '&ndash;'}</td><td><button type="button" class="btn ghost small dbm-open" data-id="${escapeHtml(r.id)}" data-section="${escapeHtml(r.section)}">Statistiche &rarr;</button></td></tr>`;
+    return `<tr data-id="${escapeHtml(r.id)}"><td>${img}</td><td>${meshCell}</td><td class="mono dbm-edit" data-act="id" data-id="${escapeHtml(r.id)}" title="Clic per rinominare l'ID (cambia in tutte le schede dell'app)">${escapeHtml(r.id)}</td><td class="dbm-edit loc-col" data-act="name" data-id="${escapeHtml(r.id)}" title="Clic per cambiare il nome (aggiorna ENTITIES e il Localization Master)">${escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>'}</td><td><select class="dbm-type" data-id="${escapeHtml(r.id)}" title="Cambia il tipo di modulo">${MOD_SECTIONS.map(x => '<option value="' + escapeHtml(x.name) + '"' + (x.name === r.section ? ' selected' : '') + '>' + escapeHtml(x.name) + '</option>').join('')}</select>${r.moduleType && r.moduleType !== r.section ? ' <span class="badge-type">' + escapeHtml(r.moduleType) + '</span>' : ''}</td>${producerCellHtml(r.id)}<td class="dbm-unlock" data-id="${escapeHtml(r.id)}" style="font-size:11.5px;cursor:pointer" title="Clic per impostare evento e stazione di sblocco">${unlock || '&ndash;'}</td><td><button type="button" class="btn ghost small dbm-open" data-id="${escapeHtml(r.id)}" data-section="${escapeHtml(r.section)}">Statistiche &rarr;</button></td></tr>`;
   }).join('');
   tbody.querySelectorAll('.dbm-mesh').forEach(b => b.addEventListener('click', () => openMeshDialog(b.dataset.id)));
   tbody.querySelectorAll('.dbm-open').forEach(b => b.addEventListener('click', () => {
@@ -3577,11 +3823,165 @@ function renderDbModuleTable(){
     document.getElementById('modSearch').value = b.dataset.id;
   }));
 }
+// ---- "Tutti i moduli": modifica di ID, nome e tipo (aggiorna le schede ENTITIES / MODULES / Localization dell'app) ----
+async function reloadAfterRowEdit(){ await Promise.all([loadModulesSheet(), loadEntities(), loadMedia()]); renderAll(); }
+document.addEventListener('click', async e => {
+  const c = e.target.closest && e.target.closest('.dbm-edit'); if(!c || c.querySelector('input')) return;
+  const id = c.dataset.id, act = c.dataset.act, old = act === 'id' ? id : c.textContent.trim();
+  if(act === 'id'){
+    const nuovo = (prompt('Nuovo ID per ' + id + ' (cambia in ENTITIES, MODULES, Cargo, Items e collegamenti).\nATTENZIONE: gli asset già presenti in Unreal con il vecchio nome non vengono rinominati.', id) || '').trim();
+    if(!nuovo || nuovo === id) return;
+    try{ const r = await apiFetch('/api/rows/rename', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({from: id, to: nuovo})}); const j = await r.json(); if(!r.ok){ showToast(j.error || 'Impossibile rinominare'); return; } await reloadAfterRowEdit(); showToast('ID rinominato: ' + id + ' → ' + nuovo); }
+    catch(err){ showToast('Impossibile rinominare: ' + err.message); }
+    return;
+  }
+  c.innerHTML = '<input type="text" class="cell-input" style="width:100%;min-width:160px">'; const inp = c.firstChild; inp.value = old; inp.focus(); inp.select();
+  let done = false;
+  const commit = async save => {
+    if(done) return; done = true;
+    if(save && inp.value !== old){
+      try{ await apiSend('/api/entities/' + encodeURIComponent(id), 'PUT', {fields: {Label: inp.value}}); await reloadAfterRowEdit(); showToast('Nome di ' + id + ' aggiornato'); return; }
+      catch(err){ showToast('Impossibile salvare il nome'); }
+    }
+    renderAll();
+  };
+  inp.addEventListener('blur', () => commit(true));
+  inp.addEventListener('keydown', ev => { if(ev.key === 'Enter'){ ev.preventDefault(); commit(true); } else if(ev.key === 'Escape') commit(false); });
+});
+document.addEventListener('change', async e => {
+  const sel = e.target.closest && e.target.closest('.dbm-type'); if(!sel) return;
+  try{ const r = await apiFetch('/api/rows/modules/' + encodeURIComponent(sel.dataset.id) + '/section', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({section: sel.value})}); const j = await r.json(); if(!r.ok){ showToast(j.error || 'Impossibile cambiare il tipo'); renderAll(); return; } await reloadAfterRowEdit(); showToast('Tipo di ' + sel.dataset.id + ': ' + sel.value); }
+  catch(err){ showToast('Impossibile cambiare il tipo: ' + err.message); }
+});
+// ---- DATABASE › Localization › Moduli: ID, nome e descrizione dei moduli (per il narrative) ----
+let dblUi = { search:'', type:'Tutti', missing:false }, dblLoading = false;
+function dblRows(){
+  const ents = {}; ENTITIES.forEach(e => { ents[e['(ID)']] = e; });
+  return MODS.map(m => {
+    const id = m['(ID)'], e = ents[id] || {}, ef = ENT_EFF[id] || {};
+    const lk = String(e.LabelKey || '').trim() || id + '-Name', dk = String(e.DescriptionKey || '').trim() || id + '-Description';
+    return {id, section: m.__section || '', lk, dk, name: String((ef.Label && ef.Label.v) || e.Label || ''), desc: String((ef.BriefDescription && ef.BriefDescription.v) || e.BriefDescription || '')};
+  });
+}
+function renderDbLocModules(){
+  const all = dblRows(), types = [...new Set(all.map(r => r.section).filter(Boolean))];
+  const q = dblUi.search.trim().toLowerCase();
+  let rows = all.filter(r => (dblUi.type === 'Tutti' || r.section === dblUi.type) && (!dblUi.missing || !r.name || !r.desc) && (!q || [r.id, r.name, r.desc].some(v => v.toLowerCase().includes(q))));
+  document.getElementById('dblTypeFilter').innerHTML = ['Tutti', ...types].map(t => '<option value="' + escapeHtml(t) + '"' + (dblUi.type === t ? ' selected' : '') + '>' + (t === 'Tutti' ? 'Tutti i tipi' : escapeHtml(t) + ' (' + all.filter(r => r.section === t).length + ')') + '</option>').join('');
+  document.getElementById('dblMissing').classList.toggle('active', dblUi.missing);
+  document.getElementById('dblStats').innerHTML = [{l:'Moduli', n: all.length, accent:true}, {l:'Senza nome', n: all.filter(r => !r.name).length}, {l:'Senza descrizione', n: all.filter(r => !r.desc).length}]
+    .map(it => '<div class="stat' + (it.accent ? ' accent' : '') + '"><div class="n mono">' + it.n + '</div><div class="l">' + escapeHtml(it.l) + '</div></div>').join('');
+  const dash = '<span style="color:var(--text-faint)">&ndash;</span>';
+  document.getElementById('dblTbody').innerHTML = rows.length ? rows.map(r => '<tr data-id="' + escapeHtml(r.id) + '"><td class="mono">' + escapeHtml(r.id) + '</td>'
+    + '<td class="dbl-edit loc-col" data-field="Label" data-id="' + escapeHtml(r.id) + '" title="Clic per modificare">' + (escapeHtml(r.name) || dash) + '</td>'
+    + '<td class="dbl-edit loc-col" data-field="BriefDescription" data-id="' + escapeHtml(r.id) + '" title="Clic per modificare" style="max-width:520px;white-space:pre-wrap">' + (escapeHtml(r.desc) || dash) + '</td>'
+    + '<td>' + escapeHtml(r.section) + '</td>'
+    + '<td><button type="button" class="btn ghost small dbl-open" data-id="' + escapeHtml(r.id) + '" title="Apri la pagina del modulo in DATABASE › Modules">Apri modulo &rarr;</button></td></tr>').join('') : '<tr class="empty-row"><td colspan="5">' + (MODS.length ? 'Nessun modulo corrisponde ai filtri.' : 'Nessun modulo nel database.') + '</td></tr>';
+  if(!dblLoading){
+    dblLoading = true;
+    Promise.all([loadModulesSheet(), loadEntities()]).then(() => { if(activeSection === 'dbloc_modules' && !document.querySelector('#dblTbody textarea')) renderDbLocModules(); }).catch(() => {}).finally(() => { dblLoading = false; });
+  }
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('.dbl-open'); if(!b) return;
+  dbmUi.search = b.dataset.id; dbmUi.type = 'Tutti'; activeSection = 'dbmodules'; renderAll();
+  const inp = document.getElementById('dbmSearch'); if(inp) inp.value = b.dataset.id;
+});
+document.getElementById('dblSearch').addEventListener('input', e => { dblUi.search = e.target.value; renderDbLocModules(); });
+document.getElementById('dblTypeFilter').addEventListener('change', e => { dblUi.type = e.target.value; renderDbLocModules(); });
+document.getElementById('dblMissing').addEventListener('click', () => { dblUi.missing = !dblUi.missing; renderDbLocModules(); });
+document.addEventListener('click', e => {
+  const c = e.target.closest && e.target.closest('.dbl-edit'); if(!c || c.querySelector('textarea')) return;
+  const id = c.dataset.id, field = c.dataset.field, row = dblRows().find(r => r.id === id) || {};
+  const short = field === 'Label';
+  const old = field === 'Label' ? row.name : row.desc;
+  c.innerHTML = '<textarea class="cell-input" rows="' + (short ? 1 : 4) + '" style="width:100%;min-width:' + (short ? 200 : 380) + 'px"></textarea>';
+  const ta = c.firstChild; ta.value = old || ''; ta.focus(); ta.select();
+  let done = false;
+  const commit = async save => {
+    if(done) return; done = true;
+    if(save && ta.value !== (old || '')){
+      try{
+        await apiSend('/api/entities/' + encodeURIComponent(id), 'PUT', {fields: {[field]: ta.value}}); await loadEntities(); showToast((field === 'Label' ? 'Nome' : 'Descrizione') + ' di ' + id + ' aggiornato');
+      }
+      catch(err){ showToast('Impossibile salvare il testo'); }
+    }
+    renderDbLocModules();
+  };
+  ta.addEventListener('blur', () => commit(true));
+  ta.addEventListener('keydown', ev => { if(ev.key === 'Escape') commit(false); else if(ev.key === 'Enter' && !ev.shiftKey){ ev.preventDefault(); commit(true); } });
+});
+
+// ---- Nuovo modulo: flusso completo (entità + riga MODULES + riga Cargo/Loot + testi di localizzazione) ----
+function openNewModule(){
+  let o = document.getElementById('nmOverlay'); if(o) o.remove();
+  o = document.createElement('div'); o.id = 'nmOverlay';
+  o.style.cssText = 'position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px';
+  const opt = (list, sel) => list.map(x => '<option value="' + escapeHtml(x) + '"' + (x === sel ? ' selected' : '') + '>' + escapeHtml(x) + '</option>').join('');
+  const row = (label, input) => '<label style="display:block;margin:10px 0 3px;color:var(--text-dim);font-size:12.5px">' + label + '</label>' + input;
+  o.innerHTML = '<div style="background:var(--surface,var(--bg));border:1px solid var(--border);border-radius:10px;padding:22px;width:100%;max-width:520px;max-height:92vh;overflow:auto;color:var(--text)"><h3 style="margin:0 0 4px">Nuovo modulo</h3><p style="margin:0 0 6px;color:var(--text-dim);font-size:12.5px">Crea in un colpo solo: l\'entità (ENTITIES), la riga in MODULES, la riga in Cargo/Loot (valori tipici dei moduli) e nome e descrizione nel Localization Master. Poi trascina immagine e mesh negli slot della riga. Non tocca Unreal.</p>'
+    + row('ID (lettere, numeri, - _ .)', '<input type="text" id="nmId" maxlength="100" style="width:100%" placeholder="es. MOD90-NuovoMotore_M">')
+    + row('Nome', '<input type="text" id="nmName" style="width:100%">')
+    + row('Descrizione (facoltativa)', '<textarea id="nmDesc" rows="2" style="width:100%"></textarea>')
+    + row('Tipo di modulo', '<select id="nmSec" style="width:100%">' + opt(MOD_SECTIONS.map(x => x.name), 'MainEngine') + '</select>')
+    + row('Produttore', '<select id="nmProd" style="width:100%"><option value="">&ndash; nessuno &ndash;</option>' + opt(producerList(), '') + '</select>')
+    + '<div style="display:flex;gap:10px"><div style="flex:1">' + row('Rarità', '<select id="nmRar" style="width:100%">' + opt(RARITY_ORDER, 'Salvage') + '</select>') + '</div><div style="flex:1">' + row('Prezzo', '<input type="text" id="nmPrice" value="0" style="width:100%">') + '</div></div>'
+    + '<div style="display:flex;gap:12px;margin-top:12px"><div style="flex:1"><label style="display:block;color:var(--text-dim);font-size:12.5px;margin-bottom:3px">Immagine (facoltativa)</label><div class="nm-drop" id="nmImgDrop" data-kind="image" style="border:2px dashed var(--border);border-radius:8px;min-height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px;text-align:center;cursor:pointer;font-size:12px;color:var(--text-dim)">Trascina qui un PNG/JPG<br>o clicca per scegliere</div><input type="file" id="nmImgFile" accept="image/*" hidden></div>'
+    + '<div style="flex:1"><label style="display:block;color:var(--text-dim);font-size:12.5px;margin-bottom:3px">Mesh (facoltativa)</label><div class="nm-drop" id="nmMeshDrop" data-kind="mesh" style="border:2px dashed var(--border);border-radius:8px;min-height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px;text-align:center;cursor:pointer;font-size:12px;color:var(--text-dim)">Trascina qui un FBX<br>o clicca per scegliere</div><input type="file" id="nmMeshFile" accept=".fbx" hidden></div></div>'
+    + '<div id="nmParams"></div>'
+    + '<p id="nmErr" style="color:#d9534f;min-height:1.2em;margin:10px 0 0;font-size:13px"></p>'
+    + '<div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end"><button class="btn ghost small" id="nmCancel">Annulla</button><button class="btn primary small" id="nmCreate">Crea modulo</button></div></div>';
+  document.body.appendChild(o);
+  const q = id => document.getElementById(id);
+  q('nmCancel').onclick = () => o.remove();
+  q('nmId').focus();
+  // parametri propri del tipo di modulo scelto (colonne della sezione in MODULES): appaiono sotto e cambiano con il tipo
+  const SKIP = new Set(['(ID)', 'ItemType', 'StaticMesh', 'ModuleType', 'Rarity', 'Price']);
+  const drawParams = () => {
+    const sec = MOD_SECTIONS.find(x => x.name === q('nmSec').value);
+    const heads = (sec ? sec.headers : []).filter(h => h && !SKIP.has(h) && !/^\d+(#\d+)?$|^#/.test(h));
+    q('nmParams').innerHTML = heads.length ? '<div style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border-soft)"><div style="font-weight:700;margin-bottom:4px">Parametri di ' + escapeHtml(q('nmSec').value) + '</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 12px">'
+      + heads.map(h => '<div><label style="display:block;color:var(--text-dim);font-size:12px;margin-top:4px">' + escapeHtml(h) + '</label><input type="text" class="nm-par" data-key="' + escapeHtml(h) + '" style="width:100%"></div>').join('') + '</div></div>' : '';
+  };
+  q('nmSec').onchange = drawParams; drawParams();
+  // immagine e mesh scelte qui vengono caricate subito dopo la creazione del modulo
+  const picked = {image: null, mesh: null};
+  const setDrop = async (kind, file) => {
+    if(!file) return;
+    const box = q(kind === 'image' ? 'nmImgDrop' : 'nmMeshDrop');
+    if(kind === 'image'){ if(!/^image\//.test(file.type)){ showToast('Serve un file immagine'); return; } picked.image = file; box.innerHTML = '<img src="' + URL.createObjectURL(file) + '" alt="" style="max-width:100%;max-height:70px;object-fit:contain"><span>' + escapeHtml(file.name) + '</span>'; }
+    else { if(!/\.fbx$/i.test(file.name)){ showToast('Serve un file FBX (.fbx)'); return; } picked.mesh = file; box.innerHTML = '<span class="badge-type">FBX</span><span>' + escapeHtml(file.name) + ' (' + Math.round(file.size / 1024) + ' KB)</span>'; }
+  };
+  [['nmImgDrop', 'nmImgFile', 'image'], ['nmMeshDrop', 'nmMeshFile', 'mesh']].forEach(([dz, fi, kind]) => {
+    const z = q(dz); z.onclick = () => q(fi).click(); q(fi).onchange = e => setDrop(kind, e.target.files[0]);
+    ['dragenter', 'dragover'].forEach(ev => z.addEventListener(ev, e => { e.preventDefault(); z.style.borderColor = 'var(--accent)'; }));
+    z.addEventListener('dragleave', () => { z.style.borderColor = ''; });
+    z.addEventListener('drop', e => { e.preventDefault(); z.style.borderColor = ''; setDrop(kind, e.dataTransfer.files && e.dataTransfer.files[0]); });
+  });
+  q('nmCreate').onclick = async () => {
+    q('nmErr').textContent = '';
+    const body = {id: q('nmId').value.trim(), name: q('nmName').value.trim(), description: q('nmDesc').value.trim(), section: q('nmSec').value, producer: q('nmProd').value, rarity: q('nmRar').value, price: q('nmPrice').value.trim(), fields: Object.fromEntries([...o.querySelectorAll('.nm-par')].map(i => [i.dataset.key, i.value.trim()]).filter(x => x[1] !== ''))};
+    try{
+      const r = await apiFetch('/api/rows/new-module', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      const j = await r.json(); if(!r.ok){ q('nmErr').textContent = j.error || 'Impossibile creare il modulo'; return; }
+      // eventuali immagine e mesh scelte nella finestra: si assegnano alla nuova riga
+      const warn = [];
+      if(picked.image){ try{ const rr = await apiFetch('/api/custom-media/' + encodeURIComponent(body.id) + '/image', {method:'POST', headers:{'Content-Type':'image/png'}, body: await fileToPng(picked.image)}); if(!rr.ok) warn.push('immagine: ' + ((await rr.json().catch(() => ({}))).error || rr.status)); }catch(err){ warn.push('immagine: ' + err.message); } }
+      if(picked.mesh){ try{ const rr = await apiFetch('/api/custom-media/' + encodeURIComponent(body.id) + '/mesh?filename=' + encodeURIComponent(picked.mesh.name), {method:'POST', headers:{'Content-Type':'application/octet-stream'}, body: picked.mesh}); if(!rr.ok) warn.push('mesh: ' + ((await rr.json().catch(() => ({}))).error || rr.status)); }catch(err){ warn.push('mesh: ' + err.message); } }
+      o.remove(); dbmUi.search = body.id; dbmUi.type = 'Tutti';
+      if(warn.length) setTimeout(() => showToast('Modulo creato, ma non si è caricato: ' + warn.join('; ') + ' (riprova trascinando il file nello slot)'), 400);
+      await Promise.all([loadModulesSheet(), loadEntities(), loadMedia(), (async () => { const v = Object.values(TAB_VIEWS).find(x => x.tab === 'cargo'); if(v) await v.load(); const g = GRID_VIEWS['loc_entities']; if(g) await g.load(); })()]);
+      renderAll(); if(!warn.length) showToast('Modulo ' + body.id + ' creato' + (picked.image || picked.mesh ? ' con ' + [picked.image ? 'immagine' : '', picked.mesh ? 'mesh' : ''].filter(Boolean).join(' e ') : ': ora trascina immagine e mesh negli slot'));
+    }catch(err){ q('nmErr').textContent = 'Errore: ' + err.message; }
+  };
+}
+document.getElementById('dbmNewBtn').addEventListener('click', openNewModule);
 function renderDbModules(){
   const types = [...new Set(MODS.map(m => m.__section).filter(Boolean))];
   const sel = document.getElementById('dbmTypeFilter');
   sel.innerHTML = ['Tutti', ...types].map(t => `<option value="${escapeHtml(t)}" ${dbmUi.type===t?'selected':''}>${t==='Tutti' ? 'Tutti i tipi' : escapeHtml(t) + ' (' + MODS.filter(m => m.__section === t).length + ')'}</option>`).join('');
   document.getElementById('dbmSearch').value = dbmUi.search;
+  document.getElementById('dbmUnlockFilter').value = dbmUi.unlock;
   const rows = dbmRows();
   document.getElementById('dbmStats').innerHTML = [{l:'Moduli', n: rows.length, accent:true}, {l:'Tipi', n: types.length}, {l:'Senza nome', n: rows.filter(r => !r.name).length}]
     .map(it => `<div class="stat${it.accent?' accent':''}"><div class="n mono">${it.n}</div><div class="l">${escapeHtml(it.l)}</div></div>`).join('');
@@ -3868,6 +4268,8 @@ makeGridView('quest', 'loc_quest', 'Quest');
 makeGridView('eventsaudio', 'loc_eventsaudio', 'EventsAudio');
 makeGridView('mainevents', 'evt_mainevents', 'MainEvents');
 makeGridView('eventtexts', 'evt_eventtexts', 'EventTexts');
+makeGridView('stationlocks', 'stn_locks', 'GenericLockRules');
+makeGridView('stationrules', 'stn_rules', 'SpaceStationRules');
 
 /* ============================== STATIONS ============================== */
 let STATIONS = [];
@@ -4488,6 +4890,12 @@ function renderAll(){
     renderDbModSection();
   } else if(DBCOL[activeSection]){
     renderDbCollection();
+  } else if(activeSection === 'dbstations'){
+    renderDbStations();
+  } else if(activeSection === 'dbloc_stations'){
+    renderDbLocStations();
+  } else if(activeSection === 'dbloc_modules'){
+    renderDbLocModules();
   } else if(activeSection === 'dbmodules'){
     renderDbModules();
   } else if(activeSection === 'modsheet'){
@@ -4522,6 +4930,7 @@ document.getElementById('dbcSearch').addEventListener('input', e => { dbcState()
 document.getElementById('dbcSubFilter').addEventListener('change', e => { dbcState().sub = e.target.value; renderDbCollectionTable(); });
 document.getElementById('dbmSearch').addEventListener('input', e => { dbmUi.search = e.target.value; renderDbModuleTable(); });
 document.getElementById('dbmTypeFilter').addEventListener('change', e => { dbmUi.type = e.target.value; renderDbModuleTable(); });
+document.getElementById('dbmUnlockFilter').addEventListener('change', e => { dbmUi.unlock = e.target.value; renderDbModuleTable(); });
 document.getElementById('modSearch').addEventListener('input', e => { modUi.search = e.target.value; renderModTable(); });
 document.getElementById('modSectionFilter').addEventListener('change', e => { modUi.section = e.target.value; renderModTable(); });
 document.getElementById('modTechToggle').addEventListener('click', e => { modUi.tech = !modUi.tech; e.currentTarget.classList.toggle('active', modUi.tech); renderModTable(); });
@@ -4971,6 +5380,7 @@ async function init(){
   for(const v of Object.values(TAB_VIEWS)){
     try{ await v.load(); }catch(err){ console.error('Impossibile caricare /api/tabs/' + v.tab, err); }
   }
+  await loadUnlocks();
   try{
     await loadStations();
   }catch(err){

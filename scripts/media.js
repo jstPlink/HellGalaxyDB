@@ -141,12 +141,59 @@ module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imag
     return { items, total: items.reduce((a, i) => a + i.bytes, 0), disk, counts: { textures: db.prepare("SELECT COUNT(*) c FROM media_assets WHERE kind='texture'").get().c, meshes: db.prepare("SELECT COUNT(*) c FROM media_assets WHERE kind='mesh'").get().c } };
   }
 
+  // ---------- immagini e mesh trascinate dall'utente negli slot (hanno la precedenza su quelle di Unreal) ----------
+  // Un solo file per ID e ruolo: textures/custom_<ID>.png (la UI converte in PNG) e meshes/custom_<ID>.fbx.
+  // Restano solo nell'app: verranno importate in Unreal quando si scriveranno gli SMDA_/le texture (non ancora fatto).
+  db.exec(`CREATE TABLE IF NOT EXISTS custom_links (owner TEXT NOT NULL, role TEXT NOT NULL, kind TEXT NOT NULL, name TEXT NOT NULL, user TEXT, at TEXT, PRIMARY KEY (owner, role))`);
+  const ID_RE = /^[A-Za-z0-9][A-Za-z0-9_.\-]{0,99}$/;
+  const userOf = req => String(req.headers['x-hg-user'] ? decodeURIComponent(String(req.headers['x-hg-user'])) : 'sistema').slice(0, 60);
+  function readRaw(req, max) {
+    return new Promise((resolve, reject) => {
+      const chunks = []; let size = 0, over = false;
+      req.on('data', ch => { size += ch.length; if (size > max) { over = true; req.destroy(); } else chunks.push(ch); });
+      req.on('end', () => resolve(over ? null : Buffer.concat(chunks)));
+      req.on('error', reject); req.on('close', () => { if (over) resolve(null); });
+    });
+  }
+  function logHistory(req, id, field, oldV, newV) {
+    try { db.prepare('INSERT INTO history (at, user, area, row_id, field, old, new, source) VALUES (?, ?, ?, ?, ?, ?, ?, ?)').run(new Date().toISOString(), userOf(req), 'MODULES', id, field, oldV, newV, 'modifica'); } catch (e) { /* cronologia opzionale */ }
+  }
+  async function customUpload(req, res, id, kind, query) {
+    if (!ID_RE.test(id)) return sendJson(res, 400, { error: 'ID non valido' });
+    const exists = db.prepare('SELECT 1 FROM entities WHERE id = ? UNION SELECT 1 FROM modules_sheet WHERE id = ?').get(id, id);
+    if (!exists) return sendJson(res, 404, { error: 'riga non trovata' });
+    const isImg = kind === 'image', name = 'custom_' + id, role = isImg ? 'icon' : 'static_mesh';
+    const buf = await readRaw(req, isImg ? 8 * 1024 * 1024 : 300 * 1024 * 1024);
+    if (!buf || !buf.length) return sendJson(res, buf ? 400 : 413, { error: buf ? 'file vuoto' : 'file troppo grande' });
+    if (isImg) {
+      if (buf.slice(0, 8).toString('hex') !== '89504e470d0a1a0a') return sendJson(res, 400, { error: 'immagine non valida (serve un PNG: la pagina lo converte da sola)' });
+      fs.writeFileSync(path.join(base, 'textures', name + '.png'), buf);
+    } else {
+      const file = String(query.filename || '');
+      const head = buf.slice(0, 64).toString('latin1');
+      if (!/\.fbx$/i.test(file) || !(head.startsWith('Kaydara FBX Binary') || /^\s*; FBX/.test(head) || head.includes('FBXHeaderExtension'))) return sendJson(res, 400, { error: 'file non valido: serve un FBX (.fbx)' });
+      fs.writeFileSync(path.join(base, 'meshes', name + '.fbx'), buf);
+      try { fs.rmSync(path.join(base, 'previews', name + '.png'), { force: true }); } catch (e) { /* nessuna anteprima precedente */ }
+    }
+    const now = new Date().toISOString();
+    const prev = db.prepare('SELECT name FROM custom_links WHERE owner = ? AND role = ?').get(id, role);
+    db.prepare('INSERT OR REPLACE INTO media_assets (kind, name, size, preview, path, exported_at) VALUES (?, ?, ?, 0, ?, ?)').run(isImg ? 'texture' : 'mesh', name, buf.length, 'caricato dall\'utente', now);
+    db.prepare('INSERT OR REPLACE INTO custom_links (owner, role, kind, name, user, at) VALUES (?, ?, ?, ?, ?, ?)').run(id, role, isImg ? 'texture' : 'mesh', name, userOf(req), now);
+    logHistory(req, id, isImg ? 'immagine' : 'mesh', prev ? 'caricata dall\'utente' : '', (isImg ? 'immagine' : String(query.filename || 'mesh')) + ' (' + Math.round(buf.length / 1024) + ' KB)');
+    return sendJson(res, 200, { ok: true, name, bytes: buf.length });
+  }
+
   // ---------- indice per la UI ----------
   function index() {
     const assets = { texture: {}, mesh: {} };
     for (const r of db.prepare('SELECT kind, name, size, preview FROM media_assets').all()) if (fs.existsSync(path.join(base, r.kind === 'mesh' ? 'meshes' : 'textures', r.name + (r.kind === 'mesh' ? '.fbx' : '.png')))) assets[r.kind][r.name] = r.kind === 'mesh' ? { size: r.size, preview: !!r.preview } : { size: r.size };
     const links = {};
     for (const r of db.prepare('SELECT owner, role, kind, name FROM media_links').all()) {
+      if (!assets[r.kind][r.name]) continue;
+      (links[r.owner] = links[r.owner] || {})[r.role] = r.name;
+    }
+    // le immagini/mesh dell'utente sostituiscono quelle di Unreal per lo stesso ruolo
+    for (const r of db.prepare('SELECT owner, role, kind, name FROM custom_links').all()) {
       if (!assets[r.kind][r.name]) continue;
       (links[r.owner] = links[r.owner] || {})[r.role] = r.name;
     }
@@ -209,11 +256,42 @@ module.exports = function createMedia({ db, sendJson, readJsonBody, dbPath, imag
       fs.createReadStream(file).pipe(res);
     });
   };
-  async function handle(req, res, urlPath, query) {
+  // ---------- localhost: i file (texture, anteprime, FBX) stanno sul NAS, non nella cartella locale ----------
+  // Se l'app locale ha HG_REMOTE_URL (es. https://hgdb.fplinio.it) le rotte dei media vengono inoltrate al server
+  // (con HG_REMOTE_TOKEN): indice, texture, anteprime, FBX e anche i caricamenti trascinati negli slot.
+  // Disattivabile con HG_MEDIA_REMOTE=0 (test, o per lavorare con i file locali).
+  const remoteCfg = () => process.env.HG_MEDIA_REMOTE === '0' ? null : (process.env.HG_REMOTE_URL ? { url: process.env.HG_REMOTE_URL.replace(/\/+$/, ''), token: process.env.HG_REMOTE_TOKEN || '' } : null);
+  const isMediaRoute = (method, p) => (method === 'GET' && (/^\/media\/(textures|previews)\//.test(p) || /^\/api\/media\/mesh\//.test(p) || p === '/api/media'))
+    || (/^\/api\/custom-media\//.test(p) && (method === 'POST' || method === 'DELETE'));
+  async function proxyToRemote(req, res, urlPath, queryString, cfg) {
+    try {
+      const headers = {};
+      if (cfg.token) headers.Authorization = 'Bearer ' + cfg.token;
+      for (const h of ['content-type', 'x-hg-user', 'x-hg-client']) if (req.headers[h]) headers[h] = req.headers[h];
+      let body;
+      if (req.method === 'POST') { body = await readRaw(req, 300 * 1024 * 1024); if (!body) return sendJson(res, 413, { error: 'file troppo grande' }); }
+      const r = await fetch(cfg.url + urlPath + (queryString ? '?' + queryString : ''), { method: req.method, headers, body, redirect: 'follow' });
+      const out = { 'Cache-Control': r.headers.get('cache-control') || 'no-store' };
+      for (const h of ['content-type', 'content-disposition']) if (r.headers.get(h)) out[h] = r.headers.get(h);
+      const buf = Buffer.from(await r.arrayBuffer());
+      res.writeHead(r.status, { ...out, 'Content-Length': buf.length });
+      res.end(buf);
+    } catch (e) { sendJson(res, 502, { error: 'Server dei media non raggiungibile (' + cfg.url + '): ' + e.message }); }
+  }
+  async function handle(req, res, urlPath, query, queryString) {
     let m;
+    const rc = remoteCfg();
+    if (rc && isMediaRoute(req.method, urlPath)) { await proxyToRemote(req, res, urlPath, queryString || '', rc); return true; }
     if ((m = urlPath.match(/^\/media\/(textures|previews)\/([A-Za-z0-9_.\-]+\.png)$/)) && req.method === 'GET') { sendFile(req, res, path.join(base, m[1], m[2]), 'image/png'); return true; }
     if ((m = urlPath.match(/^\/api\/media\/mesh\/([A-Za-z0-9_.\-]+)\.fbx$/)) && req.method === 'GET') {
       sendFile(req, res, path.join(base, 'meshes', m[1] + '.fbx'), 'application/octet-stream', { 'Content-Disposition': `attachment; filename="${m[1]}.fbx"`, 'Cache-Control': 'no-store' }); return true;
+    }
+    if ((m = urlPath.match(/^\/api\/custom-media\/([^/]+)\/(image|mesh)$/)) && req.method === 'POST') { await customUpload(req, res, decodeURIComponent(m[1]), m[2], query); return true; }
+    if ((m = urlPath.match(/^\/api\/custom-media\/([^/]+)\/(image|mesh)$/)) && req.method === 'DELETE') {
+      const id = decodeURIComponent(m[1]), role = m[2] === 'image' ? 'icon' : 'static_mesh';
+      db.prepare('DELETE FROM custom_links WHERE owner = ? AND role = ?').run(id, role);
+      logHistory(req, id, m[2] === 'image' ? 'immagine' : 'mesh', 'caricata dall\'utente', '(tolta: torna quella di Unreal)');
+      sendJson(res, 200, { ok: true }); return true;
     }
     if (urlPath === '/api/media' && req.method === 'GET') { sendJson(res, 200, index()); return true; }
     if (urlPath === '/api/storage' && req.method === 'GET') { sendJson(res, 200, storage()); return true; }

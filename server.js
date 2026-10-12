@@ -634,7 +634,9 @@ function serveStatic(req, res, urlPath) {
 // Tab CargoItemsAndLoots e Items del foglio (importazione esatta + lettura da Unreal in sola lettura).
 const tabsHandler = require('./scripts/tabs_server')({ db, sendJson, readJsonBody, SheetError, UnrealError: unreal.UnrealError, unrealRead, fs, purgeTombstones: () => rowsAdmin.purgeTombstones() });
 // Righe nuove/eliminate dall'app (ENTITIES, MODULES, CARGO/LOOT, ITEMS)
-const rowsAdmin = require('./scripts/rows_admin')({ db, sendJson, readJsonBody, sheet, msheet });
+const translations = require('./scripts/translations')({ db, sendJson, readJsonBody });
+const unlockConditions = require('./scripts/unlock_conditions')({ db, sendJson, readJsonBody });
+const rowsAdmin = require('./scripts/rows_admin')({ db, sendJson, readJsonBody, sheet, msheet, addLocRows: rows => gridHandler.addAppRows('entities', rows) });
 // Replica automatica verso il server (solo righe cambiate): ogni modifica fatta in locale arriva anche sul server (HG_REMOTE_URL).
 const remoteReplica = require('./scripts/remote_replica');
 let replicaRev = 0; // aumenta a ogni modifica dei dati: l'app locale lo legge per sapere se c'è qualcosa di nuovo da scaricare
@@ -1036,7 +1038,9 @@ const server = http.createServer(async (req, res) => {
       }
     }
     if (await backup(req, res, urlPath)) return;
-    if (await media(req, res, urlPath, Object.fromEntries(query))) return;
+    if (await media(req, res, urlPath, Object.fromEntries(query), queryString)) return;
+    if (await translations(req, res, urlPath, query)) return;
+    if (await unlockConditions(req, res, urlPath)) return;
     if (await rowsAdmin(req, res, urlPath)) return;
     if (await tabsHandler(req, res, urlPath, query)) return;
     if (await gridHandler(req, res, urlPath, query)) return;

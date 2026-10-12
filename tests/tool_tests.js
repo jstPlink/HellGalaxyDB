@@ -4,6 +4,8 @@
 //
 // Uso: node --test tests/tool_tests.js
 'use strict';
+// i test non devono mai inoltrare i media a un server remoto (in localhost l'app lo fa se c'è HG_REMOTE_URL): lo si riattiva solo dove serve
+process.env.HG_MEDIA_REMOTE = '0';
 const { test, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const { spawn } = require('node:child_process');
@@ -959,4 +961,160 @@ test('T39 replica server → locale: righe cambiate dai colleghi, eliminazioni, 
     assert.equal(await label(BL, C), 'Server C');
     const st = await (await fetch(BL + '/api/remote/status')).json(); assert.equal(st.conflicts, 0);
   } finally { local.kill(); remote.kill(); }
+});
+
+test('T40 immagini/mesh trascinate, rinomina dell\'ID e cambio del tipo di modulo', async () => {
+  const H = { Authorization: 'Bearer ' + TOKEN, 'X-HG-User': encodeURIComponent('Mario') };
+  // riga di prova: entità + modulo (sezione esistente)
+  const secs = (await api('GET', '/api/modules-sheet', null, AUTH)).json.sections.map(s => s.name);
+  assert.ok(secs.length >= 2, 'servono almeno due sezioni di moduli nel database di test');
+  assert.equal((await api('POST', '/api/rows/entities', { id: 'ZZ-Mod1' }, AUTH)).status, 200);
+  assert.equal((await api('POST', '/api/rows/modules', { id: 'ZZ-Mod1', section: secs[0] }, AUTH)).status, 200);
+  // immagine: serve un PNG vero
+  const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/q842iQAAAABJRU5ErkJggg==', 'base64');
+  const bad = await fetch(BASE + '/api/custom-media/ZZ-Mod1/image', { method: 'POST', headers: { ...H, 'Content-Type': 'image/png' }, body: Buffer.from('non sono un png') });
+  assert.equal(bad.status, 400);
+  const ok = await fetch(BASE + '/api/custom-media/ZZ-Mod1/image', { method: 'POST', headers: { ...H, 'Content-Type': 'image/png' }, body: png });
+  assert.equal(ok.status, 200);
+  const media = (await api('GET', '/api/media', null, AUTH)).json;
+  assert.equal(media.links['ZZ-Mod1'].icon, 'custom_ZZ-Mod1', "l'immagine caricata è collegata alla riga");
+  assert.equal((await fetch(BASE + '/media/textures/custom_ZZ-Mod1.png')).status, 200);
+  // mesh: solo FBX veri
+  const badMesh = await fetch(BASE + '/api/custom-media/ZZ-Mod1/mesh?filename=x.fbx', { method: 'POST', headers: { ...H, 'Content-Type': 'application/octet-stream' }, body: Buffer.from('niente fbx') });
+  assert.equal(badMesh.status, 400);
+  const fbx = Buffer.concat([Buffer.from('Kaydara FBX Binary  \x00\x1a\x00'), Buffer.alloc(40)]);
+  assert.equal((await fetch(BASE + '/api/custom-media/ZZ-Mod1/mesh?filename=prova.fbx', { method: 'POST', headers: { ...H, 'Content-Type': 'application/octet-stream' }, body: fbx })).status, 200);
+  assert.equal((await api('GET', '/api/media', null, AUTH)).json.links['ZZ-Mod1'].static_mesh, 'custom_ZZ-Mod1');
+  assert.equal((await fetch(BASE + '/api/custom-media/NESSUNO/image', { method: 'POST', headers: { ...H }, body: png })).status, 404);
+  // cambio del tipo di modulo: anche ModuleType dell'entità
+  const sec2 = secs.find(x => x !== secs[0]);
+  assert.equal((await api('POST', '/api/rows/modules/ZZ-Mod1/section', { section: sec2 }, AUTH)).status, 200);
+  let mods = (await api('GET', '/api/modules-sheet', null, AUTH)).json.items.find(m => m['(ID)'] === 'ZZ-Mod1');
+  assert.equal(mods.__section, sec2);
+  assert.equal((await api('GET', '/api/entities', null, AUTH)).json.items.find(e => e['(ID)'] === 'ZZ-Mod1').ModuleType, sec2);
+  assert.equal((await api('POST', '/api/rows/modules/ZZ-Mod1/section', { section: 'SezioneNonEsiste' }, AUTH)).status, 400);
+  // rinomina: ovunque, con i collegamenti
+  assert.equal((await api('POST', '/api/rows/rename', { from: 'ZZ-Mod1', to: 'ZZ-Mod2' }, AUTH)).status, 200);
+  assert.equal((await api('POST', '/api/rows/rename', { from: 'ZZ-Mod2', to: 'MOD02-Engine_M' }, AUTH)).status, 409, 'ID già esistente');
+  assert.equal((await api('POST', '/api/rows/rename', { from: 'NONESISTE', to: 'ZZ-X' }, AUTH)).status, 404);
+  const ents = (await api('GET', '/api/entities', null, AUTH)).json.items;
+  assert.ok(ents.some(e => e['(ID)'] === 'ZZ-Mod2') && !ents.some(e => e['(ID)'] === 'ZZ-Mod1'));
+  mods = (await api('GET', '/api/modules-sheet', null, AUTH)).json.items.find(m => m['(ID)'] === 'ZZ-Mod2');
+  assert.ok(mods, 'anche il modulo è stato rinominato');
+  assert.equal((await api('GET', '/api/media', null, AUTH)).json.links['ZZ-Mod2'].icon, 'custom_ZZ-Mod1', 'immagine collegata al nuovo ID');
+  // pulizia
+  await api('DELETE', '/api/rows/modules/ZZ-Mod2', null, AUTH); await api('DELETE', '/api/rows/entities/ZZ-Mod2', null, AUTH);
+});
+
+test('T41 nuovo modulo: entità + MODULES + Cargo/Loot + testi del Localization Master in un colpo, e il pull non cancella i testi', async () => {
+  const csv = ['KEY,ID,ENGLISH', 'ALTRO-Name,,Altro', ''].join('\n');
+  assert.equal((await api('POST', '/api/sync/pull/grid/entities?apply=1', { csv }, AUTH)).json.applied, true);
+  const secs = (await api('GET', '/api/modules-sheet', null, AUTH)).json.sections.map(s => s.name);
+  const body = { id: 'ZZ-NuovoMod', name: 'Nuovo Motore', description: 'Un motore di prova', section: secs[0], producer: 'TTF', rarity: 'Rare', price: '120' };
+  assert.equal((await api('POST', '/api/rows/new-module', { ...body, id: 'id sbagliato' }, AUTH)).status, 400);
+  assert.equal((await api('POST', '/api/rows/new-module', { ...body, rarity: 'Boh' }, AUTH)).status, 400);
+  assert.equal((await api('POST', '/api/rows/new-module', { ...body, price: 'tanto' }, AUTH)).status, 400);
+  assert.equal((await api('POST', '/api/rows/new-module', { ...body, section: 'Inesistente' }, AUTH)).status, 400);
+  const r = await api('POST', '/api/rows/new-module', body, AUTH);
+  assert.equal(r.status, 200, JSON.stringify(r.json));
+  assert.equal((await api('POST', '/api/rows/new-module', body, AUTH)).status, 409, 'duplicato');
+  const e = (await api('GET', '/api/entities', null, AUTH)).json.items.find(x => x['(ID)'] === 'ZZ-NuovoMod');
+  assert.deepEqual([e.Label, e.EntityType, e.BaseRarity, e.BasePrice, e.ModuleType, e.ProducerIcon, e.LabelKey], ['Nuovo Motore', 'Module', 'Rare', '120', secs[0], 'TTF', 'ZZ-NuovoMod-Name']);
+  const m = (await api('GET', '/api/modules-sheet', null, AUTH)).json.items.find(x => x['(ID)'] === 'ZZ-NuovoMod');
+  assert.equal(m.__section, secs[0]);
+  const c = (await api('GET', '/api/tabs/cargo', null, AUTH)).json.items.find(x => x['(ID)'] === 'ZZ-NuovoMod');
+  assert.deepEqual([c.StackValue, c.Attractable, c.ForceToInspect], ['16', 'FALSE', 'TRUE']);
+  let g = (await api('GET', '/api/grid/entities', null, AUTH)).json;
+  assert.ok(g.rows.some(x => x[0] === 'ZZ-NuovoMod-Name' && x[2] === 'Nuovo Motore') && g.rows.some(x => x[0] === 'ZZ-NuovoMod-Description' && x[2] === 'Un motore di prova'));
+  // un nuovo pull dal foglio non cancella i testi creati nell'app
+  await api('POST', '/api/sync/pull/grid/entities?apply=1', { csv }, AUTH);
+  g = (await api('GET', '/api/grid/entities', null, AUTH)).json;
+  assert.ok(g.rows.some(x => x[0] === 'ZZ-NuovoMod-Name'), 'testi ancora presenti dopo il pull');
+  // pulizia
+  for (const a of ['modules', 'cargo', 'entities']) await api('DELETE', '/api/rows/' + a + '/ZZ-NuovoMod', null, AUTH);
+});
+
+test('T42 in localhost i media si leggono e si caricano sul server remoto (non nella cartella locale)', async () => {
+  const PB = 18943, PA = 18944, BB = `http://127.0.0.1:${PB}`, BA = `http://127.0.0.1:${PA}`;
+  fs.mkdirSync(path.join(tmp, 'remB'), { recursive: true }); fs.mkdirSync(path.join(tmp, 'locA'), { recursive: true });
+  fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'remB', 'remB.db')); fs.copyFileSync(path.join(tmp, 'test.db'), path.join(tmp, 'locA', 'locA.db'));
+  const up = async (b) => { for (let i = 0; i < 50; i++) { try { if ((await fetch(b + '/api/health')).ok) return; } catch (e) { /* non ancora su */ } await new Promise(r => setTimeout(r, 100)); } };
+  const srvB = spawn(process.execPath, [path.join(ROOT, 'server.js')], { env: { ...process.env, HG_DB_PATH: path.join(tmp, 'remB', 'remB.db'), HG_PORT: String(PB), HG_API_TOKEN: 'tok-remoto', HG_UE_MODE: 'direct' }, stdio: 'ignore' });
+  const srvA = spawn(process.execPath, [path.join(ROOT, 'server.js')], { env: { ...process.env, HG_DB_PATH: path.join(tmp, 'locA', 'locA.db'), HG_PORT: String(PA), HG_REMOTE_URL: BB, HG_REMOTE_TOKEN: 'tok-remoto', HG_MEDIA_REMOTE: '1', HG_UE_MODE: 'direct' }, stdio: 'ignore' });
+  try {
+    await up(BB); await up(BA);
+    const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/q842iQAAAABJRU5ErkJggg==', 'base64');
+    const id = (await (await fetch(BB + '/api/entities', { headers: { Authorization: 'Bearer tok-remoto' } })).json()).items[0]['(ID)'];
+    // carico l'immagine passando dall'app LOCALE: deve finire sul server remoto
+    const up1 = await fetch(`${BA}/api/custom-media/${encodeURIComponent(id)}/image`, { method: 'POST', headers: { 'Content-Type': 'image/png' }, body: png });
+    assert.equal(up1.status, 200, await up1.text());
+    // sul remoto c'è, nella cartella locale no
+    const remote = await (await fetch(BB + '/api/media', { headers: { Authorization: 'Bearer tok-remoto' } })).json();
+    assert.equal(remote.links[id].icon, 'custom_' + id);
+    assert.equal(fs.existsSync(path.join(tmp, 'remB', 'media', 'textures', 'custom_' + id + '.png')), true, 'il file sta sul server remoto');
+    assert.equal(fs.existsSync(path.join(tmp, 'locA', 'media', 'textures', 'custom_' + id + '.png')), false, 'niente file nella cartella locale');
+    // l'app locale mostra l'indice e il file del remoto
+    const local = await (await fetch(BA + '/api/media')).json();
+    assert.equal(local.links[id].icon, 'custom_' + id);
+    const img = await fetch(`${BA}/media/textures/custom_${encodeURIComponent(id)}.png`);
+    assert.equal(img.status, 200); assert.equal((await img.arrayBuffer()).byteLength, png.length);
+    // remoto non raggiungibile: errore chiaro, non l'indice locale
+    srvB.kill(); await new Promise(r => setTimeout(r, 400));
+    const down = await fetch(BA + '/api/media'); assert.equal(down.status, 502);
+  } finally { srvA.kill(); srvB.kill(); }
+});
+
+test('T43 traduzioni (italiano): salvataggio, lettura, cancellazione con testo vuoto, cronologia', async () => {
+  const put = (body) => api('PUT', '/api/translations', body, AUTH);
+  assert.equal((await put({ key: 'ZZ-Prova-Name', lang: 'it', text: 'Motore di prova' })).status, 200);
+  assert.equal((await api('GET', '/api/translations?lang=it', null, AUTH)).json.items['ZZ-Prova-Name'], 'Motore di prova');
+  assert.equal((await put({ key: 'ZZ-Prova-Name', lang: 'it', text: 'Motore di prova' })).json.unchanged, true);
+  assert.equal((await put({ key: '', lang: 'it', text: 'x' })).status, 400);
+  assert.equal((await put({ key: 'K', lang: 'xx', text: 'x' })).status, 400);
+  const h = (await api('GET', '/api/history?q=ZZ-Prova-Name', null, AUTH)).json.items;
+  assert.ok(h.some(i => i.area === 'Localization' && i.new === 'Motore di prova'));
+  assert.equal((await put({ key: 'ZZ-Prova-Name', lang: 'it', text: '  ' })).status, 200);
+  assert.equal((await api('GET', '/api/translations?lang=it', null, AUTH)).json.items['ZZ-Prova-Name'], undefined, 'testo vuoto = traduzione tolta');
+});
+
+test('T44 foglio STATIONS: due tab copia fedele (GenericLockRules, SpaceStationRules) importati da CSV', async () => {
+  const locks = ['COLLECTABLES,,,', 'EntityID,Rarity,UnlockRules,Sblocchi visualizzato in', 'COL-Crystal,Uncommon,EV_TST_Unlock1,SS-BirthyRock', ''].join('\n');
+  const rules = ['SpaceStationID,SalvageItems', 'SS-BirthyRock,2-2', ''].join('\n');
+  for (const [tab, csv, n] of [['stationlocks', locks, 2], ['stationrules', rules, 1]]) {
+    const r = await api('POST', '/api/sync/pull/grid/' + tab + '?apply=1', { csv }, AUTH);
+    assert.equal(r.status, 200, JSON.stringify(r.json)); assert.equal(r.json.applied, true);
+    const g = (await api('GET', '/api/grid/' + tab, null, AUTH)).json;
+    assert.equal(g.rows.length, n);
+  }
+  // senza foglio configurato/condiviso: errore chiaro, non un crash
+  const nocfg = await api('POST', '/api/sync/pull/grid/stationlocks', {}, AUTH);
+  assert.ok([200, 502, 503].includes(nocfg.status));
+});
+
+test('T45 condizioni di sblocco impostate nell\'app: evento senza EV_, stazione dall\'elenco, rimozione, cronologia', async () => {
+  const put = (body) => api('PUT', '/api/unlock-conditions', body, AUTH);
+  assert.equal((await put({ id: 'ZZ-Sblocco', event: 'EV_TST_Prova', station: 'SS-BirthyRock' })).status, 200);
+  const it = (await api('GET', '/api/unlock-conditions', null, AUTH)).json.items['ZZ-Sblocco'];
+  assert.equal(it.event, 'TST_Prova', 'il prefisso EV_ non si salva'); assert.equal(it.station, 'SS-BirthyRock');
+  assert.equal((await put({ id: 'ZZ-Sblocco', event: 'TST_Prova', station: 'SS-BirthyRock' })).json.unchanged, true);
+  assert.equal((await put({ id: 'ZZ-Sblocco', event: 'a b', station: '' })).status, 400);
+  assert.equal((await put({ id: 'ZZ-Sblocco', event: 'X', station: 'SS-Inesistente' })).status, 400);
+  const h = (await api('GET', '/api/history?q=ZZ-Sblocco', null, AUTH)).json.items;
+  assert.ok(h.some(i => i.field === 'condizione di sblocco' && i.new === 'EV_TST_Prova @ SS-BirthyRock'));
+  assert.equal((await put({ id: 'ZZ-Sblocco', event: '', station: '' })).status, 200);
+  assert.equal((await api('GET', '/api/unlock-conditions', null, AUTH)).json.items['ZZ-Sblocco'], undefined);
+});
+
+test('T46 nome di una stazione (Identities › ENGLISH) modificabile nell\'app, in cronologia, sopravvive al pull', async () => {
+  const csv = ['KEY,ID,ENGLISH', 'SS-Prova,,PROVA STATION', ''].join('\n');
+  assert.equal((await api('POST', '/api/sync/pull/grid/identities?apply=1', { csv }, AUTH)).json.applied, true);
+  const g0 = (await api('GET', '/api/grid/identities', null, AUTH)).json, rowNo = g0.rows.findIndex(r => r[0] === 'SS-Prova') + 2;
+  assert.ok(rowNo >= 2);
+  const r = await api('PUT', '/api/grid/identities/' + rowNo, { value: 'Stazione di prova' }, AUTH);
+  assert.equal(r.status, 200); assert.equal(r.json.rows[rowNo - 2][2], 'Stazione di prova');
+  assert.equal((await api('PUT', '/api/grid/identities/9999', { value: 'x' }, AUTH)).status, 404);
+  const h = (await api('GET', '/api/history?q=SS-Prova', null, AUTH)).json.items;
+  assert.ok(h.some(i => i.field === 'nome (Identities)' && i.new === 'Stazione di prova'));
+  await api('POST', '/api/sync/pull/grid/identities?apply=1', { csv }, AUTH);
+  assert.equal((await api('GET', '/api/grid/identities', null, AUTH)).json.rows[rowNo - 2][2], 'Stazione di prova', 'la modifica locale resta dopo un nuovo pull');
 });
