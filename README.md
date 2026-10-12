@@ -172,6 +172,10 @@ Sul PC dove lavori con l'Editor Unreal: nell'app clic su **"Agente: non connesso
 - **Controlli**: segnala valori fuori elenco, chiavi mancanti e righe orfane (sola lettura).
 - Gli indirizzi dei fogli Google sono già nell'app (`scripts/sheets_defaults.json`): "Scarica dal foglio" funziona anche sul NAS.
 
+## Novità v0.2.14 (2026-10-12)
+- Nomi modificabili in Consumable/Item/Collectable; tabelle dei moduli ordinabili con colonne Evento e Stazione separate e filtri con/senza evento e stazione (anche nelle sotto-tab, con ricerca sopra la griglia).
+- "Statistiche →" porta alla sotto-tab del DATABASE; immagini su piastrella scura; colonne localizzate in celeste più chiaro; etichette dei grafici a 45°; app a tutta larghezza con 45 px dai bordi.
+
 ## Novità v0.2.13 (2026-10-12)
 - **DATABASE › Events**: tipi di evento (nome + prefisso; iniziali IC e QE). **Più eventi di sblocco** per modulo e per stazione (clic sulla cella). Nome stazione modificabile anche da Stations.
 - **Immagine e mesh dei moduli**: clic per ingrandire o "Rimuovere collegamento".

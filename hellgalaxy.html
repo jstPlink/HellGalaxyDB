@@ -38,7 +38,7 @@
     background: var(--bg);
     color: var(--text);
     font-family: 'IBM Plex Sans', -apple-system, Segoe UI, sans-serif;
-    padding-inline: 16px;
+    padding-inline: 37px;
     min-height:100%;
   }
   ::selection{ background: var(--accent-dim); color: var(--text); }
@@ -49,7 +49,7 @@
   .mono{ font-family:'IBM Plex Mono', ui-monospace, monospace; }
 
   .wrap{
-    max-width: min(1880px, 97vw);
+    max-width: none; /* l app occupa tutta la larghezza della pagina */
     margin: 0 auto;
     padding-block: 22px 60px;
     display:flex;
@@ -91,6 +91,8 @@
   #userBtn{ display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px; padding:4px 14px 4px 5px; border-radius:999px; border:2px solid var(--text); color:var(--text); }
   .hg-av{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; font-weight:800; font-size:14px; flex:none; box-sizing:border-box; border:2px solid var(--hg-ring,#111); }
   .drop-slot{ width:44px; height:44px; display:flex; align-items:center; justify-content:center; border-radius:6px; position:relative; }
+  /* le immagini (spesso bianche) stanno su una piastrella scura, così si vedono su qualsiasi sfondo */
+  .drop-slot[data-kind="image"][data-has="1"]{ background:#3b4350; }
   .drop-slot.empty{ border:2px dashed var(--border); color:var(--text-faint); font-size:15px; }
   .drop-slot.over{ outline:3px solid var(--accent); outline-offset:1px; background:color-mix(in srgb, var(--accent) 18%, transparent); }
   .dbm-type{ font-size:12px; padding:2px 4px; border:1px solid var(--border); border-radius:6px; background:var(--surface-2); color:var(--text); }
@@ -567,7 +569,7 @@
   .tab.temp{ background:#fff3b0 !important; border-color:#e0b400 !important; color:#5c4a00 !important; }
   .tab.temp.active{ box-shadow: inset 0 -3px 0 #b88a00; font-weight:600; }
   .th-temp, .td-temp{ background:#fff3b0 !important; color:#5c4a00 !important; }
-  .loc-col{ background:#dff1fb !important; color:#0b3a52 !important; }
+  .loc-col{ background:#e7f4fc !important; color:#0b3a52 !important; }
   .btn.temp, .chip.temp{ background:#fff3b0 !important; border-color:#e0b400 !important; color:#5c4a00 !important; }
   .btn.temp:hover, .chip.temp:hover{ background:#ffe97a !important; }
   .section-tab{ border:2px solid var(--border); background: var(--surface-2); box-shadow:0 1px 3px rgba(0,0,0,.25); }
@@ -808,14 +810,6 @@
 
   <section class="panel" id="panel-dbmsec" hidden>
     <div class="stats" id="dbsStats"></div>
-    <div class="toolbar">
-      <div class="search">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input type="text" class="searchInput" id="dbsSearch" placeholder="Cerca per nome o ID&hellip;">
-      </div>
-      <select class="selbox" id="dbsRarity"></select>
-      <span class="hint" style="font-size:12px;color:var(--text-dim)">Dati da MODULES (foglio) + ENTITIES (foglio): ogni modifica l&igrave; compare qui.</span>
-    </div>
     <div class="chart-card">
       <div class="chart-head">
         <div class="chart-title">Confronto moduli<span class="sub" id="dbsChartSub"></span></div>
@@ -835,6 +829,16 @@
       </div>
       <div class="chart-legend" id="dbsLegend"></div>
       <div class="chart-scroll"><svg id="dbsSvg"></svg></div>
+    </div>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" class="searchInput" id="dbsSearch" placeholder="Cerca per nome o ID&hellip;">
+      </div>
+      <select class="selbox" id="dbsRarity"></select>
+      <select class="selbox" id="dbsStation" title="Filtra i moduli per stazione assegnata"><option value="all">Tutti (con e senza stazione)</option><option value="with">Con stazione assegnata</option><option value="without">Senza stazione assegnata</option></select>
+      <select class="selbox" id="dbsUnlock" title="Filtra i moduli per evento di sblocco"><option value="all">Tutti (con e senza evento)</option><option value="with">Con evento di sblocco</option><option value="without">Senza evento di sblocco</option></select>
+      <span class="hint" style="font-size:12px;color:var(--text-dim)">Dati da MODULES (foglio) + ENTITIES (foglio): ogni modifica l&igrave; compare qui.</span>
     </div>
     <div class="table-shell">
       <div class="table-scroll">
@@ -933,13 +937,14 @@
         <input type="text" class="searchInput" id="dbmSearch" placeholder="Cerca per ID, nome o tipo&hellip;">
       </div>
       <select class="selbox" id="dbmTypeFilter"></select>
+      <select class="selbox" id="dbmStationFilter" title="Filtra i moduli per stazione assegnata"><option value="all">Tutti (con e senza stazione)</option><option value="with">Con stazione assegnata</option><option value="without">Senza stazione assegnata</option></select>
       <select class="selbox" id="dbmUnlockFilter" title="Filtra i moduli per evento di sblocco"><option value="all">Tutti (con e senza evento)</option><option value="with">Con evento di sblocco</option><option value="without">Senza evento di sblocco</option></select>
     </div>
     <div style="margin:6px 0 8px"><button class="btn primary" id="dbmNewBtn" title="Crea un nuovo modulo: ENTITIES, MODULES, Cargo/Loot e testi del Localization Master in un colpo solo">+ Nuovo modulo</button></div>
     <div class="table-shell">
       <div class="table-scroll">
         <table>
-          <thead><tr><th>Immagine</th><th>Mesh</th><th>ID</th><th class="loc-col">Nome</th><th>Tipo di modulo</th><th>Produttore</th><th>Condizione di sblocco</th><th></th></tr></thead>
+          <thead><tr id="dbmThead"></tr></thead>
           <tbody id="dbmTbody"></tbody>
         </table>
       </div>
@@ -1778,7 +1783,7 @@ function renderChart(catId){
   }
   svg.style.display = '';
 
-  const autoAngle = rows.length > 20 ? 90 : (rows.length > 9 ? 45 : 0);
+  const autoAngle = 45; // predefinito: etichette a 45°
   const angle = uiState[catId].labelAngle === null ? autoAngle : uiState[catId].labelAngle;
   const angleChips = document.querySelectorAll('.chartAngleChips[data-cat="'+catId+'"] .chip');
   angleChips.forEach(ch => ch.classList.toggle('active', Number(ch.dataset.angle) === angle));
@@ -3427,7 +3432,7 @@ function openImageDialog(id, legacyDir){
   const old = document.getElementById('imgDlg'); if(old) old.remove();
   const ov = document.createElement('div'); ov.id = 'imgDlg';
   ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;display:flex;align-items:center;justify-content:center';
-  ov.innerHTML = '<div style="background:var(--bg-elev,#fff);color:var(--text);border:1px solid var(--border,#ccc);border-radius:10px;padding:18px;max-width:92vw;max-height:90vh;overflow:auto;text-align:center"><div style="display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:10px"><b class="mono">' + escapeHtml(id) + '</b><button class="btn ghost small" id="imgDlgX">Chiudi</button></div><img src="' + src + '" alt="" style="width:300px;height:300px;object-fit:contain;background:rgba(128,128,128,.12);border-radius:8px"><div class="mono" style="font-size:12px;margin:6px 0">' + escapeHtml(label) + '</div><button class="btn danger small" id="imgDlgRm">Rimuovi collegamento</button></div>';
+  ov.innerHTML = '<div style="background:var(--bg-elev,#fff);color:var(--text);border:1px solid var(--border,#ccc);border-radius:10px;padding:18px;max-width:92vw;max-height:90vh;overflow:auto;text-align:center"><div style="display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:10px"><b class="mono">' + escapeHtml(id) + '</b><button class="btn ghost small" id="imgDlgX">Chiudi</button></div><img src="' + src + '" alt="" style="width:300px;height:300px;object-fit:contain;background:#3b4350;border-radius:8px"><div class="mono" style="font-size:12px;margin:6px 0">' + escapeHtml(label) + '</div><button class="btn danger small" id="imgDlgRm">Rimuovi collegamento</button></div>';
   document.body.appendChild(ov);
   ov.addEventListener('click', async e => { if(e.target === ov || e.target.id === 'imgDlgX') ov.remove(); if(e.target.id === 'imgDlgRm' && await removeMedia(id, 'image')) ov.remove(); });
 }
@@ -3495,6 +3500,8 @@ function dbsNumCols(){
 function dbsFiltered(){
   const st = dbsState(); let rows = dbsAllRows();
   if(st.rarity !== 'Tutte') rows = rows.filter(r => r.Rarity === st.rarity);
+  if((st.unlock || 'all') !== 'all') rows = rows.filter(r => (unlockInfo(r.ID).rules.length > 0) === (st.unlock === 'with'));
+  if((st.station || 'all') !== 'all') rows = rows.filter(r => (unlockInfo(r.ID).stations.length > 0) === (st.station === 'with'));
   const q = st.search.trim().toLowerCase();
   if(q) rows = rows.filter(r => r.Name.toLowerCase().includes(q) || r.ID.toLowerCase().includes(q));
   const key = st.sortKey, num = key !== 'Name' && key !== 'ID' && key !== 'Rarity';
@@ -3520,7 +3527,8 @@ function dbsDrawChart(rows, cols){
   document.getElementById('dbsMax').value = Math.round(chartMax * 100) / 100;
   if(!data.length){ svg.style.display = 'none'; legend.innerHTML = ''; return; }
   svg.style.display = '';
-  const autoAngle = data.length > 20 ? 90 : (data.length > 9 ? 45 : 0), angle = st.angle === null ? autoAngle : st.angle;
+  const autoAngle = 45, // predefinito: etichette a 45°
+     angle = st.angle === null ? autoAngle : st.angle;
   document.querySelectorAll('#dbsAngles .chip').forEach(ch => ch.classList.toggle('active', Number(ch.dataset.angle) === angle));
   const SPEC = {0:{pad:34, len:9}, 45:{pad:92, len:17}, 90:{pad:146, len:24}}[angle];
   const barW = 22, gap = 12, plotH = 190, axisW = 52, topPad = 26, width = axisW + data.length * (barW + gap) + gap, height = topPad + plotH + SPEC.pad;
@@ -3553,24 +3561,23 @@ function renderDbSectionTable(){
   const st = dbsState(), cols = dbsNumCols(), rows = dbsFiltered();
   const arrow = k => st.sortKey === k ? (st.sortDir > 0 ? ' ▲' : ' ▼') : '';
   const th = (k, label) => '<th class="dbs-sort" data-key="' + escapeHtml(k) + '" style="cursor:pointer">' + escapeHtml(label) + arrow(k) + '</th>';
-  document.getElementById('dbsThead').innerHTML = '<th>Immagine</th><th>Mesh</th>' + th('ID', 'ID') + '<th>Condizione di sblocco</th>' + th('Name', 'Nome').replace('class="dbs-sort"', 'class="dbs-sort loc-col"') + th('Rarity', 'Rarità') + '<th>Produttore</th>' + cols.map(c => th(c, c)).join('') + '<th></th>';
+  document.getElementById('dbsThead').innerHTML = '<th>Immagine</th><th>Mesh</th>' + th('ID', 'ID') + '<th>Evento assegnato</th><th>Stazione assegnata</th>' + th('Name', 'Nome').replace('class="dbs-sort"', 'class="dbs-sort loc-col"') + th('Rarity', 'Rarità') + '<th>Produttore</th>' + cols.map(c => th(c, c)).join('');
   document.getElementById('dbsThead').querySelectorAll('.dbs-sort').forEach(h => h.addEventListener('click', () => { const s = dbsState(); if(s.sortKey === h.dataset.key) s.sortDir = -s.sortDir; else { s.sortKey = h.dataset.key; s.sortDir = 1; } renderDbSectionTable(); }));
   const tbody = document.getElementById('dbsTbody');
   if(!rows.length){ tbody.innerHTML = '<tr class="empty-row"><td colspan="' + (cols.length + 8) + '">Nessun modulo corrisponde ai filtri.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => {
     const lk = MEDIA.links[r.ID] || {}, mesh = lk.static_mesh && MEDIA.assets.mesh[lk.static_mesh];
     const img = slotImage(r.ID, (r.__m || {}).__section), mc = slotMesh(r.ID);
-    return '<tr data-id="' + escapeHtml(r.ID) + '"><td>' + img + '</td><td>' + mc + '</td><td class="mono">' + escapeHtml(r.ID) + '</td><td class="dbm-unlock" data-id="' + escapeHtml(r.ID) + '" style="font-size:11.5px;cursor:pointer" title="Clic per impostare evento e stazione di sblocco">' + (unlockConditionFor(r.ID) || '&ndash;') + '</td><td class="loc-col">' + escapeHtml(r.Name) + '</td><td style="color:' + (RARITY_COLOR[r.Rarity] || '') + '">' + escapeHtml(r.Rarity) + '</td>' + producerCellHtml(r.ID) + cols.map(c => { const v = modCellValue(r.__m, c).v; return '<td class="num-cell">' + escapeHtml(v === '' ? '' : (isNaN(dbsNum(v)) ? v : dbsFmt(dbsNum(v)))) + '</td>'; }).join('') + '<td><button type="button" class="btn ghost small dbs-open" data-id="' + escapeHtml(r.ID) + '">Statistiche &rarr;</button></td></tr>';
+    return '<tr data-id="' + escapeHtml(r.ID) + '"><td>' + img + '</td><td>' + mc + '</td><td class="mono">' + escapeHtml(r.ID) + '</td><td class="dbm-unlock" data-id="' + escapeHtml(r.ID) + '" style="font-size:11.5px;cursor:pointer" title="Clic per impostare eventi e stazione di sblocco">' + dbmEventsHtml({events: unlockInfo(r.ID).rules}) + '</td><td class="dbm-unlock" data-id="' + escapeHtml(r.ID) + '" style="font-size:11.5px;cursor:pointer" title="Clic per impostare eventi e stazione di sblocco">' + dbmStationsHtml({stations: unlockInfo(r.ID).stations}) + '</td><td class="loc-col">' + escapeHtml(r.Name) + '</td><td style="color:' + (RARITY_COLOR[r.Rarity] || '') + '">' + escapeHtml(r.Rarity) + '</td>' + producerCellHtml(r.ID) + cols.map(c => { const v = modCellValue(r.__m, c).v; return '<td class="num-cell">' + escapeHtml(v === '' ? '' : (isNaN(dbsNum(v)) ? v : dbsFmt(dbsNum(v)))) + '</td>'; }).join('') + '</tr>';
   }).join('');
   tbody.querySelectorAll('.dbm-mesh').forEach(b => b.addEventListener('click', () => openMeshDialog(b.dataset.id)));
-  tbody.querySelectorAll('.dbs-open').forEach(b => b.addEventListener('click', () => dbsOpenStats(b.dataset.id)));
 }
 let dbsLoading = false;
 function renderDbModSection(){
   const cfg = DBMSEC[activeSection], st = dbsState(), all = dbsAllRows(), cols = dbsNumCols();
   const rar = RARITY_ORDER.filter(r => all.some(x => x.Rarity === r));
   document.getElementById('dbsRarity').innerHTML = ['Tutte', ...rar].map(r => '<option value="' + r + '"' + (st.rarity === r ? ' selected' : '') + '>' + (r === 'Tutte' ? 'Tutte le rarità' : r + ' (' + all.filter(x => x.Rarity === r).length + ')') + '</option>').join('');
-  document.getElementById('dbsSearch').value = st.search;
+  document.getElementById('dbsSearch').value = st.search; document.getElementById('dbsStation').value = st.station || 'all'; document.getElementById('dbsUnlock').value = st.unlock || 'all';
   const withImg = all.filter(r => (MEDIA.links[r.ID] || {}).icon).length, withMesh = all.filter(r => { const l = MEDIA.links[r.ID] || {}; return l.static_mesh && MEDIA.assets.mesh[l.static_mesh]; }).length;
   document.getElementById('dbsStats').innerHTML = [{l:'Totale', n: all.length, accent:true}, {l:'Con immagine', n: withImg}, {l:'Con mesh', n: withMesh}].concat(rar.map(r => ({l:r, n: all.filter(x => x.Rarity === r).length})))
     .map(it => '<div class="stat' + (it.accent ? ' accent' : '') + '"><div class="n mono">' + it.n + '</div><div class="l">' + escapeHtml(it.l) + '</div></div>').join('');
@@ -3582,6 +3589,8 @@ function renderDbModSection(){
   }
 }
 document.getElementById('dbsSearch').addEventListener('input', e => { dbsState().search = e.target.value; dbsDrawChart(dbsFiltered(), dbsNumCols()); renderDbSectionTable(); });
+document.getElementById('dbsStation').addEventListener('change', e => { dbsState().station = e.target.value; dbsDrawChart(dbsFiltered(), dbsNumCols()); renderDbSectionTable(); });
+document.getElementById('dbsUnlock').addEventListener('change', e => { dbsState().unlock = e.target.value; dbsDrawChart(dbsFiltered(), dbsNumCols()); renderDbSectionTable(); });
 document.getElementById('dbsRarity').addEventListener('change', e => { dbsState().rarity = e.target.value; dbsDrawChart(dbsFiltered(), dbsNumCols()); renderDbSectionTable(); });
 document.getElementById('dbsMetric').addEventListener('change', e => { const s = dbsState(); s.metric = e.target.value; s.max = null; dbsDrawChart(dbsFiltered(), dbsNumCols()); });
 document.getElementById('dbsMax').addEventListener('change', e => { const v = Number(e.target.value); dbsState().max = v > 0 ? v : null; dbsDrawChart(dbsFiltered(), dbsNumCols()); });
@@ -3628,7 +3637,7 @@ function renderDbCollectionTable(){
     const mk = ['static_mesh','bp_mesh_0','bp_mesh_1','bp_mesh_2','loot_mesh_0','loot_mesh_1','loot_mesh_2','loot_mesh_3','loot_mesh_4','loot_mesh_5','loot_mesh_6'].find(k => lk[k] && MEDIA.assets.mesh[lk[k]]);
     const mesh = mk && MEDIA.assets.mesh[lk[mk]];
     const meshCell = slotMesh(r.id);
-    return '<tr data-id="' + escapeHtml(r.id) + '"><td>' + img + '</td><td>' + meshCell + '</td><td class="mono">' + escapeHtml(r.id) + '</td><td class="loc-col">' + (escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>') + '</td><td style="color:' + (RARITY_COLOR[r.rarity] || '') + '">' + escapeHtml(r.rarity) + '</td>' + producerCellHtml(r.id) + '<td class="num-cell">' + escapeHtml(r.price) + '</td><td>' + escapeHtml(cfg.type === 'Item' ? r.sub : '') + '</td><td style="white-space:nowrap"><button type="button" class="btn ghost small dbc-open" data-id="' + escapeHtml(r.id) + '" data-page="' + cfg.detail + '">' + escapeHtml(cfg.detailLabel) + ' &rarr;</button> <button type="button" class="btn ghost small dbc-open" data-id="' + escapeHtml(r.id) + '" data-page="entitysheet">Entit&agrave; &rarr;</button></td></tr>';
+    return '<tr data-id="' + escapeHtml(r.id) + '"><td>' + img + '</td><td>' + meshCell + '</td><td class="mono">' + escapeHtml(r.id) + '</td><td class="loc-col dbc-edit" data-id="' + escapeHtml(r.id) + '" style="cursor:text" title="Clic per cambiare il nome (aggiorna ENTITIES e il Localization Master)">' + (escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>') + '</td><td style="color:' + (RARITY_COLOR[r.rarity] || '') + '">' + escapeHtml(r.rarity) + '</td>' + producerCellHtml(r.id) + '<td class="num-cell">' + escapeHtml(r.price) + '</td><td>' + escapeHtml(cfg.type === 'Item' ? r.sub : '') + '</td><td style="white-space:nowrap"><button type="button" class="btn ghost small dbc-open" data-id="' + escapeHtml(r.id) + '" data-page="' + cfg.detail + '">' + escapeHtml(cfg.detailLabel) + ' &rarr;</button> <button type="button" class="btn ghost small dbc-open" data-id="' + escapeHtml(r.id) + '" data-page="entitysheet">Entit&agrave; &rarr;</button></td></tr>';
   }).join('');
   tbody.querySelectorAll('.dbm-mesh').forEach(b => b.addEventListener('click', () => openMeshDialog(b.dataset.id)));
   tbody.querySelectorAll('.dbc-open').forEach(b => b.addEventListener('click', () => dbcOpenDetail(b.dataset.id, b.dataset.page)));
@@ -3654,7 +3663,7 @@ function renderDbCollection(){
   }
 }
 /* ---- DATABASE › Moduli: collection costruita dalle tab foglio MODULES + ENTITIES ---- */
-let dbmUi = { search:'', type:'Tutti', unlock:'all' };
+let dbmUi = { search:'', type:'Tutti', unlock:'all', station:'all', sortKey:'', sortDir:1 };
 // Condizione di sblocco (PROVVISORIA): dal catalogo della pagina Stations (evento di sblocco + stazione di origine) e dalla colonna "Unlocked In" del foglio Modules
 // Indice delle condizioni di sblocco costruito dalla copia del foglio STATIONS (GenericLockRules + SpaceStationRules):
 //   regola di sblocco = colonna "UnlockRules"; stazione = colonna "Sblocchi visualizzato in" se è l'ID di una stazione di SpaceStationRules.
@@ -3819,7 +3828,9 @@ document.getElementById('dblsSearch').addEventListener('input', e => { dblsSearc
 document.addEventListener('click', e => {
   const c = e.target.closest && e.target.closest('.dbls-edit'); if(!c || c.querySelector('input')) return;
   const id = c.dataset.id, old = stationName(id), rowNo = stationRowNo(id);
-  c.innerHTML = '<input type="text" class="cell-input" maxlength="500" style="width:100%;min-width:260px">';
+  // la cella tiene la larghezza che aveva: il campo non allarga la tabella
+  c.style.width = c.style.maxWidth = c.offsetWidth + 'px';
+  c.innerHTML = '<input type="text" class="cell-input" maxlength="500" style="width:100%;min-width:0;box-sizing:border-box">';
   const inp = c.firstChild; inp.value = old; inp.focus(); inp.select();
   let done = false;
   const commit = async save => {
@@ -3869,37 +3880,68 @@ function dbmRows(){
     const id = m['(ID)'], eff = ENT_EFF[id] || {}, e = ents[id] || {};
     const name = (eff.Label && eff.Label.v) || e.Label || '';
     const sec = m.__section || '', mt = (MOD_EFF[id] && MOD_EFF[id].ModuleType && MOD_EFF[id].ModuleType.v) || m.ModuleType || '';
-    return {id, name, section: sec, moduleType: mt, icon: (eff.Icon && eff.Icon.v) || e.Icon || ''};
+    const ui = unlockInfo(id);
+    return {id, name, section: sec, moduleType: mt, icon: (eff.Icon && eff.Icon.v) || e.Icon || '', producer: String((ENT_EFF[id] && ENT_EFF[id].ProducerIcon && ENT_EFF[id].ProducerIcon.v) || e.ProducerIcon || '').trim(), events: ui.rules, stations: ui.stations};
   });
 }
 function dbmFiltered(){
   let rows = dbmRows();
   if(dbmUi.type !== 'Tutti') rows = rows.filter(r => r.section === dbmUi.type);
-  if(dbmUi.unlock !== 'all') rows = rows.filter(r => (unlockInfo(r.id).rules.length > 0) === (dbmUi.unlock === 'with'));
+  if(dbmUi.unlock !== 'all') rows = rows.filter(r => (r.events.length > 0) === (dbmUi.unlock === 'with'));
+  if(dbmUi.station !== 'all') rows = rows.filter(r => (r.stations.length > 0) === (dbmUi.station === 'with'));
   const q = dbmUi.search.trim().toLowerCase();
   if(q) rows = rows.filter(r => [r.id, r.name, r.section, r.moduleType].some(v => String(v || '').toLowerCase().includes(q)));
+  if(dbmUi.sortKey){
+    const val = r => { const v = dbmUi.sortKey === 'events' ? r.events.join(' ') : dbmUi.sortKey === 'stations' ? r.stations.join(' ') : r[dbmUi.sortKey]; return String(v || '').toLowerCase(); };
+    rows = rows.map((r, i) => ({r, i, v: val(r)})).sort((a, b) => (a.v === '' ? 1 : 0) - (b.v === '' ? 1 : 0) || a.v.localeCompare(b.v, 'it', {numeric:true}) * dbmUi.sortDir || a.i - b.i).map(x => x.r);
+  }
   return rows;
 }
+function dbmEventsHtml(r){ return r.events.map(x => '<span class="mono">' + escapeHtml(x) + '</span>').join('<br>') || '&ndash;'; }
+function dbmStationsHtml(r){ return r.stations.map(x => '<span class="mono" style="color:var(--accent)">' + escapeHtml(x) + '</span>').join('<br>') || '&ndash;'; }
 function renderDbModuleTable(){
+  const arrow = k => dbmUi.sortKey === k ? (dbmUi.sortDir > 0 ? ' ▲' : ' ▼') : '';
+  const th = (k, label, cls) => '<th class="dbm-sort' + (cls ? ' ' + cls : '') + '" data-key="' + k + '" style="cursor:pointer" title="Clic per ordinare">' + label + arrow(k) + '</th>';
+  document.getElementById('dbmThead').innerHTML = '<th>Immagine</th><th>Mesh</th>' + th('id', 'ID') + th('name', 'Nome', 'loc-col') + th('section', 'Tipo di modulo') + th('producer', 'Produttore') + th('events', 'Evento assegnato') + th('stations', 'Stazione assegnata') + '<th></th>';
   const rows = dbmFiltered(), tbody = document.getElementById('dbmTbody');
-  if(!rows.length){ tbody.innerHTML = `<tr class="empty-row"><td colspan="8">${MODS.length ? 'Nessun modulo corrisponde ai filtri.' : 'Nessun modulo: importa il tab Modules da ENTITIES (foglio) › Modules.'}</td></tr>`; return; }
+  if(!rows.length){ tbody.innerHTML = `<tr class="empty-row"><td colspan="9">${MODS.length ? 'Nessun modulo corrisponde ai filtri.' : 'Nessun modulo: importa il tab Modules da ENTITIES (foglio) › Modules.'}</td></tr>`; return; }
   tbody.innerHTML = rows.map(r => {
     const dir = DBM_IMG_DIR[r.section], lk = MEDIA.links[r.id] || {};
     const img = slotImage(r.id, r.section);
     const mesh = lk.static_mesh && MEDIA.assets.mesh[lk.static_mesh];
     const meshCell = slotMesh(r.id);
-    const unlock = unlockConditionFor(r.id);
-    return `<tr data-id="${escapeHtml(r.id)}"><td>${img}</td><td>${meshCell}</td><td class="mono dbm-edit" data-act="id" data-id="${escapeHtml(r.id)}" title="Clic per rinominare l'ID (cambia in tutte le schede dell'app)">${escapeHtml(r.id)}</td><td class="dbm-edit loc-col" data-act="name" data-id="${escapeHtml(r.id)}" title="Clic per cambiare il nome (aggiorna ENTITIES e il Localization Master)">${escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>'}</td><td><select class="dbm-type" data-id="${escapeHtml(r.id)}" title="Cambia il tipo di modulo">${MOD_SECTIONS.map(x => '<option value="' + escapeHtml(x.name) + '"' + (x.name === r.section ? ' selected' : '') + '>' + escapeHtml(x.name) + '</option>').join('')}</select>${r.moduleType && r.moduleType !== r.section ? ' <span class="badge-type">' + escapeHtml(r.moduleType) + '</span>' : ''}</td>${producerCellHtml(r.id)}<td class="dbm-unlock" data-id="${escapeHtml(r.id)}" style="font-size:11.5px;cursor:pointer" title="Clic per impostare evento e stazione di sblocco">${unlock || '&ndash;'}</td><td><button type="button" class="btn ghost small dbm-open" data-id="${escapeHtml(r.id)}" data-section="${escapeHtml(r.section)}">Statistiche &rarr;</button></td></tr>`;
+    return `<tr data-id="${escapeHtml(r.id)}"><td>${img}</td><td>${meshCell}</td><td class="mono dbm-edit" data-act="id" data-id="${escapeHtml(r.id)}" title="Clic per rinominare l'ID (cambia in tutte le schede dell'app)">${escapeHtml(r.id)}</td><td class="dbm-edit loc-col" data-act="name" data-id="${escapeHtml(r.id)}" title="Clic per cambiare il nome (aggiorna ENTITIES e il Localization Master)">${escapeHtml(r.name) || '<span style="color:var(--text-faint)">&ndash;</span>'}</td><td><select class="dbm-type" data-id="${escapeHtml(r.id)}" title="Cambia il tipo di modulo">${MOD_SECTIONS.map(x => '<option value="' + escapeHtml(x.name) + '"' + (x.name === r.section ? ' selected' : '') + '>' + escapeHtml(x.name) + '</option>').join('')}</select></td>${producerCellHtml(r.id)}<td class="dbm-unlock" data-id="${escapeHtml(r.id)}" style="font-size:11.5px;cursor:pointer" title="Clic per impostare eventi e stazione di sblocco">${dbmEventsHtml(r)}</td><td class="dbm-unlock" data-id="${escapeHtml(r.id)}" style="font-size:11.5px;cursor:pointer" title="Clic per impostare eventi e stazione di sblocco">${dbmStationsHtml(r)}</td><td><button type="button" class="btn ghost small dbm-open" data-id="${escapeHtml(r.id)}" data-section="${escapeHtml(r.section)}">Statistiche &rarr;</button></td></tr>`;
   }).join('');
   tbody.querySelectorAll('.dbm-mesh').forEach(b => b.addEventListener('click', () => openMeshDialog(b.dataset.id)));
+  // "Statistiche →": apre la sotto-pagina del DATABASE di quel tipo (Main Body, Engine…) filtrata sul modulo; se il tipo non ha una pagina, la scheda del foglio
   tbody.querySelectorAll('.dbm-open').forEach(b => b.addEventListener('click', () => {
+    const page = Object.keys(DBMSEC).find(k => DBMSEC[k].section === b.dataset.section);
+    if(page){ activeSection = page; const st = dbsState(); st.search = b.dataset.id; st.rarity = 'Tutte'; renderAll(); return; }
     modUi.section = b.dataset.section || 'Tutte'; modUi.search = b.dataset.id;
     activeSection = 'modsheet'; renderAll();
     document.getElementById('modSearch').value = b.dataset.id;
   }));
 }
 // ---- "Tutti i moduli": modifica di ID, nome e tipo (aggiorna le schede ENTITIES / MODULES / Localization dell'app) ----
-async function reloadAfterRowEdit(){ await Promise.all([loadModulesSheet(), loadEntities(), loadMedia()]); renderAll(); }
+async function reloadAfterRowEdit(){ await Promise.all([loadModulesSheet(), loadEntities(), loadMedia(), (async () => { const g = GRID_VIEWS['loc_entities']; if(g) await g.load(); })()]); renderAll(); }
+// DATABASE › Consumable / Item / Collectable: nome modificabile (Label di ENTITIES, specchiato nel Localization Master › Entities)
+document.addEventListener('click', e => {
+  const c = e.target.closest && e.target.closest('.dbc-edit'); if(!c || c.querySelector('input')) return;
+  const id = c.dataset.id, old = (dbcRows().find(r => r.id === id) || {}).name || '';
+  c.style.width = c.style.maxWidth = c.offsetWidth + 'px'; // il campo non allarga la tabella
+  c.innerHTML = '<input type="text" class="cell-input" style="width:100%;min-width:0;box-sizing:border-box">'; const inp = c.firstChild; inp.value = old; inp.focus(); inp.select();
+  let done = false;
+  const commit = async save => {
+    if(done) return; done = true;
+    if(save && inp.value !== old){
+      try{ await apiSend('/api/entities/' + encodeURIComponent(id), 'PUT', {fields: {Label: inp.value}}); await reloadAfterRowEdit(); showToast('Nome di ' + id + ' aggiornato (anche in ENTITIES e Localization Master)'); return; }
+      catch(err){ showToast('Impossibile salvare il nome'); }
+    }
+    renderAll();
+  };
+  inp.addEventListener('blur', () => commit(true));
+  inp.addEventListener('keydown', ev => { if(ev.key === 'Escape') commit(false); else if(ev.key === 'Enter'){ ev.preventDefault(); commit(true); } });
+});
 document.addEventListener('click', async e => {
   const c = e.target.closest && e.target.closest('.dbm-edit'); if(!c || c.querySelector('input')) return;
   const id = c.dataset.id, act = c.dataset.act, old = act === 'id' ? id : c.textContent.trim();
@@ -3970,14 +4012,15 @@ document.addEventListener('click', e => {
   const id = c.dataset.id, field = c.dataset.field, row = dblRows().find(r => r.id === id) || {};
   const short = field === 'Label';
   const old = field === 'Label' ? row.name : row.desc;
-  c.innerHTML = '<textarea class="cell-input" rows="' + (short ? 1 : 4) + '" style="width:100%;min-width:' + (short ? 200 : 380) + 'px"></textarea>';
+  c.style.width = c.style.maxWidth = c.offsetWidth + 'px'; // il campo non allarga la tabella
+  c.innerHTML = '<textarea class="cell-input" rows="' + (short ? 1 : 4) + '" style="width:100%;min-width:0;box-sizing:border-box"></textarea>';
   const ta = c.firstChild; ta.value = old || ''; ta.focus(); ta.select();
   let done = false;
   const commit = async save => {
     if(done) return; done = true;
     if(save && ta.value !== (old || '')){
       try{
-        await apiSend('/api/entities/' + encodeURIComponent(id), 'PUT', {fields: {[field]: ta.value}}); await loadEntities(); showToast((field === 'Label' ? 'Nome' : 'Descrizione') + ' di ' + id + ' aggiornato');
+        await apiSend('/api/entities/' + encodeURIComponent(id), 'PUT', {fields: {[field]: ta.value}}); await Promise.all([loadEntities(), (async () => { const g = GRID_VIEWS['loc_entities']; if(g) await g.load(); })()]); showToast((field === 'Label' ? 'Nome' : 'Descrizione') + ' di ' + id + ' aggiornato');
       }
       catch(err){ showToast('Impossibile salvare il testo'); }
     }
@@ -4056,7 +4099,7 @@ function renderDbModules(){
   const sel = document.getElementById('dbmTypeFilter');
   sel.innerHTML = ['Tutti', ...types].map(t => `<option value="${escapeHtml(t)}" ${dbmUi.type===t?'selected':''}>${t==='Tutti' ? 'Tutti i tipi' : escapeHtml(t) + ' (' + MODS.filter(m => m.__section === t).length + ')'}</option>`).join('');
   document.getElementById('dbmSearch').value = dbmUi.search;
-  document.getElementById('dbmUnlockFilter').value = dbmUi.unlock;
+  document.getElementById('dbmUnlockFilter').value = dbmUi.unlock; document.getElementById('dbmStationFilter').value = dbmUi.station;
   const rows = dbmRows();
   document.getElementById('dbmStats').innerHTML = [{l:'Moduli', n: rows.length, accent:true}, {l:'Tipi', n: types.length}, {l:'Senza nome', n: rows.filter(r => !r.name).length}]
     .map(it => `<div class="stat${it.accent?' accent':''}"><div class="n mono">${it.n}</div><div class="l">${escapeHtml(it.l)}</div></div>`).join('');
@@ -5007,6 +5050,8 @@ document.getElementById('dbcSearch').addEventListener('input', e => { dbcState()
 document.getElementById('dbcSubFilter').addEventListener('change', e => { dbcState().sub = e.target.value; renderDbCollectionTable(); });
 document.getElementById('dbmSearch').addEventListener('input', e => { dbmUi.search = e.target.value; renderDbModuleTable(); });
 document.getElementById('dbmTypeFilter').addEventListener('change', e => { dbmUi.type = e.target.value; renderDbModuleTable(); });
+document.getElementById('dbmThead').addEventListener('click', e => { const h = e.target.closest('.dbm-sort'); if(!h) return; if(dbmUi.sortKey === h.dataset.key) dbmUi.sortDir = -dbmUi.sortDir; else { dbmUi.sortKey = h.dataset.key; dbmUi.sortDir = 1; } renderDbModuleTable(); });
+document.getElementById('dbmStationFilter').addEventListener('change', e => { dbmUi.station = e.target.value; renderDbModuleTable(); });
 document.getElementById('dbmUnlockFilter').addEventListener('change', e => { dbmUi.unlock = e.target.value; renderDbModuleTable(); });
 document.getElementById('modSearch').addEventListener('input', e => { modUi.search = e.target.value; renderModTable(); });
 document.getElementById('modSectionFilter').addEventListener('change', e => { modUi.section = e.target.value; renderModTable(); });

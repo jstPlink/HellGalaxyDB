@@ -1,6 +1,6 @@
 # Prompt per riprendere il lavoro in una nuova sessione
 
-Ultimo aggiornamento: **2026-10-12 sera** (app pubblicata v0.2.13, committata e pubblicata il 2026-10-12). Copiare il blocco qui sotto come primo messaggio della nuova sessione (cartella di lavoro: la cartella del repository HellGalaxyDB; fare `git status` e `git log` per vedere cosa è committato).
+Ultimo aggiornamento: **2026-10-12 sera** (app pubblicata v0.2.14, committata e pubblicata il 2026-10-12). Copiare il blocco qui sotto come primo messaggio della nuova sessione (cartella di lavoro: la cartella del repository HellGalaxyDB; fare `git status` e `git log` per vedere cosa è committato).
 
 ````
 Riprendi il lavoro sul progetto HellGalaxyDB (app Node senza dipendenze npm + SQLite, cartella del repository: C:\Users\franc\Desktop\Github\HellGalaxyDB). Rispondi sempre in italiano.
@@ -19,7 +19,7 @@ Controlla anche la memoria automatica (MEMORY.md).
 2) VINCOLI (non negoziabili)
 - Unreal (D:/Plastic/HellGalaxy): scrivere SOLO con il via libera esplicito dell'utente (HG_UE_ALLOW_WRITE=1 sull'app E sul PC dell'agente; oggi nel .env locale c'è già, per la sessione di lavoro del 2026-10-12). REGOLA (2026-10-12): le scritture si fanno TUTTE IN BLOCCO IN MEMORIA e NON si salva né si fa checkout (asset sporchi, salva l'utente). Le cancellazioni (delete_asset) sono immediate su disco. Nessun commit/check-in su Plastic. Se l'Editor sembra bloccato: Rider con debugger collegato (breakpoint su ensure): Resume o non avviare in Debug.
 - Il sistema di sicurezza di Claude Code ha RIFIUTATO più volte le cancellazioni in blocco su Unreal (comando di cancellazione dei 945 asset): vanno lanciate dall'utente o autorizzate con una regola di permesso Bash nel file .claude/settings.local.json (es. "Bash(curl:*localhost:8936/api/unreal/cleanup*)"); NON aggirare. Le scritture ProducerIcon invece sono passate.
-- Commit e push SOLO quando lo chiede l'utente; prima aggiorna docs/DOCUMENTAZIONE.md e README.md, incrementa VERSION (pubblicata 0.2.13 → prossima 0.2.14) e aggiungi i nuovi script a Dockerfile e ai paths di .github/workflows/docker-image.yml.
+- Commit e push SOLO quando lo chiede l'utente; prima aggiorna docs/DOCUMENTAZIONE.md e README.md, incrementa VERSION (pubblicata 0.2.14 → prossima 0.2.15) e aggiungi i nuovi script a Dockerfile e ai paths di .github/workflows/docker-image.yml.
 - I test non devono mai raggiungere il server vero (HG_MEDIA_REMOTE=0 e HG_DB_PATH nei test); nessuna scrittura in blocco sul server (NAS hgdb.fplinio.it) senza conferma; NON sovrascrivere il .env dell'utente (contiene i token: solo aggiungere righe); non stampare i token.
 - Punti da far rispondere all'utente: numerati con NUMERI (1, 2, 3…). Chiudi ogni risposta con "Stato attuale dell'app: …". Dubbi su prezzo/rarità/testi: chiedi ("vale Unreal" solo per ProducerIcon, Quality, mesh, shield mesh, icone, e per il cargo di COL-StationSupply_* e PY-*).
 - Nessun blocco sulle modifiche degli utenti: solo notifica "X ha modificato Y".
